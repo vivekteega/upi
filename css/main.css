@@ -421,6 +421,23 @@ p {
   color: var(--primary-color);
 }
 
+.container:empty ~ .empty {
+  display: -ms-grid;
+  display: grid;
+}
+
+.empty {
+  display: none;
+  place-items: center;
+  width: 100%;
+}
+
+.empty svg {
+  stroke: rgba(var(--text), 0.8);
+  height: 12em;
+  width: 12em;
+}
+
 .container-header {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -474,6 +491,10 @@ p {
   background: var(--background) !important;
 }
 
+form {
+  width: 100%;
+}
+
 .popup-container {
   display: -ms-grid;
   display: grid;
@@ -490,6 +511,10 @@ p {
 }
 
 .popup-container .popup {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -ms-flex-item-align: end;
       align-self: flex-end;
   -webkit-box-align: start;
@@ -529,7 +554,7 @@ p {
       -ms-flex-align: center;
           align-items: center;
   padding: 0;
-  margin-bottom: 1.5em;
+  margin-bottom: 1.5rem;
 }
 
 .popup-container .popup .container-header .btn {
@@ -561,7 +586,7 @@ p {
   top: 0;
   width: 100%;
   max-width: 100%;
-  z-index: 11;
+  z-index: 40;
   background: rgba(var(--foreground), 1);
 }
 
@@ -722,6 +747,17 @@ p {
   text-align: right;
 }
 
+.icon {
+  height: 1.2rem;
+  width: 1.2rem;
+  fill: none;
+  stroke: rgba(var(--text), 0.8);
+  stroke-width: 6;
+  overflow: visible;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 #navbar {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -759,17 +795,6 @@ p {
   letter-spacing: 0.1em;
 }
 
-#navbar .navbar-item .icon {
-  height: 1.2rem;
-  width: 1.2rem;
-  fill: none;
-  stroke: rgba(var(--text), 0.8);
-  stroke-width: 6;
-  overflow: visible;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
 #navbar .navbar-item h5 {
   font-size: 0.6em;
   margin-top: 0.4em;
@@ -789,20 +814,13 @@ p {
 }
 
 #home_page h1 {
+  margin-top: 4rem;
   margin-bottom: 1rem;
   font-weight: 700;
 }
 
 #home_page p {
-  margin-bottom: 1.5rem;
-}
-
-#home_page .user-option {
-  margin-bottom: 2rem;
-}
-
-#home_page .user-option:last-of-type {
-  margin: 0;
+  margin-bottom: 3rem;
 }
 
 #home_page h2 {
@@ -810,25 +828,33 @@ p {
 }
 
 .options-tab {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  margin-top: 0.8rem;
+  display: -ms-grid;
+  display: grid;
+  margin-top: 1rem;
+  -ms-grid-columns: (10rem)[2];
+      grid-template-columns: repeat(2, 10rem);
   margin-bottom: 1rem;
 }
 
 .options-tab .option {
-  white-space: nowrap;
-  padding: 0.6rem 1rem;
-  text-decoration: none;
-  border-right: solid 1px rgba(var(--text), 0.2);
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  border-radius: 0.2rem;
+  padding: 1.5rem;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  border: solid 1px rgba(var(--text), 0.3);
   text-transform: capitalize;
+  cursor: pointer;
 }
 
-.options-tab .option:last-of-type {
-  border: none;
+.options-tab .option .icon {
+  margin-bottom: 1.5rem;
 }
 
 .notification-dot::after {
@@ -896,7 +922,7 @@ p {
       align-self: flex-end;
 }
 
-#deposit_request_container, #withdraw_request_container {
+.container {
   display: -ms-grid;
   display: grid;
   gap: 1em;
@@ -960,26 +986,13 @@ p {
   background: rgba(var(--text-light), 0.2);
 }
 
-.empty {
-  display: -ms-grid;
-  display: grid;
-  place-items: center;
-  width: 100%;
-}
-
-.empty svg {
-  stroke: rgba(var(--text), 0.8);
-  height: 12em;
-  width: 12em;
-}
-
 @media only screen and (min-width: 640px) {
   body {
     padding: 1rem 6vw;
     margin-left: 6rem;
   }
   .popup-container .popup {
-    width: auto;
+    width: 24rem;
     -ms-flex-item-align: center;
         -ms-grid-row-align: center;
         align-self: center;
@@ -1010,7 +1023,7 @@ p {
     margin: 1rem;
     margin-bottom: 2rem;
   }
-  #deposit_request_container, #withdraw_request_container {
+  .container {
     -ms-grid-columns: (1fr)[2];
         grid-template-columns: repeat(2, 1fr);
   }
@@ -1062,15 +1075,16 @@ p {
   #sign_in_popup {
     width: 24rem;
   }
+  .options-tab {
+    -ms-grid-columns: (10rem)[3];
+        grid-template-columns: repeat(3, 10rem);
+  }
 }
 
 @media only screen and (min-width: 800px) {
-  #deposit_request_container, #withdraw_request_container {
+  .container {
     -ms-grid-columns: (1fr)[3];
         grid-template-columns: repeat(3, 1fr);
-  }
-  #home_page .user-option {
-    max-width: 40%;
   }
 }
 
@@ -1078,9 +1092,13 @@ p {
   body {
     padding: 1rem 12vw;
   }
-  #deposit_request_container, #withdraw_request_container {
+  .container {
     -ms-grid-columns: (1fr)[3];
         grid-template-columns: repeat(3, 1fr);
+  }
+  .options-tab {
+    -ms-grid-columns: (10rem)[4];
+        grid-template-columns: repeat(4, 10rem);
   }
 }
 
@@ -1089,7 +1107,7 @@ p {
     font-size: 24px;
     padding: 2rem 20vw;
   }
-  #deposit_request_container, #withdraw_request_container {
+  .container {
     -ms-grid-columns: (1fr)[4];
         grid-template-columns: repeat(4, 1fr);
   }
@@ -1100,7 +1118,7 @@ p {
     font-size: 24px;
     padding: 2rem 30vw;
   }
-  #deposit_request_container, #withdraw_request_container {
+  .container {
     -ms-grid-columns: (1fr)[4];
         grid-template-columns: repeat(4, 1fr);
   }
