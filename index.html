@@ -48,6 +48,17 @@
             </svg>
         </button>
     </div>
+    <!-- Loading screen-->
+    <div class="popup-container solid-background hide">
+        <div id="main_loader" class="popup">
+            <svg id="loader" viewBox="0 0 73 73">
+                <title>Loader</title>
+                <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+            <h3 id="tip_container">Loading BLOCKCHAIN UPi</h3>
+        </div>
+    </div>
+    <!-- Sign in popup-->
     <div class="popup-container solid-background hide">
         <div id="sign_in_popup" class="popup">
             <div class="container-header">
@@ -56,19 +67,14 @@
             <p class="expand light-text">Welcome to RanchiMall Blockchain UPI</b></p>
             <form class="expand" autocomplete="off" onsubmit="return false">
                 <div class="input">
-                    <input id="get_priv_key_field" type="password" required>
+                    <input id="get_priv_key_field" type="password" minlength="40" required>
                     <label>Private Key</label>
                 </div>
-                <div class="action expand" onclick="signIn(this)">
-                    <button class="primary-btn expand" type="submit" disabled>
+                <button id="sign_in_btn" class="primary-btn expand" type="submit" disabled>
                         Sign In
-                    </button>
-                    <svg viewBox="0 0 73 73" class="loader">
-                        <path
-                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                    </svg>
-                </div>
+                </button>
             </form>
+            *Sign in button will not be activated until correct value is entered.
         </div>
     </div>
     <header id="main_header" class="flex">
@@ -92,7 +98,7 @@
             </span>
         </div>
         <div id="display_balance">
-            <h5>Rupee Tokens</h5>
+            <h5>Rupee Balance</h5>
             <h3 id="token_balance">0</h3>
         </div>
     </header>
@@ -104,7 +110,7 @@
             </svg>
             <h5>Home</h5>
         </div>
-        <div title="See all cash deposit requests" id="deposit_page_btn" class="navbar-item cashier-option"
+        <div title="See all cash deposit requests" id="deposit_page_btn" class="navbar-item cashier-option hide-completely"
             onclick="showPage(this, 'deposit')">
             <svg class="icon banking" viewBox="0 0 52 51.5">
                 <line x1="4" y1="28" x2="4" y2="19.5" />
@@ -118,7 +124,7 @@
             </svg>
             <h5>Deposit</h5>
         </div>
-        <div title="See all cash withdraw requests" class="navbar-item cashier-option"
+        <div title="See all cash withdraw requests" class="navbar-item cashier-option hide-completely"
             onclick="showPage(this, 'withdraw')">
             <svg class="icon banking" viewBox="0 0 52 60">
                 <line x1="4" y1="33.5" x2="4" y2="25" />
@@ -137,7 +143,7 @@
             </svg>
             <h5>Withdraw</h5>
         </div>
-        <div title="See all pay requests" class="navbar-item cashier-option" onclick="showPage(this, 'pay_cashier')">
+        <div title="See all pay requests" class="navbar-item cashier-option hide-completely" onclick="showPage(this, 'pay_cashier')">
             <svg class="icon" viewBox="0 0 64 64">
                 <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
                 <rect height="64" width="64" rx="8"></rect>
@@ -173,12 +179,37 @@
                         <polyline
                             points="17.04 35.97 14.57 33.5 40.15 7.9 32.75 0.5 55.52 0.5 55.52 23.28 48.12 15.87 23.86 40.14 15.88 48.13 8.48 40.72 8.48 63.5 31.25 63.5 23.85 56.1 49.43 30.5 46.96 28.03" />
                     </svg>
-                    Transfer cash
+                    Transfer Rupee
                 </div>
-                <div class="option" onclick="showPopup('buy_rupee')">
-                    buy rupee
+                <div class="option" onclick="showPopup('deposit_rupee')">
+                    <svg class="icon banking" viewBox="0 0 52 51.5">
+                        <line x1="4" y1="28" x2="4" y2="19.5" />
+                        <polyline points="4 6 4 1 51 1 51 48 4 48 4 41.5" />
+                        <line x1="9" y1="50" x2="18" y2="50" />
+                        <line x1="36" y1="50" x2="45" y2="50" />
+                        <circle cx="27.5" cy="30" r="9.5" />
+                        <circle cx="27.5" cy="30" r="3.5" />
+                        <rect x="1" y="6" width="6" height="13.5" rx="2.76" />
+                        <rect x="1" y="28" width="6" height="13.5" rx="2.76" />
+                    </svg>
+                    deposit rupee
                 </div>
-                <div class="option" onclick="showPopup('withdraw_rupee')">withdraw rupee</div>
+                <div class="option" onclick="showPopup('withdraw_rupee')">
+                    <svg class="icon banking" viewBox="0 0 52 60">
+                        <line x1="4" y1="33.5" x2="4" y2="25" />
+                        <polyline points="41.52 6.5 51 6.5 51 53.5 41.69 53.5" />
+                        <line x1="9" y1="55.5" x2="14" y2="55.5" />
+                        <line x1="43" y1="55.5" x2="45" y2="55.5" />
+                        <rect x="1" y="11.5" width="6" height="13.5" rx="2.76" />
+                        <rect x="1" y="33.5" width="6" height="13.5" rx="2.76" />
+                        <polyline points="3.81 11.5 3.81 6.5 41.5 1 41.69 59 3.81 53.5 3.81 47" />
+                        <path d="M35.64,39.19c0,6.31-3.25,11.45-7.22,11.48s-7-4.92-7-11.07,3.13-11.29,7.05-11.48S35.64,32.88,35.64,39.19Z"
+                            transform="translate(-6 -2)" />
+                        <path d="M31.06,39.32c0,2.31-1.19,4.2-2.64,4.23s-2.62-1.79-2.62-4.08S27,35.3,28.42,35.24,31.06,37,31.06,39.32Z"
+                            transform="translate(-6 -2)" />
+                    </svg>
+                    withdraw rupee
+                </div>
                 <div class="option" onclick="showPopup('pay_anyone')">
                     <svg class="icon" viewBox="0 0 64 64">
                         <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
@@ -190,13 +221,17 @@
             <div class="popup-container hide">
                 <div id="cash_transfer" class="popup">
                     <div class="container-header">
-                        <h3>Cash transfer</h3>
+                        <h3>Transfer Rupee</h3>
                         <div id="send_tokens_btn" class="action expand">
                             <button class="primary-btn expand" type="submit" disabled>
                                 transfer
                             </button>
                         </div>
                     </div>
+                    <p>
+                        Transfer your deposited Rupee tokens to any FLO address.<br>
+                        *Requires token to be deposited first.
+                    </p>
                     <form autocomplete="off" onsubmit="return false">
                         <div class="input">
                             <input id="token_receiver" type="text" required>
@@ -210,19 +245,18 @@
                 </div>
             </div>
             <div class="popup-container hide">
-                <div id="buy_rupee" class="popup">
+                <div id="deposit_rupee" class="popup">
                     <div class="container-header">
-                        <h3>Buy rupee</h3>
+                        <h3>Deposit rupee</h3>
                         <div id="request_tokens_btn" class="action expand">
                             <button class="primary-btn expand" type="submit" disabled>
-                                buy
+                                deposit
                             </button>
-                            <svg viewBox="0 0 73 73" class="loader">
-                                <path
-                                    d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                            </svg>
                         </div>
                     </div>
+                    <p>
+                        Deposit rupee through UPI to use as Digital currency powered by blockchain.
+                    </p>
                     <form autocomplete="off" onsubmit="return false">
                         <div class="input">
                             <input id="token_amount_to_buy" inputmode="numeric" type="number" required>
@@ -239,20 +273,19 @@
                             <button class="primary-btn expand" type="submit" disabled>
                                 withdraw
                             </button>
-                            <svg viewBox="0 0 73 73" class="loader">
-                                <path
-                                    d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                            </svg>
                         </div>
                     </div>
+                    <p>
+                        Withdraw or redeem your rupee tokens back to your specified UPI address.
+                    </p>
                     <form autocomplete="off" onsubmit="return false">
-                        <div class="input">
-                            <input id="withdraw_cash_amount" type="text" required>
-                            <label for="withdraw_cash_amount">Reciever's FLO ID</label>
-                        </div>
                         <div class="input">
                             <input id="user_withdraw_upi" type="text" required>
                             <label for="user_withdraw_upi">Reciever's UPI address</label>
+                        </div>
+                        <div class="input">
+                            <input id="withdraw_cash_amount" type="number" inputmode="numeric" required>
+                            <label for="withdraw_cash_amount">amount</label>
                         </div>
                     </form>
                 </div>
@@ -266,12 +299,11 @@
                             <button class="primary-btn expand" type="submit" disabled>
                                 pay
                             </button>
-                            <svg viewBox="0 0 73 73" class="loader">
-                                <path
-                                    d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                            </svg>
                         </div>
                     </div>
+                    <p>
+                        Don't have enough token balance? Pay to our cashier through UPI and your cash will be transfered as Rupee tokens.
+                    </p>
                     <form autocomplete="off" onsubmit="return false">
                         <div class="input">
                             <input id="recvr_id" type="text" required>
@@ -502,6 +534,7 @@
             depositRequest: function (txid, floId) {
                 let card = document.createElement('div');
                 card.classList.add('request')
+                setAttributes(card, {'data-user-flo-id': floId, 'data-txid': txid})
                 card.innerHTML = `  <h5>FLO ID</h5>
                                     <h4 class="breakable">${floId}</h4>
                                     <h5>UPI TXID</h5>
@@ -514,6 +547,7 @@
             withdrawRequest: function (txid, upiId, floId) {
                 let card = document.createElement('div');
                 card.classList.add('request')
+                setAttributes(card, {'data-txid': txid, 'data-user-flo-id': floId, 'data-upi': upiId })
                 card.innerHTML = `  <h5>FLO ID</h5>
                                     <h4 class="breakable">${floId}</h4>
                                     <h5>UPI ID</h5>
@@ -528,13 +562,14 @@
             payRequest: function (sender, txid, floId, amount) {
                 let card = document.createElement('div');
                 card.classList.add('request')
-                card.innerHTML = `                                         <h5>Transaction ID</h5>
+                setAttributes(card, {'data-sender': sender, 'data-receiver-flo-id': floId, 'data-txid': txid, 'data-amount': amount})
+                card.innerHTML = `  <h5>Transaction ID</h5>
                                     <h4 class="breakable">${txid}</h4>
                                     <h5>Receiver's FLO ID</h5>
                                     <h4 class="breakable">${floId}</h4>
                                     <h5>Amount</h5>
                                     <h4 class="breakable">₹${amount}</h4>
-                                    <button id="" class="confirm-withdraw-btn">
+                                    <button id="" class="confirm-pay-btn">
                                         Transfer
                                     </button>`;
                 return card;
@@ -550,11 +585,6 @@
         window.addEventListener('online', () => {
             notify('', 'We are back online.', '', true)
         })
-        function clearAllInputs(parent) {
-            parent.querySelectorAll("input, textarea").forEach((field) => {
-                field.value = '';
-            })
-        }
         // function required for popups or modals to appear
         class Stack {
             constructor() {
@@ -600,8 +630,8 @@
                 zIndex--;
                 thisPopup.parentNode.setAttribute('style', `z-index: ${zIndex}`)
             }, 400)
-            if (popup === 'main_loader') {
-                loader.classList.remove('animate-loader')
+            if (popup === 'main_loader' || popup === 'sign_in_popup') {
+                //loader.classList.remove('animate-loader')
                 document.querySelector('main').classList.remove('hide-completely')
             }
         }
@@ -629,6 +659,8 @@
                 else
                     field.checked = false
             })
+            if(parent.querySelector("button[type='submit']"))
+            parent.querySelector("button[type='submit']").disabled = true;
         }
 
         //Function for displaying toast notifications. pass in error for mode param if you want to show an error.
@@ -666,46 +698,18 @@
 
         // displays a popup for asking permission. Use this instead of JS confirm
         let askConfirmation = function (message) {
-            return new Promise((resolve, reject) => {
+            return new Promise(resolve => {
                 let popup = document.getElementById('confirmation');
                 showPopup('confirmation')
                 popup.children[0].textContent = message;
                 popup.children[1].firstElementChild.onclick = function () {
                     hidePopup()
-                    reject(false)
                 }
                 popup.children[1].children[1].onclick = function () {
                     hidePopup()
                     resolve(true);
                 }
             })
-        }
-        function enableBtn(btn) {
-            if (typeof btn === 'string')
-                btn = document.getElementById(btn);
-            if (btn.disabled)
-                btn.disabled = false;
-        }
-
-        function disableBtn(btn) {
-            if (typeof btn === 'string')
-                btn = document.getElementById(btn);
-            if (!btn.disabled)
-                btn.disabled = true;
-        }
-        function btnLoading(btn, option) {
-            if (typeof btn === 'string')
-                btn = document.getElementById(btn);
-            if (option === 'start') {
-                btn.firstElementChild.focus();
-                btn.children[0].classList.add('clip')
-                btn.children[1].classList.add('animate-loader')
-            }
-            else {
-                disableBtn(btn.children[0])
-                btn.children[0].classList.remove('clip')
-                btn.children[1].classList.remove('animate-loader')
-            }
         }
 
         // prevents non numerical input on firefox 
@@ -736,6 +740,9 @@
 
         let allForms = document.querySelectorAll('form');
         window.addEventListener('load', () => {
+            /*document.querySelectorAll('.popup:not(.hide)').forEach(popup => {
+                popupStack.push(popup.id)
+            })*/
             allForms.forEach((form) => {
                 form.addEventListener('input', (e) => {
                     if (e.target.closest('.input')) {
@@ -763,44 +770,41 @@
 
             // Function for confirming deposit requests 
             document.getElementById('pending_deposits_container').addEventListener('click', (e) => {
-                let container = document.getElementById('pending_deposits_container');
                 if (e.target.closest('.confirm-deposit-btn'))
-                    askConfirmation('Confirm this deposit request?').then((result) => {
-                        if (result) {
-                            let depositRequestId = e.target.closest('.confirm-deposit-btn').id;
-                            btnLoading(e.target.closest('.confirm-deposit-btn'), 'start')
-                            setTimeout(() => {
-                                e.target.closest('.request').remove();
-                                notify('', `Request id: ${depositRequestId} confirmed.`, '', true)
-                                checkBalance();
-                                if (container.children.length === 0) {
-                                    document.getElementById('deposit_illustration').classList.remove('hide-completely')
-                                    document.getElementById('search_deposit').classList.add('hide-completely')
-                                }
-                            }, 1000)
+                    askConfirmation('Confirm this deposit request?').then(async (result) => {
+                        let depositRequest = e.target.closest('.request'),
+                        status = await transfer_token(depositRequest.dataset.userFloId, depositRequest.dataset.txid)
+                        if(status){
+                            refresh_balance()
+                            depositRequest.remove()
                         }
                     })
             })
 
-            // Function for confirming withdraw requests 
-            document.getElementById('pending_withdrawals_container').addEventListener('click', (e) => {
-                let container = document.getElementById('pending_withdrawals_container');
-                if (e.target.closest('.confirm-withdraw-btn'))
-                    askConfirmation('Confirm this withdraw request?').then((result) => {
-                        if (result) {
-                            let withdrawRequestId = e.target.closest('.confirm-withdraw-btn').id;
-                            btnLoading(e.target.closest('.confirm-withdraw-btn'), 'start')
-                            setTimeout(() => {
-                                e.target.closest('.request').remove();
-                                notify('', `Request id: ${withdrawRequestId} confirmed.`, '', true)
-                                if (container.children.length === 0) {
-                                    document.getElementById('withdraw_illustration').classList.remove('hide-completely')
-                                    document.getElementById('search_withdraw').classList.add('hide-completely')
-                                }
-                            }, 1000)
-                        }
-                    })
-            })
+        // Function for confirming withdraw requests 
+        document.getElementById('pending_withdrawals_container').addEventListener('click', (e) => {
+            if (e.target.closest('.confirm-withdraw-btn'))
+                askConfirmation('Confirm this withdraw request?').then(async (result) => {
+                    let withdrawRequest = e.target.closest('.request'),
+                        status = await cash_sent(withdrawRequest.dataset.txid, withdrawRequest.dataset.userFloId, withdrawRequest.dataset.upi)
+                    if (status) {
+                        refresh_balance()
+                        withdrawRequest.remove()
+                    }
+                })
+        })
+        // Function for confirming pay requests 
+        document.getElementById('pay_requests_container').addEventListener('click', (e) => {
+            if (e.target.closest('.confirm-pay-btn'))
+                askConfirmation('Confirm this pay request?').then(async (result) => {
+                    let payRequest = e.target.closest('.request'),
+                        status = await pay_through_cashier(payRequest.dataset.sender, payRequest.dataset.userFloId, payRequest.dataset.txid, payRequest.dataset.amount)
+                    if (status) {
+                        refresh_balance()
+                        payRequest.remove()
+                    }
+                })
+        })
         })
 
         let allPages = document.querySelectorAll('.page'),
@@ -821,57 +825,33 @@
             }
         }
 
-        let balDisplay = document.getElementById('token_balance');
-        function checkBalance() {
-            fetch(`https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?floAddress=${myFloID}&token=rupee`)
-                .then((response) => {
-                    if (response.status !== 200) {
-                        console.log('Looks like there was a problem. Status Code: ' +
-                            response.status);
-                        return;
-                    }
-                    // Examine the text in the response
-                    response.json().then(function (data) {
-                        balDisplay.textContent = data.balance;
-                    });
-                }
-                )
-                .catch(function (err) {
-                    console.log('Fetch Error :-S', err);
-                });
-        }
-
-
-        function signIn(btn) {
-            let parentPopup = btn.closest('form');
-            btnLoading(btn, 'start')
-
-            //if operation completes{
-            setTimeout(() => {
-                btnLoading(btn, 'stop')
+        function signIn() {
+            return new Promise((resolve, reject) => {
                 hidePopup()
-                notify('', 'Signed In')
-                document.querySelector('main').classList.remove('hide-completely')
-                document.getElementById('deposit_page_btn').click()
-            }, 1000)
-            //}
+                showPopup('sign_in_popup', 'no')
+                let signInBtn = document.getElementById('sign_in_btn'),
+                    privKeyInput = document.getElementById('get_priv_key_field')
+                signInBtn.onclick = () => {
+                    resolve(privKeyInput.value)
+                }
+            })
         }
 
         function signOut() {
             askConfirmation('Do you want to sign out?').then((result) => {
-                if (result) {
-                    notify('', 'Signed out')
-                    document.querySelector('main').classList.add('hide-completely')
-                    showPopup('sign_in_popup')
-                    floDapps.clearCredentials()
-                    compactIDB.deleteDB().then((message) => {
-                        delete token_app.master_configurations;
-                        onLoadStartUp()
-                        notify('You have logged out successfully.')
-                    }).catch((error) => {
-                        console.log(error)
-                    })
-                }
+                notify('Signed out')
+                document.querySelector('main').classList.add('hide-completely')
+                floDapps.clearCredentials()
+                compactIDB.deleteDB().then((message) => {
+                    delete token_app.master_configurations;
+                    onLoadStartUp()
+                    notify('You have logged out successfully.')
+                }).catch((error) => {
+                    console.log(error)
+                })
+            })
+            .catch(err =>{
+                console.log(err)
             })
         }
     </script>
@@ -9171,7 +9151,6 @@
                 updateData: function (dataSet) {
                     try {
                         dataSet = JSON.parse(dataSet);
-                        console.log(dataSet)
                         for (vc in dataSet) {
                             var message = dataSet[vc].message;
                             if (message.diff) {
@@ -9189,7 +9168,6 @@
                 storeGeneralData: function (filterStr, dataSet) {
                     try {
                         dataSet = JSON.parse(dataSet);
-                        console.log(dataSet)
                         if (!Array.isArray(floGlobals.generalData[filterStr]))
                             floGlobals.generalData[filterStr] = []
                         for (vc in dataSet) {
@@ -9458,7 +9436,7 @@
                         }
 
                         var getPrivateKeyCredentials = function () {
-                            return new Promise((resolve, reject) => {
+                            return new Promise(async (resolve, reject) => {
                                 var indexArr = localStorage.getItem(`${floGlobals.application}#privKey`)
                                 if (indexArr) {
                                     readSharesFromIDB(JSON.parse(indexArr))
@@ -9466,11 +9444,10 @@
                                         .catch(error => reject(error))
                                 } else {
                                     try {
-                                        var privKey = prompt("Enter Private Key: ")
-                                        if (!privKey)
-                                            return reject("Empty Private Key")
+                                        var privKey = await signIn()
+                                        hidePopup()
+                                        showPopup('main_loader', 'no')
                                         var floID = floCrypto.getFloIDfromPubkeyHex(floCrypto.getPubKeyHex(privKey))
-                                        console.log(floID)
                                     } catch (error) {
                                         console.error(error)
                                         return reject("Invalid Private Key")
@@ -9584,19 +9561,19 @@
 
         reactor.registerEvent("startUpSuccessLog");
         reactor.addEventListener("startUpSuccessLog", log => console.log(log))
-        reactor.addEventListener("startUpSuccessLog", log => notify(log))
+        reactor.addEventListener("startUpSuccessLog", log => console.log(log))
 
         reactor.registerEvent("startUpErrorLog");
         reactor.addEventListener("startUpErrorLog", log => console.error(log))
 
         function onLoadStartUp() {
-            notify("Starting the app! Please Wait!")
+            showPopup('main_loader', 'no')
+            console.log("Starting the app! Please Wait!")
             floDapps.launchStartUp().then(result => {
                 console.log(result)
-                notify(result)
-                notify(`Welcome ${myFloID}`)
+                console.log(`Welcome ${myFloID}`)
                 token_app.actions.doShreeGanesh();
-                checkBalance()
+                refresh_balance()
                 document.getElementById('user_flo_id').textContent = myFloID
             }).catch(error => console.error(error))
         }
@@ -9808,7 +9785,6 @@
                             );
                         }
                         deepFreeze(token_app.master_configurations);
-                        console.log(token_app);
                         return token_app;
                     } catch (error) {
                         console.error(
@@ -9834,9 +9810,7 @@
                 transferTokensManually();
                 const allCashierOptions = document.querySelectorAll('.cashier-option'),
                     userType = document.getElementById('user_type')
-                console.log(Object.keys(token_app.master_configurations.cashiers))
                 if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-                    console.log(myFloID)
                     allCashierOptions.forEach(option => {
                         option.classList.remove('hide-completely')
                     })
@@ -9848,9 +9822,12 @@
                     })
                     userType.textContent = 'User'
                 }
+                hidePopup()
 
                 init_pay_through_cashier_system();
-
+                show_deposit_request()
+                show_withdraw_request()
+                showPayRequests()
                 // build pay vendors ui
                 // const pay_vendors_tbl = document.getElementById('pay_vendors_tbl')
                 // let vd = ``;
@@ -9869,7 +9846,7 @@
             },
 
             retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals.subAdmins) {
-                notify('Loading the latest content')
+                console.log('Loading the latest content')
 
                 floCloudAPI.requestObjectData(token_app.master_configurations.SUBJECT, { receiverID, senderIDs });
 
@@ -10099,10 +10076,10 @@
                         }, "flo_txid")
                     notify(`Transfer successfull: ${flo_txid}.`);
 
-                    return false;
+                    return true;
                 }
             } catch (error) {
-                throw new Error(error)
+                notify(error, 'error')
             }
         }
 
@@ -10151,7 +10128,7 @@
                     { receiverID: input_data['withdrawer_flo_id'], senderIDs: [myFloID] })
 
             } catch (error) {
-                throw new Error(error)
+                notify(error, 'error')
             }
         }
 
@@ -10197,12 +10174,14 @@
 
         async function refresh_balance() {
             try {
-                const current_token_balance = document.getElementById('token_balance').innerText;
+                const current_token_balance = document.getElementById('token_balance').textContent;
                 if (typeof current_token_balance == "string") {
                     const get_user_balance = await ajaxGet('https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' + myFloID)
                     if (typeof get_user_balance === "object" && get_user_balance.balance >= 0) {
-                        document.getElementById('token_balance').innerText
-                            = `${get_user_balance.floAddress}: ${get_user_balance.balance}`;
+                        if(get_user_balance.balance === null)
+                            get_user_balance.balance = 0;
+                        document.getElementById('token_balance').textContent
+                            = get_user_balance.balance;
                     }
                 }
                 return true;
@@ -10318,7 +10297,7 @@
                         }, upi_txid);
                         notify(`Transaction successfull: ${flo_txid}.`);
                         notify(`INR ${amount_to_pay} sent to ${vendor_flo_id}`)
-                        return false;
+                        return true;
                     }
                 }
 
