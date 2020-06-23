@@ -29,7 +29,7 @@
 
             //for cloud apps
             subAdmins: [],
-            application: "RUPEE_TOKEN_APP_TEST4",//rupeeTokenApp
+            application: "RUPEE_TOKEN_APP_TEST5",//rupeeTokenApp
             vectorClock: {},
             appObjects: {},
             generalData: {},
@@ -10249,20 +10249,6 @@
                 show_deposit_request()
                 show_withdraw_request()
                 showPayRequests()
-                // build pay vendors ui
-                // const pay_vendors_tbl = document.getElementById('pay_vendors_tbl')
-                // let vd = ``;
-                // for (const vendor_flo_id of token_app.master_configurations.vendors) {
-                //     vd += `<tr>`;
-                //     vd += `<td>`;
-                //     vd += `${vendor_flo_id}`;
-                //     vd += `</td>`;
-                //     vd += `<td>`;
-                //     vd += `<button class="btn btn-primary pay_vendor_class" id="${vendor_flo_id}">Pay</button>`;
-                //     vd += `</td>`;
-                //     vd += `</tr>`;
-                // }
-                // pay_vendors_tbl.insertAdjacentHTML('beforeend', vd);
 
             },
 
@@ -10365,6 +10351,17 @@
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
                 await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, 
+                        { receiverID: myFloID, senderIDs: [myFloID] });
+
+                const finished_tasks = floCloudAPI.requestApplicationData(
+                    {type: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS, 
+                    receiverID: myFloID, 
+                    senderIDs:[myFloID]
+                });
+
+                const processed_deposits = Object.values(finished_tasks).map(m=>m.message.user_upi_txid);
+                
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, 
                         { receiverID: myFloID });
 
                 let cash_deposits = await compactIDB.readAllData('deposits_flo_txids');
@@ -10377,6 +10374,7 @@
                 depositsContainer.innerHTML = ``;
                 for (const m of general_msg) {
                     if (cash_deposits_upi_txid_list.includes(m.message.upi_txid)) continue;
+                    if (processed_deposits.includes(m.message.upi_txid)) continue;
                     let { user_flo_id, upi_txid } = m.message;
                     frag.append(render.depositRequest(upi_txid, user_flo_id))
                 }
@@ -10454,6 +10452,14 @@
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
+                const finished_tasks = floCloudAPI.requestApplicationData(
+                    {type: token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS, 
+                    receiverID: myFloID, 
+                    senderIDs:[myFloID]
+                });
+
+                const processed_withdraws = Object.values(finished_tasks).map(m=>m.message.user_upi_txid);
+            
                 await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, 
                 { receiverID: myFloID });
 
@@ -10471,6 +10477,7 @@
                 withdrawsContainer.innerHTML = ``;
                 for (const m of general_msg) {
                     if (cash_withdraws_token_txid_list.includes(m.message.token_txid)) continue;
+                    if (processed_withdraws.includes(m.message.token_txid)) continue;
                     let { token_txid, user_flo_id, withdrawer_upi } = m.message
                     frag.append(render.withdrawRequest(token_txid, withdrawer_upi, user_flo_id))
                 }
@@ -10499,13 +10506,19 @@
                     }
                     // TODO: check https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}
                     // and then continue
-                    compactIDB.addData('deposits_flo_txids',
-                        {
-                            receiver_flo_id,
-                            flo_txid,
-                            user_upi_txid,
-                            "datetime": + new Date()
-                        }, "flo_txid")
+                    const input_data = {
+                        receiver_flo_id,
+                        flo_txid,
+                        user_upi_txid,
+                        "datetime": + new Date()
+                    }
+                    
+                    compactIDB.addData('deposits_flo_txids', input_data, "flo_txid");
+
+                    // Add data into personal ledger as well
+                    floCloudAPI.sendGeneralData(input_data, token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
+                    { receiverID: myFloID });
+    
                     notify(`Transfer successfull: ${flo_txid}.`, '', 'fixed', true);
 
                     return true;
@@ -10553,6 +10566,10 @@
                 input_data["withdrawn_upi_txid"] = transfer_upi_txid;
 
                 compactIDB.addData("cash_sent_details", input_data, input_data["token_txid"])
+
+                // Add data into personal ledger as well
+                floCloudAPI.sendGeneralData(input_data, token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
+                    { receiverID: myFloID });
 
                 floCloudAPI.sendGeneralData(`Your withdrawal request of INR ${amount_to_transfer} is approved. 
                     Please check reference number ${transfer_upi_txid} in your UPI ${withdraw_upi}`,
