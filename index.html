@@ -10129,9 +10129,14 @@
                 #!#CURRENCY=INR
                 #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST4
                 #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST4
-                #!#TYPE_MSGES=USER_MESSAGES_TEST3
+                #!#TYPE_MSGES=USER_MESSAGES_TEST4
+                #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT4
+                #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT4
+                #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT4
+                #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT4
                 #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER3
                 #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
+                #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                 #!#cashiers=
                 {
                     "FByrY4vc1NRfbkqAqABtUyhhNzMZsKUjqr": {
@@ -10228,6 +10233,7 @@
                 withdraw_token_to_get_cash();
 
                 transferTokensManually();
+
                 const allCashierOptions = document.querySelectorAll('.cashier-option'),
                     userType = document.getElementById('user_type')
                 if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
@@ -10272,6 +10278,8 @@
                     await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
                         { receiverID: myFloID });
 
+                    return true;
+                } else if (token_app.master_configurations.helplineFloId===myFloID) {
                     return true;
                 } else {
 
@@ -10353,7 +10361,7 @@
                 await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, 
                         { receiverID: myFloID, senderIDs: [myFloID] });
 
-                const finished_tasks = floCloudAPI.requestApplicationData(
+                const finished_tasks = await floCloudAPI.requestApplicationData(
                     {type: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS, 
                     receiverID: myFloID, 
                     senderIDs:[myFloID]
@@ -10452,7 +10460,7 @@
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
-                const finished_tasks = floCloudAPI.requestApplicationData(
+                const finished_tasks = await floCloudAPI.requestApplicationData(
                     {type: token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS, 
                     receiverID: myFloID, 
                     senderIDs:[myFloID]
@@ -10682,6 +10690,18 @@
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
+                const finished_tasks = await floCloudAPI.requestApplicationData(
+                    {type: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER, 
+                    receiverID: myFloID, 
+                    senderIDs:[myFloID]
+                });
+
+                console.log(finished_tasks);
+
+                const processed_cashier_payments = Object.values(finished_tasks).map(m=>m.message.upi_txid);
+                
+                console.log(processed_cashier_payments);
+                
                 await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, 
                 { receiverID: myFloID });
 
@@ -10692,6 +10712,7 @@
                 let payRequestsContainer = document.getElementById("pay_requests_container");
                 payRequestsContainer.innerHTML = ``;
                 for (const m of user_requests) {
+                    if (processed_cashier_payments.includes(m.message.upi_txid)) continue;
                     if (pay_thru_cashier_list.includes(m.message.upi_txid)) continue;
                     let { upi_txid, receiver_flo_id, amount } = m.message;
                     frag.append(render.payRequest(m.sender, upi_txid, receiver_flo_id, amount))
@@ -10737,13 +10758,20 @@
                         notify(`Transaction unsuccessfull.`, 'error', '', true);
                         return false;
                     } else {
-                        compactIDB.addData('pay_thru_cashier', {
+                        const input_data = {
                             sender_flo_id,
                             vendor_flo_id,
                             upi_txid,
                             flo_txid,
                             'datetime': + new Date()
-                        }, upi_txid);
+                        };
+
+                        await compactIDB.addData('pay_thru_cashier', input_data, upi_txid);
+
+                        // Add data into personal ledger as well
+                        await floCloudAPI.sendGeneralData(input_data, token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
+                            { receiverID: myFloID });
+
                         notify(`Transaction successfull: ${flo_txid}.   
                         INR ${amount_to_pay} sent to ${vendor_flo_id}`, '', 'fixed', true);
                         return true;
@@ -10781,6 +10809,132 @@
                 notify(e);
             }
         }
+
+        async function file_complaint(order_type='', order_vc='') {
+            try {
+
+                const cnf_comaplin = confirm(`Any deposit or withdraw 
+                order may take about 12 hours to process. 
+                Are you sure you want to complain?`);
+
+                if(!cnf_comaplin) return;
+
+                let custom_msg = prompt("You may provide any custom message to us.", "");
+
+                let input_data = {
+                    order_type, order_vc, custom_msg
+                }
+
+                console.log(input_data);
+
+                let complaint_type = (order_type=='deposit') ? 
+                token_app.master_configurations.TYPE_FILE_DEPOSITS_COMPLAINT 
+                : token_app.master_configurations.TYPE_FILE_WITHDRAWS_COMPLAINT;
+
+                floCloudAPI.sendGeneralData(input_data, complaint_type,
+                    { receiverID: token_app.master_configurations.helplineFloId});   
+
+                notify('Your complaint has been registered. Our team will take an action very soon. Thank you.');
+
+                return true;
+
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    </script>
+
+    <!-- Helpline -->
+    <script>
+
+        async function load_deposit_complaints(sendersArray=[], receiver='') {
+            try {
+
+                let options = {
+                    type: token_app.master_configurations.TYPE_FILE_DEPOSITS_COMPLAINT,
+                    receiverID: token_app.master_configurations.helplineFloId
+                };
+
+                if(typeof sendersArray=="object" && sendersArray.length>0) {
+                    options.senderIDs = sendersArray;
+                }
+
+                const all_deposits_complaints = await floCloudAPI.requestApplicationData(options);
+
+                //options.type = token_app.master_configurations.TYPE_PROCESSED_DEPOSITS;
+                options.type = token_app.master_configurations.TYPE_PROCESSED_DEPOSITS_COMPLAINT;
+
+                const processed_deposits_complaints = await floCloudAPI.requestApplicationData(options);
+
+                console.log(all_deposits_complaints);
+                console.log(processed_deposits_complaints);
+
+                // filter out processed tasks from unprocessed ones
+                // Show details of unprocessed ones
+                // After resolving the dispute mark it as resolved
+
+            } catch(e) {
+                console.error(e);
+                notify(e);
+            }
+        }
+
+        async function load_withdraw_complaints(sender='', receiver='') {
+            try {
+
+                let options = {
+                    type: token_app.master_configurations.TYPE_FILE_WITHDRAWS_COMPLAINT,
+                    receiverID: token_app.master_configurations.helplineFloId
+                };
+                if(typeof sendersArray=="object" && sendersArray.length>0) {
+                    options.senderIDs = sendersArray
+                }
+
+                const all_withdraws_complaints = await floCloudAPI.requestApplicationData(options);
+
+                //options.type = token_app.master_configurations.TYPE_PROCESSED_DEPOSITS;
+                options.type = token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS_COMPLAINT;
+
+                const processed_withdraws_complaints = await floCloudAPI.requestApplicationData(options);
+
+                console.log(all_withdraws_complaints);
+                console.log(processed_withdraws_complaints);
+
+                // filter out processed tasks from unprocessed ones
+                // Show details of unprocessed ones
+
+            } catch(e) {
+                console.error(e);
+                notify(e);
+            }
+        }
+
+        async function load_pay_thru_cashier_complaints(sender='', receiver='') {
+            try {
+
+            } catch(e) {
+                console.error(e);
+                notify(e);
+            }
+        }
+
+        function mark_complaint_resolved(order_type='', input_data={}) {
+            try {
+
+                let complaint_type = (order_type=='deposit') ? 
+                token_app.master_configurations.TYPE_PROCESSED_DEPOSITS_COMPLAINT 
+                : token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS_COMPLAINT;
+
+                floCloudAPI.sendGeneralData(input_data, complaint_type,
+                    { receiverID: token_app.master_configurations.helplineFloId}); 
+
+                notify('Complaint marked as resolved.');
+
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
     </script>
 </body>
 
