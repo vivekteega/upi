@@ -338,7 +338,7 @@ form{
         flex-wrap: wrap;
         width: calc(100% - 2rem);
         margin-bottom: 1rem;
-        border-radius: 1rem;
+        border-radius: 0.5rem;
         padding: 1.5rem;
         position: relative;
         display: flex;
@@ -376,7 +376,7 @@ form{
 #show_message{
     transform: translate(0, -100%);
     transition: transform 0.3s, opacity 0.3s;
-    box-shadow: 0.2rem 0.4rem 0.8rem rgba($color: #000000, $alpha: 0.16);
+    box-shadow: 0 0.4rem 0.8rem rgba($color: #000000, $alpha: 0.16);
     align-items: center;
     flex-direction: row;
     display: flex;
@@ -384,7 +384,10 @@ form{
     position: fixed;
     right: 0;
     top: 0;
-    width: 100%;
+    width: calc(100% - 2rem);
+    margin: 1rem;
+    border-radius: 0.5rem;
+    border: solid 1px rgba(var(--text), 0.2);
     max-width: 100%;
     z-index: 40;
     background: rgba(var(--foreground), 1);
@@ -424,19 +427,24 @@ form{
         }
     }
 }
-#confirmation{
+#confirmation,#prompt{
     flex-direction: column;
-    justify-content: center;
-    padding: 1rem;
+    padding: 1.5rem;
     p{
         margin: 1rem;
         font-size: 1rem;
         font-weight: 500;
         color: rgba(var(--rgb-bw),1) !important;
     }
-    div{
+    h4{
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+    }
+    .input{
+        margin-bottom: 1rem;
+    }
+    .btns{
         display: flex;
-        padding: 1em;
         justify-content: right;
         width: 100%;
         button{
@@ -452,22 +460,20 @@ form{
     margin-bottom: 1em;
 }
 #sign_in_popup{
-    align-self: center;
-    border-radius: 0.5em;
-    width: calc(100vw - 2em);
-    background: rgba(var(--foreground), 1);
     h1{
         margin-top: 2rem;
     }
-    p:first-of-type{
-        margin-bottom: 4em;
+    h4{
+        font-weight: 500;
+        margin-bottom: 3rem;
     }
     button{
         margin: 1rem 0;
     }
-    p:nth-of-type(2){
-        margin-top: 2em;
-        margin-bottom: 1em;
+    p{
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        margin-bottom: 0 !important;
     }
     .input{
         background: rgba(var(--text), 0.1);
@@ -482,20 +488,25 @@ form{
 #main_header{
     align-items: center;
     padding: 1em 0;
-    svg{
-        stroke: var(--primary-color);
-        stroke-width: 10;
-        stroke-linecap: round;
-        height: 2em;
-        width: 3em;
-        fill: none;
-        margin-right: 0.4em;
-    }
+    justify-content: space-between;
     #display_balance{
-        display: flex;
-        flex-direction: column;
-        margin-left: auto;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas: 'title title'
+                                ' . .';
+        gap: 0.3rem 0.5rem;
+        align-items: center;
         text-align: right;
+        h5{
+           grid-area: title; 
+        }
+        .icon{
+            height: 1.4rem;
+            width: 1.4rem;
+            padding: 0.3rem;
+            stroke-width: 10;
+            cursor: pointer;
+        }
     }
 }
 .icon{
@@ -569,20 +580,47 @@ form{
     .option{
         display: inline-flex;
         flex-direction: column;
-        border-radius: 0.2rem;
+        border-radius: 0.4rem;
         padding: 1.5rem;
         margin-right: 1rem;
         margin-bottom: 1rem;
-        border: solid 1px rgba(var(--text), 0.3);
+        border: solid 1px rgba(var(--text), 0.2);
         text-transform: capitalize;
         cursor: pointer;
         .icon{
-            height: 1.4rem;
-            width: 1.4rem;
-            margin-bottom: 1.5rem;
+            height: 2.8rem;
+            width: 2.8rem;
+            padding: 0.8rem;
+            border-radius: 2rem;
+            margin-bottom: 1rem;
+            stroke: rgba(var(--text), 0.4);
         }
         h4{
             font-weight: 600;
+        }
+        &:nth-of-type(1){
+            .icon{
+                background: rgb(255, 229, 234);
+                stroke: rgb(175, 15, 44);
+            }
+        }
+        &:nth-of-type(2){
+            .icon{
+                background: rgb(255, 249, 213);
+                stroke: rgb(230, 150, 32);
+            }
+        }
+        &:nth-of-type(3){
+            .icon{
+                background: rgb(229, 255, 227);
+                stroke: rgb(24, 155, 15);
+            }
+        }
+        &:nth-of-type(4){
+            .icon{
+                background: rgb(228, 251, 255);
+                stroke: rgb(11, 142, 165);
+            }
         }
     }
 }
@@ -702,18 +740,7 @@ form{
         border-radius: 0.2rem;
     }
     #confirmation{
-        padding: 1rem;
         width: 24rem;
-        button{
-            margin-left: 0.5rem;
-            &:first-of-type{
-                margin-left: auto;
-            }
-        }
-        p{
-            margin: 1rem;
-            margin-bottom: 2rem;
-        }
     }
     .container{
         grid-template-columns: repeat(2, 1fr);

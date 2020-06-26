@@ -525,7 +525,7 @@ form {
       flex-wrap: wrap;
   width: calc(100% - 2rem);
   margin-bottom: 1rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   padding: 1.5rem;
   position: relative;
   display: -webkit-box;
@@ -584,8 +584,8 @@ form {
   transition: opacity 0.3s, -webkit-transform 0.3s;
   transition: transform 0.3s, opacity 0.3s;
   transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
-  -webkit-box-shadow: 0.2rem 0.4rem 0.8rem rgba(0, 0, 0, 0.16);
-          box-shadow: 0.2rem 0.4rem 0.8rem rgba(0, 0, 0, 0.16);
+  -webkit-box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.16);
+          box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.16);
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -600,7 +600,10 @@ form {
   position: fixed;
   right: 0;
   top: 0;
-  width: 100%;
+  width: calc(100% - 2rem);
+  margin: 1rem;
+  border-radius: 0.5rem;
+  border: solid 1px rgba(var(--text), 0.2);
   max-width: 100%;
   z-index: 40;
   background: rgba(var(--foreground), 1);
@@ -653,40 +656,45 @@ form {
   stroke-width: 6;
 }
 
-#confirmation {
+#confirmation, #prompt {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  padding: 1rem;
+  padding: 1.5rem;
 }
 
-#confirmation p {
+#confirmation p, #prompt p {
   margin: 1rem;
   font-size: 1rem;
   font-weight: 500;
   color: rgba(var(--rgb-bw), 1) !important;
 }
 
-#confirmation div {
+#confirmation h4, #prompt h4 {
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+#confirmation .input, #prompt .input {
+  margin-bottom: 1rem;
+}
+
+#confirmation .btns, #prompt .btns {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  padding: 1em;
   -webkit-box-pack: right;
       -ms-flex-pack: right;
           justify-content: right;
   width: 100%;
 }
 
-#confirmation div button {
+#confirmation .btns button, #prompt .btns button {
   background: none;
 }
 
-#confirmation div button:first-of-type {
+#confirmation .btns button:first-of-type, #prompt .btns button:first-of-type {
   margin-right: 0.6em;
 }
 
@@ -695,30 +703,23 @@ form {
   margin-bottom: 1em;
 }
 
-#sign_in_popup {
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
-  border-radius: 0.5em;
-  width: calc(100vw - 2em);
-  background: rgba(var(--foreground), 1);
-}
-
 #sign_in_popup h1 {
   margin-top: 2rem;
 }
 
-#sign_in_popup p:first-of-type {
-  margin-bottom: 4em;
+#sign_in_popup h4 {
+  font-weight: 500;
+  margin-bottom: 3rem;
 }
 
 #sign_in_popup button {
   margin: 1rem 0;
 }
 
-#sign_in_popup p:nth-of-type(2) {
-  margin-top: 2em;
-  margin-bottom: 1em;
+#sign_in_popup p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 0 !important;
 }
 
 #sign_in_popup .input {
@@ -739,28 +740,37 @@ form {
       -ms-flex-align: center;
           align-items: center;
   padding: 1em 0;
-}
-
-#main_header svg {
-  stroke: var(--primary-color);
-  stroke-width: 10;
-  stroke-linecap: round;
-  height: 2em;
-  width: 3em;
-  fill: none;
-  margin-right: 0.4em;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 #main_header #display_balance {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  margin-left: auto;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr auto;
+      grid-template-columns: 1fr auto;
+      grid-template-areas: 'title title' ' . .';
+  gap: 0.3rem 0.5rem;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   text-align: right;
+}
+
+#main_header #display_balance h5 {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-area: title;
+}
+
+#main_header #display_balance .icon {
+  height: 1.4rem;
+  width: 1.4rem;
+  padding: 0.3rem;
+  stroke-width: 10;
+  cursor: pointer;
 }
 
 .icon {
@@ -860,23 +870,46 @@ form {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  border-radius: 0.2rem;
+  border-radius: 0.4rem;
   padding: 1.5rem;
   margin-right: 1rem;
   margin-bottom: 1rem;
-  border: solid 1px rgba(var(--text), 0.3);
+  border: solid 1px rgba(var(--text), 0.2);
   text-transform: capitalize;
   cursor: pointer;
 }
 
 .options-tab .option .icon {
-  height: 1.4rem;
-  width: 1.4rem;
-  margin-bottom: 1.5rem;
+  height: 2.8rem;
+  width: 2.8rem;
+  padding: 0.8rem;
+  border-radius: 2rem;
+  margin-bottom: 1rem;
+  stroke: rgba(var(--text), 0.4);
 }
 
 .options-tab .option h4 {
   font-weight: 600;
+}
+
+.options-tab .option:nth-of-type(1) .icon {
+  background: #ffe5ea;
+  stroke: #af0f2c;
+}
+
+.options-tab .option:nth-of-type(2) .icon {
+  background: #fff9d5;
+  stroke: #e69620;
+}
+
+.options-tab .option:nth-of-type(3) .icon {
+  background: #e5ffe3;
+  stroke: #189b0f;
+}
+
+.options-tab .option:nth-of-type(4) .icon {
+  background: #e4fbff;
+  stroke: #0b8ea5;
 }
 
 .notification-dot::after {
@@ -1034,18 +1067,7 @@ form {
     border-radius: 0.2rem;
   }
   #confirmation {
-    padding: 1rem;
     width: 24rem;
-  }
-  #confirmation button {
-    margin-left: 0.5rem;
-  }
-  #confirmation button:first-of-type {
-    margin-left: auto;
-  }
-  #confirmation p {
-    margin: 1rem;
-    margin-bottom: 2rem;
   }
   .container {
     -ms-grid-columns: (1fr)[2];
