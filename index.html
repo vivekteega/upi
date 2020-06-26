@@ -842,7 +842,7 @@
             if (e.target.closest('.confirm-pay-btn'))
                 askConfirmation('Confirm this pay request?').then(async (result) => {
                     let payRequest = e.target.closest('.request'),
-                        status = await pay_through_cashier(payRequest.dataset.sender, payRequest.dataset.receiverFloId, payRequest.dataset.txid, payRequest.dataset.amount)
+                        status = await pay_as_cashier(payRequest.dataset.sender, payRequest.dataset.receiverFloId, payRequest.dataset.txid, payRequest.dataset.amount)
                     if (status) {
                         refresh_balance()
                         payRequest.remove()
@@ -10119,6 +10119,19 @@
             }
         }
 
+        async function clearCashierData(dataStores = ['deposits_flo_txids', 'cash_sent_details', 
+        'generalData', 'generalVC', 'pay_thru_cashier']) {
+            try {
+                for (const ds of dataStores) {
+                    compactIDB.clearData(ds);        
+                }
+                return true;
+            } catch(e) {
+                console.error(e);
+                return false;
+            }
+        }
+
     </script>
 
     <script>
@@ -10265,7 +10278,7 @@
 
                 hidePopup()
 
-                init_pay_through_cashier_system();
+                pay_through_cashier();
                 show_deposit_request()
                 show_withdraw_request()
                 showPayRequests()
@@ -10294,11 +10307,14 @@
 
                     return true;
                 } else if (token_app.master_configurations.helplineFloId===myFloID) {
-                    
-                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_DEPOSITS);
-                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS);
-                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_DEPOSITS);
-                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_DEPOSITS);
+                    await clearCashierData();
+
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_FILE_DEPOSITS_COMPLAINT);
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT);
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_FILE_WITHDRAWS_COMPLAINT);
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_DEPOSITS_COMPLAINT);
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT);
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS_COMPLAINT);
 
                     return true;
                 } else {
@@ -10344,36 +10360,6 @@
                 { receiverID: floGlobals.adminID });
         }
 
-        function request_rupee_token() {
-            try {
-                const request_tokens_btn = document.getElementById('request_tokens_btn');
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
-                request_tokens_btn.onclick = function () {
-                    if (typeof myFloID !== "string" || myFloID.length < 1) return;
-                    const token_amount_to_buy = Number(document.getElementById('token_amount_to_buy').value);
-                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                    notify(`Please pay Rs ${token_amount_to_buy} to UPI id ${cashier_upi}.`, '', 'fixed', true);
-                    let upi_txid = prompt(`Please enter UPI TXID for deposited cash to ${cashier_upi}`);
-                    let request_object = {
-                        user_flo_id: myFloID,
-                        upi_txid: upi_txid,
-                    }
-                    if (typeof upi_txid === "string" && upi_txid.length > 1) {
-                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_DEPOSITS,
-                            { receiverID: cashier }).then(result => {
-                                console.log(result);
-                                notify('Request sent successfully.');
-                            })
-                        return true;
-                    }
-                    notify('Request failed.', 'error');
-                    return false;
-                }
-            } catch (error) {
-                throw new Error(error)
-            }
-        }
-
         async function show_deposit_request() {
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
@@ -10411,68 +10397,6 @@
 
                 depositsContainer.append(frag)
 
-            } catch (error) {
-                throw new Error(error)
-            }
-        }
-
-        function withdraw_token_to_get_cash() {
-            try {
-                const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
-                withdraw_cash_btn.onclick = async function () {
-                    // TODO: Disble the button
-                    if (typeof myFloID !== "string" || myFloID.length < 1) {
-                        notify(`Your Flo Id is invalid.`);
-                        return;
-                    }
-                    const withdraw_cash_amount = Number(document.getElementById('withdraw_cash_amount').value);
-                    const user_withdraw_upi = String(document.getElementById('user_withdraw_upi').value);
-                    if (withdraw_cash_amount < 1) {
-                        notify(`Invalid amount. Please provide a number above 0.`);
-                        return false;
-                    }
-                    if (!user_withdraw_upi.includes('@')) {
-                        notify(`Please enter a valid UPI id.`);
-                        return false;
-                    }
-                    const token_balance_url = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${myFloID}`;
-                    const user_token_balance_object = await ajaxGet(token_balance_url);
-                    if (typeof user_token_balance_object !== "object" || typeof user_token_balance_object.balance !== "number") {
-                        notify('You do not have rupee balance yet. Please deposit rupee to get balance.');
-                        return;
-                    }
-                    const current_balance = Number(user_token_balance_object.balance);
-                    if (current_balance < withdraw_cash_amount) {
-                        notify(`You have unsufficient balance to withdraw. You can withdraw only Rs ${user_token_balance_object.balance}`, 'error', 'fixed', true);
-                        return;
-                    }
-
-                    const flo_comment = `transfer ${withdraw_cash_amount} rupee#`;
-                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, cashier, 0.001, myPrivKey, flo_comment)
-                    console.log(flo_txid);
-                    if (typeof flo_txid !== "string") {
-                        notify(`Transaction unsuccessfull.`);
-                        return false;
-                    }
-                    // TODO: Validate https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}
-                    // and then continue further
-
-                    let request_object = {
-                        user_flo_id: myFloID,
-                        token_txid: flo_txid,
-                        withdrawer_upi: user_withdraw_upi
-                    }
-                    console.log(request_object);
-                    if (typeof flo_txid === "string" && flo_txid.length > 1) {
-                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_WITHDRAWS,
-                            { receiverID: cashier });
-                        notify('Withdraw request sent successfully.');
-                        return true;
-                    }
-                    notify('Failed to send withdraw request to cashier.');
-                    return true;
-                }
             } catch (error) {
                 throw new Error(error)
             }
@@ -10671,45 +10595,6 @@
             }
         }
 
-        function init_pay_through_cashier_system() {
-            try {
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
-                const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                
-                const txt = `Please send cash to UPI address ${cashier_upi}. 
-                      Then specify the amount sent and UPI Txid below.`;
-            
-                document.getElementById('pay_cashier_info').innerText = txt;
-
-                const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
-                cnf_cash_payment_btn.onclick = function () {
-                    const paying_amount_div = document.getElementById('recvr_amount_to_pay')
-                    const recvr_id = document.getElementById('recvr_id').value;
-                    let amount_to_pay = Number(paying_amount_div.value);
-                    let paid_cashier_upi_txid = document.getElementById('paid_cashier_upi_txid').value;
-                    paid_cashier_upi_txid = toAlphanumeric(paid_cashier_upi_txid);
-                    if (recvr_id.length < 1
-                        || amount_to_pay <= 0
-                        || paid_cashier_upi_txid.length < 1)
-                        return notify("Incomplete information", 'error', '', true);
-                    const req_object = {
-                        receiver_flo_id: recvr_id,
-                        amount: amount_to_pay,
-                        upi_txid: toAlphanumeric(paid_cashier_upi_txid)
-                    }
-                    
-                    floCloudAPI.sendGeneralData(req_object, token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
-                        { receiverID: cashier, senderIDs: [myFloID] });
-
-                    notify(`You have sent cash to ${recvr_id} through our cashier service (${cashier_upi}). 
-                    Once the cashier receives your payment, he will transfer it to ${recvr_id}.`, '', 'fixed', true);
-                }
-
-            } catch (error) {
-                throw new Error(error)
-            }
-        }
-
         async function showPayRequests() {
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
@@ -10751,7 +10636,7 @@
             }
         }
 
-        async function pay_through_cashier(sender_flo_id = '', vendor_flo_id = '', upi_txid = '', usr_amount_to_pay = 0) {
+        async function pay_as_cashier(sender_flo_id = '', vendor_flo_id = '', upi_txid = '', usr_amount_to_pay = 0) {
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
                 if (vendor_flo_id.length < 1) throw new Error("Invalid Receiver Id");
@@ -10814,6 +10699,138 @@
 
     <!-- User functions -->
     <script>
+
+        function request_rupee_token() {
+            try {
+                const request_tokens_btn = document.getElementById('request_tokens_btn');
+                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
+                request_tokens_btn.onclick = function () {
+                    if (typeof myFloID !== "string" || myFloID.length < 1) return;
+                    const token_amount_to_buy = Number(document.getElementById('token_amount_to_buy').value);
+                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+                    notify(`Please pay Rs ${token_amount_to_buy} to UPI id ${cashier_upi}.`, '', 'fixed', true);
+                    let upi_txid = prompt(`Please enter UPI TXID for deposited cash to ${cashier_upi}`);
+                    let request_object = {
+                        user_flo_id: myFloID,
+                        upi_txid: upi_txid,
+                    }
+                    if (typeof upi_txid === "string" && upi_txid.length > 1) {
+                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_DEPOSITS,
+                            { receiverID: cashier }).then(result => {
+                                console.log(result);
+                                notify('Request sent successfully.');
+                            })
+                        return true;
+                    }
+                    notify('Request failed.', 'error');
+                    return false;
+                }
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+
+        function withdraw_token_to_get_cash() {
+            try {
+                const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
+                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
+                withdraw_cash_btn.onclick = async function () {
+                    // TODO: Disble the button
+                    if (typeof myFloID !== "string" || myFloID.length < 1) {
+                        notify(`Your Flo Id is invalid.`);
+                        return;
+                    }
+                    const withdraw_cash_amount = Number(document.getElementById('withdraw_cash_amount').value);
+                    const user_withdraw_upi = String(document.getElementById('user_withdraw_upi').value);
+                    if (withdraw_cash_amount < 1) {
+                        notify(`Invalid amount. Please provide a number above 0.`);
+                        return false;
+                    }
+                    if (!user_withdraw_upi.includes('@')) {
+                        notify(`Please enter a valid UPI id.`);
+                        return false;
+                    }
+                    const token_balance_url = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${myFloID}`;
+                    const user_token_balance_object = await ajaxGet(token_balance_url);
+                    if (typeof user_token_balance_object !== "object" || typeof user_token_balance_object.balance !== "number") {
+                        notify('You do not have rupee balance yet. Please deposit rupee to get balance.');
+                        return;
+                    }
+                    const current_balance = Number(user_token_balance_object.balance);
+                    if (current_balance < withdraw_cash_amount) {
+                        notify(`You have unsufficient balance to withdraw. You can withdraw only Rs ${user_token_balance_object.balance}`, 'error', 'fixed', true);
+                        return;
+                    }
+
+                    const flo_comment = `transfer ${withdraw_cash_amount} rupee#`;
+                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, cashier, 0.001, myPrivKey, flo_comment)
+                    console.log(flo_txid);
+                    if (typeof flo_txid !== "string") {
+                        notify(`Transaction unsuccessfull.`);
+                        return false;
+                    }
+                    // TODO: Validate https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}
+                    // and then continue further
+
+                    let request_object = {
+                        user_flo_id: myFloID,
+                        token_txid: flo_txid,
+                        withdrawer_upi: user_withdraw_upi
+                    }
+                    console.log(request_object);
+                    if (typeof flo_txid === "string" && flo_txid.length > 1) {
+                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_WITHDRAWS,
+                            { receiverID: cashier });
+                        notify('Withdraw request sent successfully.');
+                        return true;
+                    }
+                    notify('Failed to send withdraw request to cashier.');
+                    return true;
+                }
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+
+        function pay_through_cashier() {
+            try {
+                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
+                const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+                
+                const txt = `Please send cash to UPI address ${cashier_upi}. 
+                      Then specify the amount sent and UPI Txid below.`;
+            
+                document.getElementById('pay_cashier_info').innerText = txt;
+
+                const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
+                cnf_cash_payment_btn.onclick = function () {
+                    const paying_amount_div = document.getElementById('recvr_amount_to_pay')
+                    const recvr_id = document.getElementById('recvr_id').value;
+                    let amount_to_pay = Number(paying_amount_div.value);
+                    let paid_cashier_upi_txid = document.getElementById('paid_cashier_upi_txid').value;
+                    paid_cashier_upi_txid = toAlphanumeric(paid_cashier_upi_txid);
+                    if (recvr_id.length < 1
+                        || amount_to_pay <= 0
+                        || paid_cashier_upi_txid.length < 1)
+                        return notify("Incomplete information", 'error', '', true);
+                    const req_object = {
+                        receiver_flo_id: recvr_id,
+                        amount: amount_to_pay,
+                        upi_txid: toAlphanumeric(paid_cashier_upi_txid)
+                    }
+                    
+                    floCloudAPI.sendGeneralData(req_object, token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                        { receiverID: cashier, senderIDs: [myFloID] });
+
+                    notify(`You have sent cash to ${recvr_id} through our cashier service (${cashier_upi}). 
+                    Once the cashier receives your payment, he will transfer it to ${recvr_id}.`, '', 'fixed', true);
+                }
+
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+
         async function show_user_activities() {
             try {
                 await token_app.actions.retrieveLatestContent();
@@ -10881,9 +10898,10 @@
     <!-- Helpline -->
     <script>
 
-        async function load_deposit_complaints(sendersArray=[], receiver='') {
+        async function load_deposit_complaints(receiver='', sendersArray=[]) {
             try {
 
+                await clearCashierData();
 
                 await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, 
                         { receiverID: receiver });                
@@ -10943,8 +10961,10 @@
             }
         }
 
-        async function load_withdraw_complaints(sender='', receiver='') {
+        async function load_withdraw_complaints(receiver='', sender=[]) {
             try {
+
+                await clearCashierData();
 
                 await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, 
                         { receiverID: receiver });                
@@ -10998,8 +11018,10 @@
             }
         }
 
-        async function load_pay_thru_cashier_complaints(sender='', receiver='') {
+        async function load_pay_thru_cashier_complaints(receiver='', sender=[]) {
             try {
+
+                await clearCashierData();
 
                 await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, 
                         { receiverID: receiver });                
