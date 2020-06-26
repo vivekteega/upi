@@ -336,13 +336,14 @@ form{
         align-self: flex-end;
         align-items: flex-start;
         flex-wrap: wrap;
-        width: 100%;
-        border-radius: 0.5rem 0.5rem 0 0;
+        width: calc(100% - 2rem);
+        margin-bottom: 1rem;
+        border-radius: 1rem;
         padding: 1.5rem;
         position: relative;
         display: flex;
         background: rgba(var(--foreground), 1);
-        transform: translateY(1rem);
+        transform: translateY(100%);
         transition: transform 0.3s;
         box-shadow: 0 2rem 2rem rgba($color: #000000, $alpha: 0.24);
         overflow-y: auto;
@@ -353,9 +354,16 @@ form{
             margin-left: auto;
         }
         .container-header{
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             align-items: center;
             padding: 0;
             margin-bottom: 1.5rem;
+            .icon{
+                cursor: pointer;
+                padding-right: 0.4rem;
+                stroke-width: 8;
+            }
             .btn{
                 padding: 0.6em 1.2em;
             }
@@ -573,6 +581,9 @@ form{
             width: 1.4rem;
             margin-bottom: 1.5rem;
         }
+        h4{
+            font-weight: 600;
+        }
     }
 }
 .notification-dot::after{
@@ -680,6 +691,7 @@ form{
             align-self: center;
             border-radius: 0.2rem;
             height: auto;
+            transform: translateY(1rem);
         }
     }
     #show_message{

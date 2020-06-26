@@ -523,16 +523,17 @@ form {
           align-items: flex-start;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  width: 100%;
-  border-radius: 0.5rem 0.5rem 0 0;
+  width: calc(100% - 2rem);
+  margin-bottom: 1rem;
+  border-radius: 1rem;
   padding: 1.5rem;
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   background: rgba(var(--foreground), 1);
-  -webkit-transform: translateY(1rem);
-          transform: translateY(1rem);
+  -webkit-transform: translateY(100%);
+          transform: translateY(100%);
   -webkit-transition: -webkit-transform 0.3s;
   transition: -webkit-transform 0.3s;
   transition: transform 0.3s;
@@ -551,11 +552,21 @@ form {
 }
 
 .popup-container .popup .container-header {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto 1fr auto;
+      grid-template-columns: auto 1fr auto;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   padding: 0;
   margin-bottom: 1.5rem;
+}
+
+.popup-container .popup .container-header .icon {
+  cursor: pointer;
+  padding-right: 0.4rem;
+  stroke-width: 8;
 }
 
 .popup-container .popup .container-header .btn {
@@ -864,6 +875,10 @@ form {
   margin-bottom: 1.5rem;
 }
 
+.options-tab .option h4 {
+  font-weight: 600;
+}
+
 .notification-dot::after {
   content: '';
   position: absolute;
@@ -1005,6 +1020,8 @@ form {
         align-self: center;
     border-radius: 0.2rem;
     height: auto;
+    -webkit-transform: translateY(1rem);
+            transform: translateY(1rem);
   }
   #show_message {
     -webkit-transform: translate(100%, 0);

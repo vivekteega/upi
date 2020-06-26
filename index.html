@@ -6,6 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blockchain UPI</title>
     <link rel="stylesheet" href="css/main.css">
+
+    <script id="floGlobals">
+        /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
+        const floGlobals = {
+
+            //Required for all
+            blockchain: "FLO",
+
+            //Required for blockchain API operators
+            apiURL: {
+                FLO: ['https://explorer.mediciland.com/', 'https://livenet.flocha.in/', 'https://flosight.duckdns.org/', 'http://livenet-explorer.floexperiments.com/'],
+                FLO_TEST: ['https://testnet-flosight.duckdns.org/', 'https://testnet.flocha.in/']
+            },
+            adminID: "F7HEAV9226tqXtRk34XrA9nZCb8ZcbVJt1",
+            sendAmt: 0.001,
+            fee: 0.0005,
+
+            //Required for Supernode operations
+            SNStorageID: "FEzk75EGMPEQMrCuPosGiwuK162hcEu49E",
+            supernodes: {}, //each supnernode must be stored as floID : {uri:<uri>,pubKey:<publicKey>}
+
+            //for cloud apps
+            subAdmins: [],
+            application: "RUPEE_TOKEN_APP_TEST5",//rupeeTokenApp
+            vectorClock: {},
+            appObjects: {},
+            generalData: {},
+            generalVC: {}
+        }
+    </script>
+
+    <script id="onLoadStartUp">
+        function onLoadStartUp() {
+            showPopup('main_loader', 'no')
+            console.log("Starting the app! Please Wait!")
+            floDapps.launchStartUp().then(result => {
+                console.log(result)
+                console.log(`Welcome ${myFloID}`)
+                token_app.actions.doShreeGanesh();
+                refresh_balance()
+                document.getElementById('user_flo_id').textContent = myFloID
+            }).catch(error => console.error(error))
+        }
+    </script>
 </head>
 
 <body onload="onLoadStartUp()">
@@ -179,7 +223,7 @@
                         <polyline
                             points="17.04 35.97 14.57 33.5 40.15 7.9 32.75 0.5 55.52 0.5 55.52 23.28 48.12 15.87 23.86 40.14 15.88 48.13 8.48 40.72 8.48 63.5 31.25 63.5 23.85 56.1 49.43 30.5 46.96 28.03" />
                     </svg>
-                    Transfer Rupee
+                    <h4>Transfer Rupee</h4>
                 </div>
                 <div class="option" onclick="showPopup('deposit_rupee')">
                     <svg class="icon banking" viewBox="0 0 52 51.5">
@@ -192,7 +236,7 @@
                         <rect x="1" y="6" width="6" height="13.5" rx="2.76" />
                         <rect x="1" y="28" width="6" height="13.5" rx="2.76" />
                     </svg>
-                    deposit rupee
+                    <h4>deposit rupee</h4>
                 </div>
                 <div class="option" onclick="showPopup('withdraw_rupee')">
                     <svg class="icon banking" viewBox="0 0 52 60">
@@ -208,19 +252,24 @@
                         <path d="M31.06,39.32c0,2.31-1.19,4.2-2.64,4.23s-2.62-1.79-2.62-4.08S27,35.3,28.42,35.24,31.06,37,31.06,39.32Z"
                             transform="translate(-6 -2)" />
                     </svg>
-                    withdraw rupee
+                    <h4>Withdraw rupee</h4>
                 </div>
                 <div class="option" onclick="showPopup('pay_anyone')">
                     <svg class="icon" viewBox="0 0 64 64">
                         <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
                         <rect height="64" width="64" rx="8"></rect>
                     </svg>
-                    pay through cashier
+                    <h4>pay through cashier</h4>
                 </a>
             </div>
             <div class="popup-container hide">
                 <div id="cash_transfer" class="popup">
                     <div class="container-header">
+                        <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                            <title>close</title>
+                            <line x1="64" y1="0" x2="0" y2="64" />
+                            <line x1="64" y1="64" x2="0" y2="0" />
+                        </svg>
                         <h3>Transfer Rupee</h3>
                         <div id="send_tokens_btn" class="action expand">
                             <button class="primary-btn expand" type="submit" disabled>
@@ -247,6 +296,11 @@
             <div class="popup-container hide">
                 <div id="deposit_rupee" class="popup">
                     <div class="container-header">
+                        <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                            <title>close</title>
+                            <line x1="64" y1="0" x2="0" y2="64" />
+                            <line x1="64" y1="64" x2="0" y2="0" />
+                        </svg>
                         <h3>Deposit rupee</h3>
                         <div id="request_tokens_btn" class="action expand">
                             <button class="primary-btn expand" type="submit" disabled>
@@ -268,6 +322,11 @@
             <div class="popup-container hide">
                 <div id="withdraw_rupee" class="popup">
                     <div class="container-header">
+                        <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                            <title>close</title>
+                            <line x1="64" y1="0" x2="0" y2="64" />
+                            <line x1="64" y1="64" x2="0" y2="0" />
+                        </svg>
                         <h3>Withdraw rupee</h3>
                         <div id="withdraw_cash_btn" class="action expand">
                             <button class="primary-btn expand" type="submit" disabled>
@@ -280,7 +339,7 @@
                     </p>
                     <form autocomplete="off" onsubmit="return false">
                         <div class="input">
-                            <input id="user_withdraw_upi" type="text" required>
+                            <input id="user_withdraw_upi" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" type="text" required>
                             <label for="user_withdraw_upi">Reciever's UPI address</label>
                         </div>
                         <div class="input">
@@ -293,9 +352,13 @@
             <div class="popup-container hide">
                 <div id="pay_anyone" class="popup">
                     <div class="container-header">
-                        <h3>Pay anyone through cashier</h3>
-                        <div id="cnf_cash_payment" class="action expand"
-                            onclick="confirm_pay_through_cashier_request()">
+                        <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                            <title>close</title>
+                            <line x1="64" y1="0" x2="0" y2="64" />
+                            <line x1="64" y1="64" x2="0" y2="0" />
+                        </svg>
+                        <h3>Pay through cashier</h3>
+                        <div id="cnf_cash_payment" class="action expand" >
                             <button class="primary-btn expand" type="submit" disabled>
                                 pay
                             </button>
@@ -304,6 +367,7 @@
                     <p>
                         Don't have enough token balance? Pay to our cashier through UPI and your cash will be transfered as Rupee tokens.
                     </p>
+                    <p><strong id="pay_cashier_info"></strong></p>
                     <form autocomplete="off" onsubmit="return false">
                         <div class="input">
                             <input id="recvr_id" type="text" required>
@@ -611,6 +675,7 @@
             popupStack.push({ popup, permission })
             zIndex++;
             thisPopup.parentNode.setAttribute('style', `z-index: ${zIndex}`)
+            document.getElementById('main_page')
             if (popup === 'main_loader') {
                 loader.classList.add('animate-loader')
                 document.querySelector('main').classList.add('hide-completely')
@@ -798,7 +863,7 @@
             if (e.target.closest('.confirm-pay-btn'))
                 askConfirmation('Confirm this pay request?').then(async (result) => {
                     let payRequest = e.target.closest('.request'),
-                        status = await pay_through_cashier(payRequest.dataset.sender, payRequest.dataset.userFloId, payRequest.dataset.txid, payRequest.dataset.amount)
+                        status = await pay_through_cashier(payRequest.dataset.sender, payRequest.dataset.receiverFloId, payRequest.dataset.txid, payRequest.dataset.amount)
                     if (status) {
                         refresh_balance()
                         payRequest.remove()
@@ -853,35 +918,6 @@
             .catch(err =>{
                 console.log(err)
             })
-        }
-    </script>
-    <script id="floGlobals">
-        /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
-        const floGlobals = {
-
-            //Required for all
-            blockchain: "FLO",
-
-            //Required for blockchain API operators
-            apiURL: {
-                FLO: ['https://explorer.mediciland.com/', 'https://livenet.flocha.in/', 'https://flosight.duckdns.org/', 'http://livenet-explorer.floexperiments.com/'],
-                FLO_TEST: ['https://testnet-flosight.duckdns.org/', 'https://testnet.flocha.in/']
-            },
-            adminID: "F7HEAV9226tqXtRk34XrA9nZCb8ZcbVJt1",
-            sendAmt: 0.001,
-            fee: 0.0005,
-
-            //Required for Supernode operations
-            SNStorageID: "FEzk75EGMPEQMrCuPosGiwuK162hcEu49E",
-            supernodes: {}, //each supnernode must be stored as floID : {uri:<uri>,pubKey:<publicKey>}
-
-            //for cloud apps
-            subAdmins: [],
-            application: "rupeeTokenApp",
-            vectorClock: {},
-            appObjects: {},
-            generalData: {},
-            generalVC: {}
         }
     </script>
     <script id="init_lib">
@@ -1456,7 +1492,7 @@
                             ba[i] = sr.getByte() ^ rvBytes[i];
                         return;
                     } catch (e) {
-                        notify(e);
+                        alert(e);
                     }
                 }
                 for (i = 0; i < ba.length; ++i) ba[i] = sr.getByte();
@@ -1558,7 +1594,7 @@
                         window.crypto.getRandomValues(ua);
                         for (t = 0; t < sr.poolSize; ++t)
                             sr.pool[sr.pptr++] = ua[t];
-                    } catch (e) { notify(e); }
+                    } catch (e) { alert(e); }
                 }
                 while (sr.pptr < sr.poolSize) {  // extract some randomness from Math.random()
                     t = Math.floor(65536 * Math.random());
@@ -7155,14 +7191,14 @@
             // Called when Math.random() is being used.
             function warn() {
                 global['console']['warn'](defaults.warning);
-                if (typeof global['notify'] === 'function' && config.notify) {
-                    global['notify'](defaults.warning);
+                if (typeof global['alert'] === 'function' && config.alert) {
+                    global['alert'](defaults.warning);
                 }
             }
 
             // Set the PRNG to use. If no RNG function is supplied, pick a default using getRNG()
             /** @expose **/
-            exports.setRNG = function (rng, notify) {
+            exports.setRNG = function (rng, alert) {
                 if (!isInited()) {
                     this.init();
                 }
@@ -7178,7 +7214,7 @@
                 } else {
                     config.rng = rng;
                 }
-                config.notify = !!notify;
+                config.alert = !!alert;
 
                 return !!config.unsafePRNG;
             };
@@ -7861,7 +7897,7 @@
             }
         })();
     </script>
-
+    
     <script id="floCrypto">
         /* FLO Crypto Operators*/
         const floCrypto = {
@@ -7937,7 +7973,8 @@
 
                 deriveSharedKeyReceiver: function (senderPublicKeyString, receiverPrivateKey) {
                     try {
-                        return ellipticCurveEncryption.receiverSharedKeyDerivation(senderPublicKeyString.XValuePublicString,
+                        return ellipticCurveEncryption.receiverSharedKeyDerivation(senderPublicKeyString
+                            .XValuePublicString,
                             senderPublicKeyString.YValuePublicString, receiverPrivateKey);
 
                     } catch (error) {
@@ -7974,7 +8011,8 @@
                 if (alphaNumeric)
                     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
                 else
-                    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_+-./*?@#&$<>=[]{}():';
+                    var characters =
+                        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_+-./*?@#&$<>=[]{}():';
                 for (var i = 0; i < length; i++)
                     result += characters.charAt(Math.floor(Math.random() * characters.length));
                 return result;
@@ -7983,7 +8021,8 @@
             //Encrypt Data using public-key
             encryptData: function (data, receiverCompressedPublicKey) {
                 var senderECKeyData = this.util.getSenderPublicKeyString();
-                var senderDerivedKey = this.util.deriveSharedKeySender(receiverCompressedPublicKey, senderECKeyData.privateKey);
+                var senderDerivedKey = this.util.deriveSharedKeySender(receiverCompressedPublicKey, senderECKeyData
+                    .privateKey);
                 let senderKey = senderDerivedKey.XValue + senderDerivedKey.YValue;
                 let secret = Crypto.AES.encrypt(data, senderKey);
                 return {
@@ -8002,8 +8041,9 @@
                     "Failed to detremine your private key.");
                 receiverECKeyData.privateKey = privateKey.privateKeyDecimal;
 
-                var receiverDerivedKey = this.util.deriveReceiverSharedKey(data.senderPublicKeyString, receiverECKeyData
-                    .privateKey);
+                var receiverDerivedKey = this.util.deriveReceiverSharedKey(data.senderPublicKeyString,
+                    receiverECKeyData
+                        .privateKey);
 
                 let receiverKey = receiverDerivedKey.XValue + receiverDerivedKey.YValue;
                 let decryptMsg = Crypto.AES.decrypt(data.secret, receiverKey);
@@ -8058,11 +8098,11 @@
 
             //Returns public-key from private-key
             getPubKeyHex: function (privateKeyHex) {
+                if (!privateKeyHex)
+                    return null;
                 var key = new Bitcoin.ECKey(privateKeyHex);
-                if (key.priv == null) {
-                    notify("Invalid Private key");
-                    return;
-                }
+                if (key.priv == null)
+                    return null;
                 key.setCompressed(true);
                 var pubkeyHex = key.getPubKeyHex();
                 return pubkeyHex;
@@ -8070,9 +8110,13 @@
 
             //Returns flo-ID from public-key
             getFloIDfromPubkeyHex: function (pubkeyHex) {
-                var key = new Bitcoin.ECKey().setPub(pubkeyHex);
-                var floID = key.getBitcoinAddress();
-                return floID;
+                try {
+                    var key = new Bitcoin.ECKey().setPub(pubkeyHex);
+                    var floID = key.getBitcoinAddress();
+                    return floID;
+                } catch (e) {
+                    console.error(e);
+                }
             },
 
             //Verify the private-key for the given public-key or flo-ID
@@ -8112,7 +8156,7 @@
                         return shares;
                     }
                     return false;
-                } catch{
+                } catch {
                     return false
                 }
             },
@@ -8131,8 +8175,8 @@
                         return comb;
                     }
                     return false;
-                } catch{
-                    return false
+                } catch {
+                    return false;
                 }
             }
         }
@@ -8196,22 +8240,24 @@
             },
 
             //Write Data into blockchain
-            writeData: function (senderAddr, Data, PrivKey, receiverAddr = floGlobals.adminID) {
+            writeData: function (senderAddr, data, privKey, receiverAddr = floGlobals.adminID) {
                 return new Promise((resolve, reject) => {
-                    this.sendTx(senderAddr, receiverAddr, floGlobals.sendAmt, PrivKey, Data)
+                    if (typeof data != "string")
+                        data = JSON.stringify(data);
+                    this.sendTx(senderAddr, receiverAddr, floGlobals.sendAmt, privKey, data)
                         .then(txid => resolve(txid))
                         .catch(error => reject(error))
                 });
             },
 
             //Send Tx to blockchain 
-            sendTx: function (senderAddr, receiverAddr, sendAmt, PrivKey, floData = '') {
+            sendTx: function (senderAddr, receiverAddr, sendAmt, privKey, floData = '') {
                 return new Promise((resolve, reject) => {
                     if (!floCrypto.validateAddr(senderAddr))
                         reject(`Invalid address : ${senderAddr}`);
                     else if (!floCrypto.validateAddr(receiverAddr))
                         reject(`Invalid address : ${receiverAddr}`);
-                    if (PrivKey.length < 1 || !floCrypto.verifyPrivKey(PrivKey, senderAddr))
+                    if (privKey.length < 1 || !floCrypto.verifyPrivKey(privKey, senderAddr))
                         reject("Invalid Private key!");
                     else if (typeof sendAmt !== 'number' || sendAmt <= 0)
                         reject(`Invalid sendAmt : ${sendAmt}`);
@@ -8223,7 +8269,8 @@
                             for (var i = utxos.length - 1;
                                 (i >= 0) && (utxoAmt < sendAmt + fee); i--) {
                                 if (utxos[i].confirmations) {
-                                    trx.addinput(utxos[i].txid, utxos[i].vout, utxos[i].scriptPubKey)
+                                    trx.addinput(utxos[i].txid, utxos[i].vout, utxos[i]
+                                        .scriptPubKey)
                                     utxoAmt += utxos[i].amount;
                                 } else break;
                             }
@@ -8234,8 +8281,8 @@
                                 var change = utxoAmt - sendAmt - fee;
                                 if (change > 0)
                                     trx.addoutput(senderAddr, change);
-                                trx.addflodata(floData);
-                                var signedTxHash = trx.sign(PrivKey, 1);
+                                trx.addflodata(floData.replace(/\n/g, ' '));
+                                var signedTxHash = trx.sign(privKey, 1);
                                 this.broadcastTx(signedTxHash)
                                     .then(txid => resolve(txid))
                                     .catch(error => reject(error))
@@ -8245,11 +8292,229 @@
                 });
             },
 
+            //merge all UTXOs of a given floID into a single UTXO
+            mergeUTXOs: function (floID, privKey, floData = '') {
+                return new Promise((resolve, reject) => {
+                    if (!floCrypto.validateAddr(floID))
+                        return reject(`Invalid floID`);
+                    if (!floCrypto.verifyPrivKey(privKey, floID))
+                        return reject("Invalid Private Key")
+
+                    var trx = bitjs.transaction();
+                    var utxoAmt = 0.0;
+                    var fee = floGlobals.fee;
+                    this.promisedAPI(`api/addr/${floID}/utxo`).then(utxos => {
+                        for (var i = utxos.length - 1; i >= 0; i--) {
+                            if (utxos[i].confirmations) {
+                                trx.addinput(utxos[i].txid, utxos[i].vout, utxos[i]
+                                    .scriptPubKey)
+                                utxoAmt += utxos[i].amount;
+                            }
+                        }
+                        trx.addoutput(floID, utxoAmt - fee);
+                        trx.addflodata(floData.replace(/\n/g, ' '));
+                        var signedTxHash = trx.sign(privKey, 1);
+                        this.broadcastTx(signedTxHash)
+                            .then(txid => resolve(txid))
+                            .catch(error => reject(error))
+                    }).catch(error => reject(error))
+                })
+            },
+
+            /**Write data into blockchain from (and/or) to multiple floID
+             * @param  {Array} senderPrivKeys List of sender private-keys
+             * @param  {string} data FLO data of the txn
+             * @param  {Array} receivers List of receivers
+             * @param  {boolean} preserveRatio (optional) preserve ratio or equal contribution
+             * @return {Promise}
+             */
+            writeDataMultiple: function (senderPrivKeys, data, receivers = [floGlobals.adminID], preserveRatio = true) {
+                return new Promise((resolve, reject) => {
+                    if (!Array.isArray(senderPrivKeys))
+                        return reject("Invalid senderPrivKeys: SenderPrivKeys must be Array")
+                    if (!preserveRatio) {
+                        let tmp = {};
+                        let amount = (floGlobals.sendAmt * receivers.length) / senderPrivKeys.length;
+                        senderPrivKeys.forEach(key => tmp[key] = amount);
+                        senderPrivKeys = tmp
+                    }
+                    if (!Array.isArray(receivers))
+                        return reject("Invalid receivers: Receivers must be Array")
+                    else {
+                        let tmp = {};
+                        let amount = floGlobals.sendAmt;
+                        receivers.forEach(floID => tmp[floID] = amount);
+                        receivers = tmp
+                    }
+                    if (typeof data != "string")
+                        data = JSON.stringify(data);
+                    this.sendTxMultiple(senderPrivKeys, receivers, data)
+                        .then(txid => resolve(txid))
+                        .catch(error => reject(error))
+                })
+            },
+
+            /**Send Tx from (and/or) to multiple floID
+             * @param  {Array or Object} senderPrivKeys List of sender private-key (optional: with coins to be sent)
+             * @param  {Object} receivers List of receivers with respective amount to be sent
+             * @param  {string} floData FLO data of the txn
+             * @return {Promise}
+             */
+            sendTxMultiple: function (senderPrivKeys, receivers, floData = '') {
+                return new Promise((resolve, reject) => {
+
+                    let senders = {}, preserveRatio;
+                    //check for argument validations
+                    try {
+                        let invalids = {
+                            InvalidSenderPrivKeys: [],
+                            InvalidSenderAmountFor: [],
+                            InvalidReceiverIDs: [],
+                            InvalidReceiveAmountFor: []
+                        }
+                        let inputVal = 0, outputVal = 0;
+                        //Validate sender privatekeys (and send amount if passed)
+                        //conversion when only privateKeys are passed (preserveRatio mode)
+                        if (Array.isArray(senderPrivKeys)) {
+                            senderPrivKeys.forEach(key => {
+                                try {
+                                    if (!key)
+                                        invalids.InvalidSenderPrivKeys.push(key);
+                                    else {
+                                        let floID = floCrypto.getFloIDfromPubkeyHex(floCrypto.getPubKeyHex(key));
+                                        senders[floID] = {
+                                            wif: key
+                                        }
+                                    }
+                                } catch (error) {
+                                    invalids.InvalidSenderPrivKeys.push(key)
+                                }
+                            })
+                            preserveRatio = true;
+                        }
+                        //conversion when privatekeys are passed with send amount
+                        else {
+                            for (let key in senderPrivKeys) {
+                                try {
+                                    if (!key)
+                                        invalids.InvalidSenderPrivKeys.push(key);
+                                    else {
+                                        if (typeof senderPrivKeys[key] !== 'number' || senderPrivKeys[key] <= 0)
+                                            invalids.InvalidSenderAmountFor.push(key)
+                                        else
+                                            inputVal += senderPrivKeys[key];
+                                        let floID = floCrypto.getFloIDfromPubkeyHex(floCrypto.getPubKeyHex(key));
+                                        senders[floID] = {
+                                            wif: key,
+                                            coins: senderPrivKeys[key]
+                                        }
+                                    }
+                                } catch (error) {
+                                    invalids.InvalidSenderPrivKeys.push(key)
+                                }
+                            }
+                            preserveRatio = false;
+                        }
+                        //Validate the receiver IDs and receive amount
+                        for (let floID in receivers) {
+                            if (!floCrypto.validateAddr(floID))
+                                invalids.InvalidReceiverIDs.push(floID)
+                            if (typeof receivers[floID] !== 'number' || receivers[floID] <= 0)
+                                invalids.InvalidReceiveAmountFor.push(floID)
+                            else
+                                outputVal += receivers[floID];
+                        }
+                        //Reject if any invalids are found
+                        for (let i in invalids)
+                            if (!invalids[i].length)
+                                delete invalids[i];
+                        if (Object.keys(invalids).length)
+                            return reject(invalids);
+                        //Reject if given inputVal and outputVal are not equal
+                        if (!preserveRatio && inputVal != outputVal)
+                            return reject(`Input Amount (${inputVal}) not equal to Output Amount (${outputVal})`)
+                    } catch (error) {
+                        return reject(error)
+                    }
+                    //Get balance of senders
+                    let promises = []
+                    for (let floID in senders)
+                        promises.push(this.getBalance(floID))
+                    Promise.all(promises).then(results => {
+                        let totalBalance = 0,
+                            totalFee = floGlobals.fee,
+                            balance = {};
+                        //Divide fee among sender if not for preserveRatio
+                        if (!preserveRatio)
+                            var dividedFee = totalFee / Object.keys(senders).length;
+                        //Check if balance of each sender is sufficient enough
+                        let insufficient = [];
+                        for (let floID in senders) {
+                            balance[floID] = parseFloat(results.shift());
+                            if (isNaN(balance[floID]) || (preserveRatio && balance[floID] <= totalFee) || (!preserveRatio && balance[floID] < senders[floID].coins + dividedFee))
+                                insufficient.push(floID)
+                            totalBalance += balance[floID];
+                        }
+                        if (insufficient.length)
+                            return reject({ InsufficientBalance: insufficient })
+                        //Calculate totalSentAmount and check if totalBalance is sufficient
+                        let totalSendAmt = totalFee;
+                        for (floID in receivers)
+                            totalSendAmt += receivers[floID];
+                        if (totalBalance < totalSendAmt)
+                            return reject("Insufficient total Balance")
+                        //Get the UTXOs of the senders
+                        let promises = []
+                        for (floID in senders)
+                            promises.push(this.promisedAPI(`api/addr/${floID}/utxo`))
+                        Promise.all(promises).then(results => {
+                            let wifSeq = [];
+                            var trx = bitjs.transaction();
+                            for (floID in senders) {
+                                let utxos = results.shift();
+                                let sendAmt;
+                                if (preserveRatio) {
+                                    let ratio = (balance[floID] / totalBalance);
+                                    sendAmt = totalSendAmt * ratio;
+                                } else
+                                    sendAmt = senders[floID].coins + dividedFee;
+                                let wif = senders[floID].wif;
+                                let utxoAmt = 0.0;
+                                for (let i = utxos.length - 1;
+                                    (i >= 0) && (utxoAmt < sendAmt); i--) {
+                                    if (utxos[i].confirmations) {
+                                        trx.addinput(utxos[i].txid, utxos[i].vout, utxos[i]
+                                            .scriptPubKey)
+                                        wifSeq.push(wif);
+                                        utxoAmt += utxos[i].amount;
+                                    }
+                                }
+                                if (utxoAmt < sendAmt)
+                                    return reject("Insufficient balance:" + floID);
+                                let change = (utxoAmt - sendAmt);
+                                if (change > 0)
+                                    trx.addoutput(floID, change);
+                            }
+                            for (floID in receivers)
+                                trx.addoutput(floID, receivers[floID]);
+                            trx.addflodata(floData.replace(/\n/g, ' '));
+                            for (let i = 0; i < wifSeq.length; i++)
+                                trx.signinput(i, wifSeq[i], 1);
+                            var signedTxHash = trx.serialize();
+                            this.broadcastTx(signedTxHash)
+                                .then(txid => resolve(txid))
+                                .catch(error => reject(error))
+                        }).catch(error => reject(error))
+                    }).catch(error => reject(error))
+                })
+            },
+
             //Broadcast signed Tx in blockchain using API
             broadcastTx: function (signedTxHash) {
                 return new Promise((resolve, reject) => {
                     var request = new XMLHttpRequest();
                     var url = this.util.serverList[this.util.curPos] + 'api/tx/send';
+                    console.log(url)
                     if (signedTxHash.length < 1)
                         reject("Empty Signature");
                     else {
@@ -8304,25 +8569,35 @@
                 return new Promise((resolve, reject) => {
                     this.promisedAPI(`api/addrs/${addr}/txs?from=0&to=1`).then(response => {
                         var newItems = response.totalItems - options.ignoreOld;
-                        this.promisedAPI(`api/addrs/${addr}/txs?from=0&to=${newItems * 2}`).then(response => {
-                            if (options.limit <= 0)
-                                options.limit = response.items.length;
-                            var filteredData = [];
-                            for (i = 0; i < (response.totalItems - options.ignoreOld) && filteredData.length < options.limit; i++) {
-                                if (options.sentOnly && response.items[i].vin[0].addr !== addr)
-                                    continue;
-                                if (options.pattern && !response.items[i].floData.startsWith(options.pattern, 0) && !response.items[i].floData.startsWith(options.pattern, 2))
-                                    continue;
-                                if (options.contains && !response.items[i].floData.includes(options.contains))
-                                    continue;
-                                if (options.filter && !options.filter(response.items[i].floData))
-                                    continue;
-                                filteredData.push(response.items[i].floData);
-                            }
-                            resolve({ totalTxs: response.totalItems, data: filteredData });
-                        }).catch(error => {
-                            reject(error);
-                        });
+                        this.promisedAPI(`api/addrs/${addr}/txs?from=0&to=${newItems * 2}`).then(
+                            response => {
+                                if (options.limit <= 0)
+                                    options.limit = response.items.length;
+                                var filteredData = [];
+                                for (i = 0; i < (response.totalItems - options.ignoreOld) &&
+                                    filteredData.length < options.limit; i++) {
+                                    if (options.sentOnly && response.items[i].vin[0].addr !==
+                                        addr)
+                                        continue;
+                                    if (options.pattern && !response.items[i].floData
+                                        .startsWith(options.pattern, 0) && !response.items[i]
+                                            .floData.startsWith(options.pattern, 2))
+                                        continue;
+                                    if (options.contains && !response.items[i].floData.includes(
+                                        options.contains))
+                                        continue;
+                                    if (options.filter && !options.filter(response.items[i]
+                                        .floData))
+                                        continue;
+                                    filteredData.push(response.items[i].floData);
+                                }
+                                resolve({
+                                    totalTxs: response.totalItems,
+                                    data: filteredData
+                                });
+                            }).catch(error => {
+                                reject(error);
+                            });
                     }).catch(error => {
                         reject(error);
                     });
@@ -8350,7 +8625,8 @@
                     const nodeIdNewInt8Array = new Uint8Array(nodeIdBytes);
                     return nodeIdNewInt8Array;
                 },
-                launch: function (superNodeList = Object.keys(floGlobals.supernodes), master_floID = floGlobals.adminID) {
+                launch: function (superNodeList = Object.keys(floGlobals.supernodes), master_floID = floGlobals
+                    .adminID) {
                     return new Promise((resolve, reject) => {
                         try {
                             const SuKBucketId = this.floIdToKbucketId(master_floID);
@@ -8484,7 +8760,6 @@
 
             sendDataToSN(data, snfloID) {
                 return new Promise((resolve, reject) => {
-                    console.log(snfloID)
                     var websocket = new WebSocket("wss://" + floGlobals.supernodes[snfloID].uri + "/ws");
                     websocket.onmessage = (evt => {
                         if (evt.data == '$+') {
@@ -8516,7 +8791,6 @@
             sendData: function (data, floID) {
                 return new Promise((resolve, reject) => {
                     this.kBucket.determineClosestSupernode(floID).then(closestNode => {
-                        console.log(closestNode)
                         this.sendDataToSN(data, closestNode[0])
                             .then(result => resolve(result))
                             .catch(error => reject(error))
@@ -8967,7 +9241,6 @@
 
             }
         }
-
     </script>
     <script id="compactIDB">
         /* Compact IndexedDB operations */
@@ -8977,43 +9250,57 @@
         window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
         if (!window.indexedDB)
-            window.notify("Your browser doesn't support a stable version of IndexedDB.")
+            window.alert("Your browser doesn't support a stable version of IndexedDB.")
 
         const compactIDB = {
 
             setDefaultDB: function (dbName) {
-                this.dbName = dbName;
+                this.defaultDB = dbName;
             },
 
-            initDB: function (dbName, objectStores = {}) {
+            initDB: function (dbName, objectStores = {}, version = null, removeStores = []) {
                 return new Promise((resolve, reject) => {
-                    this.dbName = this.dbName || dbName;
-                    var idb = indexedDB.open(dbName);
+                    this.defaultDB = this.defaultDB || dbName;
+                    var idb = version ? indexedDB.open(dbName, version) : indexedDB.open(dbName);
                     idb.onerror = (event) => {
                         reject("Error in opening IndexedDB!");
                     };
                     idb.onupgradeneeded = (event) => {
                         var db = event.target.result;
-                        for (obs in objectStores) {
-                            var objectStore = db.createObjectStore(obs, objectStores[obs].options || {});
-                            if (objectStores[obs].indexes && typeof objectStores[obs].indexes === 'object')
-                                for (i in objectStores[obs].indexes)
+                        for (let obs in objectStores) {
+                            var objectStore = db.createObjectStore(obs, objectStores[obs].options ||
+                                {});
+                            if (objectStores[obs].indexes && typeof objectStores[obs].indexes ===
+                                'object')
+                                for (let i in objectStores[obs].indexes)
                                     objectStore.createIndex(i, i, objectStores[obs].indexes[i] || {});
                         }
+                        if (version)
+                            removeStores.forEach(obs => db.deleteObjectStore(obs));
                     }
                     idb.onsuccess = (event) => {
                         var db = event.target.result;
-                        if (JSON.stringify(Object.values(db.objectStoreNames).sort()) === JSON.stringify(Object.keys(
-                            objectStores).sort()))
+                        if (JSON.stringify(Object.values(db.objectStoreNames).sort()) === JSON
+                            .stringify(Object.keys(objectStores).sort()))
                             resolve("Initiated IndexedDB");
-                        else
-                            reject("IndexedDB already exist with different ObjectStores!");
+                        else {
+                            let removeObs = [];
+                            Object.values(db.objectStoreNames).forEach(obs => {
+                                if (obs in objectStores)
+                                    delete objectStores[obs]
+                                else
+                                    removeObs.push(obs)
+                            })
+                            this.initDB(dbName, objectStores, db.version + 1, removeObs)
+                                .then(result => resolve(result))
+                                .catch(error => reject(error))
+                        }
                         db.close();
                     }
                 });
             },
 
-            openDB: function (dbName = this.dbName) {
+            openDB: function (dbName = this.defaultDB) {
                 return new Promise((resolve, reject) => {
                     var idb = indexedDB.open(dbName);
                     idb.onerror = (event) => reject("Error in opening IndexedDB!");
@@ -9021,7 +9308,7 @@
                 });
             },
 
-            deleteDB: function (dbName = this.dbName) {
+            deleteDB: function (dbName = this.defaultDB) {
                 return new Promise((resolve, reject) => {
                     var deleteReq = indexedDB.deleteDatabase(dbName);;
                     deleteReq.onerror = (event) => reject("Error deleting database!");
@@ -9029,59 +9316,75 @@
                 });
             },
 
-            writeData: function (obsName, data, key = false, dbName = this.dbName) {
+            writeData: function (obsName, data, key = false, dbName = this.defaultDB) {
                 return new Promise((resolve, reject) => {
                     this.openDB(dbName).then(db => {
                         var obs = db.transaction(obsName, "readwrite").objectStore(obsName);
                         let writeReq = (key ? obs.put(data, key) : obs.put(data));
                         writeReq.onsuccess = (evt) => resolve(`Write data Successful`);
                         writeReq.onerror = (evt) => reject(
-                            `Write data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`);
+                            `Write data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`
+                        );
                         db.close();
                     }).catch(error => reject(error));
                 });
             },
 
-            addData: function (obsName, data, key = false, dbName = this.dbName) {
+            addData: function (obsName, data, key = false, dbName = this.defaultDB) {
                 return new Promise((resolve, reject) => {
                     this.openDB(dbName).then(db => {
                         var obs = db.transaction(obsName, "readwrite").objectStore(obsName);
                         let addReq = (key ? obs.add(data, key) : obs.add(data));
                         addReq.onsuccess = (evt) => resolve(`Add data successful`);
                         addReq.onerror = (evt) => reject(
-                            `Add data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`);
+                            `Add data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`
+                        );
                         db.close();
                     }).catch(error => reject(error));
                 });
             },
 
-            removeData: function (obsName, key, dbName = this.dbName) {
+            removeData: function (obsName, key, dbName = this.defaultDB) {
                 return new Promise((resolve, reject) => {
                     this.openDB(dbName).then(db => {
                         var obs = db.transaction(obsName, "readwrite").objectStore(obsName);
                         let delReq = obs.delete(key);
                         delReq.onsuccess = (evt) => resolve(`Removed Data ${key}`);
                         delReq.onerror = (evt) => reject(
-                            `Remove data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`);
+                            `Remove data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`
+                        );
                         db.close();
                     }).catch(error => reject(error));
                 });
             },
 
-            readData: function (obsName, key, dbName = this.dbName) {
+            clearData: function (obsName, dbName = this.defaultDB) {
+                return new Promise((resolve, reject) => {
+                    this.openDB(dbName).then(db => {
+                        var obs = db.transaction(obsName, "readwrite").objectStore(obsName);
+                        let clearReq = obs.clear();
+                        clearReq.onsuccess = (evt) => resolve(`Clear data Successful`);
+                        clearReq.onerror = (evt) => reject(`Clear data Unsuccessful`);
+                        db.close();
+                    }).catch(error => reject(error));
+                });
+            },
+
+            readData: function (obsName, key, dbName = this.defaultDB) {
                 return new Promise((resolve, reject) => {
                     this.openDB(dbName).then(db => {
                         var obs = db.transaction(obsName, "readonly").objectStore(obsName);
                         let getReq = obs.get(key);
                         getReq.onsuccess = (evt) => resolve(evt.target.result);
                         getReq.onerror = (evt) => reject(
-                            `Read data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`);
+                            `Read data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`
+                        );
                         db.close();
                     }).catch(error => reject(error));
                 });
             },
 
-            readAllData: function (obsName, dbName = this.dbName) {
+            readAllData: function (obsName, dbName = this.defaultDB) {
                 return new Promise((resolve, reject) => {
                     this.openDB(dbName).then(db => {
                         var obs = db.transaction(obsName, "readonly").objectStore(obsName);
@@ -9096,13 +9399,14 @@
                                 resolve(tmpResult);
                         }
                         curReq.onerror = (evt) => reject(
-                            `Read-All data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`);
+                            `Read-All data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`
+                        );
                         db.close();
                     }).catch(error => reject(error));
                 });
             },
 
-            searchData: function (obsName, patternEval, dbName = this.dbName) {
+            searchData: function (obsName, patternEval, dbName = this.defaultDB) {
                 return new Promise((resolve, reject) => {
                     this.openDB(dbName).then(db => {
                         var obs = db.transaction(obsName, "readonly").objectStore(obsName);
@@ -9118,7 +9422,8 @@
                                 resolve(filteredResult);
                         }
                         curReq.onerror = (evt) => reject(
-                            `Search unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`);
+                            `Search unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`
+                        );
                         db.close();
                     }).catch(error => reject(error));
                 });
@@ -9130,6 +9435,9 @@
         const floCloudAPI = {
 
             util: {
+
+                lastCommit: {},
+
                 resetData: function (dataSet) {
                     try {
                         dataSet = JSON.parse(dataSet);
@@ -9139,7 +9447,8 @@
                             if (message.reset) {
                                 floGlobals.appObjects[message.object] = message.reset
                                 floGlobals.vectorClock[message.object] = vc
-                                compactIDB.writeData("appObjects", floGlobals.appObjects[message.object], message.object)
+                                compactIDB.writeData("appObjects", floGlobals.appObjects[message.object], message
+                                    .object)
                                 compactIDB.writeData("vectorClock", vc, message.object)
                             }
                         }
@@ -9151,11 +9460,14 @@
                 updateData: function (dataSet) {
                     try {
                         dataSet = JSON.parse(dataSet);
+                        console.log(dataSet)
                         for (vc in dataSet) {
                             var message = dataSet[vc].message;
                             if (message.diff) {
-                                floGlobals.appObjects[message.object] = mergeDifference(floGlobals.appObjects[message.object], message.diff)
-                                compactIDB.writeData("appObjects", floGlobals.appObjects[message.object], message.object)
+                                floGlobals.appObjects[message.object] = mergeDifference(floGlobals.appObjects[
+                                    message.object], message.diff)
+                                compactIDB.writeData("appObjects", floGlobals.appObjects[message.object], message
+                                    .object)
                             }
                             floGlobals.vectorClock[message.object] = vc
                             compactIDB.writeData("vectorClock", vc, message.object)
@@ -9168,10 +9480,15 @@
                 storeGeneralData: function (filterStr, dataSet) {
                     try {
                         dataSet = JSON.parse(dataSet);
+                        console.log(dataSet)
                         if (!Array.isArray(floGlobals.generalData[filterStr]))
                             floGlobals.generalData[filterStr] = []
                         for (vc in dataSet) {
-                            floGlobals.generalData[filterStr].push({ sender: dataSet[vc].senderID, vectorClock: vc, message: dataSet[vc].message })
+                            floGlobals.generalData[filterStr].push({
+                                sender: dataSet[vc].senderID,
+                                vectorClock: vc,
+                                message: dataSet[vc].message
+                            })
                             compactIDB.writeData("generalData", floGlobals.generalData[filterStr], filterStr)
                             floGlobals.generalVC[filterStr] = vc
                             compactIDB.writeData("generalVC", vc, filterStr)
@@ -9195,7 +9512,6 @@
                         type: type,
                         comment: options.comment || ""
                     }
-                    console.table(data);
                     floSupernode.sendData(JSON.stringify(data), data.receiverID)
                         .then(result => resolve(result))
                         .catch(error => reject(error))
@@ -9234,9 +9550,14 @@
             //request General Data
             requestGeneralData: function (type, options = {}) {
                 return new Promise((resolve, reject) => {
-                    var filterStr = JSON.stringify({ application: options.application || floGlobals.application, type: type, comment: options.comment })
+                    var filterStr = JSON.stringify({
+                        application: options.application || floGlobals.application,
+                        type: type,
+                        comment: options.comment
+                    })
                     options.type = type
-                    options.lowerVectorClock = options.lowerVectorClock || floGlobals.generalVC[filterStr] + 1
+                    options.lowerVectorClock = options.lowerVectorClock || floGlobals.generalVC[filterStr] +
+                        1
                     this.requestApplicationData(options).then(dataSet => {
                         this.util.storeGeneralData(filterStr, dataSet)
                         resolve('General Data Updated')
@@ -9249,7 +9570,8 @@
                 return new Promise((resolve, reject) => {
                     var request = {
                         receiverID: options.receiverID || floGlobals.adminID,
-                        senderIDs: (options.senderIDs === false) ? false : options.senderIDs || floGlobals.subAdmins,
+                        senderIDs: (options.senderIDs === false) ? false : options.senderIDs ||
+                            floGlobals.subAdmins,
                         application: options.application || floGlobals.application,
                         comment: options.comment,
                         type: `${objectName}@Reset`,
@@ -9261,41 +9583,49 @@
                         request.type = `${objectName}@Update`
                         request.lowerVectorClock = floGlobals.vectorClock[objectName] + 1
                         request.mostRecent = false
-                        floSupernode.requestData(JSON.stringify(request), request.receiverID).then(dataSet => {
-                            this.util.updateData(dataSet)
-                            resolve('Object Data Updated')
-                        }).catch(error => reject(error))
+                        floSupernode.requestData(JSON.stringify(request), request.receiverID).then(
+                            dataSet => {
+                                this.util.updateData(dataSet)
+                                this.util.lastCommit[objectName] = JSON.stringify(floGlobals
+                                    .appObjects[objectName])
+                                resolve('Object Data Updated')
+                            }).catch(error => reject(error))
                     }).catch(error => reject(error))
                 })
             },
 
             //reset or initialize an object and send it to cloud
-            resetObjectData: function (newObject, objectName, options = {}) {
+            resetObjectData: function (objectName, options = {}) {
                 return new Promise((resolve, reject) => {
                     var message = {
                         division: options.division || floGlobals.division,
                         object: objectName,
                         vectorClock: floGlobals.vectorClock[objectName],
-                        reset: newObject
+                        reset: floGlobals.appObjects[objectName]
                     }
-                    this.sendApplicationData(message, `${objectName}@Reset`, options)
-                        .then(result => resolve(result))
-                        .catch(error => reject(error))
+                    this.sendApplicationData(message, `${objectName}@Reset`, options).then(result => {
+                        this.util.lastCommit[objectName] = JSON.stringify(floGlobals.appObjects[
+                            objectName])
+                        resolve(result)
+                    }).catch(error => reject(error))
                 })
             },
 
             //update the diff and send it to cloud
-            updateObjectData: function (oldObject, newObject, objectName, options = {}) {
+            updateObjectData: function (objectName, options = {}) {
                 return new Promise((resolve, reject) => {
                     var message = {
                         division: options.division || floGlobals.division,
                         object: objectName,
                         vectorClock: floGlobals.vectorClock[objectName],
-                        diff: findDifference(oldObject, newObject)
+                        diff: findDifference(JSON.parse(this.util.lastCommit[objectName]), floGlobals
+                            .appObjects[objectName])
                     }
-                    this.sendApplicationData(message, `${objectName}@Update`, options)
-                        .then(result => resolve(result))
-                        .catch(error => reject(error))
+                    this.sendApplicationData(message, `${objectName}@Update`, options).then(result => {
+                        this.util.lastCommit[objectName] = JSON.stringify(floGlobals.appObjects[
+                            objectName])
+                        resolve(result)
+                    }).catch(error => reject(error))
                 })
             }
         }
@@ -9309,13 +9639,15 @@
 
                 initIndexedDB: function () {
                     return new Promise((resolve, reject) => {
-                        var storageList = floGlobals.storageList;
                         var obj = {
                             //general
                             lastTx: {},
                             //supernode (cloud list)
                             supernodes: {
-                                indexes: { uri: null, pubKey: null }
+                                indexes: {
+                                    uri: null,
+                                    pubKey: null
+                                }
                             },
                             //login credentials
                             credentials: {},
@@ -9345,20 +9677,31 @@
                     readSupernodeListFromAPI: function () {
                         return new Promise((resolve, reject) => {
                             compactIDB.readData("lastTx", floGlobals.SNStorageID).then(lastTx => {
-                                floBlockchainAPI.readData(floGlobals.SNStorageID, { ignoreOld: lastTx, sentOnly: true, pattern: "SuperNodeStorage" }).then(result => {
+                                floBlockchainAPI.readData(floGlobals.SNStorageID, {
+                                    ignoreOld: lastTx,
+                                    sentOnly: true,
+                                    pattern: "SuperNodeStorage"
+                                }).then(result => {
                                     for (var i = result.data.length - 1; i >= 0; i--) {
-                                        var content = JSON.parse(result.data[i]).SuperNodeStorage;
+                                        var content = JSON.parse(result.data[i])
+                                            .SuperNodeStorage;
                                         for (sn in content.removeNodes)
                                             compactIDB.removeData("supernodes", sn);
                                         for (sn in content.addNodes)
-                                            compactIDB.writeData("supernodes", content.addNodes[sn], sn);
+                                            compactIDB.writeData("supernodes", content
+                                                .addNodes[sn], sn);
                                     }
-                                    compactIDB.writeData("lastTx", result.totalTxs, floGlobals.SNStorageID);
+                                    compactIDB.writeData("lastTx", result.totalTxs,
+                                        floGlobals.SNStorageID);
                                     compactIDB.readAllData("supernodes").then(result => {
                                         floGlobals.supernodes = result;
 
-                                        floSupernode.kBucket.launch(Object.keys(floGlobals.supernodes), floGlobals.SNStorageID)
-                                            .then(result => resolve("Loaded Supernode list\n" + result))
+                                        floSupernode.kBucket.launch(Object.keys(
+                                            floGlobals.supernodes),
+                                            floGlobals.SNStorageID)
+                                            .then(result => resolve(
+                                                "Loaded Supernode list\n" +
+                                                result))
                                     })
                                 })
                             }).catch(error => reject(error))
@@ -9368,17 +9711,27 @@
                     readSubAdminListFromAPI: function () {
                         return new Promise((resolve, reject) => {
                             compactIDB.readData("lastTx", floGlobals.adminID).then(lastTx => {
-                                floBlockchainAPI.readData(floGlobals.adminID, { ignoreOld: lastTx, sentOnly: true, pattern: floGlobals.application }).then(result => {
+                                floBlockchainAPI.readData(floGlobals.adminID, {
+                                    ignoreOld: lastTx,
+                                    sentOnly: true,
+                                    pattern: floGlobals.application
+                                }).then(result => {
                                     for (var i = result.data.length - 1; i >= 0; i--) {
-                                        var content = JSON.parse(result.data[i])[floGlobals.application];
+                                        var content = JSON.parse(result.data[i])[floGlobals
+                                            .application];
                                         if (Array.isArray(content.removeSubAdmin))
-                                            for (var j = 0; j < content.removeSubAdmin.length; j++)
-                                                compactIDB.removeData("subAdmins", content.removeSubAdmin[j]);
+                                            for (var j = 0; j < content.removeSubAdmin
+                                                .length; j++)
+                                                compactIDB.removeData("subAdmins", content
+                                                    .removeSubAdmin[j]);
                                         if (Array.isArray(content.addSubAdmin))
-                                            for (var k = 0; k < content.addSubAdmin.length; k++)
-                                                compactIDB.writeData("subAdmins", true, content.addSubAdmin[k]);
+                                            for (var k = 0; k < content.addSubAdmin
+                                                .length; k++)
+                                                compactIDB.writeData("subAdmins", true,
+                                                    content.addSubAdmin[k]);
                                     }
-                                    compactIDB.writeData("lastTx", result.totalTxs, floGlobals.adminID);
+                                    compactIDB.writeData("lastTx", result.totalTxs,
+                                        floGlobals.adminID);
                                     compactIDB.readAllData("subAdmins").then(result => {
                                         floGlobals.subAdmins = Object.keys(result);
                                         resolve("Read subAdmins from blockchain");
@@ -9404,7 +9757,19 @@
 
                     getCredentials: function () {
 
-                        var readSharesFromIDB = function (indexArr) {
+                        const defaultInput = function (type) {
+                            return new Promise((resolve, reject) => {
+                                let inputVal = prompt(`Enter ${type}: `)
+                                if (inputVal === null)
+                                    reject(null)
+                                else
+                                    resolve(inputVal)
+                            })
+                        }
+
+                        const inputFn = this.getCredentials.privKeyInput || defaultInput;
+
+                        const readSharesFromIDB = function (indexArr) {
                             return new Promise((resolve, reject) => {
                                 var promises = []
                                 for (var i = 0; i < indexArr.length; i++)
@@ -9419,7 +9784,7 @@
                             })
                         }
 
-                        var writeSharesToIDB = function (shares, i = 0, resultIndexes = []) {
+                        const writeSharesToIDB = function (shares, i = 0, resultIndexes = []) {
                             return new Promise((resolve, reject) => {
                                 if (i >= shares.length)
                                     return resolve(resultIndexes)
@@ -9435,66 +9800,113 @@
                             })
                         }
 
-                        var getPrivateKeyCredentials = function () {
-                            return new Promise(async (resolve, reject) => {
+                        const getPrivateKeyCredentials = function () {
+                            return new Promise((resolve, reject) => {
                                 var indexArr = localStorage.getItem(`${floGlobals.application}#privKey`)
                                 if (indexArr) {
                                     readSharesFromIDB(JSON.parse(indexArr))
                                         .then(result => resolve(result))
                                         .catch(error => reject(error))
                                 } else {
-                                    try {
-                                        var privKey = await signIn()
-                                        hidePopup()
-                                        showPopup('main_loader', 'no')
-                                        var floID = floCrypto.getFloIDfromPubkeyHex(floCrypto.getPubKeyHex(privKey))
-                                    } catch (error) {
-                                        console.error(error)
-                                        return reject("Invalid Private Key")
-                                    }
-                                    var threshold = floCrypto.randInt(10, 20)
-                                    writeSharesToIDB(floCrypto.createShamirsSecretShares(privKey, threshold, threshold)).then(resultIndexes => {
-                                        //store index keys in localStorage
-                                        localStorage.setItem(`${floGlobals.application}#privKey`, JSON.stringify(resultIndexes))
-                                        //also add a dummy privatekey to the IDB
-                                        var randomPrivKey = floCrypto.generateNewID().privKey
-                                        var randomThreshold = floCrypto.randInt(10, 20)
-                                        writeSharesToIDB(floCrypto.createShamirsSecretShares(randomPrivKey, randomThreshold, randomThreshold))
-                                        //resolve private Key
-                                        resolve(privKey)
-                                    }).catch(error => reject(error))
+                                    var privKey;
+                                    inputFn("PRIVATE_KEY").then(result => {
+                                        try {
+                                            if (!result)
+                                                return reject("Empty Private Key")
+                                            var floID = floCrypto.getFloIDfromPubkeyHex(
+                                                floCrypto.getPubKeyHex(result))
+                                            privKey = result
+                                        } catch (error) {
+                                            console.error(error)
+                                            return reject("Invalid Private Key")
+                                        }
+                                    }).catch(error => {
+                                        console.log(error, "Generating Random Keys")
+                                        privKey = floCrypto.generateNewID().privKey
+                                    }).finally(_ => {
+                                        var threshold = floCrypto.randInt(10, 20)
+                                        writeSharesToIDB(floCrypto.createShamirsSecretShares(
+                                            privKey, threshold, threshold)).then(
+                                                resultIndexes => {
+                                                    //store index keys in localStorage
+                                                    localStorage.setItem(
+                                                        `${floGlobals.application}#privKey`,
+                                                        JSON.stringify(resultIndexes))
+                                                    //also add a dummy privatekey to the IDB
+                                                    var randomPrivKey = floCrypto
+                                                        .generateNewID().privKey
+                                                    var randomThreshold = floCrypto.randInt(10,
+                                                        20)
+                                                    writeSharesToIDB(floCrypto
+                                                        .createShamirsSecretShares(
+                                                            randomPrivKey, randomThreshold,
+                                                            randomThreshold))
+                                                    //resolve private Key
+                                                    resolve(privKey)
+                                                }).catch(error => reject(error))
+                                    })
+                                }
+                            })
+                        }
+
+                        const checkIfPinRequired = function (key) {
+                            return new Promise((resolve, reject) => {
+                                if (key.length == 52)
+                                    resolve(key)
+                                else {
+                                    inputFn("PIN/Password").then(pwd => {
+                                        try {
+                                            let privKey = Crypto.AES.decrypt(key, pwd);
+                                            resolve(privKey)
+                                        } catch (error) {
+                                            reject("Access Denied: Incorrect PIN/Password")
+                                        }
+                                    }).catch(error => reject("Access Denied: PIN/Password required"))
                                 }
                             })
                         }
 
                         return new Promise((resolve, reject) => {
-                            getPrivateKeyCredentials().then(privKey => {
-                                myPrivKey = privKey
-                                myPubKey = floCrypto.getPubKeyHex(myPrivKey)
-                                myFloID = floCrypto.getFloIDfromPubkeyHex(myPubKey)
-                                resolve('Login Credentials loaded successful')
+                            getPrivateKeyCredentials().then(key => {
+                                checkIfPinRequired(key).then(privKey => {
+                                    try {
+                                        myPrivKey = privKey
+                                        myPubKey = floCrypto.getPubKeyHex(myPrivKey)
+                                        myFloID = floCrypto.getFloIDfromPubkeyHex(myPubKey)
+                                        resolve('Login Credentials loaded successful')
+                                    } catch (error) {
+                                        reject("Corrupted Private Key")
+                                    }
+                                }).catch(error => reject(error))
                             }).catch(error => reject(error))
                         })
                     }
-
                 },
 
                 callStartUpFunction: function (fname) {
                     return new Promise((resolve, reject) => {
                         this.startUpFunctions[fname]().then(result => {
                             this.callStartUpFunction.completed += 1
-                            reactor.dispatchEvent("startUpSuccessLog", `${result}\nCompleted ${this.callStartUpFunction.completed}/${this.callStartUpFunction.total} Startup functions`)
+                            reactor.dispatchEvent("startUpSuccessLog",
+                                `${result}\nCompleted ${this.callStartUpFunction.completed}/${this.callStartUpFunction.total} Startup functions`
+                            )
                             resolve(true)
                         }).catch(error => {
                             this.callStartUpFunction.failed += 1
-                            reactor.dispatchEvent("startUpErrorLog", `${error}\nFailed ${this.callStartUpFunction.failed}/${this.callStartUpFunction.total} Startup functions`)
+                            reactor.dispatchEvent("startUpErrorLog",
+                                `${error}\nFailed ${this.callStartUpFunction.failed}/${this.callStartUpFunction.total} Startup functions`
+                            )
                             reject(false)
                         })
                     })
                 },
 
                 getFilterString: function (type, options = {}) {
-                    var filterStr = JSON.stringify({ application: options.application || floGlobals.application, type: type, comment: options.comment })
+                    var filterStr = JSON.stringify({
+                        application: options.application || floGlobals.application,
+                        type: type,
+                        comment: options.comment
+                    })
                     return filterStr
                 }
             },
@@ -9503,7 +9915,8 @@
                 return new Promise((resolve, reject) => {
                     this.util.initIndexedDB().then(log => {
                         console.log(log)
-                        this.util.callStartUpFunction.total = Object.keys(this.util.startUpFunctions).length
+                        this.util.callStartUpFunction.total = Object.keys(this.util
+                            .startUpFunctions).length
                         this.util.callStartUpFunction.completed = 0
                         this.util.callStartUpFunction.failed = 0
                         var promises = []
@@ -9522,18 +9935,60 @@
                 this.util.startUpFunctions[fname] = fn;
             },
 
+            setCustomPrivKeyInput: function (customFn) {
+                this.util.startUpFunctions.getCredentials.privKeyInput = customFn
+            },
+
             setAppObjectStores: function (appObs) {
                 this.util.appObs = appObs
             },
 
+            manageSubAdmins(adminPrivKey, addList, rmList) {
+                return new Promise((resolve, reject) => {
+                    if (!Array.isArray(addList)) addList = undefined;
+                    if (!Array.isArray(rmList)) rmList = undefined;
+                    var floData = {
+                        [floGlobals.application]: {
+                            addSubAdmin: addList,
+                            removeSubAdmin: rmList,
+                        }
+                    }
+                    var floID = floCrypto.getFloIDfromPubkeyHex(floCrypto.getPubKeyHex(adminPrivKey))
+                    if (floID != floGlobals.adminID)
+                        reject('Access Denied for Admin privilege')
+                    else
+                        floBlockchainAPI.writeData(floID, JSON.stringify(floData), adminPrivKey)
+                            .then(result => resolve(['Updated SubAdmin List', result]))
+                            .catch(error => reject(error))
+                })
+            },
+
             clearCredentials: function () {
-                var indexArr = localStorage.getItem(`${floGlobals.application}#privKey`)
-                if (!indexArr)
-                    return `privKey credentials not found!`
-                indexArr = JSON.parse(indexArr)
-                indexArr.forEach(i => compactIDB.removeData('credentials', i))
-                localStorage.removeItem(`${floGlobals.application}#privKey`)
-                return `privKey credentials deleted!`
+                return new Promise((resolve, reject) => {
+                    compactIDB.clearData('credentials').then(result => {
+                        localStorage.removeItem(`${floGlobals.application}#privKey`)
+                        myPrivKey = myPubKey = myFloID = undefined;
+                        resolve("privKey credentials deleted!")
+                    }).catch(error => reject(error))
+                })
+            },
+
+            securePrivKey: function (pwd) {
+                return new Promise((resolve, reject) => {
+                    let indexArr = localStorage.getItem(`${floGlobals.application}#privKey`)
+                    if (!indexArr)
+                        return reject("PrivKey not found");
+                    indexArr = JSON.parse(indexArr)
+                    let encryptedKey = Crypto.AES.encrypt(myPrivKey, pwd);
+                    let threshold = indexArr.length;
+                    let shares = floCrypto.createShamirsSecretShares(encryptedKey, threshold, threshold)
+                    let promises = [];
+                    for (var i = 0; i < threshold; i++)
+                        promises.push(compactIDB.writeData("credentials", shares[i], indexArr[i], floGlobals.application));
+                    Promise.all(promises)
+                        .then(results => resolve("Private Key Secured"))
+                        .catch(error => reject(error))
+                })
             },
 
             objectDataMapper: function (object, path, data) {
@@ -9550,35 +10005,20 @@
             getNextGeneralData: function (type, vectorClock, options = {}) {
                 var filter = this.util.getFilterString(type, options)
                 var filteredResult = []
-                if (typeof floGlobals.generalData[filter] === "object") {
-                    for (var i = 0; i < floGlobals.generalData[filter].length; i++)
-                        if (floGlobals.generalData[filter][i].vectorClock > vectorClock)
-                            filteredResult.push(floGlobals.generalData[filter][i])
-                }
+                for (var i = 0; i < floGlobals.generalData[filter].length; i++)
+                    if (floGlobals.generalData[filter][i].vectorClock > vectorClock)
+                        filteredResult.push(floGlobals.generalData[filter][i])
                 return filteredResult
             }
         }
 
         reactor.registerEvent("startUpSuccessLog");
         reactor.addEventListener("startUpSuccessLog", log => console.log(log))
-        reactor.addEventListener("startUpSuccessLog", log => console.log(log))
 
         reactor.registerEvent("startUpErrorLog");
         reactor.addEventListener("startUpErrorLog", log => console.error(log))
-
-        function onLoadStartUp() {
-            showPopup('main_loader', 'no')
-            console.log("Starting the app! Please Wait!")
-            floDapps.launchStartUp().then(result => {
-                console.log(result)
-                console.log(`Welcome ${myFloID}`)
-                token_app.actions.doShreeGanesh();
-                refresh_balance()
-                document.getElementById('user_flo_id').textContent = myFloID
-            }).catch(error => console.error(error))
-        }
     </script>
-
+    
     <script>
         function extend(Child, Parent) {
             var Temp = function () { };
@@ -9693,8 +10133,30 @@
             }
         }
 
-    </script>
+        // https://stackoverflow.com/a/21988185/5348972
+        function orders_comparer(otherArray) {
+            return function (current) {
+                return otherArray.filter(function (other) {
+                    return JSON.stringify(other.message) == JSON.stringify(current.message)
+                }).length == 0;
+            }
+        }
 
+        async function clearCashierData(dataStores = ['deposits_flo_txids', 'cash_sent_details',
+            'generalData', 'generalVC', 'pay_thru_cashier']) {
+            try {
+                for (const ds of dataStores) {
+                    compactIDB.clearData(ds);
+                }
+                return true;
+            } catch (e) {
+                console.error(e);
+                return false;
+            }
+        }
+
+    </script>
+    
     <script>
 
         const token_app = {
@@ -9708,19 +10170,32 @@
 
             parse_flo_comments: async function () {
                 text = `masterFLOPubKey=03BA851FE0F28AA156B0D6E00784919133D1E98284F9A94544B470DBBFB3D90EDD
-                #!#SUBJECT=RUPEE_TOKEN_APP_TEST3
-                #!#CURRENCY=INR
-                #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST3
-                #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST3
-                #!#TYPE_MSGES=USER_MESSAGES_TEST3
-                #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER3
-                #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
-                #!#cashiers=
-                {
-                    "FFS5hFXG7DBtdgzrLwixZLpenAmsCKRddm": {
-                        "upi_id": "7004780931@upi"
-                    }
-                }`
+                    #!#SUBJECT=RUPEE_TOKEN_APP_TEST6
+                    #!#CURRENCY=INR
+                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST6
+                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST6
+                    #!#TYPE_MSGES=USER_MESSAGES_TEST6
+                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS6
+                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS6
+                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT6
+                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT6
+                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT6
+                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT6
+                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER6
+                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT6
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER6
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT6
+                    #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
+                    #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
+                    #!#cashiers=
+                    {
+                        "FByrY4vc1NRfbkqAqABtUyhhNzMZsKUjqr": {
+                            "upi_id": "johnDoe@upi"
+                        },
+                        "FHU7dfBVDLZwp3fLRJ5cr7nEABBeeU9Z4T": {
+                            "upi_id": "janeDoe@upi"
+                        }
+                    }`
                 text = removeWhiteSpaces(text);
                 return text;
                 const master_data = await ajaxGet(`${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOPubKey}`);
@@ -9808,6 +10283,7 @@
                 withdraw_token_to_get_cash();
 
                 transferTokensManually();
+
                 const allCashierOptions = document.querySelectorAll('.cashier-option'),
                     userType = document.getElementById('user_type')
                 if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
@@ -9822,31 +10298,20 @@
                     })
                     userType.textContent = 'User'
                 }
+
                 hidePopup()
 
-                init_pay_through_cashier_system();
+                pay_through_cashier();
                 show_deposit_request()
                 show_withdraw_request()
                 showPayRequests()
-                // build pay vendors ui
-                // const pay_vendors_tbl = document.getElementById('pay_vendors_tbl')
-                // let vd = ``;
-                // for (const vendor_flo_id of token_app.master_configurations.vendors) {
-                //     vd += `<tr>`;
-                //     vd += `<td>`;
-                //     vd += `${vendor_flo_id}`;
-                //     vd += `</td>`;
-                //     vd += `<td>`;
-                //     vd += `<button class="btn btn-primary pay_vendor_class" id="${vendor_flo_id}">Pay</button>`;
-                //     vd += `</td>`;
-                //     vd += `</tr>`;
-                // }
-                // pay_vendors_tbl.insertAdjacentHTML('beforeend', vd);
 
             },
 
             retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals.subAdmins) {
-                console.log('Loading the latest content')
+                notify('Loading the latest content...');
+
+                refresh_balance();
 
                 floCloudAPI.requestObjectData(token_app.master_configurations.SUBJECT, { receiverID, senderIDs });
 
@@ -9862,6 +10327,17 @@
 
                     await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
                         { receiverID: myFloID });
+
+                    return true;
+                } else if (token_app.master_configurations.helplineFloId === myFloID) {
+                    await clearCashierData();
+
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_FILE_DEPOSITS_COMPLAINT);
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT);
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_FILE_WITHDRAWS_COMPLAINT);
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_DEPOSITS_COMPLAINT);
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT);
+                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS_COMPLAINT);
 
                     return true;
                 } else {
@@ -9885,14 +10361,17 @@
 
                     promises.push(p3);
 
-                    await Promise.all(promises)
+                    await Promise.all(promises);
+
+                    return promises;
+
                 }
 
             }
         }
 
     </script>
-
+    
     <!-- Cashier functions -->
     <script>
         // Create root structure
@@ -9904,52 +10383,38 @@
                 { receiverID: floGlobals.adminID });
         }
 
-        function request_rupee_token() {
-            try {
-                const request_tokens_btn = document.getElementById('request_tokens_btn');
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
-                request_tokens_btn.onclick = function () {
-                    if (typeof myFloID !== "string" || myFloID.length < 1) return;
-                    const token_amount_to_buy = Number(document.getElementById('token_amount_to_buy').value);
-                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                    notify(`Please pay Rs ${token_amount_to_buy} to UPI id ${cashier_upi}.`);
-                    let upi_txid = prompt(`Please enter UPI TXID for deposited cash to ${cashier_upi}`);
-                    let request_object = {
-                        user_flo_id: myFloID,
-                        upi_txid: upi_txid,
-                    }
-                    if (typeof upi_txid === "string" && upi_txid.length > 1) {
-                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_DEPOSITS,
-                            { receiverID: cashier, senderIDs: [myFloID] });
-                        notify('Request sent successfully.');
-                        return true;
-                    }
-                    notify('Request failed.', 'error');
-                    return false;
-                }
-            } catch (error) {
-                throw new Error(error)
-            }
-        }
-
         async function show_deposit_request() {
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS,
+                    { receiverID: myFloID, senderIDs: [myFloID] });
+
+                let finished_tasks = await floCloudAPI.requestApplicationData(
+                    {
+                        type: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
+                        receiverID: myFloID,
+                        senderIDs: [myFloID]
+                    });
+
+                if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
+
+                const processed_deposits = Object.values(finished_tasks).map(m => m.message.user_upi_txid);
+
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS,
+                    { receiverID: myFloID });
+
                 let cash_deposits = await compactIDB.readAllData('deposits_flo_txids');
-                console.log(cash_deposits);
+
                 let cash_deposits_upi_txid_list = Object.values(cash_deposits).map(m => m.upi_txid);
 
-                const general_msg = floGlobals.generalData[JSON.stringify(
-                    {
-                        application: floGlobals.application,
-                        type: token_app.master_configurations.TYPE_DEPOSITS
-                    })];
+                const general_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0");
 
                 let depositsContainer = document.getElementById("pending_deposits_container");
                 depositsContainer.innerHTML = ``;
                 for (const m of general_msg) {
                     if (cash_deposits_upi_txid_list.includes(m.message.upi_txid)) continue;
+                    if (processed_deposits.includes(m.message.upi_txid)) continue;
                     let { user_flo_id, upi_txid } = m.message;
                     frag.append(render.depositRequest(upi_txid, user_flo_id))
                 }
@@ -9961,73 +10426,26 @@
             }
         }
 
-        function withdraw_token_to_get_cash() {
-            try {
-                const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
-                withdraw_cash_btn.onclick = async function () {
-                    if (typeof myFloID !== "string" || myFloID.length < 1) {
-                        notify(`Your Flo Id is invalid.`);
-                        return;
-                    }
-                    const withdraw_cash_amount = Number(document.getElementById('withdraw_cash_amount').value);
-                    const user_withdraw_upi = String(document.getElementById('user_withdraw_upi').value);
-                    if (withdraw_cash_amount < 1) {
-                        notify(`Invalid amount. Please provide a number above 0.`);
-                        return false;
-                    }
-                    if (!user_withdraw_upi.includes('@')) {
-                        notify(`Please enter a valid UPI id.`);
-                        return false;
-                    }
-                    const token_balance_url = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${myFloID}`;
-                    const user_token_balance_object = await ajaxGet(token_balance_url);
-                    if (typeof user_token_balance_object !== "object" || typeof user_token_balance_object.balance !== "number") {
-                        notify('You do not have rupee balance yet. Please deposit rupee to get balance.');
-                        return;
-                    }
-                    const current_balance = Number(user_token_balance_object.balance);
-                    if (current_balance < withdraw_cash_amount) {
-                        notify(`You have unsufficient balance to withdraw. You can withdraw only Rs ${user_token_balance_object.balance}`);
-                        return;
-                    }
-
-                    const flo_comment = `transfer ${withdraw_cash_amount} rupee#`;
-                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, cashier, 0.001, myPrivKey, flo_comment)
-                    console.log(flo_txid);
-                    if (typeof flo_txid !== "string") {
-                        notify(`Transaction unsuccessfull.`);
-                        return false;
-                    }
-                    let request_object = {
-                        user_flo_id: myFloID,
-                        token_txid: flo_txid,
-                        withdrawer_upi: user_withdraw_upi
-                    }
-                    console.log(request_object);
-                    if (typeof flo_txid === "string" && flo_txid.length > 1) {
-                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_WITHDRAWS,
-                            { receiverID: cashier, senderIDs: [myFloID] });
-                        notify('Withdraw request sent successfully.');
-                        return true;
-                    }
-                    notify('Failed to send withdraw request to cashier.');
-                    return true;
-                }
-            } catch (error) {
-                throw new Error(error)
-            }
-        }
-
         async function show_withdraw_request() {
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
-                const general_msg = floGlobals.generalData[JSON.stringify(
+                let finished_tasks = await floCloudAPI.requestApplicationData(
                     {
-                        application: floGlobals.application,
-                        type: token_app.master_configurations.TYPE_WITHDRAWS
-                    })];
+                        type: token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
+                        receiverID: myFloID,
+                        senderIDs: [myFloID]
+                    });
+
+                if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
+
+                const processed_withdraws = Object.values(finished_tasks).map(m => m.message.user_upi_txid);
+
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
+                    { receiverID: myFloID });
+
+                const general_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, "0");
+
                 if (typeof general_msg !== "object") {
                     notify(`No data available in withdraws.`);
                     return;
@@ -10035,12 +10453,12 @@
 
                 let cash_withdraws = await compactIDB.readAllData('cash_sent_details');
                 let cash_withdraws_token_txid_list = Object.values(cash_withdraws).map(m => m.token_txid);
-                console.log(general_msg);
 
                 let withdrawsContainer = document.getElementById("pending_withdrawals_container");
                 withdrawsContainer.innerHTML = ``;
                 for (const m of general_msg) {
-                    if (cash_withdraws_tok6en_txid_list.includes(m.message.token_txid)) continue;
+                    if (cash_withdraws_token_txid_list.includes(m.message.token_txid)) continue;
+                    if (processed_withdraws.includes(m.message.token_txid)) continue;
                     let { token_txid, user_flo_id, withdrawer_upi } = m.message
                     frag.append(render.withdrawRequest(token_txid, withdrawer_upi, user_flo_id))
                 }
@@ -10067,14 +10485,22 @@
                         notify(`Transfer unsuccessfull.`);
                         return false;
                     }
-                    compactIDB.addData('deposits_flo_txids',
-                        {
-                            receiver_flo_id,
-                            flo_txid,
-                            user_upi_txid,
-                            "datetime": + new Date()
-                        }, "flo_txid")
-                    notify(`Transfer successfull: ${flo_txid}.`);
+                    // TODO: check https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}
+                    // and then continue
+                    const input_data = {
+                        receiver_flo_id,
+                        flo_txid,
+                        user_upi_txid,
+                        "datetime": + new Date()
+                    }
+
+                    compactIDB.addData('deposits_flo_txids', input_data, "flo_txid");
+
+                    // Add data into personal ledger as well
+                    floCloudAPI.sendGeneralData(input_data, token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
+                        { receiverID: myFloID });
+
+                    notify(`Transfer successfull: ${flo_txid}.`, '', 'fixed', true);
 
                     return true;
                 }
@@ -10111,7 +10537,7 @@
                     return;
                 }
 
-                notify("Please transfer INR " + amount_to_transfer + " to " + input_data["withdrawer_upi"]);
+                notify("Please transfer INR " + amount_to_transfer + " to " + input_data["withdrawer_upi"], '', 'fixed', true);
 
                 let transfer_upi_txid = prompt("Enter the UPI txid for transferred amount.", "");
                 if (transfer_upi_txid.length < 1) {
@@ -10122,10 +10548,14 @@
 
                 compactIDB.addData("cash_sent_details", input_data, input_data["token_txid"])
 
+                // Add data into personal ledger as well
+                floCloudAPI.sendGeneralData(input_data, token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
+                    { receiverID: myFloID });
+
                 floCloudAPI.sendGeneralData(`Your withdrawal request of INR ${amount_to_transfer} is approved. 
-                    Please check reference number ${transfer_upi_txid} in your UPI ${withdraw_upi}`,
+                        Please check reference number ${transfer_upi_txid} in your UPI ${withdraw_upi}`,
                     token_app.master_configurations.TYPE_MSGES,
-                    { receiverID: input_data['withdrawer_flo_id'], senderIDs: [myFloID] })
+                    { receiverID: input_data['withdrawer_flo_id'] })
 
             } catch (error) {
                 notify(error, 'error')
@@ -10161,7 +10591,7 @@
                             notify(`Transaction unsuccessfull.`);
                             return false;
                         } else {
-                            notify(`Transaction successfull: ${flo_txid}.`);
+                            notify(`Transaction successfull: ${flo_txid}.`, '', 'fixed', true);
                             return false;
                         }
                     })
@@ -10178,7 +10608,7 @@
                 if (typeof current_token_balance == "string") {
                     const get_user_balance = await ajaxGet('https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' + myFloID)
                     if (typeof get_user_balance === "object" && get_user_balance.balance >= 0) {
-                        if(get_user_balance.balance === null)
+                        if (get_user_balance.balance === null)
                             get_user_balance.balance = 0;
                         document.getElementById('token_balance').textContent
                             = get_user_balance.balance;
@@ -10190,64 +10620,37 @@
             }
         }
 
-        function init_pay_through_cashier_system() {
-            try {
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
-                const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                const paying_amount_div = document.getElementById('recvr_amount_to_pay')
-                const recvr_id = document.getElementById('recvr_id').value;
-                let amount_to_pay = Number(paying_amount_div.value);
-
-                paying_amount_div.onfocusout = function () {
-                    let txt = '';
-                    if (typeof amount_to_pay === "number" && amount_to_pay > 0) {
-                        txt = `Please pay INR ${amount_to_pay} to ${cashier_upi}. 
-                        Then specify the Tx id or Reference id of the UPI tx below.`;
-                    } else txt = '';
-                    document.getElementById('pay_cashier_info').innerText = txt;
-                }
-
-                const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
-                cnf_cash_payment_btn.onclick = function () {
-                    let paid_cashier_upi_txid = document.getElementById('paid_cashier_upi_txid').value;
-                    paid_cashier_upi_txid = toAlphanumeric(paid_cashier_upi_txid);
-                    if (recvr_id.length < 1
-                        || amount_to_pay <= 0
-                        || paid_cashier_upi_txid.length < 1)
-                        throw new Error("Incomplete information")
-                    const req_object = {
-                        receiver_flo_id: recvr_id,
-                        amount: amount_to_pay,
-                        upi_txid: toAlphanumeric(paid_cashier_upi_txid)
-                    }
-                    floCloudAPI.sendGeneralData(req_object, token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
-                        { receiverID: cashier, senderIDs: [myFloID] });
-
-                    notify(`You have sent INR ${amount_to_pay} to ${recvr_id} through our cashier. 
-                    Once the cashier ${cashier} receives your payment, he will transfer it to ${recvr_id}.`);
-                }
-
-            } catch (error) {
-                throw new Error(error)
-            }
-        }
-
         async function showPayRequests() {
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
-                const user_requests = floGlobals.generalData[JSON.stringify(
+
+                let finished_tasks = await floCloudAPI.requestApplicationData(
                     {
-                        application: floGlobals.application,
-                        type: token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER
-                    })];
+                        type: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
+                        receiverID: myFloID,
+                        senderIDs: [myFloID]
+                    });
+
+                if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
+
+                console.log(finished_tasks);
+
+                const processed_cashier_payments = Object.values(finished_tasks).map(m => m.message.upi_txid)
+                    .filter(f => f !== undefined);
+
+                console.log(processed_cashier_payments);
+
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                    { receiverID: myFloID });
+
+                const user_requests = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, "0");
 
                 let pay_thru_cashier = await compactIDB.readAllData('pay_thru_cashier');
                 let pay_thru_cashier_list = Object.values(pay_thru_cashier).map(m => m.upi_txid);
-                console.log(pay_thru_cashier_list);
-
                 let payRequestsContainer = document.getElementById("pay_requests_container");
                 payRequestsContainer.innerHTML = ``;
                 for (const m of user_requests) {
+                    if (processed_cashier_payments.includes(m.message.upi_txid)) continue;
                     if (pay_thru_cashier_list.includes(m.message.upi_txid)) continue;
                     let { upi_txid, receiver_flo_id, amount } = m.message;
                     frag.append(render.payRequest(m.sender, upi_txid, receiver_flo_id, amount))
@@ -10259,14 +10662,19 @@
             }
         }
 
-        async function pay_through_cashier(sender_flo_id = '', vendor_flo_id = '', upi_txid = '', amount_to_pay = 0) {
+        async function pay_as_cashier(sender_flo_id = '', vendor_flo_id = '', upi_txid = '', usr_amount_to_pay = 0) {
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
                 if (vendor_flo_id.length < 1) throw new Error("Invalid Receiver Id");
                 if (sender_flo_id.length < 1) throw new Error("Invalid Sender Id");
                 if (upi_txid.length < 1) throw new Error("Invalid UPI Txid");
+                const amount_to_pay = Number(prompt('Enter amount to pay', 0));
                 if (typeof amount_to_pay !== "number" || amount_to_pay <= 0)
-                    throw new Error("Invalid amount.");
+                    return notify("Invalid amount.", 'error', '', true);
+                if (Number(usr_amount_to_pay) !== amount_to_pay) {
+                    let amount_mismatch = confirm("Amount mismatch: Your amount does not match what user entered. Continue?");
+                    if (!amount_mismatch) return;
+                }
                 let flo_statement = `transfer ${amount_to_pay} rupee# on behalf of ${sender_flo_id}`;
                 let send_token_cnf = confirm(`Send ${amount_to_pay} to ${vendor_flo_id} ?`);
                 if (send_token_cnf == true) {
@@ -10278,31 +10686,434 @@
                         || typeof my_token_balance.balance !== "number"
                         || my_token_balance.balance < amount_to_pay) {
                         err_msg = `INFO: You have insufficient rupee balance.`;
-                        notify(err_msg);
+                        notify(err_msg, 'error', 'fixed', true);
                         return false;
                     }
 
                     let flo_txid = await floBlockchainAPI.sendTx(myFloID, vendor_flo_id, 0.001, myPrivKey, flo_statement)
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
-                        notify(`Transaction unsuccessfull.`);
+                        notify(`Transaction unsuccessfull.`, 'error', '', true);
                         return false;
                     } else {
-                        compactIDB.addData('pay_thru_cashier', {
+                        const input_data = {
                             sender_flo_id,
                             vendor_flo_id,
                             upi_txid,
                             flo_txid,
                             'datetime': + new Date()
-                        }, upi_txid);
-                        notify(`Transaction successfull: ${flo_txid}.`);
-                        notify(`INR ${amount_to_pay} sent to ${vendor_flo_id}`)
+                        };
+
+                        await compactIDB.addData('pay_thru_cashier', input_data, upi_txid);
+
+                        // Add data into personal ledger as well
+                        await floCloudAPI.sendGeneralData(input_data, token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
+                            { receiverID: myFloID });
+
+                        notify(`Transaction successfull: ${flo_txid}.   
+                            INR ${amount_to_pay} sent to ${vendor_flo_id}`, '', 'fixed', true);
                         return true;
                     }
                 }
 
             } catch (error) {
                 throw new Error(error)
+            }
+        }
+
+    </script>
+    
+    <!-- User functions -->
+    <script>
+
+        function request_rupee_token() {
+            try {
+                const request_tokens_btn = document.getElementById('request_tokens_btn');
+                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
+                request_tokens_btn.onclick = function () {
+                    if (typeof myFloID !== "string" || myFloID.length < 1) return;
+                    const token_amount_to_buy = Number(document.getElementById('token_amount_to_buy').value);
+                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+                    notify(`Please pay Rs ${token_amount_to_buy} to UPI id ${cashier_upi}.`, '', 'fixed', true);
+                    let upi_txid = prompt(`Please enter UPI TXID for deposited cash to ${cashier_upi}`);
+                    let request_object = {
+                        user_flo_id: myFloID,
+                        upi_txid: upi_txid,
+                    }
+                    if (typeof upi_txid === "string" && upi_txid.length > 1) {
+                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_DEPOSITS,
+                            { receiverID: cashier }).then(result => {
+                                console.log(result);
+                                notify('Request sent successfully.');
+                            })
+                        return true;
+                    }
+                    notify('Request failed.', 'error');
+                    return false;
+                }
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+
+        function withdraw_token_to_get_cash() {
+            try {
+                const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
+                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
+                withdraw_cash_btn.onclick = async function () {
+                    // TODO: Disble the button
+                    if (typeof myFloID !== "string" || myFloID.length < 1) {
+                        notify(`Your Flo Id is invalid.`);
+                        return;
+                    }
+                    const withdraw_cash_amount = Number(document.getElementById('withdraw_cash_amount').value);
+                    const user_withdraw_upi = String(document.getElementById('user_withdraw_upi').value);
+                    if (withdraw_cash_amount < 1) {
+                        notify(`Invalid amount. Please provide a number above 0.`);
+                        return false;
+                    }
+                    if (!user_withdraw_upi.includes('@')) {
+                        notify(`Please enter a valid UPI id.`);
+                        return false;
+                    }
+                    const token_balance_url = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${myFloID}`;
+                    const user_token_balance_object = await ajaxGet(token_balance_url);
+                    if (typeof user_token_balance_object !== "object" || typeof user_token_balance_object.balance !== "number") {
+                        notify('You do not have rupee balance yet. Please deposit rupee to get balance.');
+                        return;
+                    }
+                    const current_balance = Number(user_token_balance_object.balance);
+                    if (current_balance < withdraw_cash_amount) {
+                        notify(`You have unsufficient balance to withdraw. You can withdraw only Rs ${user_token_balance_object.balance}`, 'error', 'fixed', true);
+                        return;
+                    }
+
+                    const flo_comment = `transfer ${withdraw_cash_amount} rupee#`;
+                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, cashier, 0.001, myPrivKey, flo_comment)
+                    console.log(flo_txid);
+                    if (typeof flo_txid !== "string") {
+                        notify(`Transaction unsuccessfull.`);
+                        return false;
+                    }
+                    // TODO: Validate https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}
+                    // and then continue further
+
+                    let request_object = {
+                        user_flo_id: myFloID,
+                        token_txid: flo_txid,
+                        withdrawer_upi: user_withdraw_upi
+                    }
+                    console.log(request_object);
+                    if (typeof flo_txid === "string" && flo_txid.length > 1) {
+                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_WITHDRAWS,
+                            { receiverID: cashier });
+                        notify('Withdraw request sent successfully.');
+                        return true;
+                    }
+                    notify('Failed to send withdraw request to cashier.');
+                    return true;
+                }
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+
+        function pay_through_cashier() {
+            try {
+                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
+                const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+
+                const txt = `Please send cash to UPI address ${cashier_upi}. 
+                          Then specify the amount sent and UPI Txid below.`;
+
+                document.getElementById('pay_cashier_info').innerText = txt;
+
+                const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
+                cnf_cash_payment_btn.onclick = function () {
+                    const paying_amount_div = document.getElementById('recvr_amount_to_pay')
+                    const recvr_id = document.getElementById('recvr_id').value;
+                    let amount_to_pay = Number(paying_amount_div.value);
+                    let paid_cashier_upi_txid = document.getElementById('paid_cashier_upi_txid').value;
+                    paid_cashier_upi_txid = toAlphanumeric(paid_cashier_upi_txid);
+                    if (recvr_id.length < 1
+                        || amount_to_pay <= 0
+                        || paid_cashier_upi_txid.length < 1)
+                        return notify("Incomplete information", 'error', '', true);
+                    const req_object = {
+                        receiver_flo_id: recvr_id,
+                        amount: amount_to_pay,
+                        upi_txid: toAlphanumeric(paid_cashier_upi_txid)
+                    }
+
+                    floCloudAPI.sendGeneralData(req_object, token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                        { receiverID: cashier, senderIDs: [myFloID] });
+
+                    notify(`You have sent cash to ${recvr_id} through our cashier service (${cashier_upi}). 
+                        Once the cashier receives your payment, he will transfer it to ${recvr_id}.`, '', 'fixed', true);
+                }
+
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+
+        async function show_user_activities() {
+            try {
+                await token_app.actions.retrieveLatestContent();
+
+                const deposit_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0");
+                const withdraw_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, "0");
+                const user_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0");
+
+                for (usr_deposits of deposit_msg) {
+                    console.log(usr_deposits.message);
+                }
+                for (usr_deposits of withdraw_msg) {
+                    console.log(usr_deposits.message);
+                }
+                for (usr_deposits of user_msg) {
+                    console.log(usr_deposits.message);
+                }
+
+            } catch (e) {
+                notify(e);
+            }
+        }
+
+        async function file_complaint(order_type = '', order_vc = '') {
+            try {
+
+                const cnf_comaplin = confirm(`Any deposit or withdraw 
+                    order may take about 12 hours to process. 
+                    Are you sure you want to complain?`);
+
+                if (!cnf_comaplin) return;
+
+                let custom_msg = prompt("You may provide any custom message to us.", "");
+
+                let input_data = {
+                    order_type, order_vc, custom_msg
+                }
+
+                console.log(input_data);
+
+                let complaint_type;
+
+                if (order_type == 'deposit') {
+                    complaint_type = token_app.master_configurations.TYPE_FILE_DEPOSITS_COMPLAINT;
+                } else if (order_type == 'withdraw') {
+                    complaint_type = token_app.master_configurations.TYPE_FILE_WITHDRAWS_COMPLAINT;
+                } else if (order_type == 'pay_thru_cashier') {
+                    complaint_type = token_app.master_configurations.TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT;
+                } else return false;
+
+                floCloudAPI.sendGeneralData(input_data, complaint_type,
+                    { receiverID: token_app.master_configurations.helplineFloId });
+
+                notify('Your complaint has been registered. Our team will take an action very soon. Thank you.',
+                    '', 'fixed', true);
+
+                return true;
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    </script>
+    
+    <!-- Helpline -->
+    <script>
+
+        async function load_deposit_complaints(receiver = '', sendersArray = []) {
+            try {
+
+                await clearCashierData();
+
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS,
+                    { receiverID: receiver });
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
+                    { receiverID: receiver });
+
+                let options = {
+                    type: token_app.master_configurations.TYPE_FILE_DEPOSITS_COMPLAINT,
+                    receiverID: token_app.master_configurations.helplineFloId
+                };
+
+                if (typeof sendersArray == "object" && sendersArray.length > 0) {
+                    options.senderIDs = sendersArray;
+                }
+
+                const all_deposits_complaints = JSON.parse(await floCloudAPI.requestApplicationData(options));
+
+                //options.type = token_app.master_configurations.TYPE_PROCESSED_DEPOSITS;
+                options.type = token_app.master_configurations.TYPE_PROCESSED_DEPOSITS_COMPLAINT;
+
+                const processed_deposits_complaints = JSON.parse(await floCloudAPI.requestApplicationData(options));
+
+                //console.log(all_deposits_complaints);
+                //console.log(processed_deposits_complaints);
+
+                // filter out processed tasks from unprocessed ones
+                const unprocessed_deposits_complaints = Object.values(all_deposits_complaints)
+                    .filter(orders_comparer(Object.values(processed_deposits_complaints)));
+
+                // Show details of unprocessed ones
+                //console.log(unprocessed_deposits_complaints);
+
+                for (const udc of unprocessed_deposits_complaints) {
+                    let all_users_deposits = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0");
+                    let this_user_deposit = all_users_deposits.filter(f => f.vectorClock === udc.message.order_vc);
+                    console.log(this_user_deposit);
+
+                    let this_user_deposit_upi_txid_list = this_user_deposit.map(m => m.message.upi_txid);
+
+                    let all_cashier_processed_deposits = floDapps
+                        .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_DEPOSITS, "0");
+
+                    let this_cashier_processed_user_deposit = all_cashier_processed_deposits
+                        .filter(f => this_user_deposit_upi_txid_list.includes(f.message.user_upi_txid));
+                    console.log(this_cashier_processed_user_deposit);
+                }
+
+                // Display both this_user_deposit and this_cashier_processed_user_deposit
+                // side by side and attach button to mark resolved
+
+                // After resolving the dispute mark it as resolved
+                // set onclick event => mark_complaint_resolved(order_type='deposit', input_data={});
+
+            } catch (e) {
+                console.error(e);
+                notify(e);
+            }
+        }
+
+        async function load_withdraw_complaints(receiver = '', sender = []) {
+            try {
+
+                await clearCashierData();
+
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
+                    { receiverID: receiver });
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
+                    { receiverID: receiver });
+
+                let options = {
+                    type: token_app.master_configurations.TYPE_FILE_WITHDRAWS_COMPLAINT,
+                    receiverID: token_app.master_configurations.helplineFloId
+                };
+
+                if (typeof sendersArray == "object" && sendersArray.length > 0) {
+                    options.senderIDs = sendersArray;
+                }
+
+                const all_withdraws_complaints = JSON.parse(await floCloudAPI.requestApplicationData(options));
+
+                //options.type = token_app.master_configurations.TYPE_PROCESSED_DEPOSITS;
+                options.type = token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS_COMPLAINT;
+
+                const processed_withdraws_complaints = JSON.parse(await floCloudAPI.requestApplicationData(options));
+
+                // filter out processed tasks from unprocessed ones
+                const unprocessed_withdraws_complaints = Object.values(all_withdraws_complaints)
+                    .filter(orders_comparer(Object.values(processed_withdraws_complaints)));
+
+                for (const udc of unprocessed_withdraws_complaints) {
+                    let all_users_withdraws = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, "0");
+                    let this_user_withdraws = all_users_withdraws.filter(f => f.vectorClock === udc.message.order_vc);
+                    console.log(this_user_withdraws);
+
+                    let this_user_withdraws_token_txid_list = this_user_withdraws.map(m => m.message.token_txid);
+
+                    let all_cashier_processed_withdraws = floDapps
+                        .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS, "0");
+
+                    let this_cashier_processed_user_withdraws = all_cashier_processed_withdraws
+                        .filter(f => this_user_withdraws_token_txid_list.includes(f.message.token_txid));
+                    console.log(this_cashier_processed_user_withdraws);
+                }
+
+                // Display both this_user_withdraws and this_cashier_processed_user_withdraws
+                // side by side and attach button to mark resolved
+
+                // After resolving the dispute mark it as resolved
+                // set onclick event => mark_complaint_resolved(order_type='withdraw', input_data={});
+
+            } catch (e) {
+                console.error(e);
+                notify(e);
+            }
+        }
+
+        async function load_pay_thru_cashier_complaints(receiver = '', sender = []) {
+            try {
+
+                await clearCashierData();
+
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                    { receiverID: receiver });
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
+                    { receiverID: receiver });
+
+                let options = {
+                    type: token_app.master_configurations.TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT,
+                    receiverID: token_app.master_configurations.helplineFloId
+                };
+
+                if (typeof sendersArray == "object" && sendersArray.length > 0) {
+                    options.senderIDs = sendersArray;
+                }
+
+                const all_pay_thru_cashier_complaints = JSON.parse(await floCloudAPI.requestApplicationData(options));
+
+                options.type = token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT;
+
+                const processed_pay_thru_cashier_complaints = JSON.parse(await floCloudAPI.requestApplicationData(options));
+
+                // filter out processed tasks from unprocessed ones
+                const unprocessed_pay_thru_cashier_complaints = Object.values(all_pay_thru_cashier_complaints)
+                    .filter(orders_comparer(Object.values(processed_pay_thru_cashier_complaints)));
+
+                for (const udc of unprocessed_pay_thru_cashier_complaints) {
+                    let all_users_pay_thru_cashier = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, "0");
+                    let this_user_pay_thru_cashier = all_users_pay_thru_cashier.filter(f => f.vectorClock === udc.message.order_vc);
+                    console.log(this_user_pay_thru_cashier);
+
+                    let this_user_pay_thru_cashier_upi_txid_list = this_user_withdraws.map(m => m.message.upi_txid);
+
+                    let all_cashier_processed_pay_thru_cashier = floDapps
+                        .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS, "0");
+
+                    let this_cashier_processed_user_pay_thru_cashier = all_cashier_processed_pay_thru_cashier
+                        .filter(f => this_user_pay_thru_cashier_upi_txid_list.includes(f.message.upi_txid));
+                    console.log(this_cashier_processed_user_pay_thru_cashier);
+                }
+
+            } catch (e) {
+                console.error(e);
+                notify(e);
+            }
+        }
+
+        function mark_complaint_resolved(order_type = '', input_data = {}) {
+            try {
+
+                let complaint_type;
+
+                if (order_type == 'deposit') {
+                    complaint_type = token_app.master_configurations.TYPE_PROCESSED_DEPOSITS_COMPLAINT;
+                } else if (order_type == 'withdraw') {
+                    complaint_type = token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS_COMPLAINT;
+                } else if (order_type == 'pay_thru_cashier') {
+                    complaint_type = token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT;
+                } else return false;
+
+                floCloudAPI.sendGeneralData(input_data, complaint_type,
+                    { receiverID: token_app.master_configurations.helplineFloId });
+
+                notify('Complaint marked as resolved.');
+
+            } catch (e) {
+                console.error(e);
             }
         }
 
