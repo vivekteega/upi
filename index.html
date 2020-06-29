@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blockchain UPI</title>
     <link rel="stylesheet" href="css/main.css">
-
 </head>
 
 <body onload="onLoadStartUp()">
@@ -14,6 +13,9 @@
         <source src="https://rmservices.duckdns.org/files/notification-sound.mp3" type="audio/mpeg">
         <source src="https://rmservices.duckdns.org/files/notification-sound.ogg" type="audio/ogg">
     </audio>
+    <h5 id="textCopied" class="hide">
+        Copied
+    </h5>
     <div class="popup-container hide">
         <div id="confirmation" class="popup">
             <p id="confirm_message"></p>
@@ -69,6 +71,7 @@
                 <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
             </svg>
             <h3 id="tip_container">Loading BLOCKCHAIN UPi</h3>
+            <button>Reset</button>
         </div>
     </div>
     <!-- Sign in popup-->
@@ -90,6 +93,23 @@
             <p>*Sign in button will not be activated until correct value is entered.</p>
         </div>
     </div>
+    <!-- Report popuo-->
+    <div class="popup-container hide">
+        <div class="popup" id="report_popup">
+            <div class="container-header">
+                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                    <title>close</title>
+                    <line x1="64" y1="0" x2="0" y2="64" />
+                    <line x1="64" y1="64" x2="0" y2="0" />
+                </svg>
+                <h3>Report</h3>
+                <button>report</button>
+            </div>
+            <h4>Please add any message you want to send us regarding this issue</h4>
+            <textarea name="complaint" id="complaint_field" rows="10"></textarea>
+        </div>
+    </div>
+
     <header id="main_header" class="flex">
         <svg viewBox="0 0 180 105.7" class="hide-completely">
             <path d="M22.5,35.5C27.7,32.6,33.6,31,40,31c19.9,0,36,16.1,36,36c0,16.6-11.2,30.6-26.5,34.7" />
@@ -121,7 +141,7 @@
         </div>
     </header>
     <nav id="navbar">
-        <div title="homepage" id="home_page_btn" class="navbar-item active" onclick="showPage(this, 'home_page')">
+        <div title="homepage" id="home_page_btn" class="user-option navbar-item active" onclick="showPage(this, 'home_page')">
             <svg class="icon" viewBox="0 0 64 64">
                 <path
                     d="M24.77,44.15H40.06V63.5H53.4V36h5.66a3.38,3.38,0,0,0,2.53-5.68l-6.73-7.16V11.26H46.48v3L34.53,1.59a3.49,3.49,0,0,0-5.06,0L2.41,30.35A3.38,3.38,0,0,0,4.94,36H10.6V63.5H24.77" />
@@ -169,7 +189,18 @@
             </svg>
             <h5>pay</h5>
         </div>
-        <div title="profile page" class="dropdown navbar-item" onclick="showPage(this, 'profile_page')">
+        <div title="activity page" class="navbar-item user-option" onclick="showPage(this, 'activity_page')">
+            <svg class="icon" viewBox="0 0 64 64">
+                <title>Asset 1</title>
+                <path
+                    d="M60.38,1,32.8,33.23a1.77,1.77,0,0,0,1.34,2.92h9.63a.79.79,0,0,1,.71,1.13L33,61.36A1.49,1.49,0,0,0,35.49,63l27.58-32.2a1.77,1.77,0,0,0-1.34-2.92H52.1a.79.79,0,0,1-.71-1.13L62.85,2.64A1.49,1.49,0,0,0,60.38,1Z" />
+                <line x1="10" y1="16" x2="29" y2="16" />
+                <line y1="32.5" x2="19" y2="32.5" />
+                <line x1="7" y1="50" x2="26" y2="50" />
+            </svg>
+            <h5>Activity</h5>
+        </div>
+        <div title="profile page" class="navbar-item" onclick="showPage(this, 'profile_page')">
             <svg class="icon" id="profile_pic" viewBox="0 0 49.54 61.12">
                 <path
                     d="M49.34,19.94c7.73,0,13.26,5.26,13.26,14S58.18,50.14,49.71,50.08,36.82,42.66,36.82,33.93s5.53-14,13.26-14"
@@ -182,7 +213,7 @@
         </div>
     </nav>
     <main class="">
-        <section class="page" id="home_page">
+        <section class="page hide-completely" id="home_page">
             <h1>What do we offer?</h1>
             <p>
                 Your Rupee balance is digital footprint of actual cash.<br> Deposit, Withdraw or Pay Rupee digitally
@@ -231,6 +262,24 @@
                     </svg>
                     <h4>Withdraw rupee</h4>
                 </div>
+                <div class="option" onclick="showPopup('request_rupee')">
+                    <svg class="icon banking" viewBox="0 0 52 60">
+                        <line x1="4" y1="33.5" x2="4" y2="25" />
+                        <polyline points="41.52 6.5 51 6.5 51 53.5 41.69 53.5" />
+                        <line x1="9" y1="55.5" x2="14" y2="55.5" />
+                        <line x1="43" y1="55.5" x2="45" y2="55.5" />
+                        <rect x="1" y="11.5" width="6" height="13.5" rx="2.76" />
+                        <rect x="1" y="33.5" width="6" height="13.5" rx="2.76" />
+                        <polyline points="3.81 11.5 3.81 6.5 41.5 1 41.69 59 3.81 53.5 3.81 47" />
+                        <path
+                            d="M35.64,39.19c0,6.31-3.25,11.45-7.22,11.48s-7-4.92-7-11.07,3.13-11.29,7.05-11.48S35.64,32.88,35.64,39.19Z"
+                            transform="translate(-6 -2)" />
+                        <path
+                            d="M31.06,39.32c0,2.31-1.19,4.2-2.64,4.23s-2.62-1.79-2.62-4.08S27,35.3,28.42,35.24,31.06,37,31.06,39.32Z"
+                            transform="translate(-6 -2)" />
+                    </svg>
+                    <h4>Request rupee</h4>
+                </div>
                 <div class="option" onclick="showPopup('pay_anyone')">
                     <svg class="icon" viewBox="0 0 64 64">
                         <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
@@ -239,129 +288,130 @@
                     <h4>pay through cashier</h4>
                     </a>
                 </div>
-                <div class="popup-container hide">
-                    <div id="cash_transfer" class="popup">
-                        <div class="container-header">
-                            <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                                <title>close</title>
-                                <line x1="64" y1="0" x2="0" y2="64" />
-                                <line x1="64" y1="64" x2="0" y2="0" />
-                            </svg>
-                            <h3>Transfer Rupee</h3>
-                            <div id="send_tokens_btn" class="action expand">
-                                <button class="primary-btn expand" type="submit" disabled>
-                                    transfer
-                                </button>
-                            </div>
+            </div>
+            <div class="popup-container hide">
+                <div id="cash_transfer" class="popup">
+                    <div class="container-header">
+                        <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                            <title>close</title>
+                            <line x1="64" y1="0" x2="0" y2="64" />
+                            <line x1="64" y1="64" x2="0" y2="0" />
+                        </svg>
+                        <h3>Transfer Rupee</h3>
+                        <div id="send_tokens_btn" class="action expand">
+                            <button class="primary-btn expand" type="submit" disabled>
+                                transfer
+                            </button>
                         </div>
-                        <p>
-                            Transfer your deposited Rupee tokens to any FLO address.<br>
-                            *Requires token to be deposited first.
-                        </p>
-                        <form autocomplete="off" onsubmit="return false">
-                            <div class="input">
-                                <input id="token_receiver" type="text" required>
-                                <label for="token_receiver">Reciever's FLO ID</label>
-                            </div>
-                            <div class="input">
-                                <input id="token_amount" inputmode="numeric" type="number" required>
-                                <label for="token_amount">Amount</label>
-                            </div>
-                        </form>
                     </div>
-                </div>
-                <div class="popup-container hide">
-                    <div id="deposit_rupee" class="popup">
-                        <div class="container-header">
-                            <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                                <title>close</title>
-                                <line x1="64" y1="0" x2="0" y2="64" />
-                                <line x1="64" y1="64" x2="0" y2="0" />
-                            </svg>
-                            <h3>Deposit rupee</h3>
-                            <div id="request_tokens_btn" class="action expand">
-                                <button class="primary-btn expand" type="submit" disabled>
-                                    deposit
-                                </button>
-                            </div>
+                    <p>
+                        Transfer your deposited Rupee tokens to any FLO address.<br>
+                        *Requires token to be deposited first.
+                    </p>
+                    <form autocomplete="off" onsubmit="return false">
+                        <div class="input">
+                            <input id="token_receiver" type="text" required>
+                            <label for="token_receiver">Reciever's FLO ID</label>
                         </div>
-                        <p>
-                            Deposit rupee through UPI to use as Digital currency powered by blockchain.
-                        </p>
-                        <form autocomplete="off" onsubmit="return false">
-                            <div class="input">
-                                <input id="token_amount_to_buy" inputmode="numeric" type="number" required>
-                                <label for="token_amount_to_buy">Amount</label>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="popup-container hide">
-                    <div id="withdraw_rupee" class="popup">
-                        <div class="container-header">
-                            <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                                <title>close</title>
-                                <line x1="64" y1="0" x2="0" y2="64" />
-                                <line x1="64" y1="64" x2="0" y2="0" />
-                            </svg>
-                            <h3>Withdraw rupee</h3>
-                            <div id="withdraw_cash_btn" class="action expand">
-                                <button class="primary-btn expand" type="submit" disabled>
-                                    withdraw
-                                </button>
-                            </div>
+                        <div class="input">
+                            <input id="token_amount" inputmode="numeric" type="number" required>
+                            <label for="token_amount">Amount</label>
                         </div>
-                        <p>
-                            Withdraw or redeem your rupee tokens back to your specified UPI address.
-                        </p>
-                        <form autocomplete="off" onsubmit="return false">
-                            <div class="input">
-                                <input id="user_withdraw_upi" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" type="text" required>
-                                <label for="user_withdraw_upi">Reciever's UPI address</label>
-                            </div>
-                            <div class="input">
-                                <input id="withdraw_cash_amount" type="number" inputmode="numeric" required>
-                                <label for="withdraw_cash_amount">amount</label>
-                            </div>
-                        </form>
-                    </div>
+                    </form>
                 </div>
-                <div class="popup-container hide">
-                    <div id="pay_anyone" class="popup">
-                        <div class="container-header">
-                            <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                                <title>close</title>
-                                <line x1="64" y1="0" x2="0" y2="64" />
-                                <line x1="64" y1="64" x2="0" y2="0" />
-                            </svg>
-                            <h3>Pay through cashier</h3>
-                            <div id="cnf_cash_payment" class="action expand">
-                                <button class="primary-btn expand" type="submit" disabled>
-                                    pay
-                                </button>
-                            </div>
+            </div>
+            <div class="popup-container hide">
+                <div id="deposit_rupee" class="popup">
+                    <div class="container-header">
+                        <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                            <title>close</title>
+                            <line x1="64" y1="0" x2="0" y2="64" />
+                            <line x1="64" y1="64" x2="0" y2="0" />
+                        </svg>
+                        <h3>Deposit rupee</h3>
+                        <div id="request_tokens_btn" class="action expand">
+                            <button class="primary-btn expand" type="submit" disabled>
+                                deposit
+                            </button>
                         </div>
-                        <p>
-                            Don't have enough token balance? Pay to our cashier through UPI and your cash will be
-                            transfered as Rupee tokens.
-                        </p>
-                        <p><strong id="pay_cashier_info"></strong></p>
-                        <form autocomplete="off" onsubmit="return false">
-                            <div class="input">
-                                <input id="recvr_id" type="text" required>
-                                <label for="recvr_id">Reciever's FLO ID</label>
-                            </div>
-                            <div class="input">
-                                <input id="recvr_amount_to_pay" type="number" inputmode="numeric" required>
-                                <label for="recvr_amount_to_pay">Amount</label>
-                            </div>
-                            <div class="input">
-                                <input id="paid_cashier_upi_txid" type="text" required>
-                                <label for="paid_cashier_upi_txid">UPI Txid/Ref Number</label>
-                            </div>
-                        </form>
                     </div>
+                    <p>
+                        Deposit rupee through UPI to use as Digital currency powered by blockchain.
+                    </p>
+                    <form autocomplete="off" onsubmit="return false">
+                        <div class="input">
+                            <input id="token_amount_to_buy" inputmode="numeric" type="number" required>
+                            <label for="token_amount_to_buy">Amount</label>
+                        </div>
+                    </form>
                 </div>
+            </div>
+            <div class="popup-container hide">
+                <div id="withdraw_rupee" class="popup">
+                    <div class="container-header">
+                        <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                            <title>close</title>
+                            <line x1="64" y1="0" x2="0" y2="64" />
+                            <line x1="64" y1="64" x2="0" y2="0" />
+                        </svg>
+                        <h3>Withdraw rupee</h3>
+                        <div id="withdraw_cash_btn" class="action expand">
+                            <button class="primary-btn expand" type="submit" disabled>
+                                withdraw
+                            </button>
+                        </div>
+                    </div>
+                    <p>
+                        Withdraw or redeem your rupee tokens back to your specified UPI address.
+                    </p>
+                    <form autocomplete="off" onsubmit="return false">
+                        <div class="input">
+                            <input id="user_withdraw_upi" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" type="text" required>
+                            <label for="user_withdraw_upi">Reciever's UPI address</label>
+                        </div>
+                        <div class="input">
+                            <input id="withdraw_cash_amount" type="number" inputmode="numeric" required>
+                            <label for="withdraw_cash_amount">amount</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="popup-container hide">
+                <div id="pay_anyone" class="popup">
+                    <div class="container-header">
+                        <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                            <title>close</title>
+                            <line x1="64" y1="0" x2="0" y2="64" />
+                            <line x1="64" y1="64" x2="0" y2="0" />
+                        </svg>
+                        <h3>Pay through cashier</h3>
+                        <div id="cnf_cash_payment" class="action expand">
+                            <button class="primary-btn expand" type="submit" disabled>
+                                pay
+                            </button>
+                        </div>
+                    </div>
+                    <p>
+                        Don't have enough token balance? Pay to our cashier through UPI and your cash will be
+                        transfered as Rupee tokens.
+                    </p>
+                    <p><strong id="pay_cashier_info"></strong></p>
+                    <form autocomplete="off" onsubmit="return false">
+                        <div class="input">
+                            <input id="recvr_id" type="text" required>
+                            <label for="recvr_id">Reciever's FLO ID</label>
+                        </div>
+                        <div class="input">
+                            <input id="recvr_amount_to_pay" type="number" inputmode="numeric" required>
+                            <label for="recvr_amount_to_pay">Amount</label>
+                        </div>
+                        <div class="input">
+                            <input id="paid_cashier_upi_txid" type="text" required>
+                            <label for="paid_cashier_upi_txid">UPI Txid/Ref Number</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </section>
         <section id="deposit" class="page hide-completely">
             <div class="container-header">
@@ -558,6 +608,20 @@
                 <h2 class="light-text">No pay requests.</h2>
             </div>
         </section>
+        <section id="activity_page" class="page">
+            <div class="container-header">
+                <h2>Activity</h2>
+                <select name="activity type" id="activity_type">
+                    <option value="deposits">Deposits</option>
+                    <option value="withdraws">Withdrawals</option>
+                    <option value="cashierMsg">Messages from cashier</option>
+                </select>
+            </div>
+            <p class="bottom-margin">*If your request isn't completed in 12hrs, use <strong>REPORT</strong> to get assistance from our helpline.</p>
+            <div id="deposit_activity_container" class="container activity-container"><h4>You haven't deposited rupee yet.</h4></div>
+            <div id="withdraw_activity_container" class="container activity-container hide-completely"><h4>You haven't withdrawn rupee yet.</h4></div>
+            <div id="cashier_message_container" class="container activity-container hide-completely"><h4>No messages from cashier.</h4></div>
+        </section>
         <section id="profile_page" class="page hide-completely">
             <div class="container-header">
                 <h2>Profile</h2>
@@ -599,7 +663,7 @@
 
     <script id="onLoadStartUp">
         function onLoadStartUp() {
-            //showPopup('main_loader', 'no')
+            showPopup('main_loader', 'no')
             console.log("Starting the app! Please Wait!")
             floDapps.launchStartUp().then(result => {
                 console.log(result)
@@ -616,7 +680,7 @@
             notificationSound = document.getElementById('notification_sound');
         const render = {
             // returns an order element;
-            depositRequest: function (txid, floId) {
+            depositRequest(txid, floId) {
                 let card = document.createElement('div');
                 card.classList.add('request')
                 setAttributes(card, { 'data-user-flo-id': floId, 'data-txid': txid })
@@ -629,7 +693,7 @@
                                     </button>`;
                 return card;
             },
-            withdrawRequest: function (txid, upiId, floId) {
+            withdrawRequest(txid, upiId, floId) {
                 let card = document.createElement('div');
                 card.classList.add('request')
                 setAttributes(card, { 'data-txid': txid, 'data-user-flo-id': floId, 'data-upi': upiId })
@@ -644,7 +708,7 @@
                                     </button>`;
                 return card;
             },
-            payRequest: function (sender, txid, floId, amount) {
+            payRequest(sender, txid, floId, amount) {
                 let card = document.createElement('div');
                 card.classList.add('request')
                 setAttributes(card, { 'data-sender': sender, 'data-receiver-flo-id': floId, 'data-txid': txid, 'data-amount': amount })
@@ -657,6 +721,80 @@
                                     <button id="" class="confirm-pay-btn">
                                         Transfer
                                     </button>`;
+                return card;
+            },
+            depositActivity(vectorClock, txid, amount) {
+                let card = document.createElement('div'),
+                    time = 0;
+                time = new Date(parseInt(vectorClock.split('_')[0]))
+                card.classList.add('request')
+                let timeFrag = time.toString().split(' '), 
+                    day = timeFrag[0],
+                    month = timeFrag[1],
+                    date = timeFrag[2],
+                    year = timeFrag[3],
+                    hours = timeFrag[4].slice(0, timeFrag[4].lastIndexOf(':')),
+                    finalTime = '';
+                    parseInt(hours.split(':')[0]) > 12 ? finalTime = 'PM' : finalTime = 'AM' 
+                setAttributes(card, { 'data-vectorClock': vectorClock, 'data-type': 'withdraw'})
+                card.innerHTML = `  <h5>UPI Transanction ID</h5>
+                                    <div class="copy-row">
+                                        <h4 class="copy">${txid}</h4>
+                                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                            <title>Copy</title>
+                                            <rect x="16" y="16" width="48" height="48" rx="6" />
+                                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                        </svg>
+                                    </div>
+                                    <h5>Amount</h5>
+                                    <h4 class="deposited">₹${amount}</h4>
+                                    <div class="flex">
+                                    <h5 class="time">${hours} ${finalTime} ${day} ${date} ${month} ${year}</h5>
+                                    <button id="" class="report">
+                                        report
+                                    </button>
+                                    </div>`;
+                return card;
+            },
+            withdrawActivity(vectorClock, txid, upi, amount) {
+                let card = document.createElement('div'),
+                    time = 0;
+                time = new Date(parseInt(vectorClock.split('_')[0]))
+                card.classList.add('request')
+                let timeFrag = time.toString().split(' '), 
+                    day = timeFrag[0],
+                    month = timeFrag[1],
+                    date = timeFrag[2],
+                    year = timeFrag[3],
+                    hours = timeFrag[4].slice(0, timeFrag[4].lastIndexOf(':')),
+                    finalTime = '';
+                    parseInt(hours.split(':')[0]) > 12 ? finalTime = 'PM' : finalTime = 'AM' 
+                setAttributes(card, { 'data-vectorClock': vectorClock, 'data-type': 'withdraw'})
+                card.innerHTML = `  <h5>Transanction ID</h5>
+                                    <div class="copy-row">
+                                        <h4 class="copy">${txid}</h4>
+                                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                            <title>Copy</title>
+                                            <rect x="16" y="16" width="48" height="48" rx="6" />
+                                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                        </svg>
+                                    </div>
+                                    <h5 class="label">Withdrawn to</h5>
+                                    <h4>${upi}</h4>
+                                    <h5>Amount</h5>
+                                    <h4 class="withdrawn">₹${amount}</h4>
+                                    <div class="flex">
+                                    <h5 class="time">${hours} ${finalTime} ${day} ${date} ${month} ${year}</h5>
+                                    <button class="report">
+                                        report
+                                    </button>
+                                    </div>`;
+                return card;
+            },
+            cashierMessage(message) {
+                let card = document.createElement('div')
+                card.classList.add('cashier-message')
+                card.innerHTML = `<p>${message}</p>`;
                 return card;
             },
         }
@@ -720,6 +858,10 @@
                 //loader.classList.remove('animate-loader')
                 document.querySelector('main').classList.remove('hide-completely')
             }
+            if (popup === 'prompt') {
+                if(thisPopup.querySelector('input').value == '')
+                    thisPopup.querySelector('.cancel-btn').click()
+            }
         }
 
         addEventListener('mousedown', e => {
@@ -736,14 +878,10 @@
 
         function clearAllInputs(parent) {
             parent.querySelectorAll("input").forEach((field) => {
-                if (field.getAttribute('type') !== 'radio') {
-                    field.value = '';
-                    if (field.closest('.input')) {
-                        field.closest('.input').classList.remove('animate-label')
-                    }
+                field.value = '';
+                if (field.closest('.input')) {
+                    field.closest('.input').classList.remove('animate-label')
                 }
-                else
-                    field.checked = false
             })
             if (parent.querySelector("button[type='submit']"))
                 parent.querySelector("button[type='submit']").disabled = true;
@@ -765,7 +903,7 @@
             banner.style.background = back;
             banner.classList.add('no-transformations')
             banner.classList.remove('hide')
-            banner.querySelector('#notification_text').textContent = message.charAt(0).toUpperCase() + message.slice(1);
+            banner.querySelector('#notification_text').textContent = message;
             if (navigator.onLine && sound) {
                 notificationSound.currentTime = 0;
                 notificationSound.play();
@@ -800,8 +938,16 @@
             return new Promise(resolve => {
                 let popup = document.getElementById('prompt'),
                     input = popup.querySelector('input');
-                input.value = defaultVal;
+                if(defaultVal)
+                    input.value = defaultVal;
                 showPopup('prompt')
+                input.focus()
+                input.addEventListener('keyup', e => {
+                    if(e.key === 'Enter'){
+                        resolve(input.value);
+                        hidePopup()
+                    }
+                })
                 popup.querySelector('#prompt_message').textContent = message;
                 popup.querySelector('.submit-btn').onclick = () =>  {
                     hidePopup()
@@ -812,6 +958,16 @@
                     resolve(null);
                 }
             })
+        }
+
+        function copyToClipboard(parent) {
+            let toast = document.getElementById('textCopied'),
+                textToCopy = parent.querySelector('.copy').textContent;
+            navigator.clipboard.writeText(textToCopy)
+            toast.classList.remove('hide');
+            setTimeout(() => {
+                toast.classList.add('hide');
+            }, 2000)
         }
 
         // prevents non numerical input on firefox 
@@ -854,8 +1010,12 @@
                         else
                             parent.classList.remove('animate-label')
                         formValidation(parent.firstElementChild, e)
+                    }
+                })
+                form.addEventListener('keyup', (e) => {
+                    if (e.target.closest('.input')) {
                         if (e.key === 'Enter') {
-                            parent.closest('form').querySelector("button[type='submit']").click();
+                            e.target.closest('.popup').querySelector("button[type='submit']").click();
                         }
                     }
                 })
@@ -907,7 +1067,32 @@
                         }
                     })
             })
+            // Function for reporting complain 
+            document.getElementById('activity_page').addEventListener('click', (e) => {
+                if (e.target.closest('.report')){
+                    showPopup('report_popup')
+                }
+            })
+            document.getElementById('activity_type').addEventListener('change', function (e){
+                showActivity(this.value)
+            })
         })
+
+        let allActivities = document.querySelectorAll('.activity-container')
+        function showActivity(activity){
+            allActivities.forEach(act => {
+                act.classList.add('hide-completely')
+            })
+            if(activity === 'deposits'){
+                document.getElementById('deposit_activity_container').classList.remove('hide-completely')
+            }
+            if(activity === 'withdraws'){
+                document.getElementById('withdraw_activity_container').classList.remove('hide-completely')
+            }
+            if(activity === 'cashierMsg'){
+                document.getElementById('cashier_message_container').classList.remove('hide-completely')
+            }
+        }
 
         let allPages = document.querySelectorAll('.page'),
             allTabs = document.querySelectorAll('.navbar-item');
@@ -920,6 +1105,9 @@
             })
             document.getElementById(page).classList.remove('hide-completely')
             btn.classList.add('active', 'shrink')
+            if(page === 'activity_page'){
+                show_user_activities()
+            }
         }
 
         function signIn() {
@@ -10320,16 +10508,23 @@
                 transferTokensManually();
 
                 const allCashierOptions = document.querySelectorAll('.cashier-option'),
+                      allUserOptions = document.querySelectorAll('.user-option'),
                     userType = document.getElementById('user_type')
                 if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                     allCashierOptions.forEach(option => {
                         option.classList.remove('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.add('hide-completely')
                     })
                     userType.textContent = 'Cashier'
                 }
                 else {
                     allCashierOptions.forEach(option => {
                         option.classList.add('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
                     })
                     userType.textContent = 'User'
                 }
@@ -10344,9 +10539,6 @@
             },
 
             retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals.subAdmins) {
-                notify('Loading the latest content...');
-
-                refresh_balance();
 
                 floCloudAPI.requestObjectData(token_app.master_configurations.SUBJECT, { receiverID, senderIDs });
 
@@ -10414,7 +10606,7 @@
             token_app.requests = {};
             token_app.requests.deposits = {};
             token_app.requests.withdraws = {};
-            floCloudAPI.resetObjectData(token_app, token_app.master_configurations.SUBJECT,
+            floCloudAPI.resetObjectData(token_app, floGlobals.application,
                 { receiverID: floGlobals.adminID });
         }
 
@@ -10511,7 +10703,7 @@
                     notify("Receiver FLO id or UPI txid not found.");
                     return;
                 }
-                const amount_of_tokens_to_transfer = await askPrompt('Enter the amount of rupee to transfer', 0);
+                const amount_of_tokens_to_transfer = prompt('Enter the amount of rupee to transfer', 0);
                 if (amount_of_tokens_to_transfer > 0) {
                     let flo_comment = `transfer ${amount_of_tokens_to_transfer} rupee#`;
                     let flo_txid = await floBlockchainAPI.sendTx(myFloID, receiver_flo_id, 0.001, myPrivKey, flo_comment)
@@ -10574,7 +10766,7 @@
 
                 notify("Please transfer INR " + amount_to_transfer + " to " + input_data["withdrawer_upi"], '', 'fixed', true);
 
-                let transfer_upi_txid = await askPrompt("Enter the UPI txid for transferred amount.", "");
+                let transfer_upi_txid = prompt("Enter the UPI txid for transferred amount.", "");
                 if (transfer_upi_txid.length < 1) {
                     notify("UPI Txid length cannot be less than 1 charecter.");
                     return;
@@ -10647,7 +10839,6 @@
                             get_user_balance.balance = 0;
                         document.getElementById('token_balance').textContent
                             = get_user_balance.balance;
-                        notify('Balance refreshed')
                     }
                 }
                 return true;
@@ -10704,7 +10895,7 @@
                 if (vendor_flo_id.length < 1) throw new Error("Invalid Receiver Id");
                 if (sender_flo_id.length < 1) throw new Error("Invalid Sender Id");
                 if (upi_txid.length < 1) throw new Error("Invalid UPI Txid");
-                const amount_to_pay = Number(await askPrompt('Enter amount to pay', 0));
+                const amount_to_pay = Number(prompt('Enter amount to pay', 0));
                 if (typeof amount_to_pay !== "number" || amount_to_pay <= 0)
                     return notify("Invalid amount.", 'error', '', true);
                 if (Number(usr_amount_to_pay) !== amount_to_pay) {
@@ -10770,11 +10961,12 @@
                     if (typeof myFloID !== "string" || myFloID.length < 1) return;
                     const token_amount_to_buy = Number(document.getElementById('token_amount_to_buy').value);
                     const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                    notify(`Please pay Rs ${token_amount_to_buy} to UPI id ${cashier_upi}.`, '', 'fixed', true);
+                    notify(`Please pay ₹ ${token_amount_to_buy} to UPI id ${cashier_upi}.`, '', 'fixed', true);
                     let upi_txid = await askPrompt(`Please enter UPI TXID for deposited cash to ${cashier_upi}`);
                     let request_object = {
                         user_flo_id: myFloID,
                         upi_txid: upi_txid,
+                        deposit_amount: token_amount_to_buy,
                     }
                     if (typeof upi_txid === "string" && upi_txid.length > 1) {
                         floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_DEPOSITS,
@@ -10837,7 +11029,8 @@
                     let request_object = {
                         user_flo_id: myFloID,
                         token_txid: flo_txid,
-                        withdrawer_upi: user_withdraw_upi
+                        withdrawer_upi: user_withdraw_upi,
+                        withdraw_amount: withdraw_cash_amount,
                     }
                     console.log(request_object);
                     if (typeof flo_txid === "string" && flo_txid.length > 1) {
@@ -10893,24 +11086,40 @@
             }
         }
 
+        const depositActivityContainer = document.getElementById('deposit_activity_container'),
+              withdrawActivityContainer = document.getElementById('withdraw_activity_container'),
+              cashierMessageContainer = document.getElementById('cashier_message_container')
+        
         async function show_user_activities() {
             try {
                 await token_app.actions.retrieveLatestContent();
 
-                const deposit_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0");
-                const withdraw_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, "0");
-                const user_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0");
-
+                const deposit_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0").reverse();
+                const withdraw_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, "0").reverse();
+                const user_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0").reverse();
+        
                 for (usr_deposits of deposit_msg) {
-                    console.log(usr_deposits.message);
+                    let { upi_txid, deposit_amount} = usr_deposits.message;
+                    frag.append(render.depositActivity(usr_deposits.vectorClock, upi_txid, deposit_amount))
                 }
-                for (usr_deposits of withdraw_msg) {
-                    console.log(usr_deposits.message);
-                }
-                for (usr_deposits of user_msg) {
-                    console.log(usr_deposits.message);
-                }
+                if (frag.children.length)
+                    depositActivityContainer.innerHTML = ``;
+                depositActivityContainer.append(frag)
 
+                for (usr_withdraws of withdraw_msg) {
+                    let {token_txid, withdrawer_upi, withdraw_amount} = usr_withdraws.message;
+                    frag.append(render.withdrawActivity(usr_withdraws.vectorClock, token_txid, withdrawer_upi, withdraw_amount))
+                }
+                if (frag.children.length)
+                    withdrawActivityContainer.innerHTML = ``;
+                withdrawActivityContainer.append(frag)
+
+                for (msg of user_msg) {
+                    frag.append(render.cashierMessage(msg))
+                }
+                if(frag.children.length)
+                    cashierMessageContainer.innerHTML = ``;
+                cashierMessageContainer.append(frag)
             } catch (e) {
                 notify(e, 'error');
             }
@@ -10953,6 +11162,53 @@
 
             } catch (e) {
                 console.log(e);
+            }
+        }
+        async function request_payment(receiver_flo_id = '', amount = 0) {
+            try {
+
+                if (typeof receiver_flo_id !== "string"
+                    || receiver_flo_id.length < 1
+                    || amount <= 0) return notify('Invalid or incomplete data provided.', 'error');
+
+                let request_object = {
+                    sender_flo_id: myFloID,
+                    receiver_flo_id,
+                    amount,
+                    datetime: + new Date()
+                }
+
+                floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_REQUEST_PAYMENT,
+                    { receiverID: receiver_flo_id }).then(result => {
+                        console.log(result);
+                        notify('Request sent successfully.');
+                    });
+
+                return true;
+            } catch (e) {
+                console.error(e);
+                return false;
+            }
+        }
+
+        async function show_payment_requests() {
+            try {
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT,
+                    { receiverID: myFloID });
+
+                const general_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT, "0");
+
+                let depositsContainer = document.getElementById("pending_deposits_container");
+                depositsContainer.innerHTML = ``;
+
+                for (const m of general_msg) {
+                    let { sender_flo_id, receiver_flo_id, amount, datetime } = m.message;
+                    console.log(sender_flo_id, receiver_flo_id, amount, datetime);
+                }
+
+            } catch (e) {
+                console.error(e);
+                return false
             }
         }
     </script>
