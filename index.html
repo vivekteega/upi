@@ -29,7 +29,7 @@
 
             //for cloud apps
             subAdmins: [],
-            application: "RUPEE_TOKEN_APP_TEST6",//rupeeTokenApp
+            application: "RUPEE_TOKEN_APP_TEST7",//rupeeTokenApp
             vectorClock: {},
             appObjects: {},
             generalData: {},
@@ -10147,21 +10147,20 @@
 
             parse_flo_comments: async function () {
                 text = `masterFLOPubKey=03BA851FE0F28AA156B0D6E00784919133D1E98284F9A94544B470DBBFB3D90EDD
-                #!#SUBJECT=RUPEE_TOKEN_APP_TEST6
                 #!#CURRENCY=INR
-                #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST6
-                #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST6
-                #!#TYPE_MSGES=USER_MESSAGES_TEST6
-                #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS6
-                #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS6
-                #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT6
-                #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT6
-                #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT6
-                #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT6
-                #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER6
-                #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT6
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER6
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT6
+                #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST
+                #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST
+                #!#TYPE_MSGES=USER_MESSAGES_TEST
+                #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS
+                #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS
+                #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT
+                #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT
+                #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT
+                #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT
+                #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER
+                #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT
+                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER
+                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT
                 #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
                 #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                 #!#cashiers=
@@ -10290,7 +10289,7 @@
 
                 refresh_balance();
 
-                floCloudAPI.requestObjectData(token_app.master_configurations.SUBJECT, { receiverID, senderIDs });
+                floCloudAPI.requestObjectData(floGlobals.application, { receiverID, senderIDs });
 
                 if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                     await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS
@@ -10356,7 +10355,7 @@
             token_app.requests = {};
             token_app.requests.deposits = {};
             token_app.requests.withdraws = {};
-            floCloudAPI.resetObjectData(token_app, token_app.master_configurations.SUBJECT,
+            floCloudAPI.resetObjectData(token_app, floGlobals.application,
                 { receiverID: floGlobals.adminID });
         }
 
@@ -10713,6 +10712,8 @@
                     let request_object = {
                         user_flo_id: myFloID,
                         upi_txid: upi_txid,
+                        deposit_amount: token_amount_to_buy,
+                        datetime: + new Date()
                     }
                     if (typeof upi_txid === "string" && upi_txid.length > 1) {
                         floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_DEPOSITS,
@@ -10775,7 +10776,9 @@
                     let request_object = {
                         user_flo_id: myFloID,
                         token_txid: flo_txid,
-                        withdrawer_upi: user_withdraw_upi
+                        withdrawer_upi: user_withdraw_upi,
+                        withdraw_amount: withdraw_cash_amount,
+                        datetime: + new Date()
                     }
                     console.log(request_object);
                     if (typeof flo_txid === "string" && flo_txid.length > 1) {
@@ -10893,6 +10896,55 @@
                 console.log(e);
             }
         }
+    
+        async function request_payment(receiver_flo_id='', amount=0) {
+            try {
+
+                if(typeof receiver_flo_id !=="string"
+                || receiver_flo_id.length<1
+                || amount<=0) return notify('Invalid or incomplete data provided.', 'error');
+
+                let request_object = {
+                    sender_flo_id: myFloID, 
+                    receiver_flo_id, 
+                    amount, 
+                    datetime: + new Date()
+                }
+
+                floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_REQUEST_PAYMENT,
+                { receiverID: receiver_flo_id }).then(result => {
+                    console.log(result);
+                    notify('Request sent successfully.');
+                });
+
+                return true;
+            } catch(e) {
+                console.error(e);
+                return false;
+            }
+        }
+
+        async function show_payment_requests() {
+            try {
+                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT, 
+                        { receiverID: myFloID });
+
+                const general_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT, "0");
+
+                let depositsContainer = document.getElementById("pending_deposits_container");
+                depositsContainer.innerHTML = ``;
+                
+                for (const m of general_msg) {
+                    let { sender_flo_id, receiver_flo_id, amount, datetime } = m.message;
+                    console.log(sender_flo_id, receiver_flo_id, amount, datetime);
+                }
+
+            } catch(e) {
+                console.error(e);
+                return false
+            }
+        }
+
     </script>
 
     <!-- Helpline -->
@@ -11092,6 +11144,7 @@
         }
 
     </script>
+
 </body>
 
 </html>
