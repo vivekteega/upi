@@ -243,13 +243,14 @@ textarea{
     border-radius: 0.2rem;
     background: rgba(var(--text), 0.1);
     border: 0.1em solid transparent;
+    cursor: text;
     &:last-of-type{
         margin-bottom: 0;
     }
     &:focus-within{
         border: 0.1em solid var(--primary-color);
     }
-    label{
+    .placeholder{
         opacity: .7;
         font-weight: 500;
         font-size: 1em;
@@ -273,7 +274,7 @@ textarea{
     input{
         transform: translateY(0.5em);
     }
-    label{
+    .placeholder{
         transform: translateY(-60%)  scale(0.7);
         opacity: 1;
         color: var(--primary-color);
@@ -377,6 +378,9 @@ form{
             .btn{
                 padding: 0.6em 1.2em;
             }
+            h3{
+                text-transform: capitalize;
+            }
         }
         p{
             margin-bottom: 1.5rem !important;
@@ -423,6 +427,9 @@ form{
     span{
         font-weight: 500;
         flex: 1;
+    }
+    span::first-letter{
+        text-transform: uppercase;
     }
     button{
         padding: 1rem;
@@ -585,10 +592,10 @@ form{
     }
 }
 .options-tab{
-    display: grid;
+    display: flex;
     margin-top: 1rem;
-    grid-template-columns: repeat(2, 10rem);
     margin-bottom: 1rem;
+    flex-wrap: wrap;
     .option{
         display: inline-flex;
         flex-direction: column;
@@ -596,6 +603,7 @@ form{
         padding: 1.5rem;
         margin-right: 1rem;
         margin-bottom: 1rem;
+        width: 9rem;
         border: solid 1px rgba(var(--text), 0.2);
         text-transform: capitalize;
         cursor: pointer;
@@ -656,15 +664,18 @@ form{
         background: linear-gradient(rgba(var(--foreground), 1) 90%, transparent);
     }
 }
+.secondary-btn{
+    background: none;
+}
 .request{
     display: inline-flex;
     flex-direction: column;
-    padding: 2em 1.5em;
+    padding: 1.5em;
     border-radius: 0.4em;
     border: solid 1px rgba(var(--text), 0.2);
     h5{
         color: rgba(var(--text-light), 1);
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.4rem;
     }
     h3,h4{
         margin-bottom: 1.5rem;
@@ -683,15 +694,20 @@ form{
     button{
         width: auto;
         align-self: flex-end;
+        margin-top: 1.5rem;
+        margin-bottom: 0;
     }
     .copy-row{
         margin-bottom: 1.5rem;
     }
     .flex{
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
         margin-top: 1.5rem;
         h5{
+            margin: 0;
+        }
+        button{
             margin: 0;
         }
     }
@@ -701,6 +717,9 @@ form{
     &::before{
         content: '+ ';
     }
+}
+.decline-request{
+    margin-right: 0.5rem !important;
 }
 .withdrawn{
     color: #F44336;
@@ -725,6 +744,7 @@ form{
         position: sticky;
         top: 0;
         background: rgba(var(--foreground), 1);
+        will-change: auto;
         z-index: 2;
         h2{
             font-weight: 600;
@@ -791,6 +811,7 @@ form{
 }
 .time{
     font-family: 'Roboto', sans-serif;
+    margin-bottom: 1.5rem !important;
 }
 #report_popup{
     h4{
@@ -798,6 +819,13 @@ form{
     }
     textarea{
         margin-top: 1rem;
+    }
+}
+#profile_page{
+    display: flex;
+    flex-direction: column;
+    button{
+        align-self: flex-start;
     }
 }
 @media only screen and (min-width: 640px){
@@ -872,13 +900,10 @@ form{
     #sign_in_popup{
         width: 24rem;
     }
-    .options-tab{
-        grid-template-columns: repeat(3, 10rem);
-    }
 }
 #profile_page{
-    h5{
-        margin-bottom: 0.5rem;
+    .copy-row{
+        display: inline-flex;
     }
 }
 #main_loader{
@@ -923,9 +948,6 @@ form{
     }
     .container{
         grid-template-columns: repeat(3, 1fr);
-    }
-    .options-tab{
-        grid-template-columns: repeat(4, 10rem);
     }
 }
 @media only screen and (min-width: 1920px){
@@ -979,16 +1001,5 @@ form{
     }
 }
 @media (any-hover: hover){
-    .request{
-        button{
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        &:hover{
-            button{
-                opacity: 1;
-            }
-        }
-    }
 }
 
