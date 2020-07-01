@@ -642,6 +642,12 @@ form{
                 stroke: rgb(11, 142, 165);
             }
         }
+        &:nth-of-type(5){
+            .icon{
+                background: rgb(239, 229, 255);
+                stroke: rgb(16, 53, 155);
+            }
+        }
     }
 }
 .notification-dot::after{
@@ -713,7 +719,7 @@ form{
     }
 }
 .deposited{
-    color: #00C853;
+    color: #007732;
     &::before{
         content: '+ ';
     }
@@ -722,7 +728,7 @@ form{
     margin-right: 0.5rem !important;
 }
 .withdrawn{
-    color: #F44336;
+    color: #d43125;
     &::before{
         content: '- ';
     }

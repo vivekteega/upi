@@ -937,6 +937,11 @@ form {
   stroke: #0b8ea5;
 }
 
+.options-tab .option:nth-of-type(5) .icon {
+  background: #efe5ff;
+  stroke: #10359b;
+}
+
 .notification-dot::after {
   content: '';
   position: absolute;
@@ -1035,7 +1040,7 @@ form {
 }
 
 .deposited {
-  color: #00C853;
+  color: #007732;
 }
 
 .deposited::before {
@@ -1047,7 +1052,7 @@ form {
 }
 
 .withdrawn {
-  color: #F44336;
+  color: #d43125;
 }
 
 .withdrawn::before {

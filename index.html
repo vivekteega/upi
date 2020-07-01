@@ -20,7 +20,7 @@
         <div id="confirmation" class="popup">
             <p id="confirm_message"></p>
             <div class="btns">
-                <button class="hover cancel-btn" onclick="hidePopup()">Cancel</button>
+                <button class="hover cancel-btn">Cancel</button>
                 <button class="hover submit-btn">Ok</button>
             </div>
         </div>
@@ -71,7 +71,7 @@
                 <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
             </svg>
             <h3 id="tip_container">Loading BLOCKCHAIN UPi</h3>
-            <button>Reset</button>
+            <button onclick="signOut()">Reset</button>
         </div>
     </div>
     <!-- Sign in popup-->
@@ -316,7 +316,7 @@
             </svg>
             <h5>Deposit</h5>
         </div>
-        <div title="See all cash withdraw requests" class="navbar-item cashier-option hide-completely"
+        <div title="See all cash withdraw requests" id="deposit_page_btn" class="navbar-item cashier-option hide-completely"
             onclick="showPage(this, 'withdraw')">
             <svg class="icon banking" viewBox="0 0 52 60">
                 <line x1="4" y1="33.5" x2="4" y2="25" />
@@ -363,6 +363,17 @@
                 <line x1="7" y1="50" x2="26" y2="50" />
             </svg>
             <h5>Activity</h5>
+        </div>
+        <div title="helpline page" class="navbar-item helpline-option" id="helpline_page_btn" onclick="showPage(this, 'helpline_page')">
+            <svg class="icon" viewBox="0 0 64 64">
+                <rect x="16.52" y="24.22" width="21.12" height="5.76" transform="translate(54.18 0.03) rotate(90)" />
+                <path
+                    d="M29.46,16.62A3.68,3.68,0,0,1,32.58,13l17.61-2.64a13.57,13.57,0,0,0,7.19-4h0a4.7,4.7,0,0,1,6.12,4.48V43.41a4.69,4.69,0,0,1-6.12,4.48h0a13.62,13.62,0,0,0-7.19-4L32.58,41.23a3.68,3.68,0,0,1-3.12-3.64Z" />
+                <rect x="-1.18" y="15.26" width="27.05" height="23.69" rx="3.39" transform="translate(39.45 14.76) rotate(90)" />
+                <path
+                    d="M7.24,40.63H17.45a0,0,0,0,1,0,0v15a2.27,2.27,0,0,1-2.27,2.27H9.51a2.27,2.27,0,0,1-2.27-2.27v-15a0,0,0,0,1,0,0Z" />
+            </svg>
+            <h5>Complaints</h5>
         </div>
         <div title="profile page" class="navbar-item" onclick="showPage(this, 'profile_page')">
             <svg class="icon" id="profile_pic" viewBox="0 0 49.54 61.12">
@@ -642,7 +653,7 @@
                 <h2 class="light-text">No pay requests.</h2>
             </div>
         </section>
-        <section id="request_page" class="page">
+        <section id="request_page" class="page hide-completely">
             <div class="container-header">
                 <h2>Payment Requests</h2>
             </div>
@@ -670,6 +681,26 @@
             </div>
             <div id="cashier_message_container" class="container activity-container hide-completely">
                 <h4>No messages from cashier.</h4>
+            </div>
+        </section>
+        <section id="helpline_page" class="page">
+            <div class="container-header">
+                <h2>Complaints</h2>
+                <select name="complaint type" id="complaint_type">
+                    <option value="deposits">Deposits</option>
+                    <option value="withdraws">Withdrawals</option>
+                    <option value="payCashier">Pay through cashier</option>
+                </select>
+            </div>
+            <select name="cashier" id="select_cashier"></select>
+            <div id="deposit_complaints_container" class="container complaints-container">
+                <h4>No deposit complaints.</h4>
+            </div>
+            <div id="withdraw_complaints_container" class="container complaints-container hide-completely">
+                <h4>No withdraw complaints.</h4>
+            </div>
+            <div id="pay_cashier_complaints_container" class="container complaints-container hide-completely">
+                <h4>No pay through cashier complaints.</h4>
             </div>
         </section>
         <section id="profile_page" class="page hide-completely">
@@ -861,7 +892,7 @@
                 parseInt(hours.split(':')[0]) > 12 ? finalTime = 'PM' : finalTime = 'AM'
                 setAttributes(card, { 'data-sender-address': senderAddress, 'data-amount': amount })
                 card.innerHTML = `   <h5 class="time">${hours} ${finalTime} ${day} ${date} ${month} ${year}</h5>
-                                    <h5>Request from</h5>
+                                    <h5>Request by</h5>
                                     <div class="copy-row">
                                         <h4 class="copy">${senderAddress}</h4>
                                         <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
@@ -981,6 +1012,10 @@
                     field.closest('.input').classList.remove('animate-label')
                 }
             })
+            if(parent.querySelectorAll("textarea"))
+                parent.querySelectorAll("textarea").forEach((field) => {
+                    field.value = '';
+                })
             if (parent.querySelector("button[type='submit']"))
                 parent.querySelector("button[type='submit']").disabled = true;
         }
@@ -1027,6 +1062,10 @@
                 popup.querySelector('.submit-btn').onclick = () => {
                     hidePopup()
                     resolve(true);
+                }
+                popup.querySelector('.cancel-btn').onclick = () => {
+                    hidePopup()
+                    resolve(false);
                 }
             })
         }
@@ -1133,41 +1172,41 @@
             })
 
             // Function for confirming deposit requests 
-            document.getElementById('pending_deposits_container').addEventListener('click', (e) => {
+            document.getElementById('pending_deposits_container').addEventListener('click', async(e) => {
                 if (e.target.closest('.confirm-deposit-btn'))
-                    askConfirmation('Confirm this deposit request?').then(async (result) => {
+                    if(await askConfirmation('Confirm this deposit request?')){
                         let depositRequest = e.target.closest('.request'),
                             status = await transfer_token(depositRequest.dataset.userFloId, depositRequest.dataset.txid)
                         if (status) {
                             refresh_balance()
                             depositRequest.remove()
                         }
-                    })
+                    }
             })
 
             // Function for confirming withdraw requests 
-            document.getElementById('pending_withdrawals_container').addEventListener('click', (e) => {
+            document.getElementById('pending_withdrawals_container').addEventListener('click', async(e) => {
                 if (e.target.closest('.confirm-withdraw-btn'))
-                    askConfirmation('Confirm this withdraw request?').then(async (result) => {
+                    if(await askConfirmation('Confirm this withdraw request?')) {
                         let withdrawRequest = e.target.closest('.request'),
                             status = await cash_sent(withdrawRequest.dataset.txid, withdrawRequest.dataset.userFloId, withdrawRequest.dataset.upi)
                         if (status) {
                             refresh_balance()
                             withdrawRequest.remove()
                         }
-                    })
+                    }
             })
             // Function for confirming pay requests 
-            document.getElementById('pay_requests_container').addEventListener('click', (e) => {
+            document.getElementById('pay_requests_container').addEventListener('click', async(e) => {
                 if (e.target.closest('.confirm-pay-btn'))
-                    askConfirmation('Confirm this pay request?').then(async (result) => {
+                    if(await askConfirmation('Confirm this pay request?')){
                         let payRequest = e.target.closest('.request'),
                             status = await pay_through_cashier(payRequest.dataset.sender, payRequest.dataset.receiverFloId, payRequest.dataset.txid, payRequest.dataset.amount)
                         if (status) {
                             refresh_balance()
                             payRequest.remove()
                         }
-                    })
+                    }
             })
             let currentRequest = null;
             document.getElementById('activity_page').addEventListener('click', (e) => {
@@ -1177,8 +1216,10 @@
                 }
             })
             // Function for reporting complain 
-            document.getElementById('report_btn').addEventListener('click', (e) => {
-                console.log(currentRequest.dataset.type, currentRequest.dataset.vectorClock)
+            document.getElementById('report_btn').addEventListener('click', async(e) => {
+                if(await askConfirmation('It may take upto 12hrs to complete your request, are you sure to report this issue?')){
+                    file_complaint(currentRequest.dataset.type, currentRequest.dataset.vectorClock)
+                }
             })
             // Function for requesting rupee
             document.getElementById('request_rupee_btn').addEventListener('click', (e) => {
@@ -1202,13 +1243,21 @@
                 }
             })
             document.getElementById('activity_type').addEventListener('change', function (e) {
-                showActivity(this.value)
+                showActivities(this.value)
+            })
+            document.getElementById('complaint_type').addEventListener('change', function (e) {
+                showComplaints(this.value)
+            })
+            document.getElementById('select_cashier').addEventListener('change', function (e) {
+                load_deposit_complaints(this.value)
+                //load_withdraw_complaints(this.value)
+                //load_pay_thru_cashier_complaints(this.value)
             })
 
         })
 
         let allActivities = document.querySelectorAll('.activity-container')
-        function showActivity(activity) {
+        function showActivities(activity) {
             allActivities.forEach(act => {
                 act.classList.add('hide-completely')
             })
@@ -1220,6 +1269,22 @@
             }
             if (activity === 'cashierMsg') {
                 document.getElementById('cashier_message_container').classList.remove('hide-completely')
+            }
+        }
+
+        let allComplaints = document.querySelectorAll('.complaints-container')
+        function showComplaints(complaint) {
+            allComplaints.forEach(comp => {
+                comp.classList.add('hide-completely')
+            })
+            if (complaint === 'deposits') {
+                document.getElementById('deposit_complaints_container').classList.remove('hide-completely')
+            }
+            if (complaint === 'withdraws') {
+                document.getElementById('withdraw_complaints_container').classList.remove('hide-completely')
+            }
+            if (complaint === 'payCashier') {
+                document.getElementById('pay_cashier_complaints_container').classList.remove('hide-completely')
             }
         }
 
@@ -1254,8 +1319,8 @@
             })
         }
 
-        function signOut() {
-            askConfirmation('Do you want to sign out?').then((result) => {
+        async function signOut() {
+            if(await askConfirmation('Do you want to sign out?')){
                 document.querySelector('main').classList.add('hide-completely')
                 floDapps.clearCredentials()
                 compactIDB.deleteDB().then((message) => {
@@ -1265,10 +1330,7 @@
                 }).catch((error) => {
                     console.log(error)
                 })
-            })
-                .catch(err => {
-                    console.log(err)
-                })
+            }
         }
     </script>
     <script id="init_lib">
@@ -10116,7 +10178,6 @@
                                 else {
                                     resolve(inputVal)
                                     hidePopup()
-                                    showPage(document.getElementById('home_page_btn'), 'home_page')
                                 }
                             })
                         }
@@ -10640,7 +10701,10 @@
 
                 const allCashierOptions = document.querySelectorAll('.cashier-option'),
                     allUserOptions = document.querySelectorAll('.user-option'),
+                    allHelplineOptions = document.querySelectorAll('.helpline-option'),
                     userType = document.getElementById('user_type')
+                
+                //Cashier startup sequence
                 if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                     allCashierOptions.forEach(option => {
                         option.classList.remove('hide-completely')
@@ -10648,25 +10712,59 @@
                     allUserOptions.forEach(option => {
                         option.classList.add('hide-completely')
                     })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    show_deposit_request()
+                    show_withdraw_request()
+                    showPayRequests()
                     userType.textContent = 'Cashier'
+                    showPage(document.getElementById('deposit_page_btn'), 'deposit')
                 }
+
+                //Helpline startup sequence
+                else if(token_app.master_configurations.helplineFloId === myFloID){
+                    allCashierOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    let cashierList = ``,
+                        cashierSelect = document.getElementById('select_cashier')
+                    for(cashier in token_app.master_configurations.cashiers)
+                        cashierList += `<option>${cashier}</option>` 
+                    cashierSelect.innerHTML = cashierList;
+                    load_deposit_complaints(cashierSelect.value)
+                    //load_withdraw_complaints(cashierSelect.value)
+                    //load_pay_thru_cashier_complaints(cashierSelect.value)
+                    userType.textContent = 'Helpline'
+                     showPage(document.getElementById('helpline_page_btn'), 'helpline_page')
+                } 
+
+                //user startup sequence
                 else {
                     allCashierOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
                         option.classList.add('hide-completely')
                     })
                     allUserOptions.forEach(option => {
                         option.classList.remove('hide-completely')
                     })
+                    show_user_activities()
+                    show_payment_requests()
                     userType.textContent = 'User'
+                    showPage(document.getElementById('home_page_btn'), 'home_page')
                 }
 
                 hidePopup()
 
                 pay_through_cashier();
-                show_deposit_request()
-                show_withdraw_request()
-                showPayRequests()
-
             },
 
             retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals.subAdmins) {
@@ -11256,17 +11354,8 @@
             }
         }
 
-        async function file_complaint(order_type = '', order_vc = '') {
+        async function file_complaint(order_type = '', order_vc = '', custom_msg = '') {
             try {
-
-                const cnf_comaplin = confirm(`Any deposit or withdraw 
-                    order may take about 12 hours to process. 
-                    Are you sure you want to complain?`);
-
-                if (!cnf_comaplin) return;
-
-                let custom_msg = await askPrompt("You may provide any custom message to us.", "");
-
                 let input_data = {
                     order_type, order_vc, custom_msg
                 }
