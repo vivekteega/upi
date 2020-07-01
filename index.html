@@ -1217,8 +1217,9 @@
             })
             // Function for reporting complain 
             document.getElementById('report_btn').addEventListener('click', async(e) => {
+                let customMsg = document.getElementById('complaint_field').value
                 if(await askConfirmation('It may take upto 12hrs to complete your request, are you sure to report this issue?')){
-                    file_complaint(currentRequest.dataset.type, currentRequest.dataset.vectorClock)
+                    file_complaint(currentRequest.dataset.type, currentRequest.dataset.vectorClock, customMsg)
                 }
             })
             // Function for requesting rupee
@@ -11479,7 +11480,7 @@
                     let all_users_deposits = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0");
                     let this_user_deposit = all_users_deposits.filter(f => f.vectorClock === udc.message.order_vc);
                     console.log(this_user_deposit);
-
+                    console.log(udc)
                     let this_user_deposit_upi_txid_list = this_user_deposit.map(m => m.message.upi_txid);
 
                     let all_cashier_processed_deposits = floDapps
