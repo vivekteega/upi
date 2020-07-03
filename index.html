@@ -665,15 +665,12 @@
         <section id="activity_page" class="page">
             <div class="container-header">
                 <h2>Activity</h2>
-                <select name="activity type" id="activity_type">
-                    <option value="deposits">Deposits</option>
-                    <option value="withdraws">Withdrawals</option>
-                    <option value="cashierMsg">Messages from cashier</option>
-                </select>
+                <sm-select name="activity type" id="activity_type">
+                    <sm-option value="deposits">Deposits</sm-option>
+                    <sm-option value="withdraws">Withdrawals</sm-option>
+                    <sm-option value="cashierMsg">Messages from cashier</sm-option>
+                </sm-select>
             </div>
-            <sm-select>
-
-            </sm-select>
             <p class="bottom-margin">*If your request isn't completed in 12hrs, use <strong>REPORT</strong> to get
                 assistance from our helpline.</p>
             <div id="deposit_activity_container" class="container activity-container">
@@ -689,13 +686,13 @@
         <section id="helpline_page" class="page">
             <div class="container-header">
                 <h2>Complaints</h2>
-                <select name="complaint type" id="complaint_type">
-                    <option value="deposits">Deposits</option>
-                    <option value="withdraws">Withdrawals</option>
-                    <option value="payCashier">Pay through cashier</option>
-                </select>
+                <sm-select name="complaint type" id="complaint_type">
+                    <sm-option value="deposits">Deposits</sm-option>
+                    <sm-option value="withdraws">Withdrawals</sm-option>
+                    <sm-option value="payCashier">Pay through cashier</option>
+                </sm-select>
             </div>
-            <select name="cashier" id="select_cashier"></select>
+            <sm-select name="cashier" id="select_cashier"></sm-select>
             <div id="deposit_complaints_container" class="container complaints-container">
                 <h4>No deposit complaints.</h4>
             </div>
@@ -1253,6 +1250,7 @@
                 showComplaints(this.value)
             })
             document.getElementById('select_cashier').addEventListener('change', function (e) {
+                console.log(this.value)
                 load_deposit_complaints(this.value)
                 //load_withdraw_complaints(this.value)
                 //load_pay_thru_cashier_complaints(this.value)
@@ -1336,8 +1334,9 @@
                 })
             }
         }
-    const smSelect = document.createElement('template')
-    smSelect.innerHTML = `
+    // sm-select
+        const smSelect = document.createElement('template')
+        smSelect.innerHTML = `
         <style>     
             *{
                 padding: 0;
@@ -1346,8 +1345,8 @@
             } 
             .icon {
                 fill: none;
-                height: 1rem;
-                width: 1rem;
+                height: 0.8rem;
+                width: 0.8rem;
                 stroke: rgba(var(--text), 0.7);
                 stroke-width: 6;
                 overflow: visible;
@@ -1357,20 +1356,160 @@
             :host{
                 display: inline-flex;
             }
+            .hide{
+                opacity: 0;
+                pointer-events: none;
+            }
+            .sm-select{
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                cursor: pointer;
+            }
+            .selection{
+                border-radius: 0.2rem;
+                display: flex;
+                padding: 0.6rem 0.8rem;
+                background: rgba(var(--text), 0.1);
+                align-items: center;
+            }
+            .icon{
+                margin-left: 1rem;
+            }
+            .options{
+                position: absolute;
+                grid-area: options;
+                display: flex;
+                flex-direction: column;
+                top: 100%;
+                right: 0;
+                width: 100%;
+                background: rgba(var(--foreground), 1);
+                transition: opacity 0.3s;
+                box-shadow: 0 0.2rem 1rem #00000040;
+                border-radius: 0 0 0.2rem 0.2rem;
+            }
+            .rotate{
+                transform: rotate(-180deg)
+            }
         </style>
         <div class="sm-select">
-            <div class="value"></div>
-            <svg class="icon" viewBox="0 0 64 64">
-                <polyline points="23.27 0.5 40.73 31.48 23.27 63.5"/>
-            </svg>
-            <slot></slot> 
+            <div class="selection" tabindex="0">
+                <div class="option-text"></div>
+                <svg class="icon toggle" viewBox="0 0 64 64">
+                    <polyline points="63.65 15.99 32 47.66 0.35 15.99"/>
+                </svg>
+            </div>
+            <div class="options hide">
+                <slot></slot> 
+            </div>
         </div>`;
-        customElements.define('sm-select', class extends HTMLElement{
-            constructor(){
+        customElements.define('sm-select', class extends HTMLElement {
+            constructor() {
                 super()
                 this.attachShadow({ mode: 'open' }).append(smSelect.content.cloneNode(true))
             }
+            static get observedAttributes() {
+                return ['value']
+            }
+            get value() {
+                return this.getAttribute('value')
+            }
+            set value(val) {
+                this.setAttribute('value', val)
+            }
+            connectedCallback() {
+                let optionList = this.shadowRoot.querySelector('.options'),
+                    chevron = this.shadowRoot.querySelector('.toggle'),
+                    slot = this.shadowRoot.querySelector('.options slot'),
+                    currentOption;
+                this.addEventListener('click', e => {
+                    chevron.classList.toggle('rotate')
+                    optionList.classList.toggle('hide')
+                })
+                this.addEventListener('optionSelected', e => {
+                    if(currentOption !== e.detail.value){
+                        this.setAttribute('value', e.detail.value)
+                        this.shadowRoot.querySelector('.option-text').textContent = e.detail.text;
+                        this.dispatchEvent(new CustomEvent('change', {
+                            bubbles: true,
+                            composed: true
+                        }))
+                        currentOption = e.detail.value;
+                    }
+                })
+                slot.addEventListener('slotchange', e => {
+                    let firstElement = slot.assignedElements()[0];
+                    currentOption = firstElement.getAttribute('value');
+                    this.setAttribute('value', firstElement.getAttribute('value'))
+                    this.shadowRoot.querySelector('.option-text').textContent = firstElement.textContent
+                });
+                document.addEventListener('mousedown', e => {
+                    if (!this.contains(e.target)) {
+                        chevron.classList.remove('rotate')
+                        optionList.classList.add('hide')
+                    }
+                })
+            }
         })
+
+        // sm-option
+        const smOption = document.createElement('template')
+        smOption.innerHTML = `
+        <style>     
+            *{
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }     
+            :host{
+                display: flex;
+            }
+            .sm-option{
+                width: 100%;
+                padding: 0.6rem 0.8rem;
+                cursor: pointer;
+            }
+            .sm-option:hover{
+                background: rgba(var(--text), 0.1);
+            }
+        </style>
+        <div class="sm-option" tabindex="0">
+            <slot></slot> 
+        </div>`;
+        customElements.define('sm-option', class extends HTMLElement {
+            constructor() {
+                super()
+                this.attachShadow({ mode: 'open' }).append(smOption.content.cloneNode(true))
+            }
+            connectedCallback() {
+                this.addEventListener('click', e => {
+                    let optionSelected = new CustomEvent('optionSelected', {
+                        bubbles: true,
+                        composed: true,
+                        detail: {
+                            text: this.textContent,
+                            value: this.getAttribute('value')
+                        }
+                    })
+                    this.dispatchEvent(optionSelected)
+                })
+                if (this.hasAttribute('default')) {
+                    setTimeout(() => {
+                        let optionSelected = new CustomEvent('optionSelected', {
+                            bubbles: true,
+                            composed: true,
+                            detail: {
+                                text: this.textContent,
+                                value: this.getAttribute('value')
+                            }
+                        })
+                        this.dispatchEvent(optionSelected)
+                    }, 0);
+                }
+            }
+        })
+
     </script>
     <script id="init_lib">
         //All util libraries required for Standard operations (DO NOT EDIT ANY)
@@ -10775,8 +10914,9 @@
                     let cashierList = ``,
                         cashierSelect = document.getElementById('select_cashier')
                     for(cashier in token_app.master_configurations.cashiers)
-                        cashierList += `<option>${cashier}</option>` 
+                        cashierList += `<sm-option value = "${cashier}">${cashier}</sm-option>` 
                     cashierSelect.innerHTML = cashierList;
+                    console.log(cashierSelect.value)
                     load_deposit_complaints(cashierSelect.value)
                     //load_withdraw_complaints(cashierSelect.value)
                     //load_pay_thru_cashier_complaints(cashierSelect.value)
