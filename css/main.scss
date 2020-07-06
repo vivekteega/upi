@@ -37,8 +37,8 @@ button{
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 0.6rem 1rem;
+    letter-spacing: 0.08em;
+    padding: 0.4rem 0.7rem;
     font-weight: 600;
     cursor: pointer;
     border-radius: 0.2em;
@@ -101,6 +101,9 @@ input:invalid{
 .grid-2{
     grid-template-columns: auto auto;
     gap: 1em;
+}
+.label{
+    margin-bottom: 0.4rem;
 }
 .light-text{
     color: rgba(var(--text-light), 1);
@@ -561,7 +564,7 @@ form{
         font-size: 0.9em;
         text-transform: uppercase;
         width: 100%;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         h5{
             font-size: 0.6em;
             margin-top: 0.4em;
@@ -834,6 +837,38 @@ form{
         align-self: flex-start;
     }
 }
+.complaint{
+    display: grid;
+    gap: 1.5rem 0;
+    .complaint-actions{
+        align-items: center;
+        margin: 1.5rem 0 0 0;
+    }
+    .processed{
+        color: #007732;
+    }
+    .unprocessed{
+        color: #d43125;
+    }
+    button{
+        .icon{
+            padding: 0.2rem;
+            margin-right: 0.5rem;
+            stroke: var(--primary-color);
+            stroke-width: 8;
+        }
+    }
+}
+.complaints-container{
+    padding-top: 1.5rem;
+    display: grid;
+    gap: 1.5rem;
+}
+@media only screen and (max-width: 640px){
+    sm-select{
+        width: 100%;
+    }
+}
 @media only screen and (min-width: 640px){
     body{
         padding: 1rem 6vw;
@@ -946,6 +981,25 @@ form{
 @media only screen and (min-width: 800px){
     .container{
         grid-template-columns: repeat(3, 1fr);
+    }
+    .complaint{
+        gap: 0 1.5rem;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: '. . ' 'header header';
+        .complaint-actions{
+            grid-area: header;
+        }
+        .left{
+            border-right: 1px solid rgba(var(--text), 0.2);
+        }
+        .left, .right{
+            padding-right: 1.5rem;
+        }
+        .right{ 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     }
 }
 @media only screen and (min-width: 1280px){
