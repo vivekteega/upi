@@ -548,8 +548,8 @@ form {
   display: -ms-flexbox;
   display: flex;
   background: rgba(var(--foreground), 1);
-  -webkit-transform: translateY(1rem);
-          transform: translateY(1rem);
+  -webkit-transform: translateY(100%);
+          transform: translateY(100%);
   -webkit-transition: -webkit-transform 0.3s;
   transition: -webkit-transform 0.3s;
   transition: transform 0.3s;
@@ -918,7 +918,7 @@ form {
 }
 
 .options-tab .option h4 {
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .options-tab .option:nth-of-type(1) .icon {
@@ -992,6 +992,7 @@ form {
 .request h5 {
   color: rgba(var(--text-light), 1);
   margin-bottom: 0.4rem;
+  text-transform: capitalize;
 }
 
 .request h3, .request h4 {
@@ -1175,6 +1176,7 @@ form {
 .time {
   font-family: 'Roboto', sans-serif;
   margin-bottom: 1.5rem !important;
+  font-weight: 400;
 }
 
 #report_popup h4 {
@@ -1247,6 +1249,8 @@ form {
     margin-left: 6rem;
   }
   .popup-container .popup {
+    -webkit-transform: translateY(0) scale(0.96);
+            transform: translateY(0) scale(0.96);
     width: 24rem;
     -ms-flex-item-align: center;
         -ms-grid-row-align: center;
