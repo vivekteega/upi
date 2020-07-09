@@ -1056,7 +1056,7 @@
         // hides the popup or modal 
         function hidePopup() {
             if (popupStack.peek() === undefined)
-                return
+                return;
             let { popup, permission } = popupStack.pop();
             thisPopup = document.getElementById(popup);
             thisPopup.closest('.popup-container').classList.add('hide');
@@ -1073,6 +1073,9 @@
             if (popup === 'prompt') {
                 if (thisPopup.querySelector('input').value == '')
                     thisPopup.querySelector('.cancel-btn').click()
+            }
+            if (popup === 'cash_transfer') {
+                payingRequested = false;
             }
         }
 
@@ -1235,7 +1238,9 @@
                 parent.classList.remove('animate-label')
         }
 
-        let allForms = document.querySelectorAll('form');
+        let allForms = document.querySelectorAll('form'),
+            payingRequested = false,
+            currentPaymentRequest;
         window.addEventListener('load', () => {
             /*document.querySelectorAll('.popup:not(.hide)').forEach(popup => {
                 popupStack.push(popup.id)
@@ -1329,8 +1334,14 @@
                 if (e.target.closest('.send-rupee')) {
                     let parent = e.target.closest('.request'),
                         senderAddress = parent.dataset.senderAddress,
-                        amount = parent.dataset.amount;
+                        amount = parent.dataset.amount,
+                        paymentRequestId = parent.dataset.paymentRequestId;;
                     let popup = showPopup('cash_transfer');
+                    payingRequested = true;
+                    currentPaymentRequest = {
+                        paymentRequest: parent,
+                        requestId: paymentRequestId
+                    }
                     popup.querySelector('#token_receiver').value = senderAddress;
                     popup.querySelector('#token_amount').value = amount;
                 }
@@ -11328,42 +11339,42 @@
                 notify(error, 'error')
             }
         }
-
         async function transferTokensManually() {
             try {
-                send_tokens_btn.onclick = function () {
-                    return new Promise(async (resolve, reject) => {
-                        const token_sender = myFloID;
-                        const token_receiver = document.getElementById('token_receiver').value;
-                        const send_tokens_btn = document.getElementById('send_tokens_btn');
-                        const token_amount = Number(document.getElementById('token_amount').value);
-                        const token_name_radio = 'rupee';
+                const send_tokens_btn = document.getElementById('send_tokens_btn');
+                send_tokens_btn.onclick = async function () {
+                    console.log('hi')
+                    const token_sender = myFloID;
+                    const token_receiver = document.getElementById('token_receiver').value;
+                    const token_amount = Number(document.getElementById('token_amount').value);
+                    const token_name_radio = 'rupee';
+                    const flo_comment = `transfer ${token_amount} ${token_name_radio}# to ${token_receiver}`;
+                    const token_balance_url = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=${token_name_radio}&floAddress=${token_sender}`;
+                    const sender_token_balance = await ajaxGet(token_balance_url);
+                    let err_msg = '';
 
-                        const flo_comment = `transfer ${token_amount} ${token_name_radio}# to ${token_receiver}`;
-                        const token_balance_url = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=${token_name_radio}&floAddress=${token_sender}`;
-                        const sender_token_balance = await ajaxGet(token_balance_url);
-                        let err_msg = '';
+                    if (typeof sender_token_balance !== "object"
+                        || typeof sender_token_balance.balance !== "number"
+                        || sender_token_balance.balance < token_amount) {
+                        err_msg = `Sender has insufficient ${token_name_radio} balance.`;
+                        notify(err_msg, 'error');
+                        return false;
+                    }
 
-                        if (typeof sender_token_balance !== "object"
-                            || typeof sender_token_balance.balance !== "number"
-                            || sender_token_balance.balance < token_amount) {
-                            err_msg = `INFO: Sender has insufficient ${token_name_radio} balance.`;
-                            notify(err_msg);
-                            return false;
+                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, token_receiver, 0.001, myPrivKey, flo_comment)
+                    console.log(flo_txid);
+                    if (typeof flo_txid !== "string") {
+                        notify(`Transaction unsuccessful.`);
+                        return false;
+                    } else {
+                        notify(`Transaction successful: ${flo_txid}.`, '', 'fixed', true);
+                        if(payingRequested){
+                            payment_request_status(currentPaymentRequest.requestId, 'APPROVED')
+                            showPayRequests()
                         }
-
-                        let flo_txid = await floBlockchainAPI.sendTx(myFloID, token_receiver, 0.001, myPrivKey, flo_comment)
-                        console.log(flo_txid);
-                        if (typeof flo_txid !== "string") {
-                            notify(`Transaction unsuccessfull.`);
-                            return false;
-                        } else {
-                            notify(`Transaction successfull: ${flo_txid}.`, '', 'fixed', true);
-                            return false;
-                        }
-                    })
+                        return true;
+                    }
                 }
-
             } catch (error) {
                 throw new Error(error);
             }
@@ -11767,9 +11778,9 @@
 
                     if (req_id.lenght < 1) return false;
 
-                    if (status = 'DECLINED') {
+                    if (status === 'DECLINED') {
                         status = token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED;
-                    } else if (status = 'APPROVED') {
+                    } else if (status === 'APPROVED') {
                         status = token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED;
                     } else return;
 
@@ -11825,7 +11836,6 @@
 
                 // Show details of unprocessed ones
                 console.log(unprocessed_deposits_complaints);
-                let uniqueComplaints = []
 
                 for (const udc of unprocessed_deposits_complaints) {
                     let all_users_deposits = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0");
@@ -11863,11 +11873,9 @@
                     }
                     if (this_user_deposit.length){
                         frag.append(render.depositComplaint(userData, cashierData, udc))
-                        uniqueComplaints.push({userData, cashierData})
                     }
                 }
 
-                console.log(uniqueComplaints)
                 let container = document.getElementById('deposit_complaints_container');
 
                 container.innerHTML = ``
