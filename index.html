@@ -745,7 +745,7 @@
 
             //for cloud apps
             subAdmins: [],
-            application: "RUPEE_TOKEN_APP_TEST7",//rupeeTokenApp
+            application: "RUPEE_TOKEN_APP_TEST8",//rupeeTokenApp
             vectorClock: {},
             appObjects: {},
             generalData: {},
@@ -1301,7 +1301,7 @@
                 if (e.target.closest('.confirm-pay-btn'))
                     if (await confirmation('Confirm this pay request?')) {
                         let payRequest = e.target.closest('.request'),
-                            status = await pay_through_cashier(payRequest.dataset.sender, payRequest.dataset.receiverFloId, payRequest.dataset.txid, payRequest.dataset.amount)
+                            status = await pay_as_cashier(payRequest.dataset.sender, payRequest.dataset.receiverFloId, payRequest.dataset.txid, payRequest.dataset.amount)
                         if (status) {
                             refresh_balance()
                             payRequest.remove()
@@ -11343,7 +11343,6 @@
             try {
                 const send_tokens_btn = document.getElementById('send_tokens_btn');
                 send_tokens_btn.onclick = async function () {
-                    console.log('hi')
                     const token_sender = myFloID;
                     const token_receiver = document.getElementById('token_receiver').value;
                     const token_amount = Number(document.getElementById('token_amount').value);
@@ -11376,6 +11375,7 @@
                     }
                 }
             } catch (error) {
+                notify(error, 'error', 'fixed', true);
                 throw new Error(error);
             }
         }
