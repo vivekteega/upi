@@ -11129,15 +11129,19 @@
                         let p2 = floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS
                             , { receiverID: cashier, senderIDs: [myFloID] })
 
+                        let p3 = floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                            { receiverID: cashier, senderIDs: [myFloID] })
+
                         promises.push(p1);
                         promises.push(p2);
+                        promises.push(p3);
 
                     }
 
-                    let p3 = floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES
+                    let p4 = floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES
                         , { receiverID: myFloID })
 
-                    promises.push(p3);
+                    promises.push(p4);
 
                     await Promise.all(promises);
 
@@ -11648,8 +11652,9 @@
                 const deposit_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0").reverse();
                 const withdraw_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, "0").reverse();
                 const user_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0").reverse();
+                const pay_thru_cashier_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, "0").reverse();
 
-                console.log(deposit_msg, withdraw_msg, user_msg)
+                console.log(deposit_msg, withdraw_msg, user_msg, pay_thru_cashier_msg)
                 depositActivityContainer.innerHTML = ``;
                 for (usr_deposits of deposit_msg) {
                     let { upi_txid, deposit_amount } = usr_deposits.message;
