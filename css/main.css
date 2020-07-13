@@ -11,6 +11,10 @@
   scroll-behavior: smooth;
 }
 
+html {
+  margin-left: calc(100vw - 100%);
+}
+
 body {
   --primary-color: #303F9F;
   --text: 17, 17, 17;
@@ -132,7 +136,7 @@ input:invalid {
 }
 
 .top-margin {
-  margin-top: 1em;
+  margin-top: 1.5rem;
 }
 
 .flex {
@@ -870,6 +874,7 @@ form {
   margin-top: 4vw;
   margin-bottom: 1rem;
   font-weight: 700;
+  font-size: 3rem;
 }
 
 #home_page p {
@@ -1223,6 +1228,10 @@ form {
   color: #d43125;
 }
 
+.complaint .processed, .complaint .unprocessed {
+  margin-bottom: 1.5rem;
+}
+
 .complaint button .icon {
   padding: 0.2rem;
   margin-right: 0.5rem;
@@ -1235,6 +1244,10 @@ form {
   display: -ms-grid;
   display: grid;
   gap: 1.5rem;
+}
+
+#helpline_page sm-select {
+  margin-bottom: 1.5rem;
 }
 
 @media only screen and (max-width: 640px) {
@@ -1403,12 +1416,13 @@ form {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 
