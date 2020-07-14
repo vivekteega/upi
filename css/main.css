@@ -1250,6 +1250,47 @@ form {
   margin-bottom: 1.5rem;
 }
 
+.complaint-placeholder {
+  -webkit-animation: pulse infinite 0.6s alternate;
+          animation: pulse infinite 0.6s alternate;
+}
+
+.complaint-placeholder h4, .complaint-placeholder h5 {
+  border-radius: 0.2rem;
+}
+
+.complaint-placeholder h5 {
+  background: rgba(var(--text), 0.1);
+  padding: 0.5rem 0.6rem;
+}
+
+.complaint-placeholder h4 {
+  background: rgba(var(--text), 0.2);
+  padding: 0.8rem 0.8rem;
+}
+
+.complaint-placeholder .demo-btn {
+  padding: 0.8rem 3rem;
+}
+
+@-webkit-keyframes pulse {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @media only screen and (max-width: 640px) {
   sm-select {
     width: 100%;
@@ -1409,7 +1450,7 @@ form {
   .complaint .left {
     border-right: 1px solid rgba(var(--text), 0.2);
   }
-  .complaint .left, .complaint .right {
+  .complaint .left {
     padding-right: 1.5rem;
   }
   .complaint .right {

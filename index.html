@@ -109,6 +109,9 @@
                     <button class="primary-btn expand" type="submit" disabled>
                         transfer
                     </button>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
                 </div>
             </div>
             <p>
@@ -140,6 +143,9 @@
                     <button class="primary-btn expand" type="submit" disabled>
                         deposit
                     </button>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
                 </div>
             </div>
             <p>
@@ -166,6 +172,9 @@
                     <button class="primary-btn expand" type="submit" disabled>
                         withdraw
                     </button>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
                 </div>
             </div>
             <p>
@@ -196,6 +205,9 @@
                     <button class="primary-btn expand" type="submit" disabled>
                         request
                     </button>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
                 </div>
             </div>
             <p>
@@ -226,6 +238,9 @@
                     <button class="primary-btn expand" type="submit" disabled>
                         pay
                     </button>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
                 </div>
             </div>
             <p>
@@ -259,14 +274,14 @@
                     <line x1="64" y1="64" x2="0" y2="0" />
                 </svg>
                 <h3>Report</h3>
-                <button id="report_btn">report</button>
+                <button id="report_btn" class="btn">report</button>
             </div>
             <h4>Please add any message you want to send us regarding this issue</h4>
             <textarea name="complaint" id="complaint_field" rows="6"></textarea>
         </div>
     </div>
 
-    <header id="main_header" class="flex">
+    <header id="main_header" class="flex hide-completely">
         <svg viewBox="0 0 180 105.7" class="hide-completely">
             <path d="M22.5,35.5C27.7,32.6,33.6,31,40,31c19.9,0,36,16.1,36,36c0,16.6-11.2,30.6-26.5,34.7" />
             <path d="M4,4v63c0,16.2,10.7,30,25.5,34.4" />
@@ -296,7 +311,7 @@
             </svg>
         </div>
     </header>
-    <nav id="navbar">
+    <nav id="navbar" class="hide-completely">
         <div title="homepage" id="home_page_btn" class="user-option navbar-item active"
             onclick="showPage(this, 'home_page')">
             <svg class="icon" viewBox="0 0 64 64">
@@ -392,7 +407,7 @@
             <h5 id="user_type">Cashier</h5>
         </div>
     </nav>
-    <main>
+    <main class="hide-completely">
         <section class="page hide-completely" id="home_page">
             <h1>What DO WE OFFER?</h1>
             <p>
@@ -1129,6 +1144,28 @@
                 card.innerHTML = composition;
                 return card;
             },
+            complaintPlaceholder() {
+                let card = document.createElement('div');
+                card.classList.add('request', 'complaint', 'complaint-placeholder')
+                card.innerHTML = `
+                    <div class="left">
+                        <h5></h5>
+                        <h4></h4>
+                        <h5></h5>
+                        <h4></h4>
+                        <h5></h5>
+                        <h4></h4>
+                        <h5></h5>
+                        <h4></h4>
+                    </div>
+                    <div class="right">
+                        <h4></h4>
+                    </div>
+                    <div class="complaint-actions flex">
+                        <h4 class="demo-btn"></h4>
+                    </div>`
+                return card;
+            }
         }
 
         //Checks for internet connection status
@@ -1176,6 +1213,8 @@
             if (popup === 'main_loader') {
                 loader.classList.add('animate-loader')
                 document.querySelector('main').classList.add('hide-completely')
+                document.querySelector('#main_header').classList.add('hide-completely')
+                document.querySelector('#navbar').classList.add('hide-completely')
             }
             return thisPopup;
         }
@@ -1192,10 +1231,16 @@
                 clearAllInputs(thisPopup)
                 zIndex--;
                 thisPopup.parentNode.setAttribute('style', `z-index: ${zIndex}`)
+                if (thisPopup.querySelector('.action')) {
+                    btnLoading(thisPopup.querySelector('.action'), 'stop')
+                    thisPopup.querySelector("button[type='submit']").disabled = true;
+                }
             }, 400)
             if (popup === 'main_loader' || popup === 'sign_in_popup') {
                 loader.classList.remove('animate-loader')
                 document.querySelector('main').classList.remove('hide-completely')
+                document.querySelector('#navbar').classList.remove('hide-completely')
+                document.querySelector('#main_header').classList.remove('hide-completely')
             }
             if (popup === 'prompt') {
                 if (thisPopup.querySelector('input').value == '')
@@ -1211,6 +1256,20 @@
                 hidePopup()
             }
         })
+
+        function btnLoading(btn, option) {
+            if (typeof btn === 'string')
+                btn = document.getElementById(btn);
+            if (option === 'start') {
+                btn.children[0].classList.add('clip')
+                btn.children[1].classList.add('animate-loader')
+            }
+            else {
+                btn.children[0].classList.remove('clip')
+                btn.children[1].classList.remove('animate-loader')
+            }
+        }
+
 
         function setAttributes(el, attrs) {
             for (var key in attrs) {
@@ -1533,6 +1592,8 @@
         async function signOut() {
             if (await confirmation('Do you want to sign out?')) {
                 document.querySelector('main').classList.add('hide-completely')
+                document.querySelector('#navbar').classList.add('hide-completely')
+                document.querySelector('#main_header').classList.add('hide-completely')
                 floDapps.clearCredentials()
                 compactIDB.deleteDB().then((message) => {
                     delete token_app.master_configurations;
@@ -1783,7 +1844,10 @@
     background: var(--primary-color);
 }
 slot[name="tab"]{
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1rem;
+    grid-auto-columns: max-content;
 }
 :host([type="tab"]) .indicator{
     height: 100%;
@@ -1935,7 +1999,7 @@ slot[name="tab"]::slotted(.active){
                     e.target.nextElementSibling.classList.remove('hide-completely')
                 }
                 e.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
-                this.indicator.setAttribute('style', `width: ${e.target.getBoundingClientRect().width}px; transform: translateX(${e.target.getBoundingClientRect().left - e.target.parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft}px)`)
+                this.indicator.setAttribute('style', `width: ${e.target.getBoundingClientRect().width / 2}px; transform: translateX(${e.target.getBoundingClientRect().left - e.target.parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft + e.target.getBoundingClientRect().width / 4}px)`)
                 this.prevTab = e.target;
             })
             let observer = new IntersectionObserver((entries) => {
@@ -1947,11 +2011,13 @@ slot[name="tab"]::slotted(.active){
                         })
                         if (activeElement.length) {
                             let tabDimensions = activeElement[0].getBoundingClientRect();
-                            this.indicator.setAttribute('style', `width: ${tabDimensions.width}px; transform: translateX(${tabDimensions.left - activeElement[0].parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft}px)`)
+                            this.indicator.setAttribute('style', `width: ${tabDimensions.width / 2}px; transform: translateX(${tabDimensions.left - activeElement[0].parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft + tabDimensions.width / 4}px)`)
                         }
                         else {
+                            this.tabSlot.assignedElements()[0].classList.add('active')
                             let tabDimensions = this.tabSlot.assignedElements()[0].getBoundingClientRect();
-                            this.indicator.setAttribute('style', `width: ${tabDimensions.width}px; transform: translateX(${tabDimensions.left - this.tabSlot.assignedElements()[0].parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft}px)`)
+                            this.indicator.setAttribute('style', `width: ${tabDimensions.width / 2}px; transform: translateX(${tabDimensions.left - this.tabSlot.assignedElements()[0].parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft + tabDimensions.width / 4}px)`)
+                            this.prevTab = this.tabSlot.assignedElements()[0];
                         }
                         setTimeout(() => {
                             this.indicator.classList.add('transition')
@@ -1985,8 +2051,8 @@ slot[name="tab"]::slotted(.active){
     -webkit-tap-highlight-color: transparent;
     white-space: nowrap;
     font-size: 0.9rem;
-    padding: 0.4rem 0.6rem;
-    font-weight: 500;
+    padding: 0.4rem 0;
+    font-weight: 600;
     letter-spacing: 0.06em;
     word-spacing: 0.1em;
     text-align: center;
@@ -11716,6 +11782,7 @@ slot[name="tab"]::slotted(.active){
             try {
                 const send_tokens_btn = document.getElementById('send_tokens_btn');
                 send_tokens_btn.onclick = async function () {
+                    btnLoading('send_tokens_btn', 'start')
                     const token_sender = myFloID;
                     const token_receiver = document.getElementById('token_receiver').value;
                     const token_amount = Number(document.getElementById('token_amount').value);
@@ -11730,6 +11797,7 @@ slot[name="tab"]::slotted(.active){
                         || sender_token_balance.balance < token_amount) {
                         err_msg = `Sender has insufficient ${token_name_radio} balance.`;
                         notify(err_msg, 'error');
+                        hidePopup()
                         return false;
                     }
 
@@ -11737,6 +11805,7 @@ slot[name="tab"]::slotted(.active){
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
                         notify(`Transaction unsuccessful.`);
+                        hidePopup()
                         return false;
                     } else {
                         notify(`Transaction successful: ${flo_txid}.`, '', 'fixed', true);
@@ -11744,6 +11813,7 @@ slot[name="tab"]::slotted(.active){
                             payment_request_status(currentPaymentRequest.requestId, 'APPROVED')
                             showPayRequests()
                         }
+                        hidePopup()
                         return true;
                     }
                 }
@@ -11882,6 +11952,7 @@ slot[name="tab"]::slotted(.active){
                 const request_tokens_btn = document.getElementById('request_tokens_btn');
                 const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
                 request_tokens_btn.onclick = async function () {
+                    btnLoading('request_tokens_btn', 'start')
                     if (typeof myFloID !== "string" || myFloID.length < 1) return;
                     const token_amount_to_buy = Number(document.getElementById('token_amount_to_buy').value);
                     const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
@@ -11897,10 +11968,12 @@ slot[name="tab"]::slotted(.active){
                             { receiverID: cashier }).then(result => {
                                 console.log(result);
                                 notify('Request sent successfully.');
+                                hidePopup()
                             })
                         return true;
                     }
                     notify('Request failed.', 'error');
+                    hidePopup()
                     return false;
                 }
             } catch (error) {
@@ -11913,7 +11986,7 @@ slot[name="tab"]::slotted(.active){
                 const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
                 const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
                 withdraw_cash_btn.onclick = async function () {
-                    // TODO: Disble the button
+                    btnLoading('withdraw_cash_btn', 'start')
                     if (typeof myFloID !== "string" || myFloID.length < 1) {
                         notify(`Your Flo Id is invalid.`, 'error');
                         return;
@@ -11932,11 +12005,13 @@ slot[name="tab"]::slotted(.active){
                     const user_token_balance_object = await ajaxGet(token_balance_url);
                     if (typeof user_token_balance_object !== "object" || typeof user_token_balance_object.balance !== "number") {
                         notify('You do not have rupee balance yet. Please deposit rupee to get balance.', 'error');
+                        hidePopup()
                         return;
                     }
                     const current_balance = Number(user_token_balance_object.balance);
                     if (current_balance < withdraw_cash_amount) {
                         notify(`You have unsufficient balance to withdraw. You can withdraw only Rs ${user_token_balance_object.balance}`, 'error', 'fixed', true);
+                        hidePopup()
                         return;
                     }
 
@@ -11945,6 +12020,7 @@ slot[name="tab"]::slotted(.active){
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
                         notify(`Transaction unsuccessfull.`, 'error');
+                        hidePopup()
                         return false;
                     }
                     // TODO: Validate https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}
@@ -11961,6 +12037,7 @@ slot[name="tab"]::slotted(.active){
                         floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_WITHDRAWS,
                             { receiverID: cashier });
                         notify('Withdraw request sent successfully.');
+                        hidePopup()
                         return true;
                     }
                     notify('Failed to send withdraw request to cashier.', 'error');
@@ -11983,6 +12060,7 @@ slot[name="tab"]::slotted(.active){
 
                 const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
                 cnf_cash_payment_btn.onclick = function () {
+                    btnLoading('withdraw_cash_btn', 'start')
                     const paying_amount_div = document.getElementById('recvr_amount_to_pay')
                     const recvr_id = document.getElementById('recvr_id').value;
                     let amount_to_pay = Number(paying_amount_div.value);
@@ -12001,8 +12079,9 @@ slot[name="tab"]::slotted(.active){
                     floCloudAPI.sendGeneralData(req_object, token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
                         { receiverID: cashier, senderIDs: [myFloID] });
 
-                    notify(`You have sent cash to ${recvr_id} through our cashier service (${cashier_upi}). 
+                    notify(`You have sent cash to <span class="breakable">${recvr_id}</span> through our cashier service (${cashier_upi}). 
                         Once the cashier receives your payment, he will transfer it to ${recvr_id}.`, '', 'fixed', true);
+                    hidePopup()
                 }
 
             } catch (error) {
@@ -12084,7 +12163,7 @@ slot[name="tab"]::slotted(.active){
 
                 notify('Your complaint has been registered. Our team will take an action very soon. Thank you.',
                     '', 'fixed', true);
-
+                hidePopup()
                 return true;
 
             } catch (e) {
@@ -12185,7 +12264,10 @@ slot[name="tab"]::slotted(.active){
 
         async function load_deposit_complaints(receiver = '', sendersArray = []) {
             try {
-
+                let container = document.getElementById('deposit_complaints_container');
+                container.innerHTML = ``;
+                container.append(render.complaintPlaceholder())
+                
                 await clearCashierData();
 
                 await Promise.all([
@@ -12260,8 +12342,6 @@ slot[name="tab"]::slotted(.active){
                     }
                 }
 
-                let container = document.getElementById('deposit_complaints_container');
-
                 container.innerHTML = ``
                 if (frag.children.length)
                     container.append(frag)
@@ -12281,6 +12361,9 @@ slot[name="tab"]::slotted(.active){
 
         async function load_withdraw_complaints(receiver = '', sender = []) {
             try {
+                let container = document.getElementById('withdraw_complaints_container');
+                container.innerHTML = ``;
+                container.append(render.complaintPlaceholder())
 
                 await clearCashierData();
 
@@ -12349,8 +12432,6 @@ slot[name="tab"]::slotted(.active){
                         frag.append(render.withdrawComplaint(userData, cashierData, udc))
                 }
 
-                let container = document.getElementById('withdraw_complaints_container');
-
                 container.innerHTML = ``
                 if (frag.children.length)
                     container.append(frag)
@@ -12371,6 +12452,9 @@ slot[name="tab"]::slotted(.active){
 
         async function load_pay_thru_cashier_complaints(receiver = '', sender = []) {
             try {
+                let container = document.getElementById('pay_cashier_complaints_container');
+                container.innerHTML = ``;
+                container.append(render.complaintPlaceholder())
 
                 await clearCashierData();
 
@@ -12439,7 +12523,6 @@ slot[name="tab"]::slotted(.active){
                     if (this_user_pay_thru_cashier.length)
                         frag.append(render.payCashierComplaint(userData, cashierData, udc))                
                     }
-                let container = document.getElementById('pay_cashier_complaints_container');
 
                 container.innerHTML = ``
                 if (frag.children.length)
