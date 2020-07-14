@@ -8,6 +8,9 @@
 :root{
     scroll-behavior: smooth;
 }
+html{
+    margin-left: calc(100vw - 100%);
+}
 body{
     --primary-color: #303F9F;
     --text: 17, 17, 17;
@@ -90,7 +93,7 @@ input:invalid{
     margin-bottom: 1.5rem;
 }
 .top-margin{
-    margin-top: 1em;
+    margin-top: 1.5rem;
 }
 .flex{
     display: flex;
@@ -586,6 +589,7 @@ form{
         margin-top: 4vw;
         margin-bottom: 1rem;
         font-weight: 700;
+        font-size: 3rem;
     }
     p{
         margin-bottom: 3rem;
@@ -852,6 +856,9 @@ form{
     .unprocessed{
         color: #d43125;
     }
+    .processed, .unprocessed{
+        margin-bottom: 1.5rem;
+    }
     button{
         .icon{
             padding: 0.2rem;
@@ -865,6 +872,36 @@ form{
     padding-top: 1.5rem;
     display: grid;
     gap: 1.5rem;
+}
+#helpline_page{
+    sm-select{
+        margin-bottom: 1.5rem;
+    }
+}
+.complaint-placeholder{
+    animation: pulse infinite 0.6s alternate;
+    h4, h5{
+        border-radius: 0.2rem;
+    }
+    h5{
+        background: rgba(var(--text), 0.1);
+        padding: 0.5rem 0.6rem;
+    }
+    h4{
+        background: rgba(var(--text), 0.2);
+        padding: 0.8rem 0.8rem;
+    }
+    .demo-btn{
+        padding: 0.8rem 3rem;
+    }
+}
+@keyframes pulse{
+    from{
+        opacity: 0.4;
+    }
+    to{
+        opacity: 1;
+    }
 }
 @media only screen and (max-width: 640px){
     sm-select{
@@ -995,13 +1032,13 @@ form{
         .left{
             border-right: 1px solid rgba(var(--text), 0.2);
         }
-        .left, .right{
+        .left{
             padding-right: 1.5rem;
         }
         .right{ 
             display: flex;
-            align-items: center;
             justify-content: center;
+            flex-direction: column;
         }
     }
 }

@@ -109,6 +109,9 @@
                     <button class="primary-btn expand" type="submit" disabled>
                         transfer
                     </button>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
                 </div>
             </div>
             <p>
@@ -140,6 +143,9 @@
                     <button class="primary-btn expand" type="submit" disabled>
                         deposit
                     </button>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
                 </div>
             </div>
             <p>
@@ -166,6 +172,9 @@
                     <button class="primary-btn expand" type="submit" disabled>
                         withdraw
                     </button>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
                 </div>
             </div>
             <p>
@@ -196,6 +205,9 @@
                     <button class="primary-btn expand" type="submit" disabled>
                         request
                     </button>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
                 </div>
             </div>
             <p>
@@ -226,6 +238,9 @@
                     <button class="primary-btn expand" type="submit" disabled>
                         pay
                     </button>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
                 </div>
             </div>
             <p>
@@ -259,14 +274,14 @@
                     <line x1="64" y1="64" x2="0" y2="0" />
                 </svg>
                 <h3>Report</h3>
-                <button id="report_btn">report</button>
+                <button id="report_btn" class="btn">report</button>
             </div>
             <h4>Please add any message you want to send us regarding this issue</h4>
             <textarea name="complaint" id="complaint_field" rows="6"></textarea>
         </div>
     </div>
 
-    <header id="main_header" class="flex">
+    <header id="main_header" class="flex hide-completely">
         <svg viewBox="0 0 180 105.7" class="hide-completely">
             <path d="M22.5,35.5C27.7,32.6,33.6,31,40,31c19.9,0,36,16.1,36,36c0,16.6-11.2,30.6-26.5,34.7" />
             <path d="M4,4v63c0,16.2,10.7,30,25.5,34.4" />
@@ -296,7 +311,7 @@
             </svg>
         </div>
     </header>
-    <nav id="navbar">
+    <nav id="navbar" class="hide-completely">
         <div title="homepage" id="home_page_btn" class="user-option navbar-item active"
             onclick="showPage(this, 'home_page')">
             <svg class="icon" viewBox="0 0 64 64">
@@ -392,9 +407,9 @@
             <h5 id="user_type">Cashier</h5>
         </div>
     </nav>
-    <main class="">
+    <main class="hide-completely">
         <section class="page hide-completely" id="home_page">
-            <h1>What do we offer?</h1>
+            <h1>What DO WE OFFER?</h1>
             <p>
                 Your Rupee balance is digital footprint of actual cash.<br> Deposit, Withdraw or Pay Rupee digitally
                 using a FLO Blockchain address.
@@ -670,42 +685,48 @@
         <section id="activity_page" class="page">
             <div class="container-header">
                 <h2>Activity</h2>
-                <sm-select name="activity type" id="activity_type">
-                    <sm-option value="deposits">Deposits</sm-option>
-                    <sm-option value="withdraws">Withdrawals</sm-option>
-                    <sm-option value="cashierMsg">System notifications</sm-option>
-                </sm-select>
             </div>
             <p class="bottom-margin">*If your request isn't completed in 12hrs, use <strong>REPORT</strong> to get
                 assistance from our helpline.</p>
-            <div id="deposit_activity_container" class="container activity-container">
-                <h4>You haven't deposited rupee yet.</h4>
-            </div>
-            <div id="withdraw_activity_container" class="container activity-container hide-completely">
-                <h4>You haven't withdrawn rupee yet.</h4>
-            </div>
-            <div id="cashier_message_container" class="container activity-container hide-completely">
-                <h4>No messages from cashier.</h4>
-            </div>
+            <sm-tabs>
+                <sm-tab slot="tab" active>Deposits</sm-tab>
+                <sm-panel slot="panel" id="deposit_activity_container" class="container activity-container">
+                    <h4>You haven't deposited rupee yet.</h4>
+                </sm-panel>
+                <sm-tab slot="tab">Withdrawals</sm-tab>
+                <sm-panel slot="panel" id="withdraw_activity_container" class="container activity-container">
+                    <h4>You haven't withdrawn rupee yet.</h4>
+                </sm-panel>
+                <sm-tab slot="tab">Pay through cashier</sm-tab>
+                <sm-panel slot="panel" id="pay_cashier_activity_container" class="container activity-container">
+                    <h4>You haven't paid through cashier yet.</h4>
+                </sm-panel>
+                <sm-tab slot="tab">System Notifications</sm-tab>
+                <sm-panel slot="panel" id="cashier_message_container" class="container activity-container">
+                    <h4>No messages from cashier.</h4>
+                </sm-panel>
+            </sm-tabs>
         </section>
         <section id="helpline_page" class="page hide-completely">
             <div class="container-header">
                 <h2>Complaints</h2>
-                <sm-select name="complaint type" id="complaint_type">
-                    <sm-option value="deposits">Deposits</sm-option>
-                    <sm-option value="withdraws">Withdrawals</sm-option>
-                    <sm-option value="payCashier">Pay through cashier</sm-option>
-                </sm-select>
             </div>
             <h5 class="label">Select Cashier</h5>
             <sm-select name="cashier" id="select_cashier"></sm-select>
-            <div id="deposit_complaints_container" class="complaints-container"></div>
-            <div id="withdraw_complaints_container" class="complaints-container hide-completely">
-                <h4>No withdraw complaints.</h4>
-            </div>
-            <div id="pay_cashier_complaints_container" class="complaints-container hide-completely">
-                <h4>No pay through cashier complaints.</h4>
-            </div>
+            <sm-tabs>
+                <sm-tab slot="tab" active>Deposit</sm-tab>
+                <sm-panel slot="panel" id="deposit_complaints_container" class="complaints-container">
+                    <h4>No deposit complaints.</h4>
+                </sm-panel>
+                <sm-tab slot="tab">Withdraw</sm-tab>
+                <sm-panel slot="panel" id="withdraw_complaints_container" class="complaints-container hide-completely">
+                    <h4>No withdraw complaints.</h4>
+                </sm-panel>
+                <sm-tab slot="tab">Pay through cashier</sm-tab>
+                <sm-panel slot="panel" id="pay_cashier_complaints_container" class="complaints-container hide-completely">
+                    <h4>No pay through cashier complaints.</h4>
+                </sm-panel>
+            </sm-tabs>
         </section>
         <section id="profile_page" class="page hide-completely">
             <div class="container-header">
@@ -866,6 +887,40 @@
                                     </div>`;
                 return card;
             },
+            payCashierActivity(vectorClock, receiver, upiTxid, amount) {
+                let card = document.createElement('div'),
+                    time = parseInt(vectorClock.split('_')[0])
+                card.classList.add('request')
+                let timeFrag = time.toString().split(' ');
+                setAttributes(card, { 'data-vector-clock': vectorClock, 'data-type': 'pay_thru_cashier' })
+                card.innerHTML = `   <h5 class="time">${formatedTime(time)}</h5>
+                                    <h5>UPI Transanction ID</h5>
+                                    <div class="copy-row">
+                                        <h4 class="copy">${upiTxid}</h4>
+                                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                            <title>Copy</title>
+                                            <rect x="16" y="16" width="48" height="48" rx="6" />
+                                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                        </svg>
+                                    </div>
+                                    <h5 class="label">Sent to</h5>
+                                    <div class="copy-row">
+                                        <h4 class="copy">${receiver}</h4>
+                                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                            <title>Copy</title>
+                                            <rect x="16" y="16" width="48" height="48" rx="6" />
+                                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                        </svg>
+                                    </div>
+                                    <h5>Amount</h5>
+                                    <h4 class="withdrawn">₹${amount}</h4>
+                                    <div class="flex">
+                                    <button class="report secondary-btn">
+                                        report
+                                    </button>
+                                    </div>`;
+                return card;
+            },
             paymentRequest(time, senderAddress, amount, id) {
                 let card = document.createElement('div')
                 card.classList.add('request')
@@ -931,6 +986,15 @@
                     composition += `
                     <div class="right">
                         <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
+                        <h5 class="top-margin">Rupee Transaction ID</h5>
+                        <div class="copy-row">
+                            <h4 class="copy">${floTxId}</h4>
+                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                <title>Copy</title>
+                                <rect x="16" y="16" width="48" height="48" rx="6" />
+                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                            </svg>
+                        </div>
                     </div>`;
                 }
                 else {
@@ -982,6 +1046,15 @@
                     composition += `
                     <div class="right">
                         <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
+                        <h5 class="top-margin">Rupee Transaction ID</h5>
+                        <div class="copy-row">
+                            <h4 class="copy">${floTxId}</h4>
+                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                <title>Copy</title>
+                                <rect x="16" y="16" width="48" height="48" rx="6" />
+                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                            </svg>
+                        </div>
                     </div>`;
                 }
                 else {
@@ -1002,6 +1075,97 @@
                 card.innerHTML = composition;
                 return card;
             },
+            payCashierComplaint(userData, cashierData, udc) {
+                let card = document.createElement('div'),
+                    { amount, customMsg, sender, receiver, vectorClock } = userData,
+                    composition = ``;
+                card.classList.add('request', 'complaint')
+                setAttributes(card, { 'data-type': 'withdraw', 'data-udc': JSON.stringify(udc) })
+                composition = `
+                    <div class="left">
+                        <h5>Sender</h5>
+                        <div class="copy-row">
+                            <h4 class="copy">${sender}</h4>
+                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                <title>Copy</title>
+                                <rect x="16" y="16" width="48" height="48" rx="6" />
+                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                            </svg>
+                        </div>
+                        <h5>Receiver</h5>
+                        <div class="copy-row">
+                            <h4 class="copy">${receiver}</h4>
+                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                <title>Copy</title>
+                                <rect x="16" y="16" width="48" height="48" rx="6" />
+                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                            </svg>
+                        </div>`
+                if (customMsg && customMsg !== '')
+                    composition += `  <h5>Issue description</h5>
+                                <h4>${customMsg}</h4>`
+                composition += ` <h5>Paid</h5>
+                                <h4>₹${amount}</h4>
+                                <h5>Paid on</h5>
+                                <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
+
+                            </div>`
+                if (cashierData.processed) {
+                    let { time, floTxId } = cashierData
+                    composition += `
+                    <div class="right">
+                        <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
+                        <h5 class="top-margin">Rupee Transaction ID</h5>
+                        <div class="copy-row">
+                            <h4 class="copy">${floTxId}</h4>
+                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                <title>Copy</title>
+                                <rect x="16" y="16" width="48" height="48" rx="6" />
+                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                            </svg>
+                        </div>
+                    </div>`;
+                }
+                else {
+                    composition += `
+                    <div class="right">
+                        <h4 class="unprocessed">Cashier hasn't processed the request</h4>
+                    </div>`;
+                }
+                composition += `
+                    <div class="complaint-actions flex">
+                        <button class="mark-resolved">
+                            <svg class="icon" viewBox="0 0 64 64">
+                                <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
+                            </svg>
+                            Mark as Resolved
+                        </button>
+                    </div>`
+                card.innerHTML = composition;
+                return card;
+            },
+            complaintPlaceholder() {
+                let card = document.createElement('div');
+                card.classList.add('request', 'complaint', 'complaint-placeholder')
+                card.innerHTML = `
+                    <div class="left">
+                        <h5></h5>
+                        <h4></h4>
+                        <h5></h5>
+                        <h4></h4>
+                        <h5></h5>
+                        <h4></h4>
+                        <h5></h5>
+                        <h4></h4>
+                    </div>
+                    <div class="right">
+                        <h4></h4>
+                    </div>
+                    <div class="complaint-actions flex">
+                        <h4 class="demo-btn"></h4>
+                    </div>`
+                return card;
+            }
         }
 
         //Checks for internet connection status
@@ -1049,6 +1213,8 @@
             if (popup === 'main_loader') {
                 loader.classList.add('animate-loader')
                 document.querySelector('main').classList.add('hide-completely')
+                document.querySelector('#main_header').classList.add('hide-completely')
+                document.querySelector('#navbar').classList.add('hide-completely')
             }
             return thisPopup;
         }
@@ -1065,10 +1231,16 @@
                 clearAllInputs(thisPopup)
                 zIndex--;
                 thisPopup.parentNode.setAttribute('style', `z-index: ${zIndex}`)
+                if (thisPopup.querySelector('.action')) {
+                    btnLoading(thisPopup.querySelector('.action'), 'stop')
+                    thisPopup.querySelector("button[type='submit']").disabled = true;
+                }
             }, 400)
             if (popup === 'main_loader' || popup === 'sign_in_popup') {
                 loader.classList.remove('animate-loader')
                 document.querySelector('main').classList.remove('hide-completely')
+                document.querySelector('#navbar').classList.remove('hide-completely')
+                document.querySelector('#main_header').classList.remove('hide-completely')
             }
             if (popup === 'prompt') {
                 if (thisPopup.querySelector('input').value == '')
@@ -1084,6 +1256,20 @@
                 hidePopup()
             }
         })
+
+        function btnLoading(btn, option) {
+            if (typeof btn === 'string')
+                btn = document.getElementById(btn);
+            if (option === 'start') {
+                btn.children[0].classList.add('clip')
+                btn.children[1].classList.add('animate-loader')
+            }
+            else {
+                btn.children[0].classList.remove('clip')
+                btn.children[1].classList.remove('animate-loader')
+            }
+        }
+
 
         function setAttributes(el, attrs) {
             for (var key in attrs) {
@@ -1354,15 +1540,8 @@
                     }
                 }
             })
-            document.getElementById('activity_type').addEventListener('change', function (e) {
-                showActivities(this.value)
-            })
-            document.getElementById('complaint_type').addEventListener('change', function (e) {
-                showComplaints(this.value)
-            })
             document.getElementById('select_cashier').addEventListener('change', async function (e) {
-                await Promise.all([load_deposit_complaints(this.value), load_withdraw_complaints(this.value)])
-                //load_pay_thru_cashier_complaints(this.value)
+                await Promise.all([load_deposit_complaints(this.value), load_withdraw_complaints(this.value), load_pay_thru_cashier_complaints(this.value)])
             })
 
             document.getElementById('helpline_page').addEventListener('click', async e => {
@@ -1378,38 +1557,6 @@
             })
 
         })
-
-        let allActivities = document.querySelectorAll('.activity-container')
-        function showActivities(activity) {
-            allActivities.forEach(act => {
-                act.classList.add('hide-completely')
-            })
-            if (activity === 'deposits') {
-                document.getElementById('deposit_activity_container').classList.remove('hide-completely')
-            }
-            if (activity === 'withdraws') {
-                document.getElementById('withdraw_activity_container').classList.remove('hide-completely')
-            }
-            if (activity === 'cashierMsg') {
-                document.getElementById('cashier_message_container').classList.remove('hide-completely')
-            }
-        }
-
-        let allComplaints = document.querySelectorAll('.complaints-container')
-        function showComplaints(complaint) {
-            allComplaints.forEach(comp => {
-                comp.classList.add('hide-completely')
-            })
-            if (complaint === 'deposits') {
-                document.getElementById('deposit_complaints_container').classList.remove('hide-completely')
-            }
-            if (complaint === 'withdraws') {
-                document.getElementById('withdraw_complaints_container').classList.remove('hide-completely')
-            }
-            if (complaint === 'payCashier') {
-                document.getElementById('pay_cashier_complaints_container').classList.remove('hide-completely')
-            }
-        }
 
         let allPages = document.querySelectorAll('.page'),
             allTabs = document.querySelectorAll('.navbar-item');
@@ -1445,6 +1592,8 @@
         async function signOut() {
             if (await confirmation('Do you want to sign out?')) {
                 document.querySelector('main').classList.add('hide-completely')
+                document.querySelector('#navbar').classList.add('hide-completely')
+                document.querySelector('#main_header').classList.add('hide-completely')
                 floDapps.clearCredentials()
                 compactIDB.deleteDB().then((message) => {
                     delete token_app.master_configurations;
@@ -1647,6 +1796,293 @@
                     })
                     this.dispatchEvent(optionSelected)
                 }, 0);
+            }
+        }
+    })
+    // tab-header
+
+    const smTabs = document.createElement('template')
+    smTabs.innerHTML = `
+<style>
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+} 
+:host{
+    display: flex;
+}
+.tabs{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+}
+.tab-header{
+    position: relative;
+    overflow: auto hidden;
+    max-width: 100%;
+    border-bottom: solid 1px rgba(var(--text), .2);
+    scrollbar-width: 0;
+    margin-bottom: 1rem;
+}
+.tab-header::-webkit-scrollbar-track {
+    -webkit-box-shadow: none !important;
+    background-color: transparent !important;
+}
+
+.tab-header::-webkit-scrollbar {
+  height: 0;
+  background-color: transparent;
+}
+
+.indicator{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 0.12rem;
+    background: var(--primary-color);
+}
+slot[name="tab"]{
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1rem;
+    grid-auto-columns: max-content;
+}
+:host([type="tab"]) .indicator{
+    height: 100%;
+    border-radius: 0.2rem
+}
+:host([type="tab"]) .tab-header{
+    border-bottom: none; 
+}
+:host([type="tab"]) slot[name="tab"]{
+    border-radius: 0.2rem;
+    grid-auto-columns: 1fr;
+    border-bottom: none;
+}
+.transition{
+    transition: transform 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86), width 0.4s;
+}
+.hide-completely{
+    display: none;
+}
+:host([type="tab"]) slot[name="tab"]::slotted(.active){
+    color: rgba(var(--foreground), 1);
+}
+slot[name="tab"]::slotted(.active){
+    color: var(--primary-color);
+}
+</style>
+<div class="tabs">
+    <div class="tab-header">
+        <slot name="tab">Nothing to see here</slot>
+        <div class="indicator"></div>
+    </div>
+    <slot name="panel">Nothing to see here</slot>
+</div>
+`;
+
+    customElements.define('sm-tabs', class extends HTMLElement {
+        constructor() {
+            super()
+            this.attachShadow({ mode: 'open' }).append(smTabs.content.cloneNode(true))
+            this.indicator = this.shadowRoot.querySelector('.indicator');
+            this.tabSlot = this.shadowRoot.querySelector('slot[name="tab"]');
+            this.panelSlot = this.shadowRoot.querySelector('slot[name="panel"]');
+            this.tabHeader = this.shadowRoot.querySelector('.tab-header');
+        }
+        connectedCallback() {
+
+            //animations
+            let flyInLeft = [
+                {
+                    opacity: 0,
+                    transform: 'translateX(-1rem)'
+                },
+                {
+                    opacity: 1,
+                    transform: 'none'
+                }
+            ];
+            let flyInRight = [
+                {
+                    opacity: 0,
+                    transform: 'translateX(1rem)'
+                },
+                {
+                    opacity: 1,
+                    transform: 'none'
+                }
+            ]
+            let flyOutLeft = [
+                {
+                    opacity: 1,
+                    transform: 'none'
+                },
+                {
+                    opacity: 0,
+                    transform: 'translateX(-1rem)'
+                }
+            ]
+            let flyOutRight = [
+                {
+                    opacity: 1,
+                    transform: 'none'
+                },
+                {
+                    opacity: 0,
+                    transform: 'translateX(1rem)'
+                }
+            ]
+            let animationOptions = {
+                duration: 300,
+                fill: 'forwards',
+                easing: 'ease'
+            }
+            this.prevTab
+            this.shadowRoot.querySelector('slot[name="panel"]').addEventListener('slotchange', () => {
+                this.shadowRoot.querySelector('slot[name="panel"]').assignedElements().forEach((panel, index) => {
+                    panel.classList.add('hide-completely')
+                })
+            })
+            this.shadowRoot.querySelector('slot[name="tab"]').addEventListener('slotchange', () => {
+                this.shadowRoot.querySelector('slot[name="tab"]').assignedElements().forEach((panel, index) => {
+                    panel.setAttribute('rank', index + 1)
+                })
+            })
+            this.addEventListener('switchTab', e => {
+                if (e.target === this.prevTab)
+                    return
+                if (this.prevTab)
+                    this.prevTab.classList.remove('active')
+                e.target.classList.add('active')
+
+                if (this.prevTab) {
+                    let targetBody = e.target.nextElementSibling,
+                        currentBody = this.prevTab.nextElementSibling;
+
+                    if (this.prevTab.getAttribute('rank') < e.target.getAttribute('rank')) {
+                        if (currentBody && !targetBody)
+                            currentBody.animate(flyOutLeft, animationOptions).onfinish = () => {
+                                currentBody.classList.add('hide-completely')
+                            }
+                        else if (targetBody && !currentBody) {
+                            targetBody.classList.remove('hide-completely')
+                            targetBody.animate(flyInRight, animationOptions)
+                        }
+                        else if (currentBody && targetBody) {
+                            currentBody.animate(flyOutLeft, animationOptions).onfinish = () => {
+                                currentBody.classList.add('hide-completely')
+                                targetBody.classList.remove('hide-completely')
+                                targetBody.animate(flyInRight, animationOptions)
+                            }
+                        }
+                    } else {
+                        if (currentBody && !targetBody)
+                            currentBody.animate(flyOutRight, animationOptions).onfinish = () => {
+                                currentBody.classList.add('hide-completely')
+                            }
+                        else if (targetBody && !currentBody) {
+                            targetBody.classList.remove('hide-completely')
+                            targetBody.animate(flyInLeft, animationOptions)
+                        }
+                        else if (currentBody && targetBody) {
+                            currentBody.animate(flyOutRight, animationOptions).onfinish = () => {
+                                currentBody.classList.add('hide-completely')
+                                targetBody.classList.remove('hide-completely')
+                                targetBody.animate(flyInLeft, animationOptions)
+                            }
+                        }
+                    }
+                } else {
+                    e.target.nextElementSibling.classList.remove('hide-completely')
+                }
+                e.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+                this.indicator.setAttribute('style', `width: ${e.target.getBoundingClientRect().width / 2}px; transform: translateX(${e.target.getBoundingClientRect().left - e.target.parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft + e.target.getBoundingClientRect().width / 4}px)`)
+                this.prevTab = e.target;
+            })
+            let observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        let activeElement = this.tabSlot.assignedElements().filter(element => {
+                            if (element.classList.contains('active'))
+                                return true
+                        })
+                        if (activeElement.length) {
+                            let tabDimensions = activeElement[0].getBoundingClientRect();
+                            this.indicator.setAttribute('style', `width: ${tabDimensions.width / 2}px; transform: translateX(${tabDimensions.left - activeElement[0].parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft + tabDimensions.width / 4}px)`)
+                        }
+                        else {
+                            this.tabSlot.assignedElements()[0].classList.add('active')
+                            let tabDimensions = this.tabSlot.assignedElements()[0].getBoundingClientRect();
+                            this.indicator.setAttribute('style', `width: ${tabDimensions.width / 2}px; transform: translateX(${tabDimensions.left - this.tabSlot.assignedElements()[0].parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft + tabDimensions.width / 4}px)`)
+                            this.prevTab = this.tabSlot.assignedElements()[0];
+                        }
+                        setTimeout(() => {
+                            this.indicator.classList.add('transition')
+                        }, 100);
+                    }
+                })
+            },
+                { threshold: 1.0 })
+            observer.observe(this.tabHeader)
+        }
+    })
+
+
+    // tab
+    const smTab = document.createElement('template')
+    smTab.innerHTML = `
+<style>
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+} 
+:host{
+    display: inline-flex;
+    z-index: 1;
+}
+.tab{
+    user-select: none;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    padding: 0.4rem 0;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    word-spacing: 0.1em;
+    text-align: center;
+    transition: color 0.3s;
+    text-transform: uppercase;
+    font-family: var(--font-family);
+}
+</style>
+<div class="tab">
+    <slot></slot>
+</div>
+`;
+
+    customElements.define('sm-tab', class extends HTMLElement {
+        constructor() {
+            super()
+            this.shadow = this.attachShadow({ mode: 'open' }).append(smTab.content.cloneNode(true))
+        }
+        connectedCallback() {
+            let switchTab = new CustomEvent('switchTab', {
+                bubbles: true,
+                composed: true,
+            })
+            this.addEventListener('click', () => {
+                this.dispatchEvent(switchTab)
+            })
+            if (this.hasAttribute('active')) {
+                setTimeout(() => {
+                    this.dispatchEvent(switchTab)
+                }, 0)
             }
         }
     })
@@ -11058,8 +11494,7 @@
                     for (cashier in token_app.master_configurations.cashiers)
                         cashierList += `<sm-option value = "${cashier}">${cashier}</sm-option>`
                     cashierSelect.innerHTML = cashierList;
-                    await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(cashierSelect.value)])
-                    //load_pay_thru_cashier_complaints(cashierSelect.value)
+                    await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
                     userType.textContent = 'Helpline'
                     showPage(document.getElementById('helpline_page_btn'), 'helpline_page')
                 }
@@ -11347,6 +11782,7 @@
             try {
                 const send_tokens_btn = document.getElementById('send_tokens_btn');
                 send_tokens_btn.onclick = async function () {
+                    btnLoading('send_tokens_btn', 'start')
                     const token_sender = myFloID;
                     const token_receiver = document.getElementById('token_receiver').value;
                     const token_amount = Number(document.getElementById('token_amount').value);
@@ -11361,6 +11797,7 @@
                         || sender_token_balance.balance < token_amount) {
                         err_msg = `Sender has insufficient ${token_name_radio} balance.`;
                         notify(err_msg, 'error');
+                        hidePopup()
                         return false;
                     }
 
@@ -11368,6 +11805,7 @@
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
                         notify(`Transaction unsuccessful.`);
+                        hidePopup()
                         return false;
                     } else {
                         notify(`Transaction successful: ${flo_txid}.`, '', 'fixed', true);
@@ -11375,6 +11813,7 @@
                             payment_request_status(currentPaymentRequest.requestId, 'APPROVED')
                             showPayRequests()
                         }
+                        hidePopup()
                         return true;
                     }
                 }
@@ -11513,6 +11952,7 @@
                 const request_tokens_btn = document.getElementById('request_tokens_btn');
                 const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
                 request_tokens_btn.onclick = async function () {
+                    btnLoading('request_tokens_btn', 'start')
                     if (typeof myFloID !== "string" || myFloID.length < 1) return;
                     const token_amount_to_buy = Number(document.getElementById('token_amount_to_buy').value);
                     const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
@@ -11528,10 +11968,12 @@
                             { receiverID: cashier }).then(result => {
                                 console.log(result);
                                 notify('Request sent successfully.');
+                                hidePopup()
                             })
                         return true;
                     }
                     notify('Request failed.', 'error');
+                    hidePopup()
                     return false;
                 }
             } catch (error) {
@@ -11544,7 +11986,7 @@
                 const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
                 const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
                 withdraw_cash_btn.onclick = async function () {
-                    // TODO: Disble the button
+                    btnLoading('withdraw_cash_btn', 'start')
                     if (typeof myFloID !== "string" || myFloID.length < 1) {
                         notify(`Your Flo Id is invalid.`, 'error');
                         return;
@@ -11563,11 +12005,13 @@
                     const user_token_balance_object = await ajaxGet(token_balance_url);
                     if (typeof user_token_balance_object !== "object" || typeof user_token_balance_object.balance !== "number") {
                         notify('You do not have rupee balance yet. Please deposit rupee to get balance.', 'error');
+                        hidePopup()
                         return;
                     }
                     const current_balance = Number(user_token_balance_object.balance);
                     if (current_balance < withdraw_cash_amount) {
                         notify(`You have unsufficient balance to withdraw. You can withdraw only Rs ${user_token_balance_object.balance}`, 'error', 'fixed', true);
+                        hidePopup()
                         return;
                     }
 
@@ -11576,6 +12020,7 @@
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
                         notify(`Transaction unsuccessfull.`, 'error');
+                        hidePopup()
                         return false;
                     }
                     // TODO: Validate https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}
@@ -11592,6 +12037,7 @@
                         floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_WITHDRAWS,
                             { receiverID: cashier });
                         notify('Withdraw request sent successfully.');
+                        hidePopup()
                         return true;
                     }
                     notify('Failed to send withdraw request to cashier.', 'error');
@@ -11614,6 +12060,7 @@
 
                 const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
                 cnf_cash_payment_btn.onclick = function () {
+                    btnLoading('withdraw_cash_btn', 'start')
                     const paying_amount_div = document.getElementById('recvr_amount_to_pay')
                     const recvr_id = document.getElementById('recvr_id').value;
                     let amount_to_pay = Number(paying_amount_div.value);
@@ -11632,8 +12079,9 @@
                     floCloudAPI.sendGeneralData(req_object, token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
                         { receiverID: cashier, senderIDs: [myFloID] });
 
-                    notify(`You have sent cash to ${recvr_id} through our cashier service (${cashier_upi}). 
+                    notify(`You have sent cash to <span class="breakable">${recvr_id}</span> through our cashier service (${cashier_upi}). 
                         Once the cashier receives your payment, he will transfer it to ${recvr_id}.`, '', 'fixed', true);
+                    hidePopup()
                 }
 
             } catch (error) {
@@ -11643,6 +12091,7 @@
 
         const depositActivityContainer = document.getElementById('deposit_activity_container'),
             withdrawActivityContainer = document.getElementById('withdraw_activity_container'),
+            payCashierActivityContainer = document.getElementById('pay_cashier_activity_container'),
             cashierMessageContainer = document.getElementById('cashier_message_container')
 
         async function show_user_activities() {
@@ -11654,7 +12103,7 @@
                 const user_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0").reverse();
                 const pay_thru_cashier_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, "0").reverse();
 
-                console.log(deposit_msg, withdraw_msg, user_msg, pay_thru_cashier_msg)
+                console.log(deposit_msg, withdraw_msg, user_msg)
                 depositActivityContainer.innerHTML = ``;
                 for (usr_deposits of deposit_msg) {
                     let { upi_txid, deposit_amount } = usr_deposits.message;
@@ -11670,6 +12119,15 @@
                 }
                     
                 withdrawActivityContainer.append(frag)
+
+                payCashierActivityContainer.innerHTML = ``;
+                for (cashier_message of pay_thru_cashier_msg) {
+                    console.log(cashier_message)
+                    let { receiver_flo_id, upi_txid, amount } = cashier_message.message;
+                    frag.append(render.payCashierActivity(cashier_message.vectorClock, receiver_flo_id, upi_txid, amount))
+                }
+                    
+                payCashierActivityContainer.append(frag)
 
                 cashierMessageContainer.innerHTML = ``;
                 for (msg of user_msg) {
@@ -11705,7 +12163,7 @@
 
                 notify('Your complaint has been registered. Our team will take an action very soon. Thank you.',
                     '', 'fixed', true);
-
+                hidePopup()
                 return true;
 
             } catch (e) {
@@ -11806,7 +12264,10 @@
 
         async function load_deposit_complaints(receiver = '', sendersArray = []) {
             try {
-
+                let container = document.getElementById('deposit_complaints_container');
+                container.innerHTML = ``;
+                container.append(render.complaintPlaceholder())
+                
                 await clearCashierData();
 
                 await Promise.all([
@@ -11881,8 +12342,6 @@
                     }
                 }
 
-                let container = document.getElementById('deposit_complaints_container');
-
                 container.innerHTML = ``
                 if (frag.children.length)
                     container.append(frag)
@@ -11902,6 +12361,9 @@
 
         async function load_withdraw_complaints(receiver = '', sender = []) {
             try {
+                let container = document.getElementById('withdraw_complaints_container');
+                container.innerHTML = ``;
+                container.append(render.complaintPlaceholder())
 
                 await clearCashierData();
 
@@ -11970,8 +12432,6 @@
                         frag.append(render.withdrawComplaint(userData, cashierData, udc))
                 }
 
-                let container = document.getElementById('withdraw_complaints_container');
-
                 container.innerHTML = ``
                 if (frag.children.length)
                     container.append(frag)
@@ -11992,6 +12452,9 @@
 
         async function load_pay_thru_cashier_complaints(receiver = '', sender = []) {
             try {
+                let container = document.getElementById('pay_cashier_complaints_container');
+                container.innerHTML = ``;
+                container.append(render.complaintPlaceholder())
 
                 await clearCashierData();
 
@@ -12024,7 +12487,7 @@
                     let this_user_pay_thru_cashier = all_users_pay_thru_cashier.filter(f => f.vectorClock === udc.message.order_vc);
                     console.log(this_user_pay_thru_cashier);
 
-                    let this_user_pay_thru_cashier_upi_txid_list = this_user_withdraws.map(m => m.message.upi_txid);
+                    let this_user_pay_thru_cashier_upi_txid_list = this_user_pay_thru_cashier.map(m => m.message.upi_txid);
 
                     let all_cashier_processed_pay_thru_cashier = floDapps
                         .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS, "0");
@@ -12032,8 +12495,40 @@
                     let this_cashier_processed_user_pay_thru_cashier = all_cashier_processed_pay_thru_cashier
                         .filter(f => this_user_pay_thru_cashier_upi_txid_list.includes(f.message.upi_txid));
                     console.log(this_cashier_processed_user_pay_thru_cashier);
-                }
+                
+                    if (this_user_pay_thru_cashier.length) {
+                        let { amount, upi_txid, receiver_flo_id } = this_user_pay_thru_cashier[0].message;
+                        userData = {
+                            amount: amount,
+                            upiTxId: upi_txid,
+                            sender: this_user_pay_thru_cashier[0].sender,
+                            receiver: receiver_flo_id,
+                            vectorClock: this_user_pay_thru_cashier[0].vectorClock,
+                            customMsg: udc.message.custom_msg
+                        }
+                    }
+                    if (this_cashier_processed_user_pay_thru_cashier.length) {
+                        let { datetime, flo_txid } = this_cashier_processed_user_pay_thru_cashier[0].message;
+                        cashierData = {
+                            processed: true,
+                            time: datetime,
+                            floTxId: flo_txid
+                        }
+                    }
+                    else {
+                        cashierData = {
+                            processed: false
+                        }
+                    }
+                    if (this_user_pay_thru_cashier.length)
+                        frag.append(render.payCashierComplaint(userData, cashierData, udc))                
+                    }
 
+                container.innerHTML = ``
+                if (frag.children.length)
+                    container.append(frag)
+                else
+                    container.innerHTML = `<h4>No complaints available.</h4>`
             } catch (e) {
                 console.error(e);
                 notify(e);

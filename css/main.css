@@ -11,6 +11,10 @@
   scroll-behavior: smooth;
 }
 
+html {
+  margin-left: calc(100vw - 100%);
+}
+
 body {
   --primary-color: #303F9F;
   --text: 17, 17, 17;
@@ -132,7 +136,7 @@ input:invalid {
 }
 
 .top-margin {
-  margin-top: 1em;
+  margin-top: 1.5rem;
 }
 
 .flex {
@@ -870,6 +874,7 @@ form {
   margin-top: 4vw;
   margin-bottom: 1rem;
   font-weight: 700;
+  font-size: 3rem;
 }
 
 #home_page p {
@@ -1223,6 +1228,10 @@ form {
   color: #d43125;
 }
 
+.complaint .processed, .complaint .unprocessed {
+  margin-bottom: 1.5rem;
+}
+
 .complaint button .icon {
   padding: 0.2rem;
   margin-right: 0.5rem;
@@ -1235,6 +1244,51 @@ form {
   display: -ms-grid;
   display: grid;
   gap: 1.5rem;
+}
+
+#helpline_page sm-select {
+  margin-bottom: 1.5rem;
+}
+
+.complaint-placeholder {
+  -webkit-animation: pulse infinite 0.6s alternate;
+          animation: pulse infinite 0.6s alternate;
+}
+
+.complaint-placeholder h4, .complaint-placeholder h5 {
+  border-radius: 0.2rem;
+}
+
+.complaint-placeholder h5 {
+  background: rgba(var(--text), 0.1);
+  padding: 0.5rem 0.6rem;
+}
+
+.complaint-placeholder h4 {
+  background: rgba(var(--text), 0.2);
+  padding: 0.8rem 0.8rem;
+}
+
+.complaint-placeholder .demo-btn {
+  padding: 0.8rem 3rem;
+}
+
+@-webkit-keyframes pulse {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @media only screen and (max-width: 640px) {
@@ -1396,19 +1450,20 @@ form {
   .complaint .left {
     border-right: 1px solid rgba(var(--text), 0.2);
   }
-  .complaint .left, .complaint .right {
+  .complaint .left {
     padding-right: 1.5rem;
   }
   .complaint .right {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 
