@@ -110,7 +110,8 @@
                         transfer
                     </button>
                     <svg viewBox="0 0 73 73" class="loader">
-                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                        <path
+                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
                     </svg>
                 </div>
             </div>
@@ -144,7 +145,8 @@
                         deposit
                     </button>
                     <svg viewBox="0 0 73 73" class="loader">
-                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                        <path
+                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
                     </svg>
                 </div>
             </div>
@@ -173,7 +175,8 @@
                         withdraw
                     </button>
                     <svg viewBox="0 0 73 73" class="loader">
-                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                        <path
+                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
                     </svg>
                 </div>
             </div>
@@ -206,7 +209,8 @@
                         request
                     </button>
                     <svg viewBox="0 0 73 73" class="loader">
-                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                        <path
+                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
                     </svg>
                 </div>
             </div>
@@ -239,7 +243,8 @@
                         pay
                     </button>
                     <svg viewBox="0 0 73 73" class="loader">
-                        <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                        <path
+                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
                     </svg>
                 </div>
             </div>
@@ -723,7 +728,8 @@
                     <h4>No withdraw complaints.</h4>
                 </sm-panel>
                 <sm-tab slot="tab">Pay through cashier</sm-tab>
-                <sm-panel slot="panel" id="pay_cashier_complaints_container" class="complaints-container hide-completely">
+                <sm-panel slot="panel" id="pay_cashier_complaints_container"
+                    class="complaints-container hide-completely">
                     <h4>No pay through cashier complaints.</h4>
                 </sm-panel>
             </sm-tabs>
@@ -744,17 +750,45 @@
             <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
         </section>
     </main>
+    <script id="floGlobals">
+        /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
+        const floGlobals = {
 
+            //Required for all
+            blockchain: "FLO",
+
+            //Required for blockchain API operators
+            apiURL: {
+                FLO: ['https://explorer.mediciland.com/', 'https://livenet.flocha.in/', 'https://flosight.duckdns.org/', 'http://livenet-explorer.floexperiments.com/'],
+                FLO_TEST: ['https://testnet-flosight.duckdns.org/', 'https://testnet.flocha.in/']
+            },
+            adminID: "F7HEAV9226tqXtRk34XrA9nZCb8ZcbVJt1",
+            sendAmt: 0.001,
+            fee: 0.0005,
+
+            //Required for Supernode operations
+            SNStorageID: "FEzk75EGMPEQMrCuPosGiwuK162hcEu49E",
+            supernodes: {}, //each supnernode must be stored as floID : {uri:<uri>,pubKey:<publicKey>}
+
+            //for cloud apps
+            subAdmins: [],
+            application: "rupeeTokenApp",//rupeeTokenApp
+            vectorClock: {},
+            appObjects: {},
+            generalData: {},
+            generalVC: {}
+        }
+    </script>
 
     <script id="onLoadStartUp">
         function onLoadStartUp() {
             showPopup('main_loader', 'no')
             console.log("Starting the app! Please Wait!")
-            floDapps.launchStartUp().then( async result => {
-                console.log(result)
+            floDapps.launchStartUp().then(async result => {
+                console.log(`Welcome ${myFloID}`)
                 await token_app.actions.doShreeGanesh();
-                refresh_balance()
                 document.getElementById('user_flo_id').textContent = myFloID
+                refresh_balance()
                 hidePopup()
             }).catch(error => console.error(error))
         }
@@ -931,7 +965,7 @@
                     { depositedAmount, customMsg, sender, vectorClock } = userData,
                     composition = ``;
                 card.classList.add('request', 'complaint')
-                setAttributes(card, {'data-type': 'deposit','data-udc': JSON.stringify(udc)})
+                setAttributes(card, { 'data-type': 'deposit', 'data-udc': JSON.stringify(udc) })
                 composition = `
                     
                     <div class="left">
@@ -1342,15 +1376,20 @@
         }
 
         function formatedTime(time) {
-            let timeFrag = new Date(parseInt(time)).toString().split(' '),
-                day = timeFrag[0],
-                month = timeFrag[1],
-                date = timeFrag[2],
-                year = timeFrag[3],
-                hours = timeFrag[4].slice(0, timeFrag[4].lastIndexOf(':')),
-                finalTime = '';
-            parseInt(hours.split(':')[0]) > 12 ? finalTime = 'PM' : finalTime = 'AM'
-            return `${hours} ${finalTime} ${day} ${date} ${month} ${year}`
+            try {
+                let timeFrag = new Date(parseInt(time)).toString().split(' '),
+                    day = timeFrag[0],
+                    month = timeFrag[1],
+                    date = timeFrag[2],
+                    year = timeFrag[3],
+                    hours = timeFrag[4].slice(0, timeFrag[4].lastIndexOf(':')),
+                    finalTime = '';
+                parseInt(hours.split(':')[0]) > 12 ? finalTime = 'PM' : finalTime = 'AM'
+                return `${hours} ${finalTime} ${day} ${date} ${month} ${year}`;
+            } catch (e) {
+                console.error(e);
+                return time;
+            }
         }
 
         function copyToClipboard(parent) {
@@ -1488,7 +1527,7 @@
                 request_payment(requestedAddress, requestedAmount)
             })
             // Function for accepting payment request
-            document.getElementById('payment_request_container').addEventListener('click', async(e) => {
+            document.getElementById('payment_request_container').addEventListener('click', async (e) => {
                 if (e.target.closest('.send-rupee')) {
                     let parent = e.target.closest('.request'),
                         senderAddress = parent.dataset.senderAddress,
@@ -1506,7 +1545,7 @@
                 if (e.target.closest('.decline-request')) {
                     let parent = e.target.closest('.request'),
                         paymentRequestId = parent.dataset.paymentRequestId;
-                    if(await confirmation(`Do want to decline this request? This will remove the request.`)){
+                    if (await confirmation(`Do want to decline this request? This will remove the request.`)) {
                         payment_request_status(paymentRequestId, 'DECLINED')
                         e.target.closest('.request').remove()
                     }
@@ -1517,11 +1556,11 @@
             })
 
             document.getElementById('helpline_page').addEventListener('click', async e => {
-                if(e.target.closest('.mark-resolved')){
+                if (e.target.closest('.mark-resolved')) {
                     let complaint = e.target.closest('.complaint'),
                         udc = complaint.dataset.udc,
                         type = complaint.dataset.type;
-                    if(await confirmation('Mark this complaint as resolved?')){
+                    if (await confirmation('Mark this complaint as resolved?')) {
                         mark_complaint_resolved(type, JSON.parse(udc))
                         complaint.remove()
                     }
@@ -1576,9 +1615,9 @@
                 })
             }
         }
-    // sm-select
-    const smSelect = document.createElement('template')
-    smSelect.innerHTML = `
+        // sm-select
+        const smSelect = document.createElement('template')
+        smSelect.innerHTML = `
         <style>     
             *{
                 padding: 0;
@@ -1662,60 +1701,60 @@
                 <slot></slot> 
             </div>
         </div>`;
-    customElements.define('sm-select', class extends HTMLElement {
-        constructor() {
-            super()
-            this.attachShadow({ mode: 'open' }).append(smSelect.content.cloneNode(true))
-        }
-        static get observedAttributes() {
-            return ['value']
-        }
-        get value() {
-            return this.getAttribute('value')
-        }
-        set value(val) {
-            this.setAttribute('value', val)
-        }
-        connectedCallback() {
-            let optionList = this.shadowRoot.querySelector('.options'),
-                chevron = this.shadowRoot.querySelector('.toggle'),
-                slot = this.shadowRoot.querySelector('.options slot'),
-                currentOption;
-            this.addEventListener('click', e => {
-                chevron.classList.toggle('rotate')
-                optionList.classList.toggle('hide')
-                optionList.classList.toggle('no-transformations')
-            })
-            this.addEventListener('optionSelected', e => {
-                if (currentOption !== e.detail.value) {
-                    this.setAttribute('value', e.detail.value)
-                    this.shadowRoot.querySelector('.option-text').textContent = e.detail.text;
-                    this.dispatchEvent(new CustomEvent('change', {
-                        bubbles: true,
-                        composed: true
-                    }))
-                    currentOption = e.detail.value;
-                }
-            })
-            slot.addEventListener('slotchange', e => {
-                let firstElement = slot.assignedElements()[0];
-                currentOption = firstElement.getAttribute('value');
-                this.setAttribute('value', firstElement.getAttribute('value'))
-                this.shadowRoot.querySelector('.option-text').textContent = firstElement.textContent
-            });
-            document.addEventListener('mousedown', e => {
-                if (!this.contains(e.target)) {
-                    chevron.classList.remove('rotate')
-                    optionList.classList.add('hide')
-                    optionList.classList.remove('no-transformations')
-                }
-            })
-        }
-    })
+        customElements.define('sm-select', class extends HTMLElement {
+            constructor() {
+                super()
+                this.attachShadow({ mode: 'open' }).append(smSelect.content.cloneNode(true))
+            }
+            static get observedAttributes() {
+                return ['value']
+            }
+            get value() {
+                return this.getAttribute('value')
+            }
+            set value(val) {
+                this.setAttribute('value', val)
+            }
+            connectedCallback() {
+                let optionList = this.shadowRoot.querySelector('.options'),
+                    chevron = this.shadowRoot.querySelector('.toggle'),
+                    slot = this.shadowRoot.querySelector('.options slot'),
+                    currentOption;
+                this.addEventListener('click', e => {
+                    chevron.classList.toggle('rotate')
+                    optionList.classList.toggle('hide')
+                    optionList.classList.toggle('no-transformations')
+                })
+                this.addEventListener('optionSelected', e => {
+                    if (currentOption !== e.detail.value) {
+                        this.setAttribute('value', e.detail.value)
+                        this.shadowRoot.querySelector('.option-text').textContent = e.detail.text;
+                        this.dispatchEvent(new CustomEvent('change', {
+                            bubbles: true,
+                            composed: true
+                        }))
+                        currentOption = e.detail.value;
+                    }
+                })
+                slot.addEventListener('slotchange', e => {
+                    let firstElement = slot.assignedElements()[0];
+                    currentOption = firstElement.getAttribute('value');
+                    this.setAttribute('value', firstElement.getAttribute('value'))
+                    this.shadowRoot.querySelector('.option-text').textContent = firstElement.textContent
+                });
+                document.addEventListener('mousedown', e => {
+                    if (!this.contains(e.target)) {
+                        chevron.classList.remove('rotate')
+                        optionList.classList.add('hide')
+                        optionList.classList.remove('no-transformations')
+                    }
+                })
+            }
+        })
 
-    // sm-option
-    const smOption = document.createElement('template')
-    smOption.innerHTML = `
+        // sm-option
+        const smOption = document.createElement('template')
+        smOption.innerHTML = `
         <style>     
             *{
                 padding: 0;
@@ -1739,25 +1778,13 @@
         <div class="sm-option" tabindex="0">
             <slot></slot> 
         </div>`;
-    customElements.define('sm-option', class extends HTMLElement {
-        constructor() {
-            super()
-            this.attachShadow({ mode: 'open' }).append(smOption.content.cloneNode(true))
-        }
-        connectedCallback() {
-            this.addEventListener('click', e => {
-                let optionSelected = new CustomEvent('optionSelected', {
-                    bubbles: true,
-                    composed: true,
-                    detail: {
-                        text: this.textContent,
-                        value: this.getAttribute('value')
-                    }
-                })
-                this.dispatchEvent(optionSelected)
-            })
-            if (this.hasAttribute('default')) {
-                setTimeout(() => {
+        customElements.define('sm-option', class extends HTMLElement {
+            constructor() {
+                super()
+                this.attachShadow({ mode: 'open' }).append(smOption.content.cloneNode(true))
+            }
+            connectedCallback() {
+                this.addEventListener('click', e => {
                     let optionSelected = new CustomEvent('optionSelected', {
                         bubbles: true,
                         composed: true,
@@ -1767,14 +1794,26 @@
                         }
                     })
                     this.dispatchEvent(optionSelected)
-                }, 0);
+                })
+                if (this.hasAttribute('default')) {
+                    setTimeout(() => {
+                        let optionSelected = new CustomEvent('optionSelected', {
+                            bubbles: true,
+                            composed: true,
+                            detail: {
+                                text: this.textContent,
+                                value: this.getAttribute('value')
+                            }
+                        })
+                        this.dispatchEvent(optionSelected)
+                    }, 0);
+                }
             }
-        }
-    })
-    // tab-header
+        })
+        // tab-header
 
-    const smTabs = document.createElement('template')
-    smTabs.innerHTML = `
+        const smTabs = document.createElement('template')
+        smTabs.innerHTML = `
 <style>
 *{
     padding: 0;
@@ -1854,157 +1893,157 @@ slot[name="tab"]::slotted(.active){
 </div>
 `;
 
-    customElements.define('sm-tabs', class extends HTMLElement {
-        constructor() {
-            super()
-            this.attachShadow({ mode: 'open' }).append(smTabs.content.cloneNode(true))
-            this.indicator = this.shadowRoot.querySelector('.indicator');
-            this.tabSlot = this.shadowRoot.querySelector('slot[name="tab"]');
-            this.panelSlot = this.shadowRoot.querySelector('slot[name="panel"]');
-            this.tabHeader = this.shadowRoot.querySelector('.tab-header');
-        }
-        connectedCallback() {
-
-            //animations
-            let flyInLeft = [
-                {
-                    opacity: 0,
-                    transform: 'translateX(-1rem)'
-                },
-                {
-                    opacity: 1,
-                    transform: 'none'
-                }
-            ];
-            let flyInRight = [
-                {
-                    opacity: 0,
-                    transform: 'translateX(1rem)'
-                },
-                {
-                    opacity: 1,
-                    transform: 'none'
-                }
-            ]
-            let flyOutLeft = [
-                {
-                    opacity: 1,
-                    transform: 'none'
-                },
-                {
-                    opacity: 0,
-                    transform: 'translateX(-1rem)'
-                }
-            ]
-            let flyOutRight = [
-                {
-                    opacity: 1,
-                    transform: 'none'
-                },
-                {
-                    opacity: 0,
-                    transform: 'translateX(1rem)'
-                }
-            ]
-            let animationOptions = {
-                duration: 300,
-                fill: 'forwards',
-                easing: 'ease'
+        customElements.define('sm-tabs', class extends HTMLElement {
+            constructor() {
+                super()
+                this.attachShadow({ mode: 'open' }).append(smTabs.content.cloneNode(true))
+                this.indicator = this.shadowRoot.querySelector('.indicator');
+                this.tabSlot = this.shadowRoot.querySelector('slot[name="tab"]');
+                this.panelSlot = this.shadowRoot.querySelector('slot[name="panel"]');
+                this.tabHeader = this.shadowRoot.querySelector('.tab-header');
             }
-            this.prevTab
-            this.shadowRoot.querySelector('slot[name="panel"]').addEventListener('slotchange', () => {
-                this.shadowRoot.querySelector('slot[name="panel"]').assignedElements().forEach((panel, index) => {
-                    panel.classList.add('hide-completely')
-                })
-            })
-            this.shadowRoot.querySelector('slot[name="tab"]').addEventListener('slotchange', () => {
-                this.shadowRoot.querySelector('slot[name="tab"]').assignedElements().forEach((panel, index) => {
-                    panel.setAttribute('rank', index + 1)
-                })
-            })
-            this.addEventListener('switchTab', e => {
-                if (e.target === this.prevTab)
-                    return
-                if (this.prevTab)
-                    this.prevTab.classList.remove('active')
-                e.target.classList.add('active')
+            connectedCallback() {
 
-                if (this.prevTab) {
-                    let targetBody = e.target.nextElementSibling,
-                        currentBody = this.prevTab.nextElementSibling;
+                //animations
+                let flyInLeft = [
+                    {
+                        opacity: 0,
+                        transform: 'translateX(-1rem)'
+                    },
+                    {
+                        opacity: 1,
+                        transform: 'none'
+                    }
+                ];
+                let flyInRight = [
+                    {
+                        opacity: 0,
+                        transform: 'translateX(1rem)'
+                    },
+                    {
+                        opacity: 1,
+                        transform: 'none'
+                    }
+                ]
+                let flyOutLeft = [
+                    {
+                        opacity: 1,
+                        transform: 'none'
+                    },
+                    {
+                        opacity: 0,
+                        transform: 'translateX(-1rem)'
+                    }
+                ]
+                let flyOutRight = [
+                    {
+                        opacity: 1,
+                        transform: 'none'
+                    },
+                    {
+                        opacity: 0,
+                        transform: 'translateX(1rem)'
+                    }
+                ]
+                let animationOptions = {
+                    duration: 300,
+                    fill: 'forwards',
+                    easing: 'ease'
+                }
+                this.prevTab
+                this.shadowRoot.querySelector('slot[name="panel"]').addEventListener('slotchange', () => {
+                    this.shadowRoot.querySelector('slot[name="panel"]').assignedElements().forEach((panel, index) => {
+                        panel.classList.add('hide-completely')
+                    })
+                })
+                this.shadowRoot.querySelector('slot[name="tab"]').addEventListener('slotchange', () => {
+                    this.shadowRoot.querySelector('slot[name="tab"]').assignedElements().forEach((panel, index) => {
+                        panel.setAttribute('rank', index + 1)
+                    })
+                })
+                this.addEventListener('switchTab', e => {
+                    if (e.target === this.prevTab)
+                        return
+                    if (this.prevTab)
+                        this.prevTab.classList.remove('active')
+                    e.target.classList.add('active')
 
-                    if (this.prevTab.getAttribute('rank') < e.target.getAttribute('rank')) {
-                        if (currentBody && !targetBody)
-                            currentBody.animate(flyOutLeft, animationOptions).onfinish = () => {
-                                currentBody.classList.add('hide-completely')
-                            }
-                        else if (targetBody && !currentBody) {
-                            targetBody.classList.remove('hide-completely')
-                            targetBody.animate(flyInRight, animationOptions)
-                        }
-                        else if (currentBody && targetBody) {
-                            currentBody.animate(flyOutLeft, animationOptions).onfinish = () => {
-                                currentBody.classList.add('hide-completely')
+                    if (this.prevTab) {
+                        let targetBody = e.target.nextElementSibling,
+                            currentBody = this.prevTab.nextElementSibling;
+
+                        if (this.prevTab.getAttribute('rank') < e.target.getAttribute('rank')) {
+                            if (currentBody && !targetBody)
+                                currentBody.animate(flyOutLeft, animationOptions).onfinish = () => {
+                                    currentBody.classList.add('hide-completely')
+                                }
+                            else if (targetBody && !currentBody) {
                                 targetBody.classList.remove('hide-completely')
                                 targetBody.animate(flyInRight, animationOptions)
                             }
-                        }
-                    } else {
-                        if (currentBody && !targetBody)
-                            currentBody.animate(flyOutRight, animationOptions).onfinish = () => {
-                                currentBody.classList.add('hide-completely')
+                            else if (currentBody && targetBody) {
+                                currentBody.animate(flyOutLeft, animationOptions).onfinish = () => {
+                                    currentBody.classList.add('hide-completely')
+                                    targetBody.classList.remove('hide-completely')
+                                    targetBody.animate(flyInRight, animationOptions)
+                                }
                             }
-                        else if (targetBody && !currentBody) {
-                            targetBody.classList.remove('hide-completely')
-                            targetBody.animate(flyInLeft, animationOptions)
-                        }
-                        else if (currentBody && targetBody) {
-                            currentBody.animate(flyOutRight, animationOptions).onfinish = () => {
-                                currentBody.classList.add('hide-completely')
+                        } else {
+                            if (currentBody && !targetBody)
+                                currentBody.animate(flyOutRight, animationOptions).onfinish = () => {
+                                    currentBody.classList.add('hide-completely')
+                                }
+                            else if (targetBody && !currentBody) {
                                 targetBody.classList.remove('hide-completely')
                                 targetBody.animate(flyInLeft, animationOptions)
                             }
+                            else if (currentBody && targetBody) {
+                                currentBody.animate(flyOutRight, animationOptions).onfinish = () => {
+                                    currentBody.classList.add('hide-completely')
+                                    targetBody.classList.remove('hide-completely')
+                                    targetBody.animate(flyInLeft, animationOptions)
+                                }
+                            }
                         }
+                    } else {
+                        e.target.nextElementSibling.classList.remove('hide-completely')
                     }
-                } else {
-                    e.target.nextElementSibling.classList.remove('hide-completely')
-                }
-                e.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
-                this.indicator.setAttribute('style', `width: ${e.target.getBoundingClientRect().width}px; transform: translateX(${e.target.getBoundingClientRect().left - e.target.parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft}px)`)
-                this.prevTab = e.target;
-            })
-            let observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        let activeElement = this.tabSlot.assignedElements().filter(element => {
-                            if (element.classList.contains('active'))
-                                return true
-                        })
-                        if (activeElement.length) {
-                            let tabDimensions = activeElement[0].getBoundingClientRect();
-                            this.indicator.setAttribute('style', `width: ${tabDimensions.width}px; transform: translateX(${tabDimensions.left - activeElement[0].parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft}px)`)
-                        }
-                        else {
-                            this.tabSlot.assignedElements()[0].classList.add('active')
-                            let tabDimensions = this.tabSlot.assignedElements()[0].getBoundingClientRect();
-                            this.indicator.setAttribute('style', `width: ${tabDimensions.width}px; transform: translateX(${tabDimensions.left - this.tabSlot.assignedElements()[0].parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft}px)`)
-                            this.prevTab = this.tabSlot.assignedElements()[0];
-                        }
-                        setTimeout(() => {
-                            this.indicator.classList.add('transition')
-                        }, 100);
-                    }
+                    e.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+                    this.indicator.setAttribute('style', `width: ${e.target.getBoundingClientRect().width}px; transform: translateX(${e.target.getBoundingClientRect().left - e.target.parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft}px)`)
+                    this.prevTab = e.target;
                 })
-            },
-                { threshold: 1.0 })
-            observer.observe(this.tabHeader)
-        }
-    })
+                let observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            let activeElement = this.tabSlot.assignedElements().filter(element => {
+                                if (element.classList.contains('active'))
+                                    return true
+                            })
+                            if (activeElement.length) {
+                                let tabDimensions = activeElement[0].getBoundingClientRect();
+                                this.indicator.setAttribute('style', `width: ${tabDimensions.width}px; transform: translateX(${tabDimensions.left - activeElement[0].parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft}px)`)
+                            }
+                            else {
+                                this.tabSlot.assignedElements()[0].classList.add('active')
+                                let tabDimensions = this.tabSlot.assignedElements()[0].getBoundingClientRect();
+                                this.indicator.setAttribute('style', `width: ${tabDimensions.width}px; transform: translateX(${tabDimensions.left - this.tabSlot.assignedElements()[0].parentNode.getBoundingClientRect().left + this.tabHeader.scrollLeft}px)`)
+                                this.prevTab = this.tabSlot.assignedElements()[0];
+                            }
+                            setTimeout(() => {
+                                this.indicator.classList.add('transition')
+                            }, 100);
+                        }
+                    })
+                },
+                    { threshold: 1.0 })
+                observer.observe(this.tabHeader)
+            }
+        })
 
 
-    // tab
-    const smTab = document.createElement('template')
-    smTab.innerHTML = `
+        // tab
+        const smTab = document.createElement('template')
+        smTab.innerHTML = `
 <style>
 *{
     padding: 0;
@@ -2035,30 +2074,30 @@ slot[name="tab"]::slotted(.active){
 </div>
 `;
 
-    customElements.define('sm-tab', class extends HTMLElement {
-        constructor() {
-            super()
-            this.shadow = this.attachShadow({ mode: 'open' }).append(smTab.content.cloneNode(true))
-        }
-        connectedCallback() {
-            let switchTab = new CustomEvent('switchTab', {
-                bubbles: true,
-                composed: true,
-            })
-            this.addEventListener('click', () => {
-                this.dispatchEvent(switchTab)
-            })
-            if (this.hasAttribute('active')) {
-                setTimeout(() => {
-                    this.dispatchEvent(switchTab)
-                }, 0)
+        customElements.define('sm-tab', class extends HTMLElement {
+            constructor() {
+                super()
+                this.shadow = this.attachShadow({ mode: 'open' }).append(smTab.content.cloneNode(true))
             }
-        }
-    })
+            connectedCallback() {
+                let switchTab = new CustomEvent('switchTab', {
+                    bubbles: true,
+                    composed: true,
+                })
+                this.addEventListener('click', () => {
+                    this.dispatchEvent(switchTab)
+                })
+                if (this.hasAttribute('active')) {
+                    setTimeout(() => {
+                        this.dispatchEvent(switchTab)
+                    }, 0)
+                }
+            }
+        })
 
-    // sm-select
-    const smStripSelect = document.createElement('template')
-    smStripSelect.innerHTML = `
+        // sm-select
+        const smStripSelect = document.createElement('template')
+        smStripSelect.innerHTML = `
         <style>     
             *{
                 padding: 0;
@@ -2095,50 +2134,50 @@ slot[name="tab"]::slotted(.active){
         <div class="sm-select">
             <slot></slot> 
         </div>`;
-    customElements.define('sm-strip-select', class extends HTMLElement {
-        constructor() {
-            super()
-            this.attachShadow({ mode: 'open' }).append(smStripSelect.content.cloneNode(true))
-        }
-        static get observedAttributes() {
-            return ['value']
-        }
-        get value() {
-            return this.getAttribute('value')
-        }
-        set value(val) {
-            this.setAttribute('value', val)
-        }
-        connectedCallback() {
-            let previousOption,
-                slot = this.shadowRoot.querySelector('slot');
-            this.addEventListener('optionSelected', e => {
-                if (previousOption === e.target) return;
-                if (previousOption)
-                    previousOption.classList.remove('active')
-                e.target.classList.add('active')
-                e.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
-                this.setAttribute('value', e.detail.value)
-                this.dispatchEvent(new CustomEvent('change', {
-                    bubbles: true,
-                    composed: true
-                }))
-                previousOption = e.target;
-            })
-            slot.addEventListener('slotchange', e => {
-                if (slot.assignedElements()[0]) {
-                    let firstElement = slot.assignedElements()[0];
-                    this.setAttribute('value', firstElement.getAttribute('value'))
-                    firstElement.classList.add('active')
-                    previousOption = firstElement;
-                }
-            });
-        }
-    })
+        customElements.define('sm-strip-select', class extends HTMLElement {
+            constructor() {
+                super()
+                this.attachShadow({ mode: 'open' }).append(smStripSelect.content.cloneNode(true))
+            }
+            static get observedAttributes() {
+                return ['value']
+            }
+            get value() {
+                return this.getAttribute('value')
+            }
+            set value(val) {
+                this.setAttribute('value', val)
+            }
+            connectedCallback() {
+                let previousOption,
+                    slot = this.shadowRoot.querySelector('slot');
+                this.addEventListener('optionSelected', e => {
+                    if (previousOption === e.target) return;
+                    if (previousOption)
+                        previousOption.classList.remove('active')
+                    e.target.classList.add('active')
+                    e.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+                    this.setAttribute('value', e.detail.value)
+                    this.dispatchEvent(new CustomEvent('change', {
+                        bubbles: true,
+                        composed: true
+                    }))
+                    previousOption = e.target;
+                })
+                slot.addEventListener('slotchange', e => {
+                    if (slot.assignedElements()[0]) {
+                        let firstElement = slot.assignedElements()[0];
+                        this.setAttribute('value', firstElement.getAttribute('value'))
+                        firstElement.classList.add('active')
+                        previousOption = firstElement;
+                    }
+                });
+            }
+        })
 
-    // sm-option
-    const smStripOption = document.createElement('template')
-    smStripOption.innerHTML = `
+        // sm-option
+        const smStripOption = document.createElement('template')
+        smStripOption.innerHTML = `
         <style>     
             *{
                 padding: 0;
@@ -2165,25 +2204,13 @@ slot[name="tab"]::slotted(.active){
         <div class="sm-option" tabindex="0">
             <slot></slot> 
         </div>`;
-    customElements.define('sm-strip-option', class extends HTMLElement {
-        constructor() {
-            super()
-            this.attachShadow({ mode: 'open' }).append(smStripOption.content.cloneNode(true))
-        }
-        connectedCallback() {
-            this.addEventListener('click', e => {
-                let optionSelected = new CustomEvent('optionSelected', {
-                    bubbles: true,
-                    composed: true,
-                    detail: {
-                        text: this.textContent,
-                        value: this.getAttribute('value')
-                    }
-                })
-                this.dispatchEvent(optionSelected)
-            })
-            if (this.hasAttribute('default')) {
-                setTimeout(() => {
+        customElements.define('sm-strip-option', class extends HTMLElement {
+            constructor() {
+                super()
+                this.attachShadow({ mode: 'open' }).append(smStripOption.content.cloneNode(true))
+            }
+            connectedCallback() {
+                this.addEventListener('click', e => {
                     let optionSelected = new CustomEvent('optionSelected', {
                         bubbles: true,
                         composed: true,
@@ -2193,40 +2220,23 @@ slot[name="tab"]::slotted(.active){
                         }
                     })
                     this.dispatchEvent(optionSelected)
-                }, 0);
+                })
+                if (this.hasAttribute('default')) {
+                    setTimeout(() => {
+                        let optionSelected = new CustomEvent('optionSelected', {
+                            bubbles: true,
+                            composed: true,
+                            detail: {
+                                text: this.textContent,
+                                value: this.getAttribute('value')
+                            }
+                        })
+                        this.dispatchEvent(optionSelected)
+                    }, 0);
+                }
             }
-        }
-    })
+        })
 
-    </script>
-    <script id="floGlobals">
-        /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
-        const floGlobals = {
-
-            //Required for all
-            blockchain: "FLO",
-
-            //Required for blockchain API operators
-            apiURL: {
-                FLO: ['https://explorer.mediciland.com/', 'https://livenet.flocha.in/', 'https://flosight.duckdns.org/', 'http://livenet-explorer.floexperiments.com/'],
-                FLO_TEST: ['https://testnet-flosight.duckdns.org/', 'https://testnet.flocha.in/']
-            },
-            adminID: "F7HEAV9226tqXtRk34XrA9nZCb8ZcbVJt1",
-            sendAmt: 0.001,
-            fee: 0.0005,
-
-            //Required for Supernode operations
-            SNStorageID: "FEzk75EGMPEQMrCuPosGiwuK162hcEu49E",
-            supernodes: {}, //each supnernode must be stored as floID : {uri:<uri>,pubKey:<publicKey>}
-
-            //for cloud apps
-            subAdmins: [],
-            application: "RUPEE_TOKEN_APP_TEST8",//rupeeTokenApp
-            vectorClock: {},
-            appObjects: {},
-            generalData: {},
-            generalVC: {}
-        }
     </script>
     <script id="init_lib">
         //All util libraries required for Standard operations (DO NOT EDIT ANY)
@@ -11472,7 +11482,7 @@ slot[name="tab"]::slotted(.active){
 
         const token_app = {
             master_configurations: {},
-            masterFLOPubKey: '03BA851FE0F28AA156B0D6E00784919133D1E98284F9A94544B470DBBFB3D90EDD',
+            //masterFLOAddress: 'FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky',
             actions: {},
             blocked_flo_ids: [],
         };
@@ -11480,43 +11490,40 @@ slot[name="tab"]::slotted(.active){
         token_app.actions = {
 
             parse_flo_comments: async function () {
-                text = `masterFLOPubKey=03BA851FE0F28AA156B0D6E00784919133D1E98284F9A94544B470DBBFB3D90EDD
+                text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
                     #!#CURRENCY=INR
-                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST
-                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST
-                    #!#TYPE_MSGES=USER_MESSAGES_TEST
-                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS
-                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS
-                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT
-                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT
-                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT
-                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT
-                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER
-                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT
-                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER
-                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT
-                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED
-                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED
+                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST1
+                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST1
+                    #!#TYPE_MSGES=USER_MESSAGES_TEST1
+                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST1
+                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST1
+                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST1
+                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST1
+                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST1
+                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST1
+                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST1
+                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST1
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST1
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST1
+                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST1
+                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST1
                     #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
                     #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                     #!#cashiers=
                     {
-                        "FByrY4vc1NRfbkqAqABtUyhhNzMZsKUjqr": {
-                            "upi_id": "johnDoe@upi"
-                        },
-                        "FHU7dfBVDLZwp3fLRJ5cr7nEABBeeU9Z4T": {
-                            "upi_id": "janeDoe@upi"
+                        "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
+                            "upi_id": "8507742774@ybl"
                         }
                     }`
                 text = removeWhiteSpaces(text);
                 return text;
-                const master_data = await ajaxGet(`${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOPubKey}`);
+                const master_data = await ajaxGet(`${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
                 if (typeof master_data === "object" && typeof master_data.txs === "object") {
                     let text = '';
                     let tx_cmnt_arr = [];
 
                     for (txt of master_data.txs) {
-                        if (txt.vin[0].addr === token_app.masterFLOPubKey) {
+                        if (txt.vin[0].addr === token_app.masterFLOAddress) {
                             if (txt.floData.length === 0) break;
                             tx_cmnt_arr.push(txt.floData);
                         }
@@ -11657,12 +11664,14 @@ slot[name="tab"]::slotted(.active){
                     showPage(document.getElementById('home_page_btn'), 'home_page')
                 }
 
+                hidePopup()
+
                 pay_through_cashier();
             },
 
             retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals.subAdmins) {
 
-               floCloudAPI.requestObjectData(floGlobals.application, { receiverID, senderIDs });
+                floCloudAPI.requestObjectData(floGlobals.application, { receiverID, senderIDs });
 
                 if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                     await Promise.all([floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS
@@ -11948,7 +11957,7 @@ slot[name="tab"]::slotted(.active){
                         return false;
                     } else {
                         notify(`Transaction successful: ${flo_txid}.`, '', 'fixed', true);
-                        if(payingRequested){
+                        if (payingRequested) {
                             payment_request_status(currentPaymentRequest.requestId, 'APPROVED')
                             showPayRequests()
                         }
@@ -11964,7 +11973,7 @@ slot[name="tab"]::slotted(.active){
 
         async function refresh_balance(refreshButton) {
             try {
-                if(refreshButton){
+                if (refreshButton) {
                     notify('Updating Balance')
                     refreshButton.classList.add('animate-loader')
                 }
@@ -12264,7 +12273,7 @@ slot[name="tab"]::slotted(.active){
                     let { token_txid, withdrawer_upi, withdraw_amount } = usr_withdraws.message;
                     frag.append(render.withdrawActivity(usr_withdraws.vectorClock, token_txid, withdrawer_upi, withdraw_amount))
                 }
-                    
+
                 withdrawActivityContainer.append(frag)
 
                 payCashierActivityContainer.innerHTML = ``;
@@ -12273,14 +12282,14 @@ slot[name="tab"]::slotted(.active){
                     let { receiver_flo_id, upi_txid, amount } = cashier_message.message;
                     frag.append(render.payCashierActivity(cashier_message.vectorClock, receiver_flo_id, upi_txid, amount))
                 }
-                    
+
                 payCashierActivityContainer.append(frag)
 
                 cashierMessageContainer.innerHTML = ``;
                 for (msg of user_msg) {
                     frag.append(render.cashierMessage(msg))
                 }
-                    
+
                 cashierMessageContainer.append(frag)
             } catch (e) {
                 notify(e, 'error');
@@ -12290,7 +12299,7 @@ slot[name="tab"]::slotted(.active){
         async function file_complaint(order_type = '', order_vc = '', custom_msg = '') {
             try {
                 let input_data = {
-                    order_type, order_vc, custom_msg, 
+                    order_type, order_vc, custom_msg,
                 }
 
                 console.log(input_data);
@@ -12331,7 +12340,7 @@ slot[name="tab"]::slotted(.active){
                     datetime: + new Date()
                 }
 
-                request_object.pay_req_id = Crypto.SHA256(JSON.stringify(request_object));    
+                request_object.pay_req_id = Crypto.SHA256(JSON.stringify(request_object));
 
                 floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_REQUEST_PAYMENT,
                     { receiverID: receiver_flo_id }).then(result => {
@@ -12351,18 +12360,18 @@ slot[name="tab"]::slotted(.active){
             try {
                 await Promise.all([
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT,
-                    { receiverID: myFloID }),
+                        { receiverID: myFloID }),
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED,
-                    { receiverID: myFloID }),
+                        { receiverID: myFloID }),
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED,
-                    { receiverID: myFloID })
-                    ])
+                        { receiverID: myFloID })
+                ])
                 const general_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT, "0").reverse(),
-                      declined_reqs_list = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED, "0").reverse(),
-                      approved_reqs_list = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED, "0").reverse();
+                    declined_reqs_list = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED, "0").reverse(),
+                    approved_reqs_list = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED, "0").reverse();
 
                 console.log(general_msg);
-                console.log(approved_reqs_list);                     
+                console.log(approved_reqs_list);
                 console.log(declined_reqs_list);
 
                 let processed_payments_requests = approved_reqs_list.map(m => m.message).concat(declined_reqs_list.map(m => m.message));
@@ -12373,6 +12382,7 @@ slot[name="tab"]::slotted(.active){
                     let { sender_flo_id, receiver_flo_id, amount, datetime, pay_req_id } = m.message;
                     if (processed_payments_requests.includes(pay_req_id || m.message)) continue;
                     console.log(sender_flo_id, amount, datetime, pay_req_id);
+                    if (typeof sender_flo_id !== "string") continue;
                     frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
                 }
                 if (frag.children.length)
@@ -12384,26 +12394,26 @@ slot[name="tab"]::slotted(.active){
             }
         }
         function payment_request_status(req_id = '', status = '') {
-                try {
+            try {
 
-                    if (req_id.lenght < 1) return false;
+                if (req_id.lenght < 1) return false;
 
-                    if (status === 'DECLINED') {
-                        status = token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED;
-                    } else if (status === 'APPROVED') {
-                        status = token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED;
-                    } else return;
+                if (status === 'DECLINED') {
+                    status = token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED;
+                } else if (status === 'APPROVED') {
+                    status = token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED;
+                } else return;
 
-                    floCloudAPI.sendGeneralData(req_id, status, { receiverID: myFloID });
+                floCloudAPI.sendGeneralData(req_id, status, { receiverID: myFloID });
 
-                    console.info(req_id + ' added to declined requests list.');
+                console.info(req_id + ' added to declined requests list.');
 
-                    return true;
+                return true;
 
-                } catch (e) {
-                    console.log(e);
-                }
+            } catch (e) {
+                console.log(e);
             }
+        }
     </script>
 
     <!-- Helpline -->
@@ -12414,7 +12424,7 @@ slot[name="tab"]::slotted(.active){
                 let container = document.getElementById('deposit_complaints_container');
                 container.innerHTML = ``;
                 container.append(render.complaintPlaceholder())
-                
+
                 await clearCashierData();
 
                 await Promise.all([
@@ -12484,7 +12494,7 @@ slot[name="tab"]::slotted(.active){
                             processed: false
                         }
                     }
-                    if (this_user_deposit.length){
+                    if (this_user_deposit.length) {
                         frag.append(render.depositComplaint(userData, cashierData, udc))
                     }
                 }
@@ -12642,7 +12652,7 @@ slot[name="tab"]::slotted(.active){
                     let this_cashier_processed_user_pay_thru_cashier = all_cashier_processed_pay_thru_cashier
                         .filter(f => this_user_pay_thru_cashier_upi_txid_list.includes(f.message.upi_txid));
                     console.log(this_cashier_processed_user_pay_thru_cashier);
-                
+
                     if (this_user_pay_thru_cashier.length) {
                         let { amount, upi_txid, receiver_flo_id } = this_user_pay_thru_cashier[0].message;
                         userData = {
@@ -12668,8 +12678,8 @@ slot[name="tab"]::slotted(.active){
                         }
                     }
                     if (this_user_pay_thru_cashier.length)
-                        frag.append(render.payCashierComplaint(userData, cashierData, udc))                
-                    }
+                        frag.append(render.payCashierComplaint(userData, cashierData, udc))
+                }
 
                 container.innerHTML = ``
                 if (frag.children.length)
@@ -12695,7 +12705,7 @@ slot[name="tab"]::slotted(.active){
                     complaint_type = token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT;
                 } else return false;
 
-                 floCloudAPI.sendGeneralData(input_data.message, complaint_type,
+                floCloudAPI.sendGeneralData(input_data.message, complaint_type,
                     { receiverID: token_app.master_configurations.helplineFloId });
 
                 notify('Complaint marked as resolved.');
