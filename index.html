@@ -304,7 +304,7 @@
         <div id="display_balance">
             <h5>Rupee Balance</h5>
             <h3 id="token_balance">0</h3>
-            <svg class="icon" onclick="refresh_balance()" viewBox="0 0 64 64">
+            <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
                 <title>refresh balance</title>
                 <path d="M60.94,43.13A30.87,30.87,0,1,1,59,17.93" />
                 <polyline points="63.09 0.1 59.3 18.87 40.49 15.08" />
@@ -2090,8 +2090,8 @@ slot[name="tab"]::slotted(.active){
     })
 
     // sm-select
-        const smStripSelect = document.createElement('template')
-        smStripSelect.innerHTML = `
+    const smStripSelect = document.createElement('template')
+    smStripSelect.innerHTML = `
         <style>     
             *{
                 padding: 0;
@@ -2121,56 +2121,57 @@ slot[name="tab"]::slotted(.active){
             }
             slot::slotted(.active){
                 border-radius: 2rem;
+                opacity: 1;
                 background-color: rgba(var(--text), .16);  
             }
         </style>
         <div class="sm-select">
             <slot></slot> 
         </div>`;
-        customElements.define('sm-strip-select', class extends HTMLElement {
-            constructor() {
-                super()
-                this.attachShadow({ mode: 'open' }).append(smStripSelect.content.cloneNode(true))
-            }
-            static get observedAttributes() {
-                return ['value']
-            }
-            get value() {
-                return this.getAttribute('value')
-            }
-            set value(val) {
-                this.setAttribute('value', val)
-            }
-            connectedCallback() {
-                let previousOption,
-                    slot = this.shadowRoot.querySelector('slot');
-                this.addEventListener('optionSelected', e => {
-                    if (previousOption === e.target) return;
-                    if (previousOption)
-                        previousOption.classList.remove('active')
-                    e.target.classList.add('active')
-                    e.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
-                    this.setAttribute('value', e.detail.value)
-                    this.dispatchEvent(new CustomEvent('change', {
-                        bubbles: true,
-                        composed: true
-                    }))
-                    previousOption = e.target;
-                })
-                slot.addEventListener('slotchange', e => {
-                    if (slot.assignedElements()[0]) {
-                        let firstElement = slot.assignedElements()[0];
-                        this.setAttribute('value', firstElement.getAttribute('value'))
-                        firstElement.classList.add('active')
-                        previousOption = firstElement;
-                    }
-                });
-            }
-        })
+    customElements.define('sm-strip-select', class extends HTMLElement {
+        constructor() {
+            super()
+            this.attachShadow({ mode: 'open' }).append(smStripSelect.content.cloneNode(true))
+        }
+        static get observedAttributes() {
+            return ['value']
+        }
+        get value() {
+            return this.getAttribute('value')
+        }
+        set value(val) {
+            this.setAttribute('value', val)
+        }
+        connectedCallback() {
+            let previousOption,
+                slot = this.shadowRoot.querySelector('slot');
+            this.addEventListener('optionSelected', e => {
+                if (previousOption === e.target) return;
+                if (previousOption)
+                    previousOption.classList.remove('active')
+                e.target.classList.add('active')
+                e.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+                this.setAttribute('value', e.detail.value)
+                this.dispatchEvent(new CustomEvent('change', {
+                    bubbles: true,
+                    composed: true
+                }))
+                previousOption = e.target;
+            })
+            slot.addEventListener('slotchange', e => {
+                if (slot.assignedElements()[0]) {
+                    let firstElement = slot.assignedElements()[0];
+                    this.setAttribute('value', firstElement.getAttribute('value'))
+                    firstElement.classList.add('active')
+                    previousOption = firstElement;
+                }
+            });
+        }
+    })
 
-        // sm-option
-        const smStripOption = document.createElement('template')
-        smStripOption.innerHTML = `
+    // sm-option
+    const smStripOption = document.createElement('template')
+    smStripOption.innerHTML = `
         <style>     
             *{
                 padding: 0;
@@ -2187,6 +2188,8 @@ slot[name="tab"]::slotted(.active){
                 outline: none;
                 border-radius: 2rem;
                 text-transform: capitalize;
+                border: solid 1px rgba(var(--text), .16);
+                opacity: 0.9;
             }
             .sm-option:hover{
                 background: rgba(var(--text), 0.1);
@@ -2195,13 +2198,25 @@ slot[name="tab"]::slotted(.active){
         <div class="sm-option" tabindex="0">
             <slot></slot> 
         </div>`;
-        customElements.define('sm-strip-option', class extends HTMLElement {
-            constructor() {
-                super()
-                this.attachShadow({ mode: 'open' }).append(smStripOption.content.cloneNode(true))
-            }
-            connectedCallback() {
-                this.addEventListener('click', e => {
+    customElements.define('sm-strip-option', class extends HTMLElement {
+        constructor() {
+            super()
+            this.attachShadow({ mode: 'open' }).append(smStripOption.content.cloneNode(true))
+        }
+        connectedCallback() {
+            this.addEventListener('click', e => {
+                let optionSelected = new CustomEvent('optionSelected', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        text: this.textContent,
+                        value: this.getAttribute('value')
+                    }
+                })
+                this.dispatchEvent(optionSelected)
+            })
+            if (this.hasAttribute('default')) {
+                setTimeout(() => {
                     let optionSelected = new CustomEvent('optionSelected', {
                         bubbles: true,
                         composed: true,
@@ -2211,22 +2226,10 @@ slot[name="tab"]::slotted(.active){
                         }
                     })
                     this.dispatchEvent(optionSelected)
-                })
-                if (this.hasAttribute('default')) {
-                    setTimeout(() => {
-                        let optionSelected = new CustomEvent('optionSelected', {
-                            bubbles: true,
-                            composed: true,
-                            detail: {
-                                text: this.textContent,
-                                value: this.getAttribute('value')
-                            }
-                        })
-                        this.dispatchEvent(optionSelected)
-                    }, 0);
-                }
+                }, 0);
             }
-        })
+        }
+    })
 
     </script>
     <script id="init_lib">
@@ -11961,8 +11964,12 @@ slot[name="tab"]::slotted(.active){
             }
         }
 
-        async function refresh_balance() {
+        async function refresh_balance(refreshButton) {
             try {
+                if(refreshButton){
+                    notify('Updating Balance')
+                    refreshButton.classList.add('animate-loader')
+                }
                 const current_token_balance = document.getElementById('token_balance').textContent;
                 if (typeof current_token_balance == "string") {
                     const get_user_balance = await ajaxGet('https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' + myFloID)
@@ -11972,6 +11979,10 @@ slot[name="tab"]::slotted(.active){
                         document.getElementById('token_balance').textContent
                             = get_user_balance.balance;
                     }
+                }
+                if (refreshButton) {
+                    notify('Balance Updated')
+                    refreshButton.classList.remove('animate-loader')
                 }
                 return true;
             } catch (error) {
