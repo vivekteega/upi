@@ -744,46 +744,18 @@
             <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
         </section>
     </main>
-    <script id="floGlobals">
-        /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
-        const floGlobals = {
 
-            //Required for all
-            blockchain: "FLO",
-
-            //Required for blockchain API operators
-            apiURL: {
-                FLO: ['https://explorer.mediciland.com/', 'https://livenet.flocha.in/', 'https://flosight.duckdns.org/', 'http://livenet-explorer.floexperiments.com/'],
-                FLO_TEST: ['https://testnet-flosight.duckdns.org/', 'https://testnet.flocha.in/']
-            },
-            adminID: "F7HEAV9226tqXtRk34XrA9nZCb8ZcbVJt1",
-            sendAmt: 0.001,
-            fee: 0.0005,
-
-            //Required for Supernode operations
-            SNStorageID: "FEzk75EGMPEQMrCuPosGiwuK162hcEu49E",
-            supernodes: {}, //each supnernode must be stored as floID : {uri:<uri>,pubKey:<publicKey>}
-
-            //for cloud apps
-            subAdmins: [],
-            application: "rupeeTokenApp",//rupeeTokenApp
-            vectorClock: {},
-            appObjects: {},
-            generalData: {},
-            generalVC: {}
-        }
-    </script>
 
     <script id="onLoadStartUp">
         function onLoadStartUp() {
             showPopup('main_loader', 'no')
             console.log("Starting the app! Please Wait!")
-            floDapps.launchStartUp().then(result => {
+            floDapps.launchStartUp().then( async result => {
                 console.log(result)
-                console.log(`Welcome ${myFloID}`)
-                token_app.actions.doShreeGanesh();
+                await token_app.actions.doShreeGanesh();
                 refresh_balance()
                 document.getElementById('user_flo_id').textContent = myFloID
+                hidePopup()
             }).catch(error => console.error(error))
         }
     </script>
@@ -1370,20 +1342,15 @@
         }
 
         function formatedTime(time) {
-            try {
-                let timeFrag = new Date(parseInt(time)).toString().split(' '),
-                    day = timeFrag[0],
-                    month = timeFrag[1],
-                    date = timeFrag[2],
-                    year = timeFrag[3],
-                    hours = timeFrag[4].slice(0, timeFrag[4].lastIndexOf(':')),
-                    finalTime = '';
-                parseInt(hours.split(':')[0]) > 12 ? finalTime = 'PM' : finalTime = 'AM'
-                return `${hours} ${finalTime} ${day} ${date} ${month} ${year}`;
-            } catch(e) {
-                console.error(e);
-                return time;
-            }
+            let timeFrag = new Date(parseInt(time)).toString().split(' '),
+                day = timeFrag[0],
+                month = timeFrag[1],
+                date = timeFrag[2],
+                year = timeFrag[3],
+                hours = timeFrag[4].slice(0, timeFrag[4].lastIndexOf(':')),
+                finalTime = '';
+            parseInt(hours.split(':')[0]) > 12 ? finalTime = 'PM' : finalTime = 'AM'
+            return `${hours} ${finalTime} ${day} ${date} ${month} ${year}`
         }
 
         function copyToClipboard(parent) {
@@ -2231,6 +2198,35 @@ slot[name="tab"]::slotted(.active){
         }
     })
 
+    </script>
+    <script id="floGlobals">
+        /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
+        const floGlobals = {
+
+            //Required for all
+            blockchain: "FLO",
+
+            //Required for blockchain API operators
+            apiURL: {
+                FLO: ['https://explorer.mediciland.com/', 'https://livenet.flocha.in/', 'https://flosight.duckdns.org/', 'http://livenet-explorer.floexperiments.com/'],
+                FLO_TEST: ['https://testnet-flosight.duckdns.org/', 'https://testnet.flocha.in/']
+            },
+            adminID: "F7HEAV9226tqXtRk34XrA9nZCb8ZcbVJt1",
+            sendAmt: 0.001,
+            fee: 0.0005,
+
+            //Required for Supernode operations
+            SNStorageID: "FEzk75EGMPEQMrCuPosGiwuK162hcEu49E",
+            supernodes: {}, //each supnernode must be stored as floID : {uri:<uri>,pubKey:<publicKey>}
+
+            //for cloud apps
+            subAdmins: [],
+            application: "RUPEE_TOKEN_APP_TEST8",//rupeeTokenApp
+            vectorClock: {},
+            appObjects: {},
+            generalData: {},
+            generalVC: {}
+        }
     </script>
     <script id="init_lib">
         //All util libraries required for Standard operations (DO NOT EDIT ANY)
@@ -11475,7 +11471,7 @@ slot[name="tab"]::slotted(.active){
 
         const token_app = {
             master_configurations: {},
-            //masterFLOAddress: 'FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky',
+            masterFLOPubKey: '03BA851FE0F28AA156B0D6E00784919133D1E98284F9A94544B470DBBFB3D90EDD',
             actions: {},
             blocked_flo_ids: [],
         };
@@ -11483,40 +11479,43 @@ slot[name="tab"]::slotted(.active){
         token_app.actions = {
 
             parse_flo_comments: async function () {
-                text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
+                text = `masterFLOPubKey=03BA851FE0F28AA156B0D6E00784919133D1E98284F9A94544B470DBBFB3D90EDD
                     #!#CURRENCY=INR
-                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST1
-                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST1
-                    #!#TYPE_MSGES=USER_MESSAGES_TEST1
-                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST1
-                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST1
-                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST1
-                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST1
-                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST1
-                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST1
-                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST1
-                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST1
-                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST1
-                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST1
-                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST1
-                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST1
+                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST
+                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST
+                    #!#TYPE_MSGES=USER_MESSAGES_TEST
+                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS
+                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS
+                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT
+                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT
+                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT
+                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT
+                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER
+                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT
+                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED
+                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED
                     #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
                     #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                     #!#cashiers=
                     {
                         "FByrY4vc1NRfbkqAqABtUyhhNzMZsKUjqr": {
-                            "upi_id": "8507742774@ybl"
+                            "upi_id": "johnDoe@upi"
+                        },
+                        "FHU7dfBVDLZwp3fLRJ5cr7nEABBeeU9Z4T": {
+                            "upi_id": "janeDoe@upi"
                         }
                     }`
                 text = removeWhiteSpaces(text);
                 return text;
-                const master_data = await ajaxGet(`${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
+                const master_data = await ajaxGet(`${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOPubKey}`);
                 if (typeof master_data === "object" && typeof master_data.txs === "object") {
                     let text = '';
                     let tx_cmnt_arr = [];
 
                     for (txt of master_data.txs) {
-                        if (txt.vin[0].addr === token_app.masterFLOAddress) {
+                        if (txt.vin[0].addr === token_app.masterFLOPubKey) {
                             if (txt.floData.length === 0) break;
                             tx_cmnt_arr.push(txt.floData);
                         }
@@ -11656,8 +11655,6 @@ slot[name="tab"]::slotted(.active){
                     userType.textContent = 'User'
                     showPage(document.getElementById('home_page_btn'), 'home_page')
                 }
-
-                hidePopup()
 
                 pay_through_cashier();
             },
@@ -12375,7 +12372,6 @@ slot[name="tab"]::slotted(.active){
                     let { sender_flo_id, receiver_flo_id, amount, datetime, pay_req_id } = m.message;
                     if (processed_payments_requests.includes(pay_req_id || m.message)) continue;
                     console.log(sender_flo_id, amount, datetime, pay_req_id);
-                    if(typeof sender_flo_id!=="string") continue;
                     frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
                 }
                 if (frag.children.length)
