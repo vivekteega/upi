@@ -304,7 +304,7 @@
         <div id="display_balance">
             <h5>Rupee Balance</h5>
             <h3 id="token_balance">0</h3>
-            <svg class="icon" onclick="refresh_balance()" viewBox="0 0 64 64">
+            <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
                 <title>refresh balance</title>
                 <path d="M60.94,43.13A30.87,30.87,0,1,1,59,17.93" />
                 <polyline points="63.09 0.1 59.3 18.87 40.49 15.08" />
@@ -744,46 +744,18 @@
             <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
         </section>
     </main>
-    <script id="floGlobals">
-        /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
-        const floGlobals = {
 
-            //Required for all
-            blockchain: "FLO",
-
-            //Required for blockchain API operators
-            apiURL: {
-                FLO: ['https://explorer.mediciland.com/', 'https://livenet.flocha.in/', 'https://flosight.duckdns.org/', 'http://livenet-explorer.floexperiments.com/'],
-                FLO_TEST: ['https://testnet-flosight.duckdns.org/', 'https://testnet.flocha.in/']
-            },
-            adminID: "F7HEAV9226tqXtRk34XrA9nZCb8ZcbVJt1",
-            sendAmt: 0.001,
-            fee: 0.0005,
-
-            //Required for Supernode operations
-            SNStorageID: "FEzk75EGMPEQMrCuPosGiwuK162hcEu49E",
-            supernodes: {}, //each supnernode must be stored as floID : {uri:<uri>,pubKey:<publicKey>}
-
-            //for cloud apps
-            subAdmins: [],
-            application: "RUPEE_TOKEN_APP_TEST8",//rupeeTokenApp
-            vectorClock: {},
-            appObjects: {},
-            generalData: {},
-            generalVC: {}
-        }
-    </script>
 
     <script id="onLoadStartUp">
         function onLoadStartUp() {
             showPopup('main_loader', 'no')
             console.log("Starting the app! Please Wait!")
-            floDapps.launchStartUp().then(result => {
+            floDapps.launchStartUp().then( async result => {
                 console.log(result)
-                console.log(`Welcome ${myFloID}`)
-                token_app.actions.doShreeGanesh();
+                await token_app.actions.doShreeGanesh();
                 refresh_balance()
                 document.getElementById('user_flo_id').textContent = myFloID
+                hidePopup()
             }).catch(error => console.error(error))
         }
     </script>
@@ -2226,6 +2198,35 @@ slot[name="tab"]::slotted(.active){
         }
     })
 
+    </script>
+    <script id="floGlobals">
+        /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
+        const floGlobals = {
+
+            //Required for all
+            blockchain: "FLO",
+
+            //Required for blockchain API operators
+            apiURL: {
+                FLO: ['https://explorer.mediciland.com/', 'https://livenet.flocha.in/', 'https://flosight.duckdns.org/', 'http://livenet-explorer.floexperiments.com/'],
+                FLO_TEST: ['https://testnet-flosight.duckdns.org/', 'https://testnet.flocha.in/']
+            },
+            adminID: "F7HEAV9226tqXtRk34XrA9nZCb8ZcbVJt1",
+            sendAmt: 0.001,
+            fee: 0.0005,
+
+            //Required for Supernode operations
+            SNStorageID: "FEzk75EGMPEQMrCuPosGiwuK162hcEu49E",
+            supernodes: {}, //each supnernode must be stored as floID : {uri:<uri>,pubKey:<publicKey>}
+
+            //for cloud apps
+            subAdmins: [],
+            application: "RUPEE_TOKEN_APP_TEST8",//rupeeTokenApp
+            vectorClock: {},
+            appObjects: {},
+            generalData: {},
+            generalVC: {}
+        }
     </script>
     <script id="init_lib">
         //All util libraries required for Standard operations (DO NOT EDIT ANY)
@@ -11655,8 +11656,6 @@ slot[name="tab"]::slotted(.active){
                     showPage(document.getElementById('home_page_btn'), 'home_page')
                 }
 
-                hidePopup()
-
                 pay_through_cashier();
             },
 
@@ -11962,8 +11961,12 @@ slot[name="tab"]::slotted(.active){
             }
         }
 
-        async function refresh_balance() {
+        async function refresh_balance(refreshButton) {
             try {
+                if(refreshButton){
+                    notify('Updating Balance')
+                    refreshButton.classList.add('animate-loader')
+                }
                 const current_token_balance = document.getElementById('token_balance').textContent;
                 if (typeof current_token_balance == "string") {
                     const get_user_balance = await ajaxGet('https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' + myFloID)
@@ -11973,6 +11976,10 @@ slot[name="tab"]::slotted(.active){
                         document.getElementById('token_balance').textContent
                             = get_user_balance.balance;
                     }
+                }
+                if (refreshButton) {
+                    notify('Balance Updated')
+                    refreshButton.classList.remove('animate-loader')
                 }
                 return true;
             } catch (error) {
