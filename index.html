@@ -766,7 +766,7 @@
 
             //for cloud apps
             subAdmins: [],
-            application: "RUPEE_TOKEN_APP_TEST8",//rupeeTokenApp
+            application: "rupeeTokenApp",//rupeeTokenApp
             vectorClock: {},
             appObjects: {},
             generalData: {},
@@ -1370,15 +1370,20 @@
         }
 
         function formatedTime(time) {
-            let timeFrag = new Date(parseInt(time)).toString().split(' '),
-                day = timeFrag[0],
-                month = timeFrag[1],
-                date = timeFrag[2],
-                year = timeFrag[3],
-                hours = timeFrag[4].slice(0, timeFrag[4].lastIndexOf(':')),
-                finalTime = '';
-            parseInt(hours.split(':')[0]) > 12 ? finalTime = 'PM' : finalTime = 'AM'
-            return `${hours} ${finalTime} ${day} ${date} ${month} ${year}`
+            try {
+                let timeFrag = new Date(parseInt(time)).toString().split(' '),
+                    day = timeFrag[0],
+                    month = timeFrag[1],
+                    date = timeFrag[2],
+                    year = timeFrag[3],
+                    hours = timeFrag[4].slice(0, timeFrag[4].lastIndexOf(':')),
+                    finalTime = '';
+                parseInt(hours.split(':')[0]) > 12 ? finalTime = 'PM' : finalTime = 'AM'
+                return `${hours} ${finalTime} ${day} ${date} ${month} ${year}`;
+            } catch(e) {
+                console.error(e);
+                return time;
+            }
         }
 
         function copyToClipboard(parent) {
@@ -11467,7 +11472,7 @@ slot[name="tab"]::slotted(.active){
 
         const token_app = {
             master_configurations: {},
-            masterFLOPubKey: '03BA851FE0F28AA156B0D6E00784919133D1E98284F9A94544B470DBBFB3D90EDD',
+            //masterFLOAddress: 'FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky',
             actions: {},
             blocked_flo_ids: [],
         };
@@ -11475,43 +11480,40 @@ slot[name="tab"]::slotted(.active){
         token_app.actions = {
 
             parse_flo_comments: async function () {
-                text = `masterFLOPubKey=03BA851FE0F28AA156B0D6E00784919133D1E98284F9A94544B470DBBFB3D90EDD
+                text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
                     #!#CURRENCY=INR
-                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST
-                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST
-                    #!#TYPE_MSGES=USER_MESSAGES_TEST
-                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS
-                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS
-                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT
-                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT
-                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT
-                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT
-                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER
-                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT
-                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER
-                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT
-                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED
-                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED
+                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST1
+                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST1
+                    #!#TYPE_MSGES=USER_MESSAGES_TEST1
+                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST1
+                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST1
+                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST1
+                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST1
+                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST1
+                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST1
+                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST1
+                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST1
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST1
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST1
+                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST1
+                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST1
                     #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
                     #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                     #!#cashiers=
                     {
                         "FByrY4vc1NRfbkqAqABtUyhhNzMZsKUjqr": {
-                            "upi_id": "johnDoe@upi"
-                        },
-                        "FHU7dfBVDLZwp3fLRJ5cr7nEABBeeU9Z4T": {
-                            "upi_id": "janeDoe@upi"
+                            "upi_id": "8507742774@ybl"
                         }
                     }`
                 text = removeWhiteSpaces(text);
                 return text;
-                const master_data = await ajaxGet(`${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOPubKey}`);
+                const master_data = await ajaxGet(`${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
                 if (typeof master_data === "object" && typeof master_data.txs === "object") {
                     let text = '';
                     let tx_cmnt_arr = [];
 
                     for (txt of master_data.txs) {
-                        if (txt.vin[0].addr === token_app.masterFLOPubKey) {
+                        if (txt.vin[0].addr === token_app.masterFLOAddress) {
                             if (txt.floData.length === 0) break;
                             tx_cmnt_arr.push(txt.floData);
                         }
@@ -12362,6 +12364,7 @@ slot[name="tab"]::slotted(.active){
                     let { sender_flo_id, receiver_flo_id, amount, datetime, pay_req_id } = m.message;
                     if (processed_payments_requests.includes(pay_req_id || m.message)) continue;
                     console.log(sender_flo_id, amount, datetime, pay_req_id);
+                    if(typeof sender_flo_id!=="string") continue;
                     frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
                 }
                 if (frag.children.length)
