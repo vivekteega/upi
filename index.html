@@ -772,7 +772,7 @@
 
             //for cloud apps
             subAdmins: [],
-            application: "rupeeTokenApp",//rupeeTokenApp
+            application: "rupeeTokenAppTest1",//rupeeTokenApp
             vectorClock: {},
             appObjects: {},
             generalData: {},
@@ -11492,21 +11492,21 @@ slot[name="tab"]::slotted(.active){
             parse_flo_comments: async function () {
                 text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
                     #!#CURRENCY=INR
-                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST1
-                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST1
-                    #!#TYPE_MSGES=USER_MESSAGES_TEST1
-                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST1
-                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST1
-                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST1
-                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST1
-                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST1
-                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST1
-                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST1
-                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST1
-                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST1
-                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST1
-                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST1
-                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST1
+                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST2
+                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST2
+                    #!#TYPE_MSGES=USER_MESSAGES_TEST2
+                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST2
+                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST2
+                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST2
+                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST2
+                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST2
+                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST2
+                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST2
+                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST2
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST2
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST2
+                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST2
+                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST2
                     #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
                     #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                     #!#cashiers=
@@ -11639,6 +11639,7 @@ slot[name="tab"]::slotted(.active){
                     })
                     let cashierList = ``,
                         cashierSelect = document.getElementById('select_cashier')
+                        cashierList += `<sm-strip-option value = "">Select Cashier...</sm-strip-option>`;
                     for (cashier in token_app.master_configurations.cashiers)
                         cashierList += `<sm-strip-option value = "${cashier}">${cashier}</sm-strip-option>`
                     cashierSelect.innerHTML = cashierList;
@@ -11940,8 +11941,21 @@ slot[name="tab"]::slotted(.active){
                     const sender_token_balance = await ajaxGet(token_balance_url);
                     let err_msg = '';
 
-                    if (typeof sender_token_balance !== "object"
-                        || typeof sender_token_balance.balance !== "number"
+                    if(token_receiver.length<1 || !floCrypto.validateAddr(token_receiver)) {
+                        err_msg = `Invalid receiver FLO address.`;
+                        notify(err_msg, 'error');
+                        hidePopup();
+                        return false;
+                    }
+
+                    if (typeof sender_token_balance !== "object") {
+                        err_msg = `Failed to load Sender balance.`;
+                        notify(err_msg, 'error');
+                        hidePopup()
+                        return false;
+                    }
+
+                    if (typeof sender_token_balance.balance !== "number"
                         || sender_token_balance.balance < token_amount) {
                         err_msg = `Sender has insufficient ${token_name_radio} balance.`;
                         notify(err_msg, 'error');
@@ -12223,6 +12237,7 @@ slot[name="tab"]::slotted(.active){
                     let paid_cashier_upi_txid = document.getElementById('paid_cashier_upi_txid').value;
                     paid_cashier_upi_txid = toAlphanumeric(paid_cashier_upi_txid);
                     if (recvr_id.length < 1
+                        || floCrypto.validateAddr(recvr_id)
                         || amount_to_pay <= 0
                         || paid_cashier_upi_txid.length < 1)
                         return notify("Incomplete information", 'error', '', true);
@@ -12331,7 +12346,9 @@ slot[name="tab"]::slotted(.active){
 
                 if (typeof receiver_flo_id !== "string"
                     || receiver_flo_id.length < 1
-                    || amount <= 0) return notify('Invalid or incomplete data provided.', 'error');
+                    || amount <= 0
+                    || !floCrypto.validateAddr(receiver_flo_id)) 
+                    return notify('Invalid or incomplete data provided.', 'error');
 
                 let request_object = {
                     sender_flo_id: myFloID,
