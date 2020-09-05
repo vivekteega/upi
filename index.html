@@ -11513,7 +11513,22 @@ slot[name="tab"]::slotted(.active){
                     {
                         "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
                             "upi_id": "8507742774@ybl"
-                        }
+                        },
+                        "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
+                            "upi_id": "8340617958@ybl"
+                        },
+                        "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
+                            "upi_id": "8902496422@ybl"
+                        },
+                        "FBun3694ZdxmD66os9oL5DxMrif3vyVjT3": {
+                            "upi_id": "7004801428@ybl"
+                        },
+                        "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
+                            "upi_id": "aakriti1705sinha@okicici"
+                        },
+                        "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
+                            "upi_id": "krishraj1012-2@okicici"
+                        },
                     }`
                 text = removeWhiteSpaces(text);
                 return text;
@@ -12237,7 +12252,7 @@ slot[name="tab"]::slotted(.active){
                     let paid_cashier_upi_txid = document.getElementById('paid_cashier_upi_txid').value;
                     paid_cashier_upi_txid = toAlphanumeric(paid_cashier_upi_txid);
                     if (recvr_id.length < 1
-                        || floCrypto.validateAddr(recvr_id)
+                        || !floCrypto.validateAddr(recvr_id)
                         || amount_to_pay <= 0
                         || paid_cashier_upi_txid.length < 1)
                         return notify("Incomplete information", 'error', '', true);
