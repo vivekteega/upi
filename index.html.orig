@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blockchain UPI</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
 </head>
 
@@ -45,7 +43,7 @@
                 <title>Loader</title>
                 <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
             </svg>
-            <h4 id="tip_container">Loading BLOCKCHAIN UPI </h4>
+            <h4 id="tip_container">Loading Blockchain UPI </h4>
             <button onclick="signOut()">Reset</button>
         </div>
     </div>
@@ -76,10 +74,10 @@
                     <line x1="64" y1="0" x2="0" y2="64" />
                     <line x1="64" y1="64" x2="0" y2="0" />
                 </svg>
-                <h4>Transfer Rupee</h4>
+                <h4>Send Rupee</h4>
                 <button id="send_tokens_btn" class="action expand" type="submit" disabled>
                     <h4 class="expand primary-btn">
-                        transfer
+                        Send
                     </h4>
                     <svg viewBox="0 0 73 73" class="loader">
                         <path
@@ -88,8 +86,8 @@
                 </button>
             </div>
             <p>
-                Transfer your deposited Rupee tokens to any FLO address.<br>
-                *Requires token to be deposited first.
+                Send Rupees to any FLO address.<br>
+                *Requires Rupee to be deposited first.
             </p>
             <form autocomplete="off" onsubmit="return false">
                 <label class="input">
@@ -123,16 +121,31 @@
                 </button>
             </div>
             <form id="deposit_amount_section" autocomplete="off" onsubmit="return false">
+<<<<<<< HEAD
+            <p>
+                Deposit rupee through UPI to use as Digital currency powered by blockchain.
+            </p>
+            <label class="input">
+=======
                 <p>
-                    Deposit rupee through UPI to use as Digital currency powered by blockchain.
+                    Deposit rupee through UPI to use as digital currency powered by FLO blockchain.
                 </p>
                 <label class="input">
+>>>>>>> 0e71a98c861cee522e666f8addb47b4806510ee0
                     <input id="token_amount_to_buy" inputmode="numeric" type="number" min="1" required>
                     <div class="placeholder">Amount</div>
                 </label>
             </form>
             <form id="upi_txId_section" class="hide-completely top-padding" autocomplete="off" onsubmit="return false">
-                <p id="send_cash_to_deposit"></p>
+                <p id="send_amount_to_deposit"></p>
+                <div class="copy-row">
+                    <h4 id="send_cash_to_deposit" class="copy"></h4>
+                    <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                        <title>Copy</title>
+                        <rect x="16" y="16" width="48" height="48" rx="6" />
+                        <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                    </svg>
+                </div>
                 <label class="input">
                     <input id="deposited_rupee_txId" required disabled>
                     <div class="placeholder">UPI TxID</div>
@@ -160,7 +173,7 @@
                 </button>
             </div>
             <p>
-                Withdraw or redeem your rupee tokens back to your specified UPI address.
+                Withdraw or redeem your Rupee back to your specified UPI address.
             </p>
             <form autocomplete="off" onsubmit="return false">
                 <label class="input">
@@ -183,18 +196,18 @@
                     <line x1="64" y1="64" x2="0" y2="0" />
                 </svg>
                 <h4>Request rupee</h3>
-                    <button id="request_rupee_btn" class="action expand" type="submit" disabled>
-                        <h4 class="primary-btn expand">
-                            request
-                        </h4>
-                        <svg viewBox="0 0 73 73" class="loader">
-                            <path
-                                d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                        </svg>
-                    </button>
+                <button id="request_rupee_btn" class="action expand" type="submit" disabled>
+                    <h4 class="primary-btn expand">
+                        request
+                    </h4>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path
+                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
+                </button>
             </div>
             <p>
-                Request for rupee tokens from other's using FLO address.
+                Request Rupee from other's using FLO address.
             </p>
             <form autocomplete="off" onsubmit="return false">
                 <label class="input">
@@ -228,8 +241,8 @@
                 </button>
             </div>
             <p>
-                Don't have enough token balance? Pay to our cashier through UPI and your cash will be
-                transfered as Rupee tokens.
+                Don't have enough Rupee balance? Pay to our cashier through UPI and your cash will be
+                sent as Rupee.
             </p>
             <p id="pay_cashier_info"></p>
             <form autocomplete="off" onsubmit="return false">
@@ -284,15 +297,6 @@
                 <h5>RanchiMall</h5>
                 <h4>BLOCKCHAIN UPI</h4>
             </span>
-        </div>
-        <div id="display_balance">
-            <h5>Rupee Balance</h5>
-            <h4 id="token_balance">0</h4>
-            <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
-                <title>refresh balance</title>
-                <path d="M60.94,43.13A30.87,30.87,0,1,1,59,17.93" />
-                <polyline points="63.09 0.1 59.3 18.87 40.49 15.08" />
-            </svg>
         </div>
     </header>
     <nav id="navbar" class="hide-completely">
@@ -379,7 +383,7 @@
             </svg>
             <h5>Complaints</h5>
         </div>
-        <div title="profile page" class="navbar-item" onclick="showPage(this, 'profile_page')">
+        <div title="profile page" class="navbar-item" onclick="showPage(this, 'settings_page')">
             <svg class="icon" id="profile_pic" viewBox="0 0 49.54 61.12">
                 <path
                     d="M49.34,19.94c7.73,0,13.26,5.26,13.26,14S58.18,50.14,49.71,50.08,36.82,42.66,36.82,33.93s5.53-14,13.26-14"
@@ -388,79 +392,107 @@
                     d="M43.83,52c-2.34,4.38-9.77,6.64-15.31,9.06-2.29,1-4.11,13-1.53,13a46.06,46.06,0,0,0,23.51,6,40.48,40.48,0,0,0,22.51-6c2.58,0,.76-12-1.53-13-5.54-2.42-13-4.68-15.31-9.06"
                     transform="translate(-25.23 -19.44)" />
             </svg>
-            <h5 id="user_type">Cashier</h5>
+            <h5>Settings</h5>
         </div>
     </nav>
     <main class="hide-completely">
         <section class="page hide-completely" id="home_page">
-            <h1>What is Blockchain UPI?</h1>
+            <!--<h1>What is Blockchain UPI?</h1>
             <p>
-                Your Rupee balance is digital footprint of actual cash.<br> Deposit, Withdraw or Pay Rupee digitally
-                using a FLO Blockchain address.
-            </p>
+                Your Rupee balance is digital representation of actual cash on FLO Blockchain. 
+            </p>-->
 
-            <h4>Go ahead and try something</h4>
-
-            <div class="options-tab">
-                <div class="option" onclick="showPopup('cash_transfer')">
-                    <svg class="icon" viewBox="0 0 64 64">
-                        <title>transfer</title>
-                        <polyline
-                            points="17.04 35.97 14.57 33.5 40.15 7.9 32.75 0.5 55.52 0.5 55.52 23.28 48.12 15.87 23.86 40.14 15.88 48.13 8.48 40.72 8.48 63.5 31.25 63.5 23.85 56.1 49.43 30.5 46.96 28.03" />
-                    </svg>
-                    <h4>Transfer Rupee</h4>
-                </div>
-                <div class="option" onclick="showPopup('deposit_rupee')">
-                    <svg class="icon banking" viewBox="0 0 52 51.5">
-                        <line x1="4" y1="28" x2="4" y2="19.5" />
-                        <polyline points="4 6 4 1 51 1 51 48 4 48 4 41.5" />
-                        <line x1="9" y1="50" x2="18" y2="50" />
-                        <line x1="36" y1="50" x2="45" y2="50" />
-                        <circle cx="27.5" cy="30" r="9.5" />
-                        <circle cx="27.5" cy="30" r="3.5" />
-                        <rect x="1" y="6" width="6" height="13.5" rx="2.76" />
-                        <rect x="1" y="28" width="6" height="13.5" rx="2.76" />
-                    </svg>
-                    <h4>deposit rupee</h4>
-                </div>
-                <div class="option" onclick="showPopup('withdraw_rupee')">
-                    <svg class="icon banking" viewBox="0 0 52 60">
-                        <line x1="4" y1="33.5" x2="4" y2="25" />
-                        <polyline points="41.52 6.5 51 6.5 51 53.5 41.69 53.5" />
-                        <line x1="9" y1="55.5" x2="14" y2="55.5" />
-                        <line x1="43" y1="55.5" x2="45" y2="55.5" />
-                        <rect x="1" y="11.5" width="6" height="13.5" rx="2.76" />
-                        <rect x="1" y="33.5" width="6" height="13.5" rx="2.76" />
-                        <polyline points="3.81 11.5 3.81 6.5 41.5 1 41.69 59 3.81 53.5 3.81 47" />
-                        <path
-                            d="M35.64,39.19c0,6.31-3.25,11.45-7.22,11.48s-7-4.92-7-11.07,3.13-11.29,7.05-11.48S35.64,32.88,35.64,39.19Z"
-                            transform="translate(-6 -2)" />
-                        <path
-                            d="M31.06,39.32c0,2.31-1.19,4.2-2.64,4.23s-2.62-1.79-2.62-4.08S27,35.3,28.42,35.24,31.06,37,31.06,39.32Z"
-                            transform="translate(-6 -2)" />
-                    </svg>
-                    <h4>Withdraw rupee</h4>
-                </div>
-                <div class="option" onclick="showPopup('request_rupee')">
-                    <svg class="icon" viewBox="0 0 64 64">
-                        <title>request</title>
-                        <path
-                            d="M24,26.19a8.67,8.67,0,0,1-.24-3.61,8.34,8.34,0,0,1,16.59,1.27c0,8.35-8.66,8.16-8.34,11.58,0,.09,0,4.73,0,4.73" />
-                        <line x1="32" y1="47.08" x2="32" y2="48.99" />
-                        <path
-                            d="M32,.5h0A31.5,31.5,0,0,1,63.5,32v0A31.5,31.5,0,0,1,32,63.5H2.48a2,2,0,0,1-2-2V32A31.5,31.5,0,0,1,32,.5Z" />
-                    </svg>
-                    <h4>Request rupee</h4>
-                </div>
-                <div class="option" onclick="showPopup('pay_anyone')">
-                    <svg class="icon" viewBox="0 0 64 64">
-                        <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
-                        <rect height="64" width="64" rx="8"></rect>
-                    </svg>
-                    <h4>pay through cashier</h4>
-                    </a>
-                </div>
+            <div class="left">
+                <h4>Rupee actions</h4>
+                <sm-carousel class="options-tab">
+                    <div class="option" onclick="showPopup('cash_transfer')">
+                        <svg class="icon" viewBox="0 0 64 64">
+                            <path d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68"/>
+                           </svg>
+                        <h4>Send</h4>
+                    </div>
+                    <div class="option" onclick="showPopup('deposit_rupee')">
+                        <svg class="icon banking" viewBox="0 0 52 51.5">
+                            <line x1="4" y1="28" x2="4" y2="19.5" />
+                            <polyline points="4 6 4 1 51 1 51 48 4 48 4 41.5" />
+                            <line x1="9" y1="50" x2="18" y2="50" />
+                            <line x1="36" y1="50" x2="45" y2="50" />
+                            <circle cx="27.5" cy="30" r="9.5" />
+                            <circle cx="27.5" cy="30" r="3.5" />
+                            <rect x="1" y="6" width="6" height="13.5" rx="2.76" />
+                            <rect x="1" y="28" width="6" height="13.5" rx="2.76" />
+                        </svg>
+                        <h4>deposit</h4>
+                    </div>
+                    <div class="option" onclick="showPopup('withdraw_rupee')">
+                        <svg class="icon banking" viewBox="0 0 52 60">
+                            <line x1="4" y1="33.5" x2="4" y2="25" />
+                            <polyline points="41.52 6.5 51 6.5 51 53.5 41.69 53.5" />
+                            <line x1="9" y1="55.5" x2="14" y2="55.5" />
+                            <line x1="43" y1="55.5" x2="45" y2="55.5" />
+                            <rect x="1" y="11.5" width="6" height="13.5" rx="2.76" />
+                            <rect x="1" y="33.5" width="6" height="13.5" rx="2.76" />
+                            <polyline points="3.81 11.5 3.81 6.5 41.5 1 41.69 59 3.81 53.5 3.81 47" />
+                            <path
+                                d="M35.64,39.19c0,6.31-3.25,11.45-7.22,11.48s-7-4.92-7-11.07,3.13-11.29,7.05-11.48S35.64,32.88,35.64,39.19Z"
+                                transform="translate(-6 -2)" />
+                            <path
+                                d="M31.06,39.32c0,2.31-1.19,4.2-2.64,4.23s-2.62-1.79-2.62-4.08S27,35.3,28.42,35.24,31.06,37,31.06,39.32Z"
+                                transform="translate(-6 -2)" />
+                        </svg>
+                        <h4>Withdraw</h4>
+                    </div>
+                    <div class="option" onclick="showPopup('request_rupee')">
+                        <svg class="icon" viewBox="0 0 64 64">
+                            <title>request</title>
+                            <path
+                                d="M24,26.19a8.67,8.67,0,0,1-.24-3.61,8.34,8.34,0,0,1,16.59,1.27c0,8.35-8.66,8.16-8.34,11.58,0,.09,0,4.73,0,4.73" />
+                            <line x1="32" y1="47.08" x2="32" y2="48.99" />
+                            <path
+                                d="M32,.5h0A31.5,31.5,0,0,1,63.5,32v0A31.5,31.5,0,0,1,32,63.5H2.48a2,2,0,0,1-2-2V32A31.5,31.5,0,0,1,32,.5Z" />
+                        </svg>
+                        <h4>Request</h4>
+                    </div>
+                    <div class="option" onclick="showPopup('pay_anyone')">
+                        <svg class="icon" viewBox="0 0 64 64">
+                            <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
+                            <rect height="64" width="64" rx="8"></rect>
+                        </svg>
+                        <h4>pay through cashier</h4>
+                        </a>
+                    </div>
+                </sm-carousel>
             </div>
+            <div class="right">
+                <div id="user_panel">
+                    <h4 id="user_type">User</h4>
+                    <div class="copy-row">
+                        <h4 id="user_flo_id" class="copy"></h4>
+                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                            <title>Copy</title>
+                            <rect x="16" y="16" width="48" height="48" rx="6" />
+                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                        </svg>
+                    </div>
+                    <div class="flex align-items space-between">
+                        <h4>Balance</h4>
+                        <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
+                            <title>refresh balance</title>
+                            <polyline points="42.99 0.16 50.25 21.23 28.78 27.7"/>
+                            <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
+                        </svg>
+                    </div>
+                    <div id="display_balance" class="grid grid-2">
+                        <div class="balance">
+                            <h5>Rupee</h5>
+                            <h3 id="token_balance">0</h3>
+                        </div>
+                        <div class="balance">
+                            <h5>FLO</h5>
+                            <h3 id="flo_balance">0</h3>
+                        </div>
+                    </div>
+                </div>
         </section>
         <section id="deposit" class="page hide-completely">
             <div class="container-header">
@@ -658,14 +690,14 @@
             </div>
         </section>
         <section id="request_page" class="page hide-completely">
-            <h2>Payment Requests</h2>
+                <h2>Payment Requests</h2>
             <p class="bottom-margin">Your payment requests will appear here.</p>
             <div id="payment_request_container" class="container">
                 <h4>You don't have any requests.</h4>
             </div>
         </section>
         <section id="activity_page" class="page">
-            <h2>Activity</h2>
+                <h2>Activity</h2>
             <p class="bottom-margin">*If your request isn't completed in 12hrs, use <strong>REPORT</strong> to get
                 assistance from our helpline.</p>
             <sm-tab-header target="user_activities">
@@ -712,18 +744,9 @@
                 </sm-panel>
             </sm-tab-panels>
         </section>
-        <section id="profile_page" class="page hide-completely">
+        <section id="settings_page" class="page hide-completely">
             <div class="container-header">
-                <h2>Profile</h2>
-            </div>
-            <h5>FLO ID</h5>
-            <div class="copy-row">
-                <h4 id="user_flo_id" class="copy"></h4>
-                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                    <title>Copy</title>
-                    <rect x="16" y="16" width="48" height="48" rx="6" />
-                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                </svg>
+                <h2>Settings</h2>
             </div>
             <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
         </section>
@@ -759,6 +782,7 @@
             generalVC: {}
         }
     </script>
+<<<<<<< HEAD
     <script>
         // tab
         const smTab = document.createElement("template");
@@ -949,24 +973,24 @@ opacity: 1
                         previousOption;
                     this.open = false;
                     (this.slideDown = [{
-                        transform: `translateY(-0.5rem)`
-                    },
-                    {
-                        transform: `translateY(0)`
-                    },
+                            transform: `translateY(-0.5rem)`
+                        },
+                        {
+                            transform: `translateY(0)`
+                        },
                     ]),
-                        (this.slideUp = [{
+                    (this.slideUp = [{
                             transform: `translateY(0)`
                         },
                         {
                             transform: `translateY(-0.5rem)`
                         },
-                        ]),
-                        (this.animationOptions = {
-                            duration: 300,
-                            fill: "forwards",
-                            easing: "ease",
-                        });
+                    ]),
+                    (this.animationOptions = {
+                        duration: 300,
+                        fill: "forwards",
+                        easing: "ease",
+                    });
                     selection.addEventListener("click", (e) => {
                         if (!this.open) {
                             this.optionList.classList.remove("hide");
@@ -1327,9 +1351,9 @@ opacity: 1
                                 this.previousGradient.classList.remove("hide");
                             }
                         }, {
-                        root: this.selectContainer,
-                        threshold: 0.95,
-                    }
+                            root: this.selectContainer,
+                            threshold: 0.95,
+                        }
                     );
                     const lastElementObserver = new IntersectionObserver(
                         (entries) => {
@@ -1341,9 +1365,9 @@ opacity: 1
                                 this.nextGradient.classList.remove("hide");
                             }
                         }, {
-                        root: this.selectContainer,
-                        threshold: 0.95,
-                    }
+                            root: this.selectContainer,
+                            threshold: 0.95,
+                        }
                     );
 
                     const selectObserver = new IntersectionObserver((entries) => {
@@ -1684,13 +1708,13 @@ stroke-width: 6;
                     if (window.innerWidth > 640) {
                         notification.animate(
                             [{
-                                transform: `translateX(1rem)`,
-                                opacity: "0",
-                            },
-                            {
-                                transform: "translateX(0)",
-                                opacity: "1",
-                            },
+                                    transform: `translateX(1rem)`,
+                                    opacity: "0",
+                                },
+                                {
+                                    transform: "translateX(0)",
+                                    opacity: "1",
+                                },
                             ],
                             this.animationOptions
                         ).onfinish = () => {
@@ -1719,13 +1743,13 @@ stroke-width: 6;
                     if (toLeft)
                         notification.animate(
                             [{
-                                transform: `translateX(${this.offset}px)`,
-                                opacity: "1",
-                            },
-                            {
-                                transform: `translateX(-100%)`,
-                                opacity: "0",
-                            },
+                                    transform: `translateX(${this.offset}px)`,
+                                    opacity: "1",
+                                },
+                                {
+                                    transform: `translateX(-100%)`,
+                                    opacity: "0",
+                                },
                             ],
                             this.animationOptions
                         ).onfinish = () => {
@@ -1734,13 +1758,13 @@ stroke-width: 6;
                     else {
                         notification.animate(
                             [{
-                                transform: `translateX(${this.offset}px)`,
-                                opacity: "1",
-                            },
-                            {
-                                transform: `translateX(100%)`,
-                                opacity: "0",
-                            },
+                                    transform: `translateX(${this.offset}px)`,
+                                    opacity: "1",
+                                },
+                                {
+                                    transform: `translateX(100%)`,
+                                    opacity: "0",
+                                },
                             ],
                             this.animationOptions
                         ).onfinish = () => {
@@ -1766,9 +1790,9 @@ stroke-width: 6;
                     };
                     this.fontSize = Number(
                         window
-                            .getComputedStyle(document.body)
-                            .getPropertyValue("font-size")
-                            .match(/\d+/)[0]
+                        .getComputedStyle(document.body)
+                        .getPropertyValue("font-size")
+                        .match(/\d+/)[0]
                     );
                     this.notification;
                     this.offset;
@@ -1795,7 +1819,7 @@ stroke-width: 6;
                                         }, 5000);
                                     if (window.innerWidth > 640)
                                         this.notificationPanel.style.padding =
-                                            "1.5rem 0 3rem 1.5rem";
+                                        "1.5rem 0 3rem 1.5rem";
                                     else this.notificationPanel.style.padding =
                                         "1rem 1rem 2rem 1rem";
                                 } else if (
@@ -1929,10 +1953,10 @@ background-color: transparent;
                     this.indicator.setAttribute(
                         "style",
                         `width: ${tabDimensions.width}px; transform: translateX(${
-                        tabDimensions.left -
-                        this.tabHeader.getBoundingClientRect().left +
-                        this.tabHeader.scrollLeft
-                        }px)`
+          tabDimensions.left -
+          this.tabHeader.getBoundingClientRect().left +
+          this.tabHeader.scrollLeft
+        }px)`
                     );
                     //else
                     //this.indicator.setAttribute('style', `width: calc(${tabDimensions.width}px - 1.6rem); transform: translateX(calc(${ tabDimensions.left - this.tabHeader.getBoundingClientRect().left + this.tabHeader.scrollLeft}px + 0.8rem)`)
@@ -2007,8 +2031,8 @@ background-color: transparent;
                                 }
                             });
                         }, {
-                        threshold: 1.0
-                    }
+                            threshold: 1.0
+                        }
                     );
                     observer.observe(this);
                 }
@@ -2069,40 +2093,40 @@ background-color: transparent;
                 connectedCallback() {
                     //animations
                     let flyInLeft = [{
-                        opacity: 0,
-                        transform: "translateX(-1rem)",
-                    },
-                    {
-                        opacity: 1,
-                        transform: "none",
-                    },
-                    ],
+                                opacity: 0,
+                                transform: "translateX(-1rem)",
+                            },
+                            {
+                                opacity: 1,
+                                transform: "none",
+                            },
+                        ],
                         flyInRight = [{
-                            opacity: 0,
-                            transform: "translateX(1rem)",
-                        },
-                        {
-                            opacity: 1,
-                            transform: "none",
-                        },
+                                opacity: 0,
+                                transform: "translateX(1rem)",
+                            },
+                            {
+                                opacity: 1,
+                                transform: "none",
+                            },
                         ],
                         flyOutLeft = [{
-                            opacity: 1,
-                            transform: "none",
-                        },
-                        {
-                            opacity: 0,
-                            transform: "translateX(-1rem)",
-                        },
+                                opacity: 1,
+                                transform: "none",
+                            },
+                            {
+                                opacity: 0,
+                                transform: "translateX(-1rem)",
+                            },
                         ],
                         flyOutRight = [{
-                            opacity: 1,
-                            transform: "none",
-                        },
-                        {
-                            opacity: 0,
-                            transform: "translateX(1rem)",
-                        },
+                                opacity: 1,
+                                transform: "none",
+                            },
+                            {
+                                opacity: 0,
+                                transform: "translateX(1rem)",
+                            },
                         ],
                         animationOptions = {
                             duration: 300,
@@ -2182,6 +2206,9 @@ background-color: transparent;
             }
         );
     </script>
+=======
+    <script src="components.js"></script>
+>>>>>>> 0e71a98c861cee522e666f8addb47b4806510ee0
     <script id="onLoadStartUp">
         function onLoadStartUp() {
             showPopup('main_loader', 'no')
@@ -2220,11 +2247,7 @@ background-color: transparent;
             withdrawRequest(txid, upiId, floId) {
                 let card = document.createElement('div');
                 card.classList.add('request')
-                setAttributes(card, {
-                    'data-txid': txid,
-                    'data-user-flo-id': floId,
-                    'data-upi': upiId
-                })
+                setAttributes(card, { 'data-txid': txid, 'data-user-flo-id': floId, 'data-upi': upiId })
                 card.innerHTML = `  <h5>FLO ID</h5>
                                     <h4 class="breakable">${floId}</h4>
                                     <h5>UPI ID</h5>
@@ -2239,12 +2262,7 @@ background-color: transparent;
             payRequest(sender, txid, floId, amount) {
                 let card = document.createElement('div');
                 card.classList.add('request')
-                setAttributes(card, {
-                    'data-sender': sender,
-                    'data-receiver-flo-id': floId,
-                    'data-txid': txid,
-                    'data-amount': amount
-                })
+                setAttributes(card, { 'data-sender': sender, 'data-receiver-flo-id': floId, 'data-txid': txid, 'data-amount': amount })
                 card.innerHTML = `  <h5>Transaction ID</h5>
                                     <h4 class="breakable">${txid}</h4>
                                     <h5>Receiver's FLO ID</h5>
@@ -2260,10 +2278,7 @@ background-color: transparent;
                 let card = document.createElement('div'),
                     time = parseInt(vectorClock.split('_')[0])
                 card.classList.add('request')
-                setAttributes(card, {
-                    'data-vector-clock': vectorClock,
-                    'data-type': 'deposit'
-                })
+                setAttributes(card, { 'data-vector-clock': vectorClock, 'data-type': 'deposit' })
                 card.innerHTML = `  <h5 class="time">${formatedTime(time)}</h5>
                                     <h5>UPI Transanction ID</h5>
                                     <div class="copy-row">
@@ -2288,10 +2303,7 @@ background-color: transparent;
                     time = parseInt(vectorClock.split('_')[0])
                 card.classList.add('request')
                 let timeFrag = time.toString().split(' ');
-                setAttributes(card, {
-                    'data-vector-clock': vectorClock,
-                    'data-type': 'withdraw'
-                })
+                setAttributes(card, { 'data-vector-clock': vectorClock, 'data-type': 'withdraw' })
                 card.innerHTML = `   <h5 class="time">${formatedTime(time)}</h5>
                                     <h5>Transanction ID</h5>
                                     <div class="copy-row">
@@ -2318,10 +2330,7 @@ background-color: transparent;
                     time = parseInt(vectorClock.split('_')[0])
                 card.classList.add('request')
                 let timeFrag = time.toString().split(' ');
-                setAttributes(card, {
-                    'data-vector-clock': vectorClock,
-                    'data-type': 'pay_thru_cashier'
-                })
+                setAttributes(card, { 'data-vector-clock': vectorClock, 'data-type': 'pay_thru_cashier' })
                 card.innerHTML = `   <h5 class="time">${formatedTime(time)}</h5>
                                     <h5>UPI Transanction ID</h5>
                                     <div class="copy-row">
@@ -2354,11 +2363,7 @@ background-color: transparent;
                 let card = document.createElement('div')
                 card.classList.add('request')
 
-                setAttributes(card, {
-                    'data-sender-address': senderAddress,
-                    'data-amount': amount,
-                    'data-payment-request-id': id
-                })
+                setAttributes(card, { 'data-sender-address': senderAddress, 'data-amount': amount, 'data-payment-request-id': id })
                 card.innerHTML = `   <h5 class="time">${formatedTime(time)}</h5>
                                     <h5>Request by</h5>
                                     <div class="copy-row">
@@ -2389,18 +2394,10 @@ background-color: transparent;
             },
             depositComplaint(userData, cashierData, udc) {
                 let card = document.createElement('div'),
-                    {
-                        depositedAmount,
-                        customMsg,
-                        sender,
-                        vectorClock
-                    } = userData,
+                    { depositedAmount, customMsg, sender, vectorClock } = userData,
                     composition = ``;
                 card.classList.add('request', 'complaint')
-                setAttributes(card, {
-                    'data-type': 'deposit',
-                    'data-udc': JSON.stringify(udc)
-                })
+                setAttributes(card, { 'data-type': 'deposit', 'data-udc': JSON.stringify(udc) })
                 composition = `
                     
                     <div class="left">
@@ -2423,10 +2420,7 @@ background-color: transparent;
 
                             </div>`
                 if (cashierData.processed) {
-                    let {
-                        time,
-                        floTxId
-                    } = cashierData
+                    let { time, floTxId } = cashierData
                     composition += `
                     <div class="right">
                         <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
@@ -2460,18 +2454,10 @@ background-color: transparent;
             },
             withdrawComplaint(userData, cashierData, udc) {
                 let card = document.createElement('div'),
-                    {
-                        withdrawnAmount,
-                        customMsg,
-                        sender,
-                        vectorClock
-                    } = userData,
+                    { withdrawnAmount, customMsg, sender, vectorClock } = userData,
                     composition = ``;
                 card.classList.add('request', 'complaint')
-                setAttributes(card, {
-                    'data-type': 'withdraw',
-                    'data-udc': JSON.stringify(udc)
-                })
+                setAttributes(card, { 'data-type': 'withdraw', 'data-udc': JSON.stringify(udc) })
                 composition = `
                     <div class="left">
                         <h5>Sender</h5>
@@ -2493,10 +2479,7 @@ background-color: transparent;
 
                             </div>`
                 if (cashierData.processed) {
-                    let {
-                        time,
-                        floTxId
-                    } = cashierData
+                    let { time, floTxId } = cashierData
                     composition += `
                     <div class="right">
                         <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
@@ -2530,19 +2513,10 @@ background-color: transparent;
             },
             payCashierComplaint(userData, cashierData, udc) {
                 let card = document.createElement('div'),
-                    {
-                        amount,
-                        customMsg,
-                        sender,
-                        receiver,
-                        vectorClock
-                    } = userData,
+                    { amount, customMsg, sender, receiver, vectorClock } = userData,
                     composition = ``;
                 card.classList.add('request', 'complaint')
-                setAttributes(card, {
-                    'data-type': 'withdraw',
-                    'data-udc': JSON.stringify(udc)
-                })
+                setAttributes(card, { 'data-type': 'withdraw', 'data-udc': JSON.stringify(udc) })
                 composition = `
                     <div class="left">
                         <h5>Sender</h5>
@@ -2573,10 +2547,7 @@ background-color: transparent;
 
                             </div>`
                 if (cashierData.processed) {
-                    let {
-                        time,
-                        floTxId
-                    } = cashierData
+                    let { time, floTxId } = cashierData
                     composition += `
                     <div class="right">
                         <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
@@ -2667,10 +2638,7 @@ background-color: transparent;
             let thisPopup = document.getElementById(popup);
             thisPopup.parentNode.classList.remove('hide');
             thisPopup.classList.add('no-transformations');
-            popupStack.push({
-                popup,
-                permission
-            })
+            popupStack.push({ popup, permission })
             zIndex++;
             thisPopup.parentNode.setAttribute('style', `z-index: ${zIndex}`)
             document.getElementById('main_page')
@@ -2698,10 +2666,7 @@ background-color: transparent;
             }, 300);
             if (popupStack.peek() === undefined)
                 return;
-            let {
-                popup,
-                permission
-            } = popupStack.pop();
+            let { popup, permission } = popupStack.pop();
             thisPopup = document.getElementById(popup);
             thisPopup.closest('.popup-container').classList.add('hide');
             thisPopup.closest('.popup').classList.remove('no-transformations');
@@ -2739,8 +2704,7 @@ background-color: transparent;
         }
 
         addEventListener('mousedown', e => {
-            if (e.target.classList.contains('popup-container') && popupStack.peek() !== undefined && popupStack
-                .peek().permission !== 'no') {
+            if (e.target.classList.contains('popup-container') && popupStack.peek() !== undefined && popupStack.peek().permission !== 'no') {
                 hidePopup()
             }
         })
@@ -2846,8 +2810,8 @@ background-color: transparent;
                     year = timeFrag[3],
                     minutes = new Date(parseInt(time)).getMinutes(),
                     hours = new Date(parseInt(time)).getHours()
-                minutes = minutes.length === 1 ? `0${minutes}` : minutes
-                let finalHours = hours - 12 > 0 ? `${hours - 12}:${minutes} pm` : `${hours}:${minutes} am`
+                minutes = minutes < 10 ? `0${minutes}` : minutes
+                let finalHours = hours > 12 ? `${hours - 12}:${minutes} PM` : `${hours}:${minutes} AM`
                 return `${finalHours} ${month} ${date} ${year}`;
             } catch (e) {
                 console.error(e);
@@ -2920,8 +2884,7 @@ background-color: transparent;
                 form.addEventListener('keyup', (e) => {
                     if (e.target.closest('.input')) {
                         if (e.key === 'Enter') {
-                            e.target.closest('.popup').querySelector("button[type='submit']")
-                                .click();
+                            e.target.closest('.popup').querySelector("button[type='submit']").click();
                         }
                     }
                 })
@@ -2941,8 +2904,7 @@ background-color: transparent;
                 if (e.target.closest('.confirm-deposit-btn'))
                     if (await confirmation('Confirm this deposit request?')) {
                         let depositRequest = e.target.closest('.request'),
-                            status = await transfer_token(depositRequest.dataset.userFloId,
-                                depositRequest.dataset.txid)
+                            status = await transfer_token(depositRequest.dataset.userFloId, depositRequest.dataset.txid)
                         if (status) {
                             refresh_balance()
                             depositRequest.remove()
@@ -2955,8 +2917,7 @@ background-color: transparent;
                 if (e.target.closest('.confirm-withdraw-btn'))
                     if (await confirmation('Confirm this withdraw request?')) {
                         let withdrawRequest = e.target.closest('.request'),
-                            status = await cash_sent(withdrawRequest.dataset.txid, withdrawRequest
-                                .dataset.userFloId, withdrawRequest.dataset.upi)
+                            status = await cash_sent(withdrawRequest.dataset.txid, withdrawRequest.dataset.userFloId, withdrawRequest.dataset.upi)
                         if (status) {
                             refresh_balance()
                             withdrawRequest.remove()
@@ -2968,9 +2929,7 @@ background-color: transparent;
                 if (e.target.closest('.confirm-pay-btn'))
                     if (await confirmation('Confirm this pay request?')) {
                         let payRequest = e.target.closest('.request'),
-                            status = await pay_as_cashier(payRequest.dataset.sender, payRequest
-                                .dataset.receiverFloId, payRequest.dataset.txid, payRequest.dataset
-                                .amount)
+                            status = await pay_as_cashier(payRequest.dataset.sender, payRequest.dataset.receiverFloId, payRequest.dataset.txid, payRequest.dataset.amount)
                         if (status) {
                             refresh_balance()
                             payRequest.remove()
@@ -2987,11 +2946,8 @@ background-color: transparent;
             // Function for reporting complain 
             document.getElementById('report_btn').addEventListener('click', async (e) => {
                 let customMsg = document.getElementById('complaint_field').value
-                if (await confirmation(
-                    'It may take upto 12hrs to complete your request, are you sure to report this issue?'
-                )) {
-                    file_complaint(currentRequest.dataset.type, currentRequest.dataset.vectorClock,
-                        customMsg)
+                if (await confirmation('It may take upto 12hrs to complete your request, are you sure to report this issue?')) {
+                    file_complaint(currentRequest.dataset.type, currentRequest.dataset.vectorClock, customMsg)
                 }
             })
             // Function for requesting rupee
@@ -3248,8 +3204,7 @@ background-color: transparent;
 
                         for (var bytes = [], i = 0, imod4 = 0; i < base64.length; imod4 = ++i % 4) {
                             if (imod4 == 0) continue;
-                            bytes.push(((base64map.indexOf(base64.charAt(i - 1)) & (Math.pow(2, -2 * imod4 +
-                                8) - 1)) << (imod4 * 2)) |
+                            bytes.push(((base64map.indexOf(base64.charAt(i - 1)) & (Math.pow(2, -2 * imod4 + 8) - 1)) << (imod4 * 2)) |
                                 (base64map.indexOf(base64.charAt(i)) >>> (6 - imod4 * 2)));
                         }
 
@@ -3321,7 +3276,7 @@ background-color: transparent;
                 var digestbytes = util.wordsToBytes(SHA1._sha1(message));
                 return options && options.asBytes ? digestbytes :
                     options && options.asString ? Binary.bytesToString(digestbytes) :
-                        util.bytesToHex(digestbytes);
+                    util.bytesToHex(digestbytes);
             };
 
             // The core
@@ -3362,9 +3317,9 @@ background-color: transparent;
 
                         var t = ((H0 << 5) | (H0 >>> 27)) + H4 + (w[j] >>> 0) + (
                             j < 20 ? (H1 & H2 | ~H1 & H3) + 1518500249 :
-                                j < 40 ? (H1 ^ H2 ^ H3) + 1859775393 :
-                                    j < 60 ? (H1 & H2 | H1 & H3 | H2 & H3) - 1894007588 :
-                                        (H1 ^ H2 ^ H3) - 899497514);
+                            j < 40 ? (H1 ^ H2 ^ H3) + 1859775393 :
+                            j < 60 ? (H1 & H2 | H1 & H3 | H2 & H3) - 1894007588 :
+                            (H1 ^ H2 ^ H3) - 899497514);
 
                         H4 = H3;
                         H3 = H2;
@@ -3438,7 +3393,7 @@ background-color: transparent;
 
                 return options && options.asBytes ? hmacbytes :
                     options && options.asString ? Binary.bytesToString(hmacbytes) :
-                        util.bytesToHex(hmacbytes);
+                    util.bytesToHex(hmacbytes);
 
             };
 
@@ -3511,8 +3466,8 @@ background-color: transparent;
                         for (var b = b.replace(/[^A-Z0-9+\/]/ig, ""), a = [], c = 0, e = 0; c < b.length; e = ++c %
                             4) e != 0 && a.push(("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
                                 .indexOf(b.charAt(c - 1)) & Math.pow(2, -2 * e + 8) - 1) << e * 2 |
-                                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".indexOf(b.charAt(
-                                    c)) >>> 6 - e * 2);
+                            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".indexOf(b.charAt(
+                                c)) >>> 6 - e * 2);
                         return a
                     }
                 },
@@ -3579,7 +3534,7 @@ background-color: transparent;
                     for (h = 0; h < 64; h++) {
                         h < 16 ? d[h] = e[h + t] : (l = d[h - 15], j = d[h - 2], d[h] = ((l << 25 | l >>> 7) ^
                             (l << 14 | l >>> 18) ^ l >>> 3) + (d[h - 7] >>> 0) + ((j << 15 | j >>> 17) ^
-                                (j << 13 | j >>> 19) ^ j >>> 10) + (d[h - 16] >>> 0));
+                            (j << 13 | j >>> 19) ^ j >>> 10) + (d[h - 16] >>> 0));
                         j = f & g ^ f & m ^ g & m;
                         var u = (f << 30 | f >>> 2) ^ (f << 19 | f >>> 13) ^ (f << 10 | f >>> 22);
                         l = (s >>> 0) + ((i << 26 | i >>> 6) ^ (i << 21 | i >>> 11) ^ (i << 7 | i >>> 25)) +
@@ -3645,7 +3600,7 @@ background-color: transparent;
         (function () {
 
             // Constructor function of Global SecureRandom object
-            var sr = window.SecureRandom = function () { };
+            var sr = window.SecureRandom = function () {};
 
             // Properties
             sr.state;
@@ -3777,7 +3732,7 @@ background-color: transparent;
                         alert(e);
                     }
                 }
-                while (sr.pptr < sr.poolSize) { // extract some randomness from Math.random()
+                while (sr.pptr < sr.poolSize) {  // extract some randomness from Math.random()
                     t = Math.floor(65536 * Math.random());
                     sr.pool[sr.pptr++] = t >>> 8;
                     sr.pool[sr.pptr++] = t & 255;
@@ -3798,13 +3753,11 @@ background-color: transparent;
                 // browser plugin details: ~16.2 to ~21.8 bits
                 var pluginsStr = "";
                 for (var i = 0; i < navigator.plugins.length; i++) {
-                    pluginsStr += navigator.plugins[i].name + " " + navigator.plugins[i].filename + " " + navigator
-                        .plugins[i].description + " " + navigator.plugins[i].version + ", ";
+                    pluginsStr += navigator.plugins[i].name + " " + navigator.plugins[i].filename + " " + navigator.plugins[i].description + " " + navigator.plugins[i].version + ", ";
                 }
                 var mimeTypesStr = "";
                 for (var i = 0; i < navigator.mimeTypes.length; i++) {
-                    mimeTypesStr += navigator.mimeTypes[i].description + " " + navigator.mimeTypes[i].type + " " +
-                        navigator.mimeTypes[i].suffixes + ", ";
+                    mimeTypesStr += navigator.mimeTypes[i].description + " " + navigator.mimeTypes[i].type + " " + navigator.mimeTypes[i].suffixes + ", ";
                 }
                 entropyStr += pluginsStr + mimeTypesStr;
                 // cookies and storage: 1 bit
@@ -3816,9 +3769,7 @@ background-color: transparent;
                 // location
                 entropyStr += window.location;
 
-                var entropyBytes = Crypto.SHA256(entropyStr, {
-                    asBytes: true
-                });
+                var entropyBytes = Crypto.SHA256(entropyStr, { asBytes: true });
                 for (var i = 0; i < entropyBytes.length; i++) {
                     sr.seedInt8(entropyBytes[i]);
                 }
@@ -4034,16 +3985,16 @@ background-color: transparent;
         // Follows 'jsbn' on Github: https://github.com/jasondavies/jsbn
         // Review and Testing: https://github.com/cryptocoinjs/bigi/
         /*!
-         * Basic JavaScript BN library - subset useful for RSA encryption. v1.4
-         *
-         * Copyright (c) 2005  Tom Wu
-         * All Rights Reserved.
-         * BSD License
-         * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
-         *
-         * Copyright Stephan Thomas
-         * Copyright pointbiz
-         */
+        * Basic JavaScript BN library - subset useful for RSA encryption. v1.4
+        *
+        * Copyright (c) 2005  Tom Wu
+        * All Rights Reserved.
+        * BSD License
+        * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
+        *
+        * Copyright Stephan Thomas
+        * Copyright pointbiz
+        */
 
         (function () {
 
@@ -5329,11 +5280,11 @@ background-color: transparent;
             BigInteger.valueOf = nbv;
 
             /**
-             * Returns a byte array representation of the big integer.
-             *
-             * This returns the absolute of the contained value in big endian
-             * form. A value of zero results in an empty array.
-             */
+            * Returns a byte array representation of the big integer.
+            *
+            * This returns the absolute of the contained value in big endian
+            * form. A value of zero results in an empty array.
+            */
             BigInteger.prototype.toByteArrayUnsigned = function () {
                 var ba = this.abs().toByteArray();
                 if (ba.length) {
@@ -5350,11 +5301,11 @@ background-color: transparent;
             };
 
             /**
-             * Turns a byte array into a big integer.
-             *
-             * This function will interpret a byte array as a big integer in big
-             * endian notation and ignore leading zeros.
-             */
+            * Turns a byte array into a big integer.
+            *
+            * This function will interpret a byte array as a big integer in big
+            * endian notation and ignore leading zeros.
+            */
             BigInteger.fromByteArrayUnsigned = function (ba) {
                 if (!ba.length) {
                     return ba.valueOf(0);
@@ -5368,29 +5319,29 @@ background-color: transparent;
             };
 
             /**
-             * Converts big integer to signed byte representation.
-             *
-             * The format for this value uses a the most significant bit as a sign
-             * bit. If the most significant bit is already occupied by the
-             * absolute value, an extra byte is prepended and the sign bit is set
-             * there.
-             *
-             * Examples:
-             *
-             *      0 =>     0x00
-             *      1 =>     0x01
-             *     -1 =>     0x81
-             *    127 =>     0x7f
-             *   -127 =>     0xff
-             *    128 =>   0x0080
-             *   -128 =>   0x8080
-             *    255 =>   0x00ff
-             *   -255 =>   0x80ff
-             *  16300 =>   0x3fac
-             * -16300 =>   0xbfac
-             *  62300 => 0x00f35c
-             * -62300 => 0x80f35c
-             */
+            * Converts big integer to signed byte representation.
+            *
+            * The format for this value uses a the most significant bit as a sign
+            * bit. If the most significant bit is already occupied by the
+            * absolute value, an extra byte is prepended and the sign bit is set
+            * there.
+            *
+            * Examples:
+            *
+            *      0 =>     0x00
+            *      1 =>     0x01
+            *     -1 =>     0x81
+            *    127 =>     0x7f
+            *   -127 =>     0xff
+            *    128 =>   0x0080
+            *   -128 =>   0x8080
+            *    255 =>   0x00ff
+            *   -255 =>   0x80ff
+            *  16300 =>   0x3fac
+            * -16300 =>   0xbfac
+            *  62300 => 0x00f35c
+            * -62300 => 0x80f35c
+            */
             BigInteger.prototype.toByteArraySigned = function () {
                 var val = this.abs().toByteArrayUnsigned();
                 var neg = this.compareTo(BigInteger.ZERO) < 0;
@@ -5411,10 +5362,10 @@ background-color: transparent;
             };
 
             /**
-             * Parse a signed big integer byte representation.
-             *
-             * For details on the format please see BigInteger.toByteArraySigned.
-             */
+            * Parse a signed big integer byte representation.
+            *
+            * For details on the format please see BigInteger.toByteArraySigned.
+            */
             BigInteger.fromByteArraySigned = function (ba) {
                 // Check for negative value
                 if (ba[0] & 0x80) {
@@ -5491,8 +5442,7 @@ background-color: transparent;
                 for (var i = 0; i < this.m.t; ++i) {
                     // faster way of calculating u0 = x[i]*mp mod DV
                     var j = x[i] & 0x7fff;
-                    var u0 = (j * this.mpl + (((j * this.mph + (x[i] >> 15) * this.mpl) & this.um) << 15)) & x
-                        .DM;
+                    var u0 = (j * this.mpl + (((j * this.mph + (x[i] >> 15) * this.mpl) & this.um) << 15)) & x.DM;
                     // use am to combine the multiply-shift-add into one call
                     j = i + this.m.t;
                     x[j] += this.m.am(0, u0, x, i, 0, this.m.t);
@@ -5677,8 +5627,7 @@ background-color: transparent;
                 // p mod 4 == 3
                 if (this.q.testBit(1)) {
                     // z = g^(u+1) + p, p = 4u + 3
-                    var z = new ec.FieldElementFp(this.q, this.x.modPow(this.q.shiftRight(2).add(BigInteger
-                        .ONE),
+                    var z = new ec.FieldElementFp(this.q, this.x.modPow(this.q.shiftRight(2).add(BigInteger.ONE),
                         this.q));
                     return z.square().equals(this) ? z : null;
                 }
@@ -5720,9 +5669,9 @@ background-color: transparent;
                 return null;
             };
             /*!
-             * Crypto-JS 2.5.4 BlockModes.js
-             * contribution from Simon Greatrix
-             */
+    * Crypto-JS 2.5.4 BlockModes.js
+    * contribution from Simon Greatrix
+    */
 
             (function (C) {
 
@@ -5806,8 +5755,7 @@ background-color: transparent;
                             var b = message.pop();
                             if (b == 0x80) return;
                             if (b != 0x00) {
-                                throw new Error("ISO-7816 padding byte must be 0, not 0x" + b.toString(
-                                    16) +
+                                throw new Error("ISO-7816 padding byte must be 0, not 0x" + b.toString(16) +
                                     ". Wrong cipher specification or key used?");
                             }
                         }
@@ -5875,8 +5823,8 @@ background-color: transparent;
                 var C_mode = C.mode = {};
 
                 /**
-                 * Mode base "class".
-                 */
+                * Mode base "class".
+                */
                 var Mode = C_mode.Mode = function (padding) {
                     if (padding) {
                         this._padding = padding;
@@ -5900,12 +5848,12 @@ background-color: transparent;
 
 
                 /**
-                 * Electronic Code Book mode.
-                 * 
-                 * ECB applies the cipher directly against each block of the input.
-                 * 
-                 * ECB does not require an initialization vector.
-                 */
+                * Electronic Code Book mode.
+                * 
+                * ECB applies the cipher directly against each block of the input.
+                * 
+                * ECB does not require an initialization vector.
+                */
                 var ECB = C_mode.ECB = function () {
                     // Call parent constructor
                     Mode.apply(this, arguments);
@@ -5937,11 +5885,11 @@ background-color: transparent;
 
 
                 /**
-                 * Cipher block chaining
-                 * 
-                 * The first block is XORed with the IV. Subsequent blocks are XOR with the
-                 * previous cipher output.
-                 */
+                * Cipher block chaining
+                * 
+                * The first block is XORed with the IV. Subsequent blocks are XOR with the
+                * previous cipher output.
+                */
                 var CBC = C_mode.CBC = function () {
                     // Call parent constructor
                     Mode.apply(this, arguments);
@@ -5991,14 +5939,14 @@ background-color: transparent;
 
 
                 /**
-                 * Cipher feed back
-                 * 
-                 * The cipher output is XORed with the plain text to produce the cipher output,
-                 * which is then fed back into the cipher to produce a bit pattern to XOR the
-                 * next block with.
-                 * 
-                 * This is a stream cipher mode and does not require padding.
-                 */
+                * Cipher feed back
+                * 
+                * The cipher output is XORed with the plain text to produce the cipher output,
+                * which is then fed back into the cipher to produce a bit pattern to XOR the
+                * next block with.
+                * 
+                * This is a stream cipher mode and does not require padding.
+                */
                 var CFB = C_mode.CFB = function () {
                     // Call parent constructor
                     Mode.apply(this, arguments);
@@ -6043,13 +5991,13 @@ background-color: transparent;
 
 
                 /**
-                 * Output feed back
-                 * 
-                 * The cipher repeatedly encrypts its own output. The output is XORed with the
-                 * plain text to produce the cipher text.
-                 * 
-                 * This is a stream cipher mode and does not require padding.
-                 */
+                * Output feed back
+                * 
+                * The cipher repeatedly encrypts its own output. The output is XORed with the
+                * plain text to produce the cipher text.
+                * 
+                * This is a stream cipher mode and does not require padding.
+                */
                 var OFB = C_mode.OFB = function () {
                     // Call parent constructor
                     Mode.apply(this, arguments);
@@ -6185,7 +6133,7 @@ background-color: transparent;
 
                     return options && options.asBytes ? derivedKeyBytes :
                         options && options.asString ? Binary.bytesToString(derivedKeyBytes) :
-                            util.bytesToHex(derivedKeyBytes);
+                        util.bytesToHex(derivedKeyBytes);
 
                 };
 
@@ -6653,11 +6601,11 @@ background-color: transparent;
 
                 // Inner state
                 var state = [
-                    [],
-                    [],
-                    [],
-                    []
-                ],
+                        [],
+                        [],
+                        [],
+                        []
+                    ],
                     keylength,
                     nrounds,
                     keyschedule;
@@ -6683,8 +6631,8 @@ background-color: transparent;
                             // Convert to bytes if message is a string
                             m = (
                                 message.constructor == String ?
-                                    UTF8.stringToBytes(message) :
-                                    message
+                                UTF8.stringToBytes(message) :
+                                message
                             ),
 
                             // Generate random IV
@@ -6693,12 +6641,12 @@ background-color: transparent;
                             // Generate key
                             k = (
                                 password.constructor == String ?
-                                    // Derive key from pass-phrase
-                                    C.PBKDF2(password, iv, 32, {
-                                        asBytes: true
-                                    }) :
-                                    // else, assume byte array representing cryptographic key
-                                    password
+                                // Derive key from pass-phrase
+                                C.PBKDF2(password, iv, 32, {
+                                    asBytes: true
+                                }) :
+                                // else, assume byte array representing cryptographic key
+                                password
                             );
 
                         // Encrypt
@@ -6726,8 +6674,8 @@ background-color: transparent;
                             // Convert to bytes if ciphertext is a string
                             c = (
                                 ciphertext.constructor == String ?
-                                    util.base64ToBytes(ciphertext) :
-                                    ciphertext
+                                util.base64ToBytes(ciphertext) :
+                                ciphertext
                             ),
 
                             // Separate IV and message
@@ -6736,12 +6684,12 @@ background-color: transparent;
                             // Generate key
                             k = (
                                 password.constructor == String ?
-                                    // Derive key from pass-phrase
-                                    C.PBKDF2(password, iv, 32, {
-                                        asBytes: true
-                                    }) :
-                                    // else, assume byte array representing cryptographic key
-                                    password
+                                // Derive key from pass-phrase
+                                C.PBKDF2(password, iv, 32, {
+                                    asBytes: true
+                                }) :
+                                // else, assume byte array representing cryptographic key
+                                password
                             );
 
                         // Decrypt
@@ -7232,7 +7180,7 @@ background-color: transparent;
                 var x = this.getX().toBigInteger();
                 var y = this.getY().toBigInteger();
                 var len =
-                    32; // integerToBytes will zero pad if integer is less than 32 bytes. 32 bytes length is required by the Bitcoin protocol.
+                32; // integerToBytes will zero pad if integer is less than 32 bytes. 32 bytes length is required by the Bitcoin protocol.
                 var enc = ec.integerToBytes(x, len);
 
                 // when compressed prepend byte depending if y point is even or odd
@@ -7245,7 +7193,7 @@ background-color: transparent;
                 } else {
                     enc.unshift(0x04);
                     enc = enc.concat(ec.integerToBytes(y,
-                        len)); // uncompressed public key appends the bytes of the y point
+                    len)); // uncompressed public key appends the bytes of the y point
                 }
                 return enc;
             };
@@ -7349,7 +7297,7 @@ background-color: transparent;
 
             ec.PointFp.prototype.toString = function () {
                 return '(' + this.getX().toBigInteger().toString() + ',' + this.getY().toBigInteger()
-                    .toString() +
+                .toString() +
                     ')';
             };
 
@@ -7566,7 +7514,7 @@ background-color: transparent;
         //bitTrx.js
         (function () {
 
-            var bitjs = window.bitjs = function () { };
+            var bitjs = window.bitjs = function () {};
 
             /* public vars */
             bitjs.pub = 0x23; // flochange - changed the prefix to FLO Mainnet PublicKey Prefix 0x23
@@ -7711,7 +7659,7 @@ background-color: transparent;
                 btrx.addflodata = function (txcomments) { // flochange - this whole function needs to be done
                     this.floData = txcomments;
                     return this
-                        .floData; //flochange .. returning the txcomments -- check if the function return will assign
+                    .floData; //flochange .. returning the txcomments -- check if the function return will assign
                 }
 
 
@@ -8025,7 +7973,7 @@ background-color: transparent;
 
 
                     return Crypto.util.bytesToHex(buffer) + floDataCountString +
-                        flohex; // flochange -- Addition of floDataCountString and floData in serialization
+                    flohex; // flochange -- Addition of floDataCountString and floData in serialization
                 }
 
 
@@ -8256,7 +8204,7 @@ background-color: transparent;
         };
 
         Bitcoin.Address.networkVersion =
-            0x23; // (FLO mainnet 0x23, 35D), (Bitcoin Mainnet, 0x00, 0D) // *this has no effect *
+        0x23; // (FLO mainnet 0x23, 35D), (Bitcoin Mainnet, 0x00, 0D) // *this has no effect *
 
         /**
          * Serialize this object as a standard Bitcoin address.
@@ -8589,7 +8537,7 @@ background-color: transparent;
                             if (pubkey.getBitcoinAddress().toString() == address) {
                                 return i;
                             }
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                     throw "Unable to find valid recovery factor";
                 }
@@ -8608,7 +8556,7 @@ background-color: transparent;
                     for (var index in this.keyArray) {
                         var currentItem = this.keyArray[index];
                         if (currentItem != null && currentItem.priv != null && item
-                            .getBitcoinAddress() == currentItem.getBitcoinAddress()) {
+                        .getBitcoinAddress() == currentItem.getBitcoinAddress()) {
                             doAdd = false;
                             break;
                         }
@@ -8695,8 +8643,8 @@ background-color: transparent;
 
                         // This part is edited for FLO. FLO WIF are always compressed WIF. FLO WIF (private key) starts with R for mainnet and c for testnet.
                         if (((floGlobals.blockchain == "FLO") &&
-                            /^R[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{51}$/.test(
-                                input)) ||
+                                /^R[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{51}$/.test(
+                                    input)) ||
                             ((floGlobals.blockchain == "FLO_TEST") &&
                                 /^c[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{51}$/.test(
                                     input))) {
@@ -8876,7 +8824,7 @@ background-color: transparent;
             // Private Key Hex Format
             ECKey.prototype.getBitcoinHexFormat = function () {
                 return Crypto.util.bytesToHex(this.getBitcoinPrivateKeyByteArray()).toString()
-                    .toUpperCase();
+            .toUpperCase();
             };
 
             // Private Key Base64 Format
@@ -9132,7 +9080,7 @@ background-color: transparent;
                 });
             },
             // duck typing method
-            hasMethods: function (obj /*, method list as strings */) {
+            hasMethods: function (obj /*, method list as strings */ ) {
                 var i = 1,
                     methodName;
                 while ((methodName = arguments[i++])) {
@@ -9148,7 +9096,7 @@ background-color: transparent;
         (function (ellipticCurveType) {
 
             //Defining Elliptic Encryption Object  
-            var ellipticEncryption = window.ellipticCurveEncryption = function () { };
+            var ellipticEncryption = window.ellipticCurveEncryption = function () {};
 
             ellipticEncryption.rng = new SecureRandom();
 
@@ -9323,7 +9271,7 @@ background-color: transparent;
 
             function init(bits) {
                 if (bits && (typeof bits !== 'number' || bits % 1 !== 0 || bits < defaults.minBits || bits >
-                    defaults.maxBits)) {
+                        defaults.maxBits)) {
                     throw new Error('Number of bits must be an integer between ' + defaults.minBits + ' and ' +
                         defaults.maxBits + ', inclusive.')
                 }
@@ -9387,7 +9335,7 @@ background-color: transparent;
 
                 // node.js crypto.randomBytes()
                 if (typeof require === 'function' && (crypto = require('crypto')) && (randomBits = crypto[
-                    'randomBytes'])) {
+                        'randomBytes'])) {
                     return function (bits) {
                         var bytes = Math.ceil(bits / 8),
                             str = null;
@@ -9401,7 +9349,7 @@ background-color: transparent;
 
                 // browsers with window.crypto.getRandomValues()
                 if (global['crypto'] && typeof global['crypto']['getRandomValues'] === 'function' && typeof global[
-                    'Uint32Array'] === 'function') {
+                        'Uint32Array'] === 'function') {
                     crypto = global['crypto'];
                     return function (bits) {
                         var elems = Math.ceil(bits / 32),
@@ -9458,8 +9406,8 @@ background-color: transparent;
 
                 // test the RNG (5 times)
                 if (typeof rng !== 'function' || typeof rng(config.bits) !== 'string' || !parseInt(rng(config
-                    .bits),
-                    2) || rng(config.bits).length > config.bits || rng(config.bits).length < config.bits) {
+                            .bits),
+                        2) || rng(config.bits).length > config.bits || rng(config.bits).length < config.bits) {
                     throw new Error(
                         "Random number generator is invalid. Supply an RNG of the form function(bits){} that returns a string containing 'bits' number of random 1's and 0's."
                     )
@@ -9541,7 +9489,7 @@ background-color: transparent;
                 }
 
                 secret = '1' + hex2bin(
-                    secret); // append a 1 so that we can preserve the correct number of leading zeros in our secret
+                secret); // append a 1 so that we can preserve the correct number of leading zeros in our secret
                 secret = split(secret, padLength);
                 var x = new Array(numShares),
                     y = new Array(numShares);
@@ -9618,7 +9566,7 @@ background-color: transparent;
 
                 var bits = parseInt(share[0], 36);
                 if (bits && (typeof bits !== 'number' || bits % 1 !== 0 || bits < defaults.minBits || bits >
-                    defaults.maxBits)) {
+                        defaults.maxBits)) {
                     throw new Error('Number of bits must be an integer between ' + defaults.minBits + ' and ' +
                         defaults.maxBits + ', inclusive.')
                 }
@@ -9738,16 +9686,16 @@ background-color: transparent;
                         if (at === x[
                             j]) { // happens when computing a share that is in the list of shares used to compute it
                             product = -
-                                1; // fix for a zero product term, after which the sum should be sum^0 = sum, not sum^1
+                            1; // fix for a zero product term, after which the sum should be sum^0 = sum, not sum^1
                             break;
                         }
                         product = (product + config.logs[at ^ x[j]] - config.logs[x[i] ^ x[j]] + config
-                            .max /* to make sure it's not negative */) %
+                                .max /* to make sure it's not negative */ ) %
                             config.max;
                     }
 
                     sum = product === -1 ? sum : sum ^ config.exps[
-                        product]; // though exps[-1]= undefined and undefined ^ anything = anything in chrome, this behavior may not hold everywhere, so do the check
+                    product]; // though exps[-1]= undefined and undefined ^ anything = anything in chrome, this behavior may not hold everywhere, so do the check
                 }
                 return sum;
             };
@@ -9910,7 +9858,7 @@ background-color: transparent;
                                 if (diff[key].hasOwnProperty(index)) {
                                     acc2[index] = preserve(diff[key][index], leftArray[index],
                                         rightArray[index]
-                                    ); // diff recurse and check for nested arrays
+                                        ); // diff recurse and check for nested arrays
                                     return acc2;
                                 }
 
@@ -9948,7 +9896,7 @@ background-color: transparent;
                         const difference = updatedDiff(l[key], r[key]);
 
                         if (isObject(difference) && isEmpty(difference) && !isDate(difference))
-                            return acc;
+                        return acc;
 
                         return {
                             ...acc,
@@ -9990,7 +9938,7 @@ background-color: transparent;
                     const difference = diff(l[key], r[key]);
 
                     if (isObject(difference) && isEmpty(difference) && !isDate(difference))
-                        return acc; // return no diff
+                return acc; // return no diff
 
                     return {
                         ...acc,
@@ -10065,7 +10013,7 @@ background-color: transparent;
                         }
 
                         return acc.slice(0, index).concat(rightItem).concat(acc.slice(index +
-                            1)); // return updated key
+                        1)); // return updated key
                     }, deletedValues);
                 }
 
@@ -10078,7 +10026,7 @@ background-color: transparent;
                     const difference = diff(l[key], r[key]);
 
                     if (isObject(difference) && isEmpty(difference) && !isDate(difference))
-                        return acc; // return no diff
+                return acc; // return no diff
 
                     return {
                         ...acc,
@@ -10253,7 +10201,7 @@ background-color: transparent;
                 deriveSharedKeySender: function (receiverCompressedPublicKey, senderPrivateKey) {
                     try {
                         let receiverPublicKeyString = this.getUncompressedPublicKey(
-                            receiverCompressedPublicKey);
+                        receiverCompressedPublicKey);
                         var senderDerivedKey = ellipticCurveEncryption.senderSharedKeyDerivation(
                             receiverPublicKeyString.x, receiverPublicKeyString.y, senderPrivateKey);
                         return senderDerivedKey;
@@ -10324,7 +10272,7 @@ background-color: transparent;
                 var senderECKeyData = this.util.getSenderPublicKeyString();
                 var senderDerivedKey = this.util.deriveSharedKeySender(receiverCompressedPublicKey,
                     senderECKeyData
-                        .privateKey);
+                    .privateKey);
                 let senderKey = senderDerivedKey.XValue + senderDerivedKey.YValue;
                 let secret = Crypto.AES.encrypt(data, senderKey);
                 return {
@@ -10345,7 +10293,7 @@ background-color: transparent;
 
                 var receiverDerivedKey = this.util.deriveReceiverSharedKey(data.senderPublicKeyString,
                     receiverECKeyData
-                        .privateKey);
+                    .privateKey);
 
                 let receiverKey = receiverDerivedKey.XValue + receiverDerivedKey.YValue;
                 let decryptMsg = Crypto.AES.decrypt(data.secret, receiverKey);
@@ -10706,7 +10654,7 @@ background-color: transparent;
                                         invalids.InvalidSenderPrivKeys.push(key);
                                     else {
                                         if (typeof senderPrivKeys[key] !== 'number' || senderPrivKeys[
-                                            key] <= 0)
+                                                key] <= 0)
                                             invalids.InvalidSenderAmountFor.push(key)
                                         else
                                             inputVal += senderPrivKeys[key];
@@ -10742,7 +10690,7 @@ background-color: transparent;
                         if (!preserveRatio && inputVal != outputVal)
                             return reject(
                                 `Input Amount (${inputVal}) not equal to Output Amount (${outputVal})`
-                            )
+                                )
                     } catch (error) {
                         return reject(error)
                     }
@@ -10762,7 +10710,7 @@ background-color: transparent;
                         for (let floID in senders) {
                             balance[floID] = parseFloat(results.shift());
                             if (isNaN(balance[floID]) || (preserveRatio && balance[floID] <=
-                                totalFee) || (!preserveRatio && balance[floID] < senders[
+                                    totalFee) || (!preserveRatio && balance[floID] < senders[
                                     floID].coins + dividedFee))
                                 insufficient.push(floID)
                             totalBalance += balance[floID];
@@ -10799,7 +10747,7 @@ background-color: transparent;
                                     if (utxos[i].confirmations) {
                                         trx.addinput(utxos[i].txid, utxos[i].vout,
                                             utxos[i]
-                                                .scriptPubKey)
+                                            .scriptPubKey)
                                         wifSeq.push(wif);
                                         utxoAmt += utxos[i].amount;
                                     }
@@ -10863,7 +10811,7 @@ background-color: transparent;
                 return new Promise((resolve, reject) => {
                     this.promisedAPI(`api/addrs/${addr}/txs?from=0&to=1`).then(response => {
                         this.promisedAPI(
-                            `api/addrs/${addr}/txs?from=0&to=${response.totalItems}0`)
+                                `api/addrs/${addr}/txs?from=0&to=${response.totalItems}0`)
                             .then(response => resolve(response.items))
                             .catch(error => reject(error));
                     }).catch(error => reject(error))
@@ -10900,14 +10848,14 @@ background-color: transparent;
                                         if (options.pattern && !response.items[i].floData
                                             .startsWith(options.pattern, 0) && !response.items[
                                                 i]
-                                                .floData.startsWith(options.pattern, 2))
+                                            .floData.startsWith(options.pattern, 2))
                                             continue;
                                         if (options.contains && !response.items[i].floData
                                             .includes(
                                                 options.contains))
                                             continue;
                                         if (options.filter && !options.filter(response.items[i]
-                                            .floData))
+                                                .floData))
                                             continue;
                                         filteredData.push(response.items[i].floData);
                                     }
@@ -10916,8 +10864,8 @@ background-color: transparent;
                                         data: filteredData
                                     });
                                 }).catch(error => {
-                                    reject(error);
-                                });
+                                reject(error);
+                            });
                     }).catch(error => {
                         reject(error);
                     });
@@ -11589,7 +11537,7 @@ background-color: transparent;
                         var db = event.target.result;
                         for (let obs in objectStores) {
                             var objectStore = db.createObjectStore(obs, objectStores[obs].options ||
-                                {});
+                            {});
                             if (objectStores[obs].indexes && typeof objectStores[obs].indexes ===
                                 'object')
                                 for (let i in objectStores[obs].indexes)
@@ -11770,7 +11718,7 @@ background-color: transparent;
                                 floGlobals.vectorClock[message.object] = vc
                                 compactIDB.writeData("appObjects", floGlobals.appObjects[message.object],
                                     message
-                                        .object)
+                                    .object)
                                 compactIDB.writeData("vectorClock", vc, message.object)
                             }
                         }
@@ -11790,7 +11738,7 @@ background-color: transparent;
                                     message.object], message.diff)
                                 compactIDB.writeData("appObjects", floGlobals.appObjects[message.object],
                                     message
-                                        .object)
+                                    .object)
                             }
                             floGlobals.vectorClock[message.object] = vc
                             compactIDB.writeData("vectorClock", vc, message.object)
@@ -11880,7 +11828,7 @@ background-color: transparent;
                     })
                     options.type = type
                     options.lowerVectorClock = options.lowerVectorClock || floGlobals.generalVC[
-                        filterStr] +
+                            filterStr] +
                         1
                     this.requestApplicationData(options).then(dataSet => {
                         this.util.storeGeneralData(filterStr, dataSet)
@@ -11946,7 +11894,7 @@ background-color: transparent;
                         vectorClock: floGlobals.vectorClock[objectName],
                         diff: findDifference(JSON.parse(this.util.lastCommit[objectName]),
                             floGlobals
-                                .appObjects[objectName])
+                            .appObjects[objectName])
                     }
                     this.sendApplicationData(message, `${objectName}@Update`, options).then(result => {
                         this.util.lastCommit[objectName] = JSON.stringify(floGlobals.appObjects[
@@ -12021,16 +11969,16 @@ background-color: transparent;
                                     compactIDB.writeData("lastTx", result.totalTxs,
                                         floGlobals.SNStorageID);
                                     compactIDB.readAllData("supernodes").then(
-                                        result => {
-                                            floGlobals.supernodes = result;
+                                    result => {
+                                        floGlobals.supernodes = result;
 
-                                            floSupernode.kBucket.launch(Object.keys(
-                                                floGlobals.supernodes),
+                                        floSupernode.kBucket.launch(Object.keys(
+                                                    floGlobals.supernodes),
                                                 floGlobals.SNStorageID)
-                                                .then(result => resolve(
-                                                    "Loaded Supernode list\n" +
-                                                    result))
-                                        })
+                                            .then(result => resolve(
+                                                "Loaded Supernode list\n" +
+                                                result))
+                                    })
                                 })
                             }).catch(error => reject(error))
                         })
@@ -12047,13 +11995,13 @@ background-color: transparent;
                                     for (var i = result.data.length - 1; i >= 0; i--) {
                                         var content = JSON.parse(result.data[i])[
                                             floGlobals
-                                                .application];
+                                            .application];
                                         if (Array.isArray(content.removeSubAdmin))
                                             for (var j = 0; j < content.removeSubAdmin
                                                 .length; j++)
                                                 compactIDB.removeData("subAdmins",
                                                     content
-                                                        .removeSubAdmin[j]);
+                                                    .removeSubAdmin[j]);
                                         if (Array.isArray(content.addSubAdmin))
                                             for (var k = 0; k < content.addSubAdmin
                                                 .length; k++)
@@ -12164,25 +12112,25 @@ background-color: transparent;
                                         writeSharesToIDB(floCrypto
                                             .createShamirsSecretShares(
                                                 privKey, threshold, threshold)).then(
-                                                    resultIndexes => {
-                                                        //store index keys in localStorage
-                                                        localStorage.setItem(
-                                                            `${floGlobals.application}#privKey`,
-                                                            JSON.stringify(resultIndexes))
-                                                        //also add a dummy privatekey to the IDB
-                                                        var randomPrivKey = floCrypto
-                                                            .generateNewID().privKey
-                                                        var randomThreshold = floCrypto.randInt(
-                                                            10,
-                                                            20)
-                                                        writeSharesToIDB(floCrypto
-                                                            .createShamirsSecretShares(
-                                                                randomPrivKey,
-                                                                randomThreshold,
-                                                                randomThreshold))
-                                                        //resolve private Key
-                                                        resolve(privKey)
-                                                    }).catch(error => reject(error))
+                                            resultIndexes => {
+                                                //store index keys in localStorage
+                                                localStorage.setItem(
+                                                    `${floGlobals.application}#privKey`,
+                                                    JSON.stringify(resultIndexes))
+                                                //also add a dummy privatekey to the IDB
+                                                var randomPrivKey = floCrypto
+                                                    .generateNewID().privKey
+                                                var randomThreshold = floCrypto.randInt(
+                                                    10,
+                                                    20)
+                                                writeSharesToIDB(floCrypto
+                                                    .createShamirsSecretShares(
+                                                        randomPrivKey,
+                                                        randomThreshold,
+                                                        randomThreshold))
+                                                //resolve private Key
+                                                resolve(privKey)
+                                            }).catch(error => reject(error))
                                     })
                                 }
                             })
@@ -12299,8 +12247,8 @@ background-color: transparent;
                         reject('Access Denied for Admin privilege')
                     else
                         floBlockchainAPI.writeData(floID, JSON.stringify(floData), adminPrivKey)
-                            .then(result => resolve(['Updated SubAdmin List', result]))
-                            .catch(error => reject(error))
+                        .then(result => resolve(['Updated SubAdmin List', result]))
+                        .catch(error => reject(error))
                 })
             },
 
@@ -12366,7 +12314,7 @@ background-color: transparent;
 
     <script>
         function extend(Child, Parent) {
-            var Temp = function () { };
+            var Temp = function () {};
             Temp.prototype = Parent.prototype;
             Child.prototype = new Temp();
             Child.prototype.constructor = Child;
@@ -12502,7 +12450,6 @@ background-color: transparent;
         }
     </script>
 
-<<<<<<< HEAD
     <script>
         const token_app = {
             master_configurations: {},
@@ -12570,307 +12517,241 @@ background-color: transparent;
                             if (txt.floData.length === 0) break;
                             tx_cmnt_arr.push(txt.floData);
                         }
-=======
-<script>
-    const token_app = {
-        master_configurations: {},
-        //masterFLOAddress: 'FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky',
-        actions: {},
-        blocked_flo_ids: [],
-    };
-
-    token_app.actions = {
-
-        parse_flo_comments: async function () {
-            text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
-                #!#CURRENCY=INR
-                #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST2
-                #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST2
-                #!#TYPE_MSGES=USER_MESSAGES_TEST2
-                #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST2
-                #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST2
-                #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST2
-                #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST2
-                #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST2
-                #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST2
-                #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST2
-                #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST2
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST2
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST2
-                #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST2
-                #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST2
-                #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
-                #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
-                #!#cashiers=
-                {
-                    "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
-                        "upi_id": "8507742774@ybl"
-                    },
-                    "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
-                        "upi_id": "8340617958@ybl"
-                    },
-                    "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
-                        "upi_id": "8902496422@ybl"
-                    },
-                    "FBun3694ZdxmD66os9oL5DxMrif3vyVjT3": {
-                        "upi_id": "7004801428@ybl"
-                    },
-                    "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
-                        "upi_id": "aakriti1705sinha@okicici"
-                    },
-                    "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
-                        "upi_id": "krishraj1012-2@okicici"
->>>>>>> dfb4096eb9e47914a901abdb9bef5f240cddd8fb
                     }
-                }`
-            text = removeWhiteSpaces(text);
-            return text;
-            const master_data = await ajaxGet(
-                `${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
-            if (typeof master_data === "object" && typeof master_data.txs === "object") {
-                let text = '';
-                let tx_cmnt_arr = [];
 
-                for (txt of master_data.txs) {
-                    if (txt.vin[0].addr === token_app.masterFLOAddress) {
-                        if (txt.floData.length === 0) break;
-                        tx_cmnt_arr.push(txt.floData);
-                    }
+                    tx_cmnt_arr.reverse().map(m => text += m.replace('text:', ''));
+                    return text;
                 }
+            },
 
-                tx_cmnt_arr.reverse().map(m => text += m.replace('text:', ''));
-                return text;
-            }
-        },
+            fetch_configs: async function () {
+                const floData = await this.parse_flo_comments();
+                let RMAssets = floData.trim();
+                let floAssetsArray = RMAssets.split("#!#");
 
-        fetch_configs: async function () {
-            const floData = await this.parse_flo_comments();
-            let RMAssets = floData.trim();
-            let floAssetsArray = RMAssets.split("#!#");
+                if (
+                    floAssetsArray.length > 0 &&
+                    typeof floAssetsArray[0] !== undefined &&
+                    floAssetsArray[0].trim() !== "" &&
+                    typeof floAssetsArray[1] !== undefined &&
+                    floAssetsArray[1].trim() !== ""
+                ) {
+                    try {
+                        for (const assets_string of floAssetsArray) {
 
-            if (
-                floAssetsArray.length > 0 &&
-                typeof floAssetsArray[0] !== undefined &&
-                floAssetsArray[0].trim() !== "" &&
-                typeof floAssetsArray[1] !== undefined &&
-                floAssetsArray[1].trim() !== ""
-            ) {
-                try {
-                    for (const assets_string of floAssetsArray) {
+                            let k = assets_string.split("=");
 
-                        let k = assets_string.split("=");
-
-                        if (k[1].indexOf(",") > 0 && k[1].indexOf("{") == -1) {
-                            k[1] = k[1]
-                                .split(",")
-                                .map(val =>
-                                    !isNaN(val) ? parseFloat(val) : val.trim()
-                                )
-                                .filter(v => ![null, "", undefined, NaN].includes(v));
-                        } else if (!isNaN(k[1])) {
-                            k[1] = parseFloat(k[1]);
-                        }
-                        if (typeof k[1] == "string" && k[1].indexOf("{") >= 0) {
-                            k[1] = JSON.parse(k[1].replace(/ /g, ""));
-                        }
-
-                        if (typeof token_app.master_configurations !== "object") token_app
-                            .master_configurations = {};
-
-                        Object.defineProperty(
-                            token_app.master_configurations,
-                            k[0], {
-                                value: k[1],
-                                writable: false,
-                                configurable: false,
-                                enumerable: true
+                            if (k[1].indexOf(",") > 0 && k[1].indexOf("{") == -1) {
+                                k[1] = k[1]
+                                    .split(",")
+                                    .map(val =>
+                                        !isNaN(val) ? parseFloat(val) : val.trim()
+                                    )
+                                    .filter(v => ![null, "", undefined, NaN].includes(v));
+                            } else if (!isNaN(k[1])) {
+                                k[1] = parseFloat(k[1]);
                             }
+                            if (typeof k[1] == "string" && k[1].indexOf("{") >= 0) {
+                                k[1] = JSON.parse(k[1].replace(/ /g, ""));
+                            }
+
+                            if (typeof token_app.master_configurations !== "object") token_app
+                                .master_configurations = {};
+
+                            Object.defineProperty(
+                                token_app.master_configurations,
+                                k[0], {
+                                    value: k[1],
+                                    writable: false,
+                                    configurable: false,
+                                    enumerable: true
+                                }
+                            );
+                        }
+                        deepFreeze(token_app.master_configurations);
+                        return token_app;
+                    } catch (error) {
+                        console.error(
+                            "FATAL ERROR: Failed to fetch master configuration: ",
+                            error
                         );
                     }
-                    deepFreeze(token_app.master_configurations);
-                    return token_app;
-                } catch (error) {
-                    console.error(
-                        "FATAL ERROR: Failed to fetch master configuration: ",
-                        error
-                    );
                 }
-            }
-            return false;
-        },
+                return false;
+            },
 
-        doShreeGanesh: async function () {
+            doShreeGanesh: async function () {
 
-            // fetch configs from master comment
-            await this.fetch_configs();
+                // fetch configs from master comment
+                await this.fetch_configs();
 
-            await this.retrieveLatestContent();
+                await this.retrieveLatestContent();
 
-            request_rupee_token();
+                request_rupee_token();
 
-            withdraw_token_to_get_cash();
+                withdraw_token_to_get_cash();
 
-            transferTokensManually();
+                transferTokensManually();
 
-            const allCashierOptions = document.querySelectorAll('.cashier-option'),
-                allUserOptions = document.querySelectorAll('.user-option'),
-                allHelplineOptions = document.querySelectorAll('.helpline-option'),
-                userType = document.getElementById('user_type')
+                const allCashierOptions = document.querySelectorAll('.cashier-option'),
+                    allUserOptions = document.querySelectorAll('.user-option'),
+                    allHelplineOptions = document.querySelectorAll('.helpline-option'),
+                    userType = document.getElementById('user_type')
 
-            //Cashier startup sequence
-            if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-                allCashierOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                show_deposit_request()
-                show_withdraw_request()
-                showPayRequests()
-                userType.textContent = 'Cashier'
-                showPage(document.getElementById('deposit_page_btn'), 'deposit')
-            }
+                //Cashier startup sequence
+                if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+                    allCashierOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    show_deposit_request()
+                    show_withdraw_request()
+                    showPayRequests()
+                    userType.textContent = 'Cashier'
+                    showPage(document.getElementById('deposit_page_btn'), 'deposit')
+                }
 
-            //Helpline startup sequence
-            else if (token_app.master_configurations.helplineFloId === myFloID) {
-                allCashierOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                let cashierList = ``,
-                    cashierSelect = document.getElementById('select_cashier')
-                cashierList += `<sm-strip-option value = "">Select Cashier...</sm-strip-option>`;
-                for (cashier in token_app.master_configurations.cashiers)
-                    cashierList += `<sm-strip-option value = "${cashier}">${cashier}</sm-strip-option>`
-                cashierSelect.innerHTML = cashierList;
-                await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(
-                    cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
-                userType.textContent = 'Helpline'
-                showPage(document.getElementById('helpline_page_btn'), 'helpline_page')
-            }
+                //Helpline startup sequence
+                else if (token_app.master_configurations.helplineFloId === myFloID) {
+                    allCashierOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    let cashierList = ``,
+                        cashierSelect = document.getElementById('select_cashier')
+                    cashierList += `<sm-strip-option value = "">Select Cashier...</sm-strip-option>`;
+                    for (cashier in token_app.master_configurations.cashiers)
+                        cashierList += `<sm-strip-option value = "${cashier}">${cashier}</sm-strip-option>`
+                    cashierSelect.innerHTML = cashierList;
+                    await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(
+                        cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
+                    userType.textContent = 'Helpline'
+                    showPage(document.getElementById('helpline_page_btn'), 'helpline_page')
+                }
 
-            //user startup sequence
-            else {
-                allCashierOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                show_user_activities()
-                show_payment_requests()
-                userType.textContent = 'User'
-                showPage(document.getElementById('home_page_btn'), 'home_page')
-            }
+                //user startup sequence
+                else {
+                    allCashierOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    show_user_activities()
+                    show_payment_requests()
+                    userType.textContent = 'User'
+                    showPage(document.getElementById('home_page_btn'), 'home_page')
+                }
 
-            hidePopup()
+                hidePopup()
 
-            pay_through_cashier();
-        },
+                pay_through_cashier();
+            },
 
-        retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals
-            .subAdmins) {
+            retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals
+                .subAdmins) {
 
-            floCloudAPI.requestObjectData(floGlobals.application, {
-                receiverID,
-                senderIDs
-            });
+                floCloudAPI.requestObjectData(floGlobals.application, {
+                    receiverID,
+                    senderIDs
+                });
 
-            if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-                await Promise.all([floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_DEPOSITS, {
+                if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+                    await Promise.all([floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_DEPOSITS, {
+                                receiverID: myFloID
+                            }),
+
+                        floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
                             receiverID: myFloID
                         }),
 
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
-                        receiverID: myFloID
-                    }),
-
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
-                        receiverID: myFloID
-                    }),
-
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PAY_THROUGH_CASHIER, {
+                        floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
                             receiverID: myFloID
-                        })
-                ])
+                        }),
 
-                return true;
-            } else if (token_app.master_configurations.helplineFloId === myFloID) {
-                await clearCashierData();
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PAY_THROUGH_CASHIER, {
+                                receiverID: myFloID
+                            })
+                    ])
 
-                await Promise.all([
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_DEPOSITS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_WITHDRAWS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_DEPOSITS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_WITHDRAWS_COMPLAINT)
-                ])
+                    return true;
+                } else if (token_app.master_configurations.helplineFloId === myFloID) {
+                    await clearCashierData();
 
-                return true;
-            } else {
+                    await Promise.all([
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_DEPOSITS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_WITHDRAWS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_DEPOSITS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_WITHDRAWS_COMPLAINT)
+                    ])
 
-                let promises = [];
+                    return true;
+                } else {
 
-                for (let cashier in token_app.master_configurations.cashiers) {
-                    let p1 = floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
-                        receiverID: cashier,
-                        senderIDs: [myFloID]
-                    })
+                    let promises = [];
 
-                    let p2 = floCloudAPI.requestGeneralData(token_app.master_configurations
-                    .TYPE_WITHDRAWS, {
-                        receiverID: cashier,
-                        senderIDs: [myFloID]
-                    })
-
-                    let p3 = floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PAY_THROUGH_CASHIER, {
+                    for (let cashier in token_app.master_configurations.cashiers) {
+                        let p1 = floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
                             receiverID: cashier,
                             senderIDs: [myFloID]
                         })
 
-                    promises.push(p1);
-                    promises.push(p2);
-                    promises.push(p3);
+                        let p2 = floCloudAPI.requestGeneralData(token_app.master_configurations
+                        .TYPE_WITHDRAWS, {
+                            receiverID: cashier,
+                            senderIDs: [myFloID]
+                        })
+
+                        let p3 = floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PAY_THROUGH_CASHIER, {
+                                receiverID: cashier,
+                                senderIDs: [myFloID]
+                            })
+
+                        promises.push(p1);
+                        promises.push(p2);
+                        promises.push(p3);
+
+                    }
+
+                    let p4 = floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
+                        receiverID: myFloID
+                    })
+
+                    promises.push(p4);
+
+                    await Promise.all(promises);
+
+                    return promises;
 
                 }
 
-                let p4 = floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
-                    receiverID: myFloID
-                })
-
-                promises.push(p4);
-
-                await Promise.all(promises);
-
-                return promises;
-
             }
-
         }
-    }
-</script>
+    </script>
 
     <!-- Cashier functions -->
     <script>
@@ -12951,7 +12832,7 @@ background-color: transparent;
                 });
 
                 const general_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
-                    "0");
+                "0");
 
                 if (typeof general_msg !== "object") {
                     notify(`No data available in withdraws.`);
@@ -13010,11 +12891,11 @@ background-color: transparent;
 
                     // Add data into personal ledger as well
                     floCloudAPI.sendGeneralData(input_data, token_app.master_configurations
-                        .TYPE_PROCESSED_DEPOSITS, {
+                    .TYPE_PROCESSED_DEPOSITS, {
                         receiverID: myFloID
                     });
 
-                    notify(`Transfer successfull: ${flo_txid}.`, 'success', true, true);
+                    notify(`Transfer successful: <span class="breakable">${flo_txid}</span>.`, 'success', '', true);
 
                     return true;
                 }
@@ -13072,8 +12953,8 @@ background-color: transparent;
                 floCloudAPI.sendGeneralData(`Your withdrawal request of INR ${amount_to_transfer} is approved. 
                         Please check reference number ${transfer_upi_txid} in your UPI ${withdraw_upi}`,
                     token_app.master_configurations.TYPE_MSGES, {
-                    receiverID: input_data['withdrawer_flo_id']
-                })
+                        receiverID: input_data['withdrawer_flo_id']
+                    })
 
             } catch (error) {
                 notify(error, 'error')
@@ -13089,7 +12970,7 @@ background-color: transparent;
                     const token_amount = Number(document.getElementById('token_amount').value);
                     const token_name_radio = 'rupee';
                     const flo_comment =
-                        `transfer ${token_amount} ${token_name_radio}# to ${token_receiver}`;
+                    `transfer ${token_amount} ${token_name_radio}# to ${token_receiver}`;
                     const token_balance_url =
                         `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=${token_name_radio}&floAddress=${token_sender}`;
                     const sender_token_balance = await ajaxGet(token_balance_url);
@@ -13117,15 +12998,14 @@ background-color: transparent;
                         return false;
                     }
 
-                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, token_receiver, 0.001, myPrivKey,
-                        flo_comment)
+                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, token_receiver, 0.001, myPrivKey, flo_comment)
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
                         notify(`Transaction unsuccessful.`);
                         hidePopup()
                         return false;
                     } else {
-                        notify(`Transaction successful: ${flo_txid}.`, '', true, true);
+                        notify(`Transaction successful: ${flo_txid}.`, 'success', '', true);
                         if (payingRequested) {
                             payment_request_status(currentPaymentRequest.requestId, 'APPROVED')
                             showPayRequests()
@@ -13143,22 +13023,28 @@ background-color: transparent;
         async function refresh_balance(refreshButton) {
             try {
                 if (refreshButton) {
-                    notify('Updating Balance')
                     refreshButton.classList.add('animate-loader')
                 }
                 const current_token_balance = document.getElementById('token_balance').textContent;
                 if (typeof current_token_balance == "string") {
-                    const get_user_balance = await ajaxGet(
+                    const get_user_rupee_balance = await ajaxGet(
                         'https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' +
                         myFloID)
-                    if (typeof get_user_balance === "object" && get_user_balance.balance >= 0) {
-                        if (get_user_balance.balance === null)
-                            get_user_balance.balance = 0;
-                        document.getElementById('token_balance').textContent = get_user_balance.balance;
+                    const get_user_flo_balance = await ajaxGet(`
+                        https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?floAddress=${myFloID}`)
+                    console.log(get_user_flo_balance)
+                    if (typeof get_user_rupee_balance === "object" && get_user_rupee_balance.balance >= 0) {
+                        if (get_user_rupee_balance.balance === null)
+                            get_user_rupee_balance.balance = 0;
+                        document.getElementById('token_balance').textContent = get_user_rupee_balance.balance;
                     }
+                    /*if (typeof get_user_flo_balance === "object" && get_user_flo_balance.balance >= 0) {
+                        if (get_user_flo_balance.balance === null)
+                            get_user_flo_balance.balance = 0;
+                        document.getElementById('flo_balance').textContent = get_user_flo_balance.balance;
+                    }*/
                 }
                 if (refreshButton) {
-                    notifications.clearAll()
                     notify('Balance Updated')
                     refreshButton.classList.remove('animate-loader')
                 }
@@ -13265,11 +13151,11 @@ background-color: transparent;
                         // Add data into personal ledger as well
                         await floCloudAPI.sendGeneralData(input_data, token_app.master_configurations
                             .TYPE_PROCESSED_PAY_THROUGH_CASHIER, {
-                            receiverID: myFloID
-                        });
+                                receiverID: myFloID
+                            });
 
-                        notify(`Transaction successfull: ${flo_txid}.   
-                            INR ${amount_to_pay} sent to ${vendor_flo_id}`, '', true, true);
+                        notify(`Transaction successful: <span class="breakable">${flo_txid}</span>.   
+                            INR ${amount_to_pay} sent to ${vendor_flo_id}`, 'success', '', true);
                         return true;
                     }
                 }
@@ -13291,9 +13177,16 @@ background-color: transparent;
                 const token_amount_to_buy = document.getElementById('token_amount_to_buy');
                 request_tokens_btn.onclick = async function () {
                     if (depositRequested === 0) {
+<<<<<<< HEAD
+                    if (typeof myFloID !== "string" || myFloID.length < 1) return;
+                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+                        document.getElementById('send_cash_to_deposit').innerHTML = `Please pay <b>₹${token_amount_to_buy.value}</b> to UPI Id <b>${cashier_upi}</b>.<br> After sending money, enter UPI transaction ID below.`;
+=======
                         if (typeof myFloID !== "string" || myFloID.length < 1) return;
                         const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                        document.getElementById('send_cash_to_deposit').innerHTML = `Please pay <b>₹${token_amount_to_buy.value}</b> to UPI Id <b>${cashier_upi}</b>.<br> After sending money, enter UPI transaction ID below.`;
+                        document.getElementById('send_cash_to_deposit').innerHTML = cashier_upi;
+                        document.getElementById('send_amount_to_deposit').innerHTML = `Please pay <b>₹${token_amount_to_buy.value}</b> to UPI Id below.`;
+>>>>>>> 0e71a98c861cee522e666f8addb47b4806510ee0
                         document.getElementById('upi_txId_section').classList.remove('hide-completely')
                         document.getElementById('deposit_amount_section').classList.add('hide-completely')
                         depositedRupeeTxId.disabled = false
@@ -13303,25 +13196,26 @@ background-color: transparent;
                     if (depositRequested === 1) {
                         btnLoading('request_tokens_btn', 'start')
                         let upi_txid = depositedRupeeTxId.value
-                        let request_object = {
-                            user_flo_id: myFloID,
-                            upi_txid: upi_txid,
+                    let request_object = {
+                        user_flo_id: myFloID,
+                        upi_txid: upi_txid,
                             deposit_amount: token_amount_to_buy.value
-                        }
-                        if (typeof upi_txid === "string" && upi_txid.length > 1) {
-                            floCloudAPI.sendGeneralData(request_object, token_app.master_configurations
-                                .TYPE_DEPOSITS, {
+                    }
+                    if (typeof upi_txid === "string" && upi_txid.length > 1) {
+                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations
+                            .TYPE_DEPOSITS, {
                                 receiverID: cashier
                             }).then(result => {
-                                console.log(result);
+                            console.log(result);
                                 notify('Deposit request sent.', 'success');
-                                hidePopup()
-                            })
-                            return true;
+                            hidePopup()
+                        })
+                        return true;
                         }
                         hidePopup()
-                        return false;
                     }
+                    return false;
+                }
                     depositRequested = depositRequested === 1 ? 0 : 1
                 }
             } catch (error) {
@@ -13368,8 +13262,7 @@ background-color: transparent;
                     }
 
                     const flo_comment = `transfer ${withdraw_cash_amount} rupee#`;
-                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, cashier, 0.001, myPrivKey,
-                        flo_comment)
+                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, cashier, 0.001, myPrivKey, flo_comment)
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
                         notify(`Transaction unsuccessfull.`, 'error');
@@ -13387,10 +13280,8 @@ background-color: transparent;
                     }
                     console.log(request_object);
                     if (typeof flo_txid === "string" && flo_txid.length > 1) {
-                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations
-                            .TYPE_WITHDRAWS, {
-                            receiverID: cashier
-                        });
+                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations.TYPE_WITHDRAWS,
+                            { receiverID: cashier });
                         notify('Withdraw request sent successfully.');
                         hidePopup()
                         return true;
@@ -13421,10 +13312,10 @@ background-color: transparent;
                     let amount_to_pay = Number(paying_amount_div.value);
                     let paid_cashier_upi_txid = document.getElementById('paid_cashier_upi_txid').value;
                     paid_cashier_upi_txid = toAlphanumeric(paid_cashier_upi_txid);
-                    if (recvr_id.length < 1 ||
-                        !floCrypto.validateAddr(recvr_id) ||
-                        amount_to_pay <= 0 ||
-                        paid_cashier_upi_txid.length < 1)
+                    if (recvr_id.length < 1
+                        || !floCrypto.validateAddr(recvr_id)
+                        || amount_to_pay <= 0
+                        || paid_cashier_upi_txid.length < 1)
                         return notify("Incomplete information", 'error', '', true);
                     const req_object = {
                         receiver_flo_id: recvr_id,
@@ -13432,11 +13323,8 @@ background-color: transparent;
                         upi_txid: toAlphanumeric(paid_cashier_upi_txid)
                     }
 
-                    floCloudAPI.sendGeneralData(req_object, token_app.master_configurations
-                        .TYPE_PAY_THROUGH_CASHIER, {
-                        receiverID: cashier,
-                        senderIDs: [myFloID]
-                    });
+                    floCloudAPI.sendGeneralData(req_object, token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                        { receiverID: cashier, senderIDs: [myFloID] });
 
                     notify(`You have sent cash to <span class="breakable">${recvr_id}</span> through our cashier service (${cashier_upi}). 
                         Once the cashier receives your payment, he will transfer it to ${recvr_id}.`, '', true, true);
@@ -13594,15 +13482,15 @@ background-color: transparent;
                     }),
                     floCloudAPI.requestGeneralData(token_app.master_configurations
                         .TYPE_REQUEST_PAYMENT_DECLINED, {
-                        receiverID: myFloID
-                    }),
+                            receiverID: myFloID
+                        }),
                     floCloudAPI.requestGeneralData(token_app.master_configurations
                         .TYPE_REQUEST_PAYMENT_APPROVED, {
-                        receiverID: myFloID
-                    })
+                            receiverID: myFloID
+                        })
                 ])
                 const general_msg = floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_REQUEST_PAYMENT, "0").reverse(),
+                        .TYPE_REQUEST_PAYMENT, "0").reverse(),
                     declined_reqs_list = floDapps.getNextGeneralData(token_app.master_configurations
                         .TYPE_REQUEST_PAYMENT_DECLINED, "0").reverse(),
                     approved_reqs_list = floDapps.getNextGeneralData(token_app.master_configurations
@@ -13679,7 +13567,7 @@ background-color: transparent;
                         receiverID: receiver
                     }),
                     floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_DEPOSITS, {
+                    .TYPE_PROCESSED_DEPOSITS, {
                         receiverID: receiver
                     })
                 ])
@@ -13711,24 +13599,18 @@ background-color: transparent;
                 console.log(unprocessed_deposits_complaints);
 
                 for (const udc of unprocessed_deposits_complaints) {
-                    let all_users_deposits = floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_DEPOSITS, "0");
+                    let all_users_deposits = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0");
                     let this_user_deposit = all_users_deposits.filter(f => f.vectorClock === udc.message.order_vc);
                     let this_user_deposit_upi_txid_list = this_user_deposit.map(m => m.message.upi_txid);
 
-                    let userData = {},
-                        cashierData = {};
+                    let userData = {}, cashierData = {};
                     let all_cashier_processed_deposits = floDapps
                         .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_DEPOSITS, "0");
                     console.log(udc)
                     let this_cashier_processed_user_deposit = all_cashier_processed_deposits
                         .filter(f => this_user_deposit_upi_txid_list.includes(f.message.user_upi_txid));
                     if (this_user_deposit.length) {
-                        let {
-                            deposit_amount,
-                            upi_txid,
-                            user_flo_id
-                        } = this_user_deposit[0].message;
+                        let { deposit_amount, upi_txid, user_flo_id } = this_user_deposit[0].message;
                         userData = {
                             depositedAmount: deposit_amount,
                             upiTxId: upi_txid,
@@ -13738,10 +13620,7 @@ background-color: transparent;
                         }
                     }
                     if (this_cashier_processed_user_deposit.length) {
-                        let {
-                            datetime,
-                            flo_txid
-                        } = this_cashier_processed_user_deposit[0].message;
+                        let { datetime, flo_txid } = this_cashier_processed_user_deposit[0].message;
                         cashierData = {
                             processed: true,
                             time: datetime,
@@ -13782,14 +13661,10 @@ background-color: transparent;
 
                 await clearCashierData();
 
-                await Promise.all([floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
-                    receiverID: receiver
-                }),
-                floCloudAPI.requestGeneralData(token_app.master_configurations
-                    .TYPE_PROCESSED_WITHDRAWS, {
-                    receiverID: receiver
-                })
-                ])
+                await Promise.all([floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
+                    { receiverID: receiver }),
+                floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
+                    { receiverID: receiver })])
 
                 let options = {
                     type: token_app.master_configurations.TYPE_FILE_WITHDRAWS_COMPLAINT,
@@ -13805,18 +13680,15 @@ background-color: transparent;
                 //options.type = token_app.master_configurations.TYPE_PROCESSED_DEPOSITS;
                 options.type = token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS_COMPLAINT;
 
-                const processed_withdraws_complaints = JSON.parse(await floCloudAPI.requestApplicationData(
-                    options));
+                const processed_withdraws_complaints = JSON.parse(await floCloudAPI.requestApplicationData(options));
 
                 // filter out processed tasks from unprocessed ones
                 const unprocessed_withdraws_complaints = Object.values(all_withdraws_complaints)
                     .filter(orders_comparer(Object.values(processed_withdraws_complaints)));
 
                 for (const udc of unprocessed_withdraws_complaints) {
-                    let all_users_withdraws = floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_WITHDRAWS, "0");
-                    let this_user_withdraws = all_users_withdraws.filter(f => f.vectorClock === udc.message
-                        .order_vc);
+                    let all_users_withdraws = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, "0");
+                    let this_user_withdraws = all_users_withdraws.filter(f => f.vectorClock === udc.message.order_vc);
                     console.log(this_user_withdraws);
 
                     let this_user_withdraws_token_txid_list = this_user_withdraws.map(m => m.message.token_txid);
@@ -13828,11 +13700,7 @@ background-color: transparent;
                         .filter(f => this_user_withdraws_token_txid_list.includes(f.message.token_txid));
                     console.log(this_cashier_processed_user_withdraws);
                     if (this_user_withdraws.length) {
-                        let {
-                            withdraw_amount,
-                            upi_txid,
-                            user_flo_id
-                        } = this_user_withdraws[0].message;
+                        let { withdraw_amount, upi_txid, user_flo_id } = this_user_withdraws[0].message;
                         userData = {
                             withdrawnAmount: withdraw_amount,
                             upiTxId: upi_txid,
@@ -13842,10 +13710,7 @@ background-color: transparent;
                         }
                     }
                     if (this_cashier_processed_user_withdraws.length) {
-                        let {
-                            datetime,
-                            flo_txid
-                        } = this_cashier_processed_user_withdraws[0].message;
+                        let { datetime, flo_txid } = this_cashier_processed_user_withdraws[0].message;
                         cashierData = {
                             processed: true,
                             time: datetime,
@@ -13886,15 +13751,10 @@ background-color: transparent;
 
                 await clearCashierData();
 
-                await Promise.all([floCloudAPI.requestGeneralData(token_app.master_configurations
-                    .TYPE_PAY_THROUGH_CASHIER, {
-                    receiverID: receiver
-                }),
-                floCloudAPI.requestGeneralData(token_app.master_configurations
-                    .TYPE_PROCESSED_PAY_THROUGH_CASHIER, {
-                    receiverID: receiver
-                })
-                ])
+                await Promise.all([floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                    { receiverID: receiver }),
+                floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
+                    { receiverID: receiver })])
 
                 let options = {
                     type: token_app.master_configurations.TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT,
@@ -13905,27 +13765,22 @@ background-color: transparent;
                     options.senderIDs = sendersArray;
                 }
 
-                const all_pay_thru_cashier_complaints = JSON.parse(await floCloudAPI.requestApplicationData(
-                    options));
+                const all_pay_thru_cashier_complaints = JSON.parse(await floCloudAPI.requestApplicationData(options));
 
                 options.type = token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT;
 
-                const processed_pay_thru_cashier_complaints = JSON.parse(await floCloudAPI.requestApplicationData(
-                    options));
+                const processed_pay_thru_cashier_complaints = JSON.parse(await floCloudAPI.requestApplicationData(options));
 
                 // filter out processed tasks from unprocessed ones
                 const unprocessed_pay_thru_cashier_complaints = Object.values(all_pay_thru_cashier_complaints)
                     .filter(orders_comparer(Object.values(processed_pay_thru_cashier_complaints)));
 
                 for (const udc of unprocessed_pay_thru_cashier_complaints) {
-                    let all_users_pay_thru_cashier = floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_PAY_THROUGH_CASHIER, "0");
-                    let this_user_pay_thru_cashier = all_users_pay_thru_cashier.filter(f => f.vectorClock === udc
-                        .message.order_vc);
+                    let all_users_pay_thru_cashier = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, "0");
+                    let this_user_pay_thru_cashier = all_users_pay_thru_cashier.filter(f => f.vectorClock === udc.message.order_vc);
                     console.log(this_user_pay_thru_cashier);
 
-                    let this_user_pay_thru_cashier_upi_txid_list = this_user_pay_thru_cashier.map(m => m.message
-                        .upi_txid);
+                    let this_user_pay_thru_cashier_upi_txid_list = this_user_pay_thru_cashier.map(m => m.message.upi_txid);
 
                     let all_cashier_processed_pay_thru_cashier = floDapps
                         .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS, "0");
@@ -13935,11 +13790,7 @@ background-color: transparent;
                     console.log(this_cashier_processed_user_pay_thru_cashier);
 
                     if (this_user_pay_thru_cashier.length) {
-                        let {
-                            amount,
-                            upi_txid,
-                            receiver_flo_id
-                        } = this_user_pay_thru_cashier[0].message;
+                        let { amount, upi_txid, receiver_flo_id } = this_user_pay_thru_cashier[0].message;
                         userData = {
                             amount: amount,
                             upiTxId: upi_txid,
@@ -13950,10 +13801,7 @@ background-color: transparent;
                         }
                     }
                     if (this_cashier_processed_user_pay_thru_cashier.length) {
-                        let {
-                            datetime,
-                            flo_txid
-                        } = this_cashier_processed_user_pay_thru_cashier[0].message;
+                        let { datetime, flo_txid } = this_cashier_processed_user_pay_thru_cashier[0].message;
                         cashierData = {
                             processed: true,
                             time: datetime,
