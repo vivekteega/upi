@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blockchain UPI</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
 </head>
 
@@ -45,7 +43,7 @@
                 <title>Loader</title>
                 <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
             </svg>
-            <h4 id="tip_container">Loading BLOCKCHAIN UPI </h4>
+            <h4 id="tip_container">Loading Blockchain UPI </h4>
             <button onclick="signOut()">Reset</button>
         </div>
     </div>
@@ -76,10 +74,10 @@
                     <line x1="64" y1="0" x2="0" y2="64" />
                     <line x1="64" y1="64" x2="0" y2="0" />
                 </svg>
-                <h4>Transfer Rupee</h4>
+                <h4>Send Rupee</h4>
                 <button id="send_tokens_btn" class="action expand" type="submit" disabled>
                     <h4 class="expand primary-btn">
-                        transfer
+                        Send
                     </h4>
                     <svg viewBox="0 0 73 73" class="loader">
                         <path
@@ -88,8 +86,8 @@
                 </button>
             </div>
             <p>
-                Transfer your deposited Rupee tokens to any FLO address.<br>
-                *Requires token to be deposited first.
+                Send Rupees to any FLO address.<br>
+                *Requires Rupee to be deposited first.
             </p>
             <form autocomplete="off" onsubmit="return false">
                 <label class="input">
@@ -124,7 +122,7 @@
             </div>
             <form id="deposit_amount_section" autocomplete="off" onsubmit="return false">
                 <p>
-                    Deposit rupee through UPI to use as Digital currency powered by blockchain.
+                    Deposit rupee through UPI to use as digital currency powered by FLO blockchain.
                 </p>
                 <label class="input">
                     <input id="token_amount_to_buy" inputmode="numeric" type="number" min="1" required>
@@ -132,7 +130,15 @@
                 </label>
             </form>
             <form id="upi_txId_section" class="hide-completely top-padding" autocomplete="off" onsubmit="return false">
-                <p id="send_cash_to_deposit"></p>
+                <p id="send_amount_to_deposit"></p>
+                <div class="copy-row">
+                    <h4 id="send_cash_to_deposit" class="copy"></h4>
+                    <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                        <title>Copy</title>
+                        <rect x="16" y="16" width="48" height="48" rx="6" />
+                        <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                    </svg>
+                </div>
                 <label class="input">
                     <input id="deposited_rupee_txId" required disabled>
                     <div class="placeholder">UPI TxID</div>
@@ -160,7 +166,7 @@
                 </button>
             </div>
             <p>
-                Withdraw or redeem your rupee tokens back to your specified UPI address.
+                Withdraw or redeem your Rupee back to your specified UPI address.
             </p>
             <form autocomplete="off" onsubmit="return false">
                 <label class="input">
@@ -194,7 +200,7 @@
                     </button>
             </div>
             <p>
-                Request for rupee tokens from other's using FLO address.
+                Request Rupee from other's using FLO address.
             </p>
             <form autocomplete="off" onsubmit="return false">
                 <label class="input">
@@ -228,8 +234,8 @@
                 </button>
             </div>
             <p>
-                Don't have enough token balance? Pay to our cashier through UPI and your cash will be
-                transfered as Rupee tokens.
+                Don't have enough Rupee balance? Pay to our cashier through UPI and your cash will be
+                sent as Rupee.
             </p>
             <p id="pay_cashier_info"></p>
             <form autocomplete="off" onsubmit="return false">
@@ -284,15 +290,6 @@
                 <h5>RanchiMall</h5>
                 <h4>BLOCKCHAIN UPI</h4>
             </span>
-        </div>
-        <div id="display_balance">
-            <h5>Rupee Balance</h5>
-            <h4 id="token_balance">0</h4>
-            <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
-                <title>refresh balance</title>
-                <path d="M60.94,43.13A30.87,30.87,0,1,1,59,17.93" />
-                <polyline points="63.09 0.1 59.3 18.87 40.49 15.08" />
-            </svg>
         </div>
     </header>
     <nav id="navbar" class="hide-completely">
@@ -379,7 +376,7 @@
             </svg>
             <h5>Complaints</h5>
         </div>
-        <div title="profile page" class="navbar-item" onclick="showPage(this, 'profile_page')">
+        <div title="profile page" class="navbar-item" onclick="showPage(this, 'settings_page')">
             <svg class="icon" id="profile_pic" viewBox="0 0 49.54 61.12">
                 <path
                     d="M49.34,19.94c7.73,0,13.26,5.26,13.26,14S58.18,50.14,49.71,50.08,36.82,42.66,36.82,33.93s5.53-14,13.26-14"
@@ -388,79 +385,107 @@
                     d="M43.83,52c-2.34,4.38-9.77,6.64-15.31,9.06-2.29,1-4.11,13-1.53,13a46.06,46.06,0,0,0,23.51,6,40.48,40.48,0,0,0,22.51-6c2.58,0,.76-12-1.53-13-5.54-2.42-13-4.68-15.31-9.06"
                     transform="translate(-25.23 -19.44)" />
             </svg>
-            <h5 id="user_type">Cashier</h5>
+            <h5>Settings</h5>
         </div>
     </nav>
     <main class="hide-completely">
         <section class="page hide-completely" id="home_page">
-            <h1>What is Blockchain UPI?</h1>
+            <!--<h1>What is Blockchain UPI?</h1>
             <p>
-                Your Rupee balance is digital footprint of actual cash.<br> Deposit, Withdraw or Pay Rupee digitally
-                using a FLO Blockchain address.
-            </p>
+                Your Rupee balance is digital representation of actual cash on FLO Blockchain. 
+            </p>-->
 
-            <h4>Go ahead and try something</h4>
-
-            <div class="options-tab">
-                <div class="option" onclick="showPopup('cash_transfer')">
-                    <svg class="icon" viewBox="0 0 64 64">
-                        <title>transfer</title>
-                        <polyline
-                            points="17.04 35.97 14.57 33.5 40.15 7.9 32.75 0.5 55.52 0.5 55.52 23.28 48.12 15.87 23.86 40.14 15.88 48.13 8.48 40.72 8.48 63.5 31.25 63.5 23.85 56.1 49.43 30.5 46.96 28.03" />
-                    </svg>
-                    <h4>Transfer Rupee</h4>
-                </div>
-                <div class="option" onclick="showPopup('deposit_rupee')">
-                    <svg class="icon banking" viewBox="0 0 52 51.5">
-                        <line x1="4" y1="28" x2="4" y2="19.5" />
-                        <polyline points="4 6 4 1 51 1 51 48 4 48 4 41.5" />
-                        <line x1="9" y1="50" x2="18" y2="50" />
-                        <line x1="36" y1="50" x2="45" y2="50" />
-                        <circle cx="27.5" cy="30" r="9.5" />
-                        <circle cx="27.5" cy="30" r="3.5" />
-                        <rect x="1" y="6" width="6" height="13.5" rx="2.76" />
-                        <rect x="1" y="28" width="6" height="13.5" rx="2.76" />
-                    </svg>
-                    <h4>deposit rupee</h4>
-                </div>
-                <div class="option" onclick="showPopup('withdraw_rupee')">
-                    <svg class="icon banking" viewBox="0 0 52 60">
-                        <line x1="4" y1="33.5" x2="4" y2="25" />
-                        <polyline points="41.52 6.5 51 6.5 51 53.5 41.69 53.5" />
-                        <line x1="9" y1="55.5" x2="14" y2="55.5" />
-                        <line x1="43" y1="55.5" x2="45" y2="55.5" />
-                        <rect x="1" y="11.5" width="6" height="13.5" rx="2.76" />
-                        <rect x="1" y="33.5" width="6" height="13.5" rx="2.76" />
-                        <polyline points="3.81 11.5 3.81 6.5 41.5 1 41.69 59 3.81 53.5 3.81 47" />
-                        <path
-                            d="M35.64,39.19c0,6.31-3.25,11.45-7.22,11.48s-7-4.92-7-11.07,3.13-11.29,7.05-11.48S35.64,32.88,35.64,39.19Z"
-                            transform="translate(-6 -2)" />
-                        <path
-                            d="M31.06,39.32c0,2.31-1.19,4.2-2.64,4.23s-2.62-1.79-2.62-4.08S27,35.3,28.42,35.24,31.06,37,31.06,39.32Z"
-                            transform="translate(-6 -2)" />
-                    </svg>
-                    <h4>Withdraw rupee</h4>
-                </div>
-                <div class="option" onclick="showPopup('request_rupee')">
-                    <svg class="icon" viewBox="0 0 64 64">
-                        <title>request</title>
-                        <path
-                            d="M24,26.19a8.67,8.67,0,0,1-.24-3.61,8.34,8.34,0,0,1,16.59,1.27c0,8.35-8.66,8.16-8.34,11.58,0,.09,0,4.73,0,4.73" />
-                        <line x1="32" y1="47.08" x2="32" y2="48.99" />
-                        <path
-                            d="M32,.5h0A31.5,31.5,0,0,1,63.5,32v0A31.5,31.5,0,0,1,32,63.5H2.48a2,2,0,0,1-2-2V32A31.5,31.5,0,0,1,32,.5Z" />
-                    </svg>
-                    <h4>Request rupee</h4>
-                </div>
-                <div class="option" onclick="showPopup('pay_anyone')">
-                    <svg class="icon" viewBox="0 0 64 64">
-                        <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
-                        <rect height="64" width="64" rx="8"></rect>
-                    </svg>
-                    <h4>pay through cashier</h4>
-                    </a>
-                </div>
+            <div class="left">
+                <h4>Rupee actions</h4>
+                <sm-carousel class="options-tab">
+                    <div class="option" onclick="showPopup('cash_transfer')">
+                        <svg class="icon" viewBox="0 0 64 64">
+                            <path d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68"/>
+                           </svg>
+                        <h4>Send</h4>
+                    </div>
+                    <div class="option" onclick="showPopup('deposit_rupee')">
+                        <svg class="icon banking" viewBox="0 0 52 51.5">
+                            <line x1="4" y1="28" x2="4" y2="19.5" />
+                            <polyline points="4 6 4 1 51 1 51 48 4 48 4 41.5" />
+                            <line x1="9" y1="50" x2="18" y2="50" />
+                            <line x1="36" y1="50" x2="45" y2="50" />
+                            <circle cx="27.5" cy="30" r="9.5" />
+                            <circle cx="27.5" cy="30" r="3.5" />
+                            <rect x="1" y="6" width="6" height="13.5" rx="2.76" />
+                            <rect x="1" y="28" width="6" height="13.5" rx="2.76" />
+                        </svg>
+                        <h4>deposit</h4>
+                    </div>
+                    <div class="option" onclick="showPopup('withdraw_rupee')">
+                        <svg class="icon banking" viewBox="0 0 52 60">
+                            <line x1="4" y1="33.5" x2="4" y2="25" />
+                            <polyline points="41.52 6.5 51 6.5 51 53.5 41.69 53.5" />
+                            <line x1="9" y1="55.5" x2="14" y2="55.5" />
+                            <line x1="43" y1="55.5" x2="45" y2="55.5" />
+                            <rect x="1" y="11.5" width="6" height="13.5" rx="2.76" />
+                            <rect x="1" y="33.5" width="6" height="13.5" rx="2.76" />
+                            <polyline points="3.81 11.5 3.81 6.5 41.5 1 41.69 59 3.81 53.5 3.81 47" />
+                            <path
+                                d="M35.64,39.19c0,6.31-3.25,11.45-7.22,11.48s-7-4.92-7-11.07,3.13-11.29,7.05-11.48S35.64,32.88,35.64,39.19Z"
+                                transform="translate(-6 -2)" />
+                            <path
+                                d="M31.06,39.32c0,2.31-1.19,4.2-2.64,4.23s-2.62-1.79-2.62-4.08S27,35.3,28.42,35.24,31.06,37,31.06,39.32Z"
+                                transform="translate(-6 -2)" />
+                        </svg>
+                        <h4>Withdraw</h4>
+                    </div>
+                    <div class="option" onclick="showPopup('request_rupee')">
+                        <svg class="icon" viewBox="0 0 64 64">
+                            <title>request</title>
+                            <path
+                                d="M24,26.19a8.67,8.67,0,0,1-.24-3.61,8.34,8.34,0,0,1,16.59,1.27c0,8.35-8.66,8.16-8.34,11.58,0,.09,0,4.73,0,4.73" />
+                            <line x1="32" y1="47.08" x2="32" y2="48.99" />
+                            <path
+                                d="M32,.5h0A31.5,31.5,0,0,1,63.5,32v0A31.5,31.5,0,0,1,32,63.5H2.48a2,2,0,0,1-2-2V32A31.5,31.5,0,0,1,32,.5Z" />
+                        </svg>
+                        <h4>Request</h4>
+                    </div>
+                    <div class="option" onclick="showPopup('pay_anyone')">
+                        <svg class="icon" viewBox="0 0 64 64">
+                            <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
+                            <rect height="64" width="64" rx="8"></rect>
+                        </svg>
+                        <h4>pay through cashier</h4>
+                        </a>
+                    </div>
+                </sm-carousel>
             </div>
+            <div class="right">
+                <div id="user_panel">
+                    <h4 id="user_type">User</h4>
+                    <div class="copy-row">
+                        <h4 id="user_flo_id" class="copy"></h4>
+                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                            <title>Copy</title>
+                            <rect x="16" y="16" width="48" height="48" rx="6" />
+                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                        </svg>
+                    </div>
+                    <div class="flex align-items space-between">
+                        <h4>Balance</h4>
+                        <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
+                            <title>refresh balance</title>
+                            <polyline points="42.99 0.16 50.25 21.23 28.78 27.7"/>
+                            <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
+                        </svg>
+                    </div>
+                    <div id="display_balance" class="grid grid-2">
+                        <div class="balance">
+                            <h5>Rupee</h5>
+                            <h3 id="token_balance">0</h3>
+                        </div>
+                        <div class="balance">
+                            <h5>FLO</h5>
+                            <h3 id="flo_balance">0</h3>
+                        </div>
+                    </div>
+                </div>
         </section>
         <section id="deposit" class="page hide-completely">
             <div class="container-header">
@@ -712,18 +737,9 @@
                 </sm-panel>
             </sm-tab-panels>
         </section>
-        <section id="profile_page" class="page hide-completely">
+        <section id="settings_page" class="page hide-completely">
             <div class="container-header">
-                <h2>Profile</h2>
-            </div>
-            <h5>FLO ID</h5>
-            <div class="copy-row">
-                <h4 id="user_flo_id" class="copy"></h4>
-                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                    <title>Copy</title>
-                    <rect x="16" y="16" width="48" height="48" rx="6" />
-                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                </svg>
+                <h2>Settings</h2>
             </div>
             <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
         </section>
@@ -759,1429 +775,7 @@
             generalVC: {}
         }
     </script>
-    <script>
-        // tab
-        const smTab = document.createElement("template");
-        smTab.innerHTML = `
-<style>
-*{
-padding: 0;
-margin: 0;
-box-sizing: border-box;
-} 
-:host{
-position: relative;
-display: inline-flex;
-z-index: 1;
-}
-.tab{
-position: relative;
-user-select: none;
-justify-content: center;
-cursor: pointer;
--webkit-tap-highlight-color: transparent;
-white-space: nowrap;
-padding: 0.4rem 0.8rem;
-font-weight: 500;
-word-spacing: 0.1em;
-text-align: center;
-transition: color 0.3s;
-text-transform: capitalize;
-font-family: var(--font-family);
-}
-@media (hover: hover){
-:host(.active) .tab{
-opacity: 1;
-}
-.tab{
-opacity: 0.7
-}
-.tab:hover{
-opacity: 1
-}
-}
-</style>
-<div part="tab" class="tab">
-<slot></slot>
-</div>
-`;
-
-        customElements.define(
-            "sm-tab",
-            class extends HTMLElement {
-                constructor() {
-                    super();
-                    this.shadow = this.attachShadow({
-                        mode: "open"
-                    }).append(
-                        smTab.content.cloneNode(true)
-                    );
-                }
-            }
-        );
-
-        // select
-        const smSelect = document.createElement("template");
-        smSelect.innerHTML = `
-<style>     
-    *{
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    } 
-    .icon {
-        fill: none;
-        height: 0.8rem;
-        width: 0.8rem;
-        stroke: rgba(var(--text-color), 0.7);
-        stroke-width: 6;
-        overflow: visible;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }      
-    :host{
-        display: inline-flex;
-    }
-    .hide{
-        opacity: 0;
-        pointer-events: none;
-    }
-    .select{
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
-        width: 100%;
-        -webkit-tap-highlight-color: transparent;
-    }
-    .option-text{
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .selection{
-        border-radius: 0.3rem;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        grid-template-areas: 'heading heading' '. .';
-        padding: 0.4rem 1rem;
-        background: rgba(var(--text-color), 0.06);
-        border: solid 1px rgba(var(--text-color), 0.2);
-        align-items: center;
-        outline: none;
-    }
-    .selection:focus{
-        box-shadow: 0 0 0 0.1rem var(--accent-color) 
-    }
-    .icon{
-        margin-left: 1rem;
-    }
-    :host([align-select="left"]) .options{
-        left: 0;
-    }
-    :host([align-select="right"]) .options{
-        right: 0;
-    }
-    .options{
-        top: 100%;
-        margin-top: 0.5rem; 
-        overflow: hidden auto;
-        position: absolute;
-        grid-area: options;
-        display: flex;
-        flex-direction: column;
-        min-width: 100%;
-        background: rgba(var(--foreground-color), 1);
-        transition: opacity 0.3s, top 0.3s;
-        border: solid 1px rgba(var(--text-color), 0.2);
-        border-radius: 0.3rem;
-        z-index: 2;
-        box-shadow: 0.4rem 0.8rem 1.2rem #00000030;
-    }
-    .rotate{
-        transform: rotate(180deg)
-    }
-</style>
-<div class="select" >
-    <div class="selection" tabindex="0">
-        <div class="option-text"></div>
-        <svg class="icon toggle" viewBox="0 0 64 64">
-            <polyline points="63.65 15.99 32 47.66 0.35 15.99"/>
-        </svg>
-    </div>
-    <div class="options hide">
-        <slot></slot> 
-    </div>
-</div>`;
-        customElements.define(
-            "sm-select",
-            class extends HTMLElement {
-                constructor() {
-                    super();
-                    this.attachShadow({
-                        mode: "open"
-                    }).append(
-                        smSelect.content.cloneNode(true)
-                    );
-                }
-                static get observedAttributes() {
-                    return ["value"];
-                }
-                get value() {
-                    return this.getAttribute("value");
-                }
-                set value(val) {
-                    this.setAttribute("value", val);
-                }
-
-                collapse() {
-                    this.optionList.animate(this.slideUp, this.animationOptions);
-                    this.optionList.classList.add("hide");
-                    this.chevron.classList.remove("rotate");
-                    this.open = false;
-                }
-                connectedCallback() {
-                    this.availableOptions;
-                    this.optionList = this.shadowRoot.querySelector(".options");
-                    this.chevron = this.shadowRoot.querySelector(".toggle");
-                    let slot = this.shadowRoot.querySelector(".options slot"),
-                        selection = this.shadowRoot.querySelector(".selection"),
-                        previousOption;
-                    this.open = false;
-                    (this.slideDown = [{
-                        transform: `translateY(-0.5rem)`
-                    },
-                    {
-                        transform: `translateY(0)`
-                    },
-                    ]),
-                        (this.slideUp = [{
-                            transform: `translateY(0)`
-                        },
-                        {
-                            transform: `translateY(-0.5rem)`
-                        },
-                        ]),
-                        (this.animationOptions = {
-                            duration: 300,
-                            fill: "forwards",
-                            easing: "ease",
-                        });
-                    selection.addEventListener("click", (e) => {
-                        if (!this.open) {
-                            this.optionList.classList.remove("hide");
-                            this.optionList.animate(this.slideDown, this.animationOptions);
-                            this.chevron.classList.add("rotate");
-                            this.open = true;
-                        } else {
-                            this.collapse();
-                        }
-                    });
-                    selection.addEventListener("keydown", (e) => {
-                        if (e.code === "ArrowDown" || e.code === "ArrowRight") {
-                            e.preventDefault();
-                            this.availableOptions[0].focus();
-                        }
-                        if (e.code === "Enter" || e.code === "Space")
-                            if (!this.open) {
-                                this.optionList.classList.remove("hide");
-                                this.optionList.animate(this.slideDown, this.animationOptions);
-                                this.chevron.classList.add("rotate");
-                                this.open = true;
-                            } else {
-                                this.collapse();
-                            }
-                    });
-                    this.optionList.addEventListener("keydown", (e) => {
-                        if (e.code === "ArrowUp" || e.code === "ArrowRight") {
-                            e.preventDefault();
-                            if (document.activeElement.previousElementSibling) {
-                                document.activeElement.previousElementSibling.focus();
-                            }
-                        }
-                        if (e.code === "ArrowDown" || e.code === "ArrowLeft") {
-                            e.preventDefault();
-                            if (document.activeElement.nextElementSibling)
-                                document.activeElement.nextElementSibling.focus();
-                        }
-                    });
-                    this.addEventListener("optionSelected", (e) => {
-                        if (previousOption !== e.target) {
-                            this.setAttribute("value", e.detail.value);
-                            this.shadowRoot.querySelector(".option-text").textContent =
-                                e.detail.text;
-                            this.dispatchEvent(
-                                new CustomEvent("change", {
-                                    bubbles: true,
-                                    composed: true,
-                                })
-                            );
-                            if (previousOption) {
-                                previousOption.classList.remove("check-selected");
-                            }
-                            previousOption = e.target;
-                        }
-                        if (!e.detail.switching) this.collapse();
-
-                        e.target.classList.add("check-selected");
-                    });
-                    slot.addEventListener("slotchange", (e) => {
-                        this.availableOptions = slot.assignedElements();
-                        if (this.availableOptions[0]) {
-                            let firstElement = this.availableOptions[0];
-                            previousOption = firstElement;
-                            firstElement.classList.add("check-selected");
-                            this.setAttribute("value", firstElement.getAttribute("value"));
-                            this.shadowRoot.querySelector(".option-text").textContent =
-                                firstElement.textContent;
-                            this.availableOptions.forEach((element, index) => {
-                                element.setAttribute("data-rank", index + 1);
-                                element.setAttribute("tabindex", "0");
-                            });
-                        }
-                    });
-                    document.addEventListener("mousedown", (e) => {
-                        if (!this.contains(e.target) && this.open) {
-                            this.collapse();
-                        }
-                    });
-                }
-            }
-        );
-
-        // option
-        const smOption = document.createElement("template");
-        smOption.innerHTML = `
-<style>     
-    *{
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }     
-    :host{
-        display: flex;
-    }
-    .option{
-        min-width: 100%;
-        padding: 0.8rem 1.2rem;
-        cursor: pointer;
-        overflow-wrap: break-word;
-        outline: none;
-        display: flex;
-        align-items: center;
-    }
-    :host(:focus){
-        outline: none;
-        background: rgba(var(--text-color), 0.1);
-    }
-    :host(:focus) .option .icon{
-        opacity: 0.4
-    }
-    :host(.check-selected) .icon{
-        opacity: 1 !important
-    }
-    .icon {
-        margin-right: 0.8rem;
-        fill: none;
-        height: 0.8rem;
-        width: 0.8rem;
-        stroke: rgba(var(--text-color), 0.7);
-        stroke-width: 10;
-        overflow: visible;
-        stroke-linecap: round;
-        border-radius: 1rem;
-        stroke-linejoin: round;
-        opacity: 0;
-    }
-    @media (hover: hover){
-        .option:hover{
-            background: rgba(var(--text-color), 0.1);
-        }
-        .option:hover .icon{
-            opacity: 0.4
-        }
-    }
-</style>
-<div class="option">
-    <svg class="icon" viewBox="0 0 64 64">
-        <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
-    </svg>
-    <slot></slot> 
-</div>`;
-        customElements.define(
-            "sm-option",
-            class extends HTMLElement {
-                constructor() {
-                    super();
-                    this.attachShadow({
-                        mode: "open"
-                    }).append(
-                        smOption.content.cloneNode(true)
-                    );
-                }
-
-                sendDetails(switching) {
-                    let optionSelected = new CustomEvent("optionSelected", {
-                        bubbles: true,
-                        composed: true,
-                        detail: {
-                            text: this.textContent,
-                            value: this.getAttribute("value"),
-                            switching: switching,
-                        },
-                    });
-                    this.dispatchEvent(optionSelected);
-                }
-
-                connectedCallback() {
-                    let validKey = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
-                    this.addEventListener("click", (e) => {
-                        this.sendDetails();
-                    });
-                    this.addEventListener("keyup", (e) => {
-                        if (e.code === "Enter" || e.code === "Space") {
-                            e.preventDefault();
-                            this.sendDetails(false);
-                        }
-                        if (validKey.includes(e.code)) {
-                            e.preventDefault();
-                            this.sendDetails(true);
-                        }
-                    });
-                    if (this.hasAttribute("default")) {
-                        setTimeout(() => {
-                            this.sendDetails();
-                        }, 0);
-                    }
-                }
-            }
-        );
-
-        // select
-        const smStripSelect = document.createElement("template");
-        smStripSelect.innerHTML = `
-<style>     
-    *{
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }    
-    :host{
-        display: flex;
-    }
-    .icon {
-        position: absolute;
-        display: flex;
-        fill: none;
-        height: 2.6rem;
-        width: 2.6rem;
-        padding: 0.9rem;
-        stroke: rgba(var(--text-color), 0.7);
-        stroke-width: 10;
-        overflow: visible;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        cursor: pointer;
-        min-width: 0;
-        z-index: 1;
-        background: rgba(var(--foreground-color), 1);
-        -webkit-tap-highlight-color: transparent;
-        transition: opacity 0.3s; 
-    }
-    .hide{
-        pointer-events: none;
-        opacity: 0;
-    }
-    .select-container{
-        position: relative;
-        display: flex;
-        width: 100%;
-        align-items: center;
-    }
-    .select{
-        position: relative;
-        display: flex;
-        gap: 0.5rem;
-        max-width: 100%;
-        overflow: auto hidden;
-    }
-    .previous-item{
-        left: 0;
-    }
-    .next-item{
-        right: 0;
-    }
-    .left,.right{
-        position: absolute;
-        width: 1rem;
-        height: 100%; 
-        transition: opacity 0.3s;
-        z-index: 1;
-    }
-    .left{
-        background: linear-gradient(to left, transparent, rgba(var(--foreground-color), 1))
-    }
-    .right{
-        right: 0;
-        background: linear-gradient(to right, transparent, rgba(var(--foreground-color), 1))
-    }
-    slot::slotted(.active){
-        border-radius: 2rem;
-        opacity: 1;
-        background-color: rgba(var(--text-color), .6);  
-        color: rgba(var(--foreground-color), 1);
-    }
-    @media (hover: none){
-        ::-webkit-scrollbar-track {
-            -webkit-box-shadow: none !important;
-            background-color: transparent !important;
-        }
-        ::-webkit-scrollbar {
-            height: 0;
-            background-color: transparent;
-        }
-        .icon{
-            display: none;
-        }
-        .left,.right{
-            display: block;
-        }
-    }
-    @media (hover: hover){
-        .select{
-            overflow: hidden;
-        }
-        .left,.right{
-            display: none;
-        }
-    }
-</style>
-<div class="select-container">
-    <div class="left hide"></div>
-    <svg class="icon previous-item hide" viewBox="4 0 64 64">
-        <title>Previous</title>
-        <polyline points="48.01 0.35 16.35 32 48.01 63.65"/>
-    </svg>
-    <div class="select">
-        <slot></slot> 
-    </div>
-    <svg class="icon next-item hide" viewBox="-6 0 64 64">
-        <title>Next</title>
-        <polyline points="15.99 0.35 47.65 32 15.99 63.65"/>
-    </svg>
-    <div class="right hide"></div>
-</div>`;
-        customElements.define(
-            "sm-strip-select",
-            class extends HTMLElement {
-                constructor() {
-                    super();
-                    this.attachShadow({
-                        mode: "open"
-                    }).append(
-                        smStripSelect.content.cloneNode(true)
-                    );
-                }
-                static get observedAttributes() {
-                    return ["value"];
-                }
-                get value() {
-                    return this.getAttribute("value");
-                }
-                set value(val) {
-                    this.setAttribute("value", val);
-                }
-                scrollLeft() {
-                    this.select.scrollBy({
-                        top: 0,
-                        left: -this.scrollDistance,
-                        behavior: "smooth",
-                    });
-                }
-
-                scrollRight() {
-                    this.select.scrollBy({
-                        top: 0,
-                        left: this.scrollDistance,
-                        behavior: "smooth",
-                    });
-                }
-                connectedCallback() {
-                    let previousOption,
-                        slot = this.shadowRoot.querySelector("slot");
-                    this.selectContainer = this.shadowRoot.querySelector(".select-container");
-                    this.select = this.shadowRoot.querySelector(".select");
-                    this.nextArrow = this.shadowRoot.querySelector(".next-item");
-                    this.previousArrow = this.shadowRoot.querySelector(".previous-item");
-                    this.nextGradient = this.shadowRoot.querySelector(".right");
-                    this.previousGradient = this.shadowRoot.querySelector(".left");
-                    this.selectOptions;
-                    this.scrollDistance = this.selectContainer.getBoundingClientRect().width;
-                    const firstElementObserver = new IntersectionObserver(
-                        (entries) => {
-                            if (entries[0].isIntersecting) {
-                                this.previousArrow.classList.add("hide");
-                                this.previousGradient.classList.add("hide");
-                            } else {
-                                this.previousArrow.classList.remove("hide");
-                                this.previousGradient.classList.remove("hide");
-                            }
-                        }, {
-                        root: this.selectContainer,
-                        threshold: 0.95,
-                    }
-                    );
-                    const lastElementObserver = new IntersectionObserver(
-                        (entries) => {
-                            if (entries[0].isIntersecting) {
-                                this.nextArrow.classList.add("hide");
-                                this.nextGradient.classList.add("hide");
-                            } else {
-                                this.nextArrow.classList.remove("hide");
-                                this.nextGradient.classList.remove("hide");
-                            }
-                        }, {
-                        root: this.selectContainer,
-                        threshold: 0.95,
-                    }
-                    );
-
-                    const selectObserver = new IntersectionObserver((entries) => {
-                        if (entries[0].isIntersecting) {
-                            this.scrollDistance = this.selectContainer.getBoundingClientRect().width;
-                        }
-                    });
-
-                    selectObserver.observe(this.selectContainer);
-                    this.addEventListener("optionSelected", (e) => {
-                        if (previousOption === e.target) return;
-                        if (previousOption) previousOption.classList.remove("active");
-                        e.target.classList.add("active");
-                        e.target.scrollIntoView({
-                            behavior: "smooth",
-                            inline: "center",
-                            block: "nearest",
-                        });
-                        this.setAttribute("value", e.detail.value);
-                        this.dispatchEvent(
-                            new CustomEvent("change", {
-                                bubbles: true,
-                                composed: true,
-                            })
-                        );
-                        previousOption = e.target;
-                    });
-                    slot.addEventListener("slotchange", (e) => {
-                        this.selectOptions = slot.assignedElements();
-                        firstElementObserver.observe(this.selectOptions[0]);
-                        lastElementObserver.observe(
-                            this.selectOptions[this.selectOptions.length - 1]
-                        );
-                        if (this.selectOptions[0]) {
-                            let firstElement = this.selectOptions[0];
-                            this.setAttribute("value", firstElement.getAttribute("value"));
-                            firstElement.classList.add("active");
-                            previousOption = firstElement;
-                        }
-                    });
-                    this.nextArrow.addEventListener("click", this.scrollRight.bind(this));
-                    this.previousArrow.addEventListener("click", this.scrollLeft.bind(this));
-                }
-
-                disconnectedCallback() {
-                    this.nextArrow.removeEventListener("click", this.scrollRight.bind(this));
-                    this.previousArrow.removeEventListener(
-                        "click",
-                        this.scrollLeft.bind(this)
-                    );
-                }
-            }
-        );
-
-        // option
-        const smStripOption = document.createElement("template");
-        smStripOption.innerHTML = `
-<style>     
-    *{
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }     
-    :host{
-        display: flex;
-    }
-    .option{
-        padding: 0.4rem 0.8rem;
-        cursor: pointer;
-        overflow-wrap: break-word;
-        outline: none;
-        border-radius: 2rem;
-        text-transform: capitalize;
-        border: solid 1px rgba(var(--text-color), .3);
-        opacity: 0.9;
-    }
-    .option:focus{
-        background: rgba(var(--text-color), 0.1);
-    }
-
-    @media (hover: hover){
-        .option{
-            transition: background 0.3s;
-        }
-        .option:hover{
-            background: rgba(var(--text-color), 0.1);
-        }
-    }
-</style>
-<div class="option" tabindex="0">
-    <slot></slot> 
-</div>`;
-        customElements.define(
-            "sm-strip-option",
-            class extends HTMLElement {
-                constructor() {
-                    super();
-                    this.attachShadow({
-                        mode: "open"
-                    }).append(
-                        smStripOption.content.cloneNode(true)
-                    );
-                }
-                sendDetails() {
-                    let optionSelected = new CustomEvent("optionSelected", {
-                        bubbles: true,
-                        composed: true,
-                        detail: {
-                            text: this.textContent,
-                            value: this.getAttribute("value"),
-                        },
-                    });
-                    this.dispatchEvent(optionSelected);
-                }
-
-                connectedCallback() {
-                    this.addEventListener("click", (e) => {
-                        this.sendDetails();
-                    });
-                    this.addEventListener("keyup", (e) => {
-                        if (e.code === "Enter" || e.code === "Space") {
-                            e.preventDefault();
-                            this.sendDetails(false);
-                        }
-                    });
-                    if (this.hasAttribute("default")) {
-                        setTimeout(() => {
-                            this.sendDetails();
-                        }, 0);
-                    }
-                }
-            }
-        );
-
-        //notifications
-
-        const smNotifications = document.createElement("template");
-        smNotifications.innerHTML = `
-<style>
-*{
-padding: 0;
-margin: 0;
-box-sizing: border-box;
-} 
-:host{
-display: flex;
-}
-.hide{
-opacity: 0 !important;
-pointer-events: none !important;
-}
-.notification-panel{
-display: grid;
-width: 100%;
-position: fixed;
-top: 0;
-right: 0;
-z-index: 100;
-max-height: 100%;
-overflow: hidden auto;
-overscroll-behavior: contain;
-}
-.no-transformations{
-transform: none;
-opacity: 1;
-}
-.notification{
-display: flex;
-opacity: 0;
-padding: 1rem 1.5rem;
-transform: translateY(-1rem);
-position: relative;
-border-radius: 0.3rem;
-box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1),
-            0.5rem 1rem 2rem rgba(0, 0, 0, 0.1);
-background: rgba(var(--foreground-color), 1);
-transition: height 0.3s, transform 0.3s, opacity 0.3s;
-overflow: hidden;
-}
-h4:first-letter,
-p:first-letter{
-text-transform: uppercase;
-}
-h4{
-font-weight: 400;
-}
-p{
-line-height: 1.6;
-flex: 1;
-color: rgba(var(--text-color), 0.9);
-overflow-wrap: break-word;
-word-wrap: break-word;
-}
-.notification:last-of-type{
-margin-bottom: 0;
-}
-.icon {
-fill: none;
-height: 1.6rem;
-width: 1.6rem;
-stroke: rgba(var(--text-color), 0.7);
-overflow: visible;
-stroke-linecap: round;
-border-radius: 1rem;
-stroke-linejoin: round;
-cursor: pointer;
-}
-.error-icon{
-stroke: #E53935;
-}
-.success-icon{
-stroke: #00C853;
-}
-.close{
-margin-left: 1rem;
-padding: 0.5rem;
-stroke-width: 10;
-}
-.notification-icon{
-height: 1.4rem;
-width: 1.4rem;
-margin-right: 0.6rem;
-stroke-width: 6;
-}
-@media screen and (min-width: 640px){
-.notification-panel{
-    width: 40vw;
-    justify-content: flex-end;
-}
-.notification{
-    justify-self: end;
-    width: auto;
-    margin-right: 1.5rem;
-    margin-bottom: 1rem;
-    border-bottom: none;
-    border: solid 1px rgba(var(--text-color), 0.2);
-    transform: translateX(1rem);
-}
-}
-@media screen and (max-width: 640px){
-.close{
-    display: none
-}
-}
-</style>
-<div class="notification-panel">
-</div>
-`;
-
-        customElements.define(
-            "sm-notifications",
-            class extends HTMLElement {
-                constructor() {
-                    super();
-                    this.shadow = this.attachShadow({
-                        mode: "open"
-                    }).append(
-                        smNotifications.content.cloneNode(true)
-                    );
-                }
-
-                handleTouchStart(e) {
-                    this.notification = e.target.closest(".notification");
-                    this.touchStartX = e.changedTouches[0].clientX;
-                    this.notification.style.transition = "initial";
-                    this.touchStartTime = e.timeStamp;
-                }
-
-                handleTouchMove(e) {
-                    e.preventDefault();
-                    if (this.touchStartX < e.changedTouches[0].clientX) {
-                        this.offset = e.changedTouches[0].clientX - this.touchStartX;
-                        this.touchEndAnimataion = requestAnimationFrame(this.movePopup);
-                    } else {
-                        this.offset = -(this.touchStartX - e.changedTouches[0].clientX);
-                        this.touchEndAnimataion = requestAnimationFrame(this.movePopup);
-                    }
-                }
-
-                handleTouchEnd(e) {
-                    this.notification.style.transition = "transform 0.3s, opacity 0.3s";
-                    this.touchEndTime = e.timeStamp;
-                    cancelAnimationFrame(this.touchEndAnimataion);
-                    this.touchEndX = e.changedTouches[0].clientX;
-                    if (this.touchEndTime - this.touchStartTime > 200) {
-                        if (this.touchEndX - this.touchStartX > this.threshold) {
-                            this.removeNotification(this.notification);
-                        } else if (this.touchStartX - this.touchEndX > this.threshold) {
-                            this.removeNotification(this.notification, true);
-                        } else {
-                            this.resetPosition();
-                        }
-                    } else {
-                        if (this.touchEndX > this.touchStartX) {
-                            this.removeNotification(this.notification);
-                        } else {
-                            this.removeNotification(this.notification, true);
-                        }
-                    }
-                }
-
-                movePopup = () => {
-                    this.notification.style.transform = `translateX(${this.offset}px)`;
-                };
-
-                resetPosition() {
-                    this.notification.style.transform = `translateX(0)`;
-                }
-
-                push(messageBody, type, pinned) {
-                    let notification = document.createElement("div"),
-                        composition = ``;
-                    notification.classList.add("notification");
-                    if (pinned) notification.classList.add("pinned");
-                    if (type === "error") {
-                        composition += `
-    <svg class="notification-icon icon error-icon" viewBox="0 0 64 64">
-            <path d="M32,4.73a3.17,3.17,0,0,1,2.76,1.59l13.9,24.09L62.57,54.49a3.19,3.19,0,0,1-2.76,4.78H4.19a3.19,3.19,0,0,1-2.76-4.78L15.34,30.41,29.24,6.32A3.17,3.17,0,0,1,32,4.73m0-1a4.14,4.14,0,0,0-3.62,2.09L14.47,29.91.57,54a4.19,4.19,0,0,0,3.62,6.28H59.81A4.19,4.19,0,0,0,63.43,54L49.53,29.91,35.62,5.82A4.14,4.14,0,0,0,32,3.73Z"/>
-            <line x1="32" y1="24" x2="32" y2="36"/>
-            <line x1="32" y1="46" x2="32" y2="48"/>
-    </svg>`;
-                    } else if (type === "success") {
-                        composition += `
-        <svg class="notification-icon icon success-icon" viewBox="0 0 64 64">
-            <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
-        </svg>
-    `;
-                    }
-                    composition += `
-                    <p>${messageBody}</p>
-                    <svg class="icon close" viewBox="0 0 64 64">
-                        <title>Close</title>
-                        <line x1="64" y1="0" x2="0" y2="64"/>
-                        <line x1="64" y1="64" x2="0" y2="0"/>
-                    </svg>`;
-                    notification.innerHTML = composition;
-                    this.notificationPanel.prepend(notification);
-                    if (window.innerWidth > 640) {
-                        notification.animate(
-                            [{
-                                transform: `translateX(1rem)`,
-                                opacity: "0",
-                            },
-                            {
-                                transform: "translateX(0)",
-                                opacity: "1",
-                            },
-                            ],
-                            this.animationOptions
-                        ).onfinish = () => {
-                            notification.setAttribute("style", `transform: none;`);
-                        };
-                    } else {
-                        notification.setAttribute(
-                            "style",
-                            `transform: translateY(0); opacity: 1`
-                        );
-                    }
-                    notification.addEventListener(
-                        "touchstart",
-                        this.handleTouchStart.bind(this)
-                    );
-                    notification.addEventListener(
-                        "touchmove",
-                        this.handleTouchMove.bind(this)
-                    );
-                    notification.addEventListener("touchend", this.handleTouchEnd.bind(this));
-                }
-
-                removeNotification(notification, toLeft) {
-                    if (!this.offset) this.offset = 0;
-
-                    if (toLeft)
-                        notification.animate(
-                            [{
-                                transform: `translateX(${this.offset}px)`,
-                                opacity: "1",
-                            },
-                            {
-                                transform: `translateX(-100%)`,
-                                opacity: "0",
-                            },
-                            ],
-                            this.animationOptions
-                        ).onfinish = () => {
-                            notification.remove();
-                        };
-                    else {
-                        notification.animate(
-                            [{
-                                transform: `translateX(${this.offset}px)`,
-                                opacity: "1",
-                            },
-                            {
-                                transform: `translateX(100%)`,
-                                opacity: "0",
-                            },
-                            ],
-                            this.animationOptions
-                        ).onfinish = () => {
-                            notification.remove();
-                        };
-                    }
-                }
-
-                clearAll = () => {
-                    Array.from(this.notificationPanel.children).forEach(child => {
-                        this.removeNotification(child)
-                    })
-                }
-
-                connectedCallback() {
-                    this.notificationPanel = this.shadowRoot.querySelector(
-                        ".notification-panel"
-                    );
-                    this.animationOptions = {
-                        duration: 300,
-                        fill: "forwards",
-                        easing: "ease",
-                    };
-                    this.fontSize = Number(
-                        window
-                            .getComputedStyle(document.body)
-                            .getPropertyValue("font-size")
-                            .match(/\d+/)[0]
-                    );
-                    this.notification;
-                    this.offset;
-                    this.touchStartX = 0;
-                    this.touchEndX = 0;
-                    this.touchStartTime = 0;
-                    this.touchEndTime = 0;
-                    this.threshold =
-                        this.notificationPanel.getBoundingClientRect().width * 0.3;
-                    this.touchEndAnimataion;
-
-                    this.notificationPanel.addEventListener("click", (e) => {
-                        if (e.target.closest(".close"))
-                            this.removeNotification(e.target.closest(".notification"));
-                    });
-
-                    const observer = new MutationObserver((mutationList) => {
-                        mutationList.forEach((mutation) => {
-                            if (mutation.type === "childList") {
-                                if (mutation.addedNodes.length) {
-                                    if (!mutation.addedNodes[0].classList.contains("pinned"))
-                                        setTimeout(() => {
-                                            this.removeNotification(mutation.addedNodes[0]);
-                                        }, 5000);
-                                    if (window.innerWidth > 640)
-                                        this.notificationPanel.style.padding =
-                                            "1.5rem 0 3rem 1.5rem";
-                                    else this.notificationPanel.style.padding =
-                                        "1rem 1rem 2rem 1rem";
-                                } else if (
-                                    mutation.removedNodes.length &&
-                                    !this.notificationPanel.children.length
-                                ) {
-                                    this.notificationPanel.style.padding = 0;
-                                }
-                            }
-                        });
-                    });
-                    observer.observe(this.notificationPanel, {
-                        attributes: true,
-                        childList: true,
-                        subtree: true,
-                    });
-                }
-            }
-        );
-
-        // tab-header
-
-        const smTabHeader = document.createElement("template");
-        smTabHeader.innerHTML = `
-<style>
-*{
-padding: 0;
-margin: 0;
-box-sizing: border-box;
-} 
-:host{
-display: flex;
-}
-.tabs{
-position: relative;
-display: grid;
-width: 100%;
-}
-.tab-header{
-display: grid;
-grid-auto-flow: column;
-justify-content: flex-start;
-gap: 1rem;
-position: relative;
-overflow: auto hidden;
-max-width: 100%;
-scrollbar-width: 0;
-}
-.indicator{
-position: absolute;
-left: 0;
-bottom: 0;
-height: 0.15rem;
-border-radius: 1rem 1rem 0 0;  
-background: var(--accent-color);
-transition: transform 0.3s, width 0.3s;
-}
-:host([variant="tab"]) .indicator{
-height: 100%;
-border-radius: 0.3rem;
-}
-:host([variant="tab"]) .tab-header{
-border-bottom: none; 
-}
-.hide-completely{
-display: none;
-}
-:host([variant="tab"]) .tab-header{
-gap: 0;
-display: inline-grid;
-justify-self: flex-start;
-background: rgba(var(--text-color), 0.1);
-border-radius: 0.3rem;
-}
-:host([variant="tab"]) slot::slotted(.active){
-color: rgba(var(--foreground-color), 1);
-}
-slot::slotted(.active){
-color: var(--accent-color);
-opacity: 1;
-}
-@media (hover: none){
-.tab-header::-webkit-scrollbar-track {
--webkit-box-shadow: none !important;
-background-color: transparent !important;
-}
-.tab-header::-webkit-scrollbar {
-height: 0;
-background-color: transparent;
-}
-}         
-</style>
-<div part="tab-container" class="tabs">
-<div part="tab-header" class="tab-header">
-<slot></slot>
-<div part="indicator" class="indicator"></div>
-</div>
-</div>
-`;
-
-        customElements.define(
-            "sm-tab-header",
-            class extends HTMLElement {
-                constructor() {
-                    super();
-                    this.attachShadow({
-                        mode: "open"
-                    }).append(
-                        smTabHeader.content.cloneNode(true)
-                    );
-
-                    this.indicator = this.shadowRoot.querySelector(".indicator");
-                    this.tabSlot = this.shadowRoot.querySelector("slot");
-                    this.tabHeader = this.shadowRoot.querySelector(".tab-header");
-                }
-
-                sendDetails(element) {
-                    this.dispatchEvent(
-                        new CustomEvent("switchtab", {
-                            bubbles: true,
-                            detail: {
-                                target: this.target,
-                                rank: parseInt(element.getAttribute("rank")),
-                            },
-                        })
-                    );
-                }
-
-                moveIndiactor(tabDimensions) {
-                    //if(this.isTab)
-                    this.indicator.setAttribute(
-                        "style",
-                        `width: ${tabDimensions.width}px; transform: translateX(${
-                        tabDimensions.left -
-                        this.tabHeader.getBoundingClientRect().left +
-                        this.tabHeader.scrollLeft
-                        }px)`
-                    );
-                    //else
-                    //this.indicator.setAttribute('style', `width: calc(${tabDimensions.width}px - 1.6rem); transform: translateX(calc(${ tabDimensions.left - this.tabHeader.getBoundingClientRect().left + this.tabHeader.scrollLeft}px + 0.8rem)`)
-                }
-
-                connectedCallback() {
-                    if (
-                        !this.hasAttribute("target") ||
-                        this.getAttribute("target").value === ""
-                    )
-                        return;
-                    this.prevTab;
-                    this.allTabs;
-                    this.activeTab;
-                    this.isTab = false;
-                    this.target = this.getAttribute("target");
-
-                    if (
-                        this.hasAttribute("variant") &&
-                        this.getAttribute("variant") === "tab"
-                    ) {
-                        this.isTab = true;
-                    }
-
-                    this.tabSlot.addEventListener("slotchange", () => {
-                        this.tabSlot.assignedElements().forEach((tab, index) => {
-                            tab.setAttribute("rank", index);
-                        });
-                    });
-                    this.allTabs = this.tabSlot.assignedElements();
-
-                    this.tabSlot.addEventListener("click", (e) => {
-                        if (e.target === this.prevTab || !e.target.closest("sm-tab")) return;
-                        if (this.prevTab) this.prevTab.classList.remove("active");
-                        e.target.classList.add("active");
-
-                        e.target.scrollIntoView({
-                            behavior: "smooth",
-                            block: "nearest",
-                            inline: "center",
-                        });
-                        this.moveIndiactor(e.target.getBoundingClientRect());
-                        this.sendDetails(e.target);
-                        this.prevTab = e.target;
-                        this.activeTab = e.target;
-                    });
-                    let resizeObserver = new ResizeObserver((entries) => {
-                        entries.forEach((entry) => {
-                            if (this.prevTab) {
-                                let tabDimensions = this.activeTab.getBoundingClientRect();
-                                this.moveIndiactor(tabDimensions);
-                            }
-                        });
-                    });
-                    resizeObserver.observe(this);
-                    let observer = new IntersectionObserver(
-                        (entries) => {
-                            entries.forEach((entry) => {
-                                if (entry.isIntersecting) {
-                                    this.indicator.style.transition = "none";
-                                    if (this.activeTab) {
-                                        let tabDimensions = this.activeTab.getBoundingClientRect();
-                                        this.moveIndiactor(tabDimensions);
-                                    } else {
-                                        this.allTabs[0].classList.add("active");
-                                        let tabDimensions = this.allTabs[0].getBoundingClientRect();
-                                        this.moveIndiactor(tabDimensions);
-                                        this.sendDetails(this.allTabs[0]);
-                                        this.prevTab = this.tabSlot.assignedElements()[0];
-                                        this.activeTab = this.prevTab;
-                                    }
-                                }
-                            });
-                        }, {
-                        threshold: 1.0
-                    }
-                    );
-                    observer.observe(this);
-                }
-            }
-        );
-
-        // tab-panels
-
-        const smTabPanels = document.createElement("template");
-        smTabPanels.innerHTML = `
-<style>
-*{
-padding: 0;
-margin: 0;
-box-sizing: border-box;
-} 
-:host{
-width: 100%;
-}
-.panel-container{
-position: relative;
-display: flex;
-width: 100%;
-height: 100%
-overflow: hidden auto;
-}
-slot::slotted(.hide-completely){
-display: none;
-}
-@media (hover: none){
-.tab-header::-webkit-scrollbar-track {
--webkit-box-shadow: none !important;
-background-color: transparent !important;
-}
-.tab-header::-webkit-scrollbar {
-height: 0;
-background-color: transparent;
-}
-}         
-</style>
-<div part="panel-container" class="panel-container">
-<slot>Nothing to see here.</slot>
-</div>
-`;
-
-        customElements.define(
-            "sm-tab-panels",
-            class extends HTMLElement {
-                constructor() {
-                    super();
-                    this.attachShadow({
-                        mode: "open"
-                    }).append(
-                        smTabPanels.content.cloneNode(true)
-                    );
-                    this.panelSlot = this.shadowRoot.querySelector("slot");
-                }
-                connectedCallback() {
-                    //animations
-                    let flyInLeft = [{
-                        opacity: 0,
-                        transform: "translateX(-1rem)",
-                    },
-                    {
-                        opacity: 1,
-                        transform: "none",
-                    },
-                    ],
-                        flyInRight = [{
-                            opacity: 0,
-                            transform: "translateX(1rem)",
-                        },
-                        {
-                            opacity: 1,
-                            transform: "none",
-                        },
-                        ],
-                        flyOutLeft = [{
-                            opacity: 1,
-                            transform: "none",
-                        },
-                        {
-                            opacity: 0,
-                            transform: "translateX(-1rem)",
-                        },
-                        ],
-                        flyOutRight = [{
-                            opacity: 1,
-                            transform: "none",
-                        },
-                        {
-                            opacity: 0,
-                            transform: "translateX(1rem)",
-                        },
-                        ],
-                        animationOptions = {
-                            duration: 300,
-                            fill: "forwards",
-                            easing: "ease",
-                        };
-                    this.prevPanel;
-                    this.allPanels;
-                    this.previousRank;
-
-                    this.panelSlot.addEventListener("slotchange", () => {
-                        this.panelSlot.assignedElements().forEach((panel) => {
-                            panel.classList.add("hide-completely");
-                        });
-                    });
-                    this.allPanels = this.panelSlot.assignedElements();
-                    this._targetBodyFlyRight = (targetBody) => {
-                        targetBody.classList.remove("hide-completely");
-                        targetBody.animate(flyInRight, animationOptions);
-                    };
-                    this._targetBodyFlyLeft = (targetBody) => {
-                        targetBody.classList.remove("hide-completely");
-                        targetBody.animate(flyInLeft, animationOptions);
-                    };
-                    document.addEventListener("switchtab", (e) => {
-                        if (e.detail.target !== this.id) return;
-
-                        if (this.prevPanel) {
-                            let targetBody = this.allPanels[e.detail.rank],
-                                currentBody = this.prevPanel;
-                            if (this.previousRank < e.detail.rank) {
-                                if (currentBody && !targetBody)
-                                    currentBody.animate(
-                                        flyOutLeft,
-                                        animationOptions
-                                    ).onfinish = () => {
-                                        currentBody.classList.add("hide-completely");
-                                    };
-                                else if (targetBody && !currentBody) {
-                                    this._targetBodyFlyRight(targetBody);
-                                } else if (currentBody && targetBody) {
-                                    currentBody.animate(
-                                        flyOutLeft,
-                                        animationOptions
-                                    ).onfinish = () => {
-                                        currentBody.classList.add("hide-completely");
-                                        this._targetBodyFlyRight(targetBody);
-                                    };
-                                }
-                            } else {
-                                if (currentBody && !targetBody)
-                                    currentBody.animate(
-                                        flyOutRight,
-                                        animationOptions
-                                    ).onfinish = () => {
-                                        currentBody.classList.add("hide-completely");
-                                    };
-                                else if (targetBody && !currentBody) {
-                                    this._targetBodyFlyLeft(targetBody);
-                                } else if (currentBody && targetBody) {
-                                    currentBody.animate(
-                                        flyOutRight,
-                                        animationOptions
-                                    ).onfinish = () => {
-                                        currentBody.classList.add("hide-completely");
-                                        this._targetBodyFlyLeft(targetBody);
-                                    };
-                                }
-                            }
-                        } else {
-                            this.allPanels[e.detail.rank].classList.remove("hide-completely");
-                        }
-                        this.previousRank = e.detail.rank;
-                        this.prevPanel = this.allPanels[e.detail.rank];
-                    });
-                }
-            }
-        );
-    </script>
+    <script src="components.js"></script>
     <script id="onLoadStartUp">
         function onLoadStartUp() {
             showPopup('main_loader', 'no')
@@ -2846,8 +1440,8 @@ background-color: transparent;
                     year = timeFrag[3],
                     minutes = new Date(parseInt(time)).getMinutes(),
                     hours = new Date(parseInt(time)).getHours()
-                minutes = minutes.length === 1 ? `0${minutes}` : minutes
-                let finalHours = hours - 12 > 0 ? `${hours - 12}:${minutes} pm` : `${hours}:${minutes} am`
+                minutes = minutes < 10 ? `0${minutes}` : minutes
+                let finalHours = hours > 12 ? `${hours - 12}:${minutes} PM` : `${hours}:${minutes} AM`
                 return `${finalHours} ${month} ${date} ${year}`;
             } catch (e) {
                 console.error(e);
@@ -12944,7 +11538,7 @@ background-color: transparent;
                         receiverID: myFloID
                     });
 
-                    notify(`Transfer successfull: ${flo_txid}.`, 'success', true, true);
+                    notify(`Transfer successful: <span class="breakable">${flo_txid}</span>.`, 'success', '', true);
 
                     return true;
                 }
@@ -13055,7 +11649,7 @@ background-color: transparent;
                         hidePopup()
                         return false;
                     } else {
-                        notify(`Transaction successful: ${flo_txid}.`, '', true, true);
+                        notify(`Transaction successful: ${flo_txid}.`, 'success', '', true);
                         if (payingRequested) {
                             payment_request_status(currentPaymentRequest.requestId, 'APPROVED')
                             showPayRequests()
@@ -13073,22 +11667,28 @@ background-color: transparent;
         async function refresh_balance(refreshButton) {
             try {
                 if (refreshButton) {
-                    notify('Updating Balance')
                     refreshButton.classList.add('animate-loader')
                 }
                 const current_token_balance = document.getElementById('token_balance').textContent;
                 if (typeof current_token_balance == "string") {
-                    const get_user_balance = await ajaxGet(
+                    const get_user_rupee_balance = await ajaxGet(
                         'https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' +
                         myFloID)
-                    if (typeof get_user_balance === "object" && get_user_balance.balance >= 0) {
-                        if (get_user_balance.balance === null)
-                            get_user_balance.balance = 0;
-                        document.getElementById('token_balance').textContent = get_user_balance.balance;
+                    const get_user_flo_balance = await ajaxGet(`
+                        https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?floAddress=${myFloID}`)
+                    console.log(get_user_flo_balance)
+                    if (typeof get_user_rupee_balance === "object" && get_user_rupee_balance.balance >= 0) {
+                        if (get_user_rupee_balance.balance === null)
+                            get_user_rupee_balance.balance = 0;
+                        document.getElementById('token_balance').textContent = get_user_rupee_balance.balance;
                     }
+                    /*if (typeof get_user_flo_balance === "object" && get_user_flo_balance.balance >= 0) {
+                        if (get_user_flo_balance.balance === null)
+                            get_user_flo_balance.balance = 0;
+                        document.getElementById('flo_balance').textContent = get_user_flo_balance.balance;
+                    }*/
                 }
                 if (refreshButton) {
-                    notifications.clearAll()
                     notify('Balance Updated')
                     refreshButton.classList.remove('animate-loader')
                 }
@@ -13198,8 +11798,8 @@ background-color: transparent;
                             receiverID: myFloID
                         });
 
-                        notify(`Transaction successfull: ${flo_txid}.   
-                            INR ${amount_to_pay} sent to ${vendor_flo_id}`, '', true, true);
+                        notify(`Transaction successful: <span class="breakable">${flo_txid}</span>.   
+                            INR ${amount_to_pay} sent to ${vendor_flo_id}`, 'success', '', true);
                         return true;
                     }
                 }
@@ -13223,7 +11823,8 @@ background-color: transparent;
                     if (depositRequested === 0) {
                         if (typeof myFloID !== "string" || myFloID.length < 1) return;
                         const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                        document.getElementById('send_cash_to_deposit').innerHTML = `Please pay <b>₹${token_amount_to_buy.value}</b> to UPI Id <b>${cashier_upi}</b>.<br> After sending money, enter UPI transaction ID below.`;
+                        document.getElementById('send_cash_to_deposit').innerHTML = cashier_upi;
+                        document.getElementById('send_amount_to_deposit').innerHTML = `Please pay <b>₹${token_amount_to_buy.value}</b> to UPI Id below.`;
                         document.getElementById('upi_txId_section').classList.remove('hide-completely')
                         document.getElementById('deposit_amount_section').classList.add('hide-completely')
                         depositedRupeeTxId.disabled = false
