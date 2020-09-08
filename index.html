@@ -44,7 +44,7 @@
                 <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
             </svg>
             <h4 id="tip_container">Loading Blockchain UPI </h4>
-            <button onclick="signOut()">Reset</button>
+            <sm-button onclick="signOut()">Reset</sm-button>
         </div>
     </div>
     <!-- Sign in popup-->
@@ -140,8 +140,8 @@
                     </svg>
                 </div>
                 <label class="input">
-                    <input id="deposited_rupee_txId" required disabled>
-                    <div class="placeholder">UPI TxID</div>
+                    <input id="deposited_rupee_upi" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" type="text" disabled required>
+                    <div class="placeholder">Sender's UPI address</div>
                 </label>
             </form>
         </div>
@@ -248,8 +248,8 @@
                     <div class="placeholder">Amount</div>
                 </label>
                 <label class="input">
-                    <input id="paid_cashier_upi_txid" type="text" required>
-                    <div class="placeholder">UPI Txid/Ref Number</div>
+                    <input id="paid_cashier_upi" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" type="text" required>
+                    <div class="placeholder">Sender's UPI address</div>
                 </label>
             </form>
         </div>
@@ -303,44 +303,11 @@
         </div>
         <div title="See all cash deposit requests" id="deposit_page_btn"
             class="navbar-item cashier-option hide-completely" onclick="showPage(this, 'deposit')">
-            <svg class="icon banking" viewBox="0 0 52 51.5">
-                <line x1="4" y1="28" x2="4" y2="19.5" />
-                <polyline points="4 6 4 1 51 1 51 48 4 48 4 41.5" />
-                <line x1="9" y1="50" x2="18" y2="50" />
-                <line x1="36" y1="50" x2="45" y2="50" />
-                <circle cx="27.5" cy="30" r="9.5" />
-                <circle cx="27.5" cy="30" r="3.5" />
-                <rect x="1" y="6" width="6" height="13.5" rx="2.76" />
-                <rect x="1" y="28" width="6" height="13.5" rx="2.76" />
-            </svg>
-            <h5>Deposit</h5>
-        </div>
-        <div title="See all cash withdraw requests" id="deposit_page_btn"
-            class="navbar-item cashier-option hide-completely" onclick="showPage(this, 'withdraw')">
-            <svg class="icon banking" viewBox="0 0 52 60">
-                <line x1="4" y1="33.5" x2="4" y2="25" />
-                <polyline points="41.52 6.5 51 6.5 51 53.5 41.69 53.5" />
-                <line x1="9" y1="55.5" x2="14" y2="55.5" />
-                <line x1="43" y1="55.5" x2="45" y2="55.5" />
-                <rect x="1" y="11.5" width="6" height="13.5" rx="2.76" />
-                <rect x="1" y="33.5" width="6" height="13.5" rx="2.76" />
-                <polyline points="3.81 11.5 3.81 6.5 41.5 1 41.69 59 3.81 53.5 3.81 47" />
-                <path
-                    d="M35.64,39.19c0,6.31-3.25,11.45-7.22,11.48s-7-4.92-7-11.07,3.13-11.29,7.05-11.48S35.64,32.88,35.64,39.19Z"
-                    transform="translate(-6 -2)" />
-                <path
-                    d="M31.06,39.32c0,2.31-1.19,4.2-2.64,4.23s-2.62-1.79-2.62-4.08S27,35.3,28.42,35.24,31.06,37,31.06,39.32Z"
-                    transform="translate(-6 -2)" />
-            </svg>
-            <h5>Withdraw</h5>
-        </div>
-        <div title="See all pay requests" class="navbar-item cashier-option hide-completely"
-            onclick="showPage(this, 'pay_cashier')">
             <svg class="icon" viewBox="0 0 64 64">
-                <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
-                <rect height="64" width="64" rx="8"></rect>
+                <path
+                    d="M24.77,44.15H40.06V63.5H53.4V36h5.66a3.38,3.38,0,0,0,2.53-5.68l-6.73-7.16V11.26H46.48v3L34.53,1.59a3.49,3.49,0,0,0-5.06,0L2.41,30.35A3.38,3.38,0,0,0,4.94,36H10.6V63.5H24.77" />
             </svg>
-            <h5>pay</h5>
+            <h5>Home</h5>
         </div>
         <div title="requests page" class="navbar-item user-option" onclick="showPage(this, 'request_page')">
             <svg class="icon" viewBox="0 0 64 64">
@@ -390,11 +357,6 @@
     </nav>
     <main class="hide-completely">
         <section class="page hide-completely" id="home_page">
-            <!--<h1>What is Blockchain UPI?</h1>
-            <p>
-                Your Rupee balance is digital representation of actual cash on FLO Blockchain. 
-            </p>-->
-
             <div class="left">
                 <h4>Rupee actions</h4>
                 <sm-carousel class="options-tab">
@@ -456,238 +418,277 @@
                     </div>
                 </sm-carousel>
             </div>
-            <div class="right">
-                <div id="user_panel">
-                    <h4 id="user_type">User</h4>
-                    <div class="copy-row">
-                        <h4 id="user_flo_id" class="copy"></h4>
-                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                            <title>Copy</title>
-                            <rect x="16" y="16" width="48" height="48" rx="6" />
-                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                        </svg>
+            <div class="user-panel">
+                <h4 class="user-type">User</h4>
+                <div class="copy-row">
+                    <h4 class="user-flo-id copy"></h4>
+                    <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                        <title>Copy</title>
+                        <rect x="16" y="16" width="48" height="48" rx="6" />
+                        <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                    </svg>
+                </div>
+                <div class="flex align-items space-between">
+                    <h4>Balance</h4>
+                    <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
+                        <title>refresh balance</title>
+                        <polyline points="42.99 0.16 50.25 21.23 28.78 27.7"/>
+                        <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
+                    </svg>
+                </div>
+                <div id="display_balance" class="grid grid-2">
+                    <div class="balance">
+                        <h5>Rupee</h5>
+                        <h3 id="token_balance">0</h3>
                     </div>
-                    <div class="flex align-items space-between">
-                        <h4>Balance</h4>
-                        <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
-                            <title>refresh balance</title>
-                            <polyline points="42.99 0.16 50.25 21.23 28.78 27.7"/>
-                            <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
-                        </svg>
-                    </div>
-                    <div id="display_balance" class="grid grid-2">
-                        <div class="balance">
-                            <h5>Rupee</h5>
-                            <h3 id="token_balance">0</h3>
-                        </div>
-                        <div class="balance">
-                            <h5>FLO</h5>
-                            <h3 id="flo_balance">0</h3>
-                        </div>
+                    <div class="balance">
+                        <h5>FLO</h5>
+                        <h3 id="flo_balance">0</h3>
                     </div>
                 </div>
+            </div>
         </section>
         <section id="deposit" class="page hide-completely">
-            <div class="container-header">
-                <h2>Deposit Requests</h2>
-                <button id="fetch_deposits" onclick="show_deposit_request()">
-                    Load pending
-                </button>
-                <label class="search" id="search_deposit">
-                    <input type="search" onkeyup="search_deposits()" placeholder="Search">
-                </label>
+            <div class="left">
+                <h3>Transaction Requests</h3>
+                <sm-tab-header target="requests_to_cashier">
+                    <sm-tab>Deposits</sm-tab>
+                    <sm-tab>Withdrawals</sm-tab>
+                    <sm-tab>Pay Through Cashier</sm-tab>
+                </sm-tab-header>
+                <sm-tab-panels id="requests_to_cashier">
+                    <sm-panel>
+                        <div class="container-header">
+                            <sm-button id="fetch_deposits" onclick="show_deposit_request()">
+                                Load pending
+                            </sm-button>
+                        </div>
+                        <div id="pending_deposits_container" class="container"></div>
+                        <div id="deposit_illustration" class="empty">
+                            <svg viewBox="0 0 529.94 446.5">
+                                <defs>
+                                    <style>
+                                        .a,
+                                        .b,
+                                        .c,
+                                        .d {
+                                            fill: none;
+                                            stroke-linejoin: round;
+                                        }
+            
+                                        .a {
+                                            stroke-width: 9px;
+                                        }
+            
+                                        .b,
+                                        .c {
+                                            stroke-width: 5px;
+                                        }
+            
+                                        .c {
+                                            stroke-dasharray: 11.94 11.94;
+                                        }
+            
+                                        .d {
+                                            stroke-width: 3px;
+                                        }
+                                    </style>
+                                </defs>
+                                <title>Empty icon</title>
+                                <polyline class="a"
+                                    points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
+                                <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
+                                <path class="c"
+                                    d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
+                                    transform="translate(-354.28 918.17) rotate(-60.69)" />
+                                <path class="d"
+                                    d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
+                                    transform="translate(-703.5 -300.22)" />
+                            </svg>
+                            <h4 class="light-text">No deposit requests.</h4>
+                        </div>
+                    </sm-panel>
+                    <sm-panel>
+                        <div class="container-header">
+                            <sm-button id="fetch_withdraws" onclick="show_withdraw_request()">Load pending</sm-button>
+                        </div>
+                        <div id="pending_withdrawals_container" class="container"></div>
+                        <div id="withdraw_illustration" class="empty">
+                            <svg viewBox="0 0 529.94 446.5">
+                                <defs>
+                                    <style>
+                                        .a,
+                                        .b,
+                                        .c,
+                                        .d {
+                                            fill: none;
+                                            stroke-linejoin: round;
+                                        }
+            
+                                        .a {
+                                            stroke-width: 9px;
+                                        }
+            
+                                        .b,
+                                        .c {
+                                            stroke-width: 5px;
+                                        }
+            
+                                        .c {
+                                            stroke-dasharray: 11.94 11.94;
+                                        }
+            
+                                        .d {
+                                            stroke-width: 3px;
+                                        }
+                                    </style>
+                                </defs>
+                                <title>Empty icon</title>
+                                <polyline class="a"
+                                    points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
+                                <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
+                                <path class="c"
+                                    d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
+                                    transform="translate(-354.28 918.17) rotate(-60.69)" />
+                                <path class="d"
+                                    d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
+                                    transform="translate(-703.5 -300.22)" />
+                            </svg>
+                            <h4 class="light-text">No withdraw requests.</h4>
+                        </div>
+                    </sm-panel>
+                    <sm-panel>
+                        <div class="container-header">
+                            <sm-button id="fetch_pay_requests" onclick="showPayRequests()">
+                                Load pending
+                            </sm-button>
+                        </div>
+                        <div id="pay_requests_container" class="container"></div>
+                        <div id="pay_illustration" class="empty">
+                            <svg viewBox="0 0 529.94 446.5">
+                                <defs>
+                                    <style>
+                                        .a,
+                                        .b,
+                                        .c,
+                                        .d {
+                                            fill: none;
+                                            stroke-linejoin: round;
+                                        }
+            
+                                        .a {
+                                            stroke-width: 9px;
+                                        }
+            
+                                        .b,
+                                        .c {
+                                            stroke-width: 5px;
+                                        }
+            
+                                        .c {
+                                            stroke-dasharray: 11.94 11.94;
+                                        }
+            
+                                        .d {
+                                            stroke-width: 3px;
+                                        }
+                                    </style>
+                                </defs>
+                                <title>Empty icon</title>
+                                <polyline class="a"
+                                    points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
+                                <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
+                                <path class="c"
+                                    d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
+                                    transform="translate(-354.28 918.17) rotate(-60.69)" />
+                                <path class="d"
+                                    d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
+                                    transform="translate(-703.5 -300.22)" />
+                            </svg>
+                            <h4 class="light-text">No pay requests.</h4>
+                        </div>
+                    </sm-panel>
+                </sm-tab-panels>
             </div>
-            <div id="pending_deposits_container" class="container"></div>
-            <div id="deposit_illustration" class="empty">
-                <svg viewBox="0 0 529.94 446.5">
-                    <defs>
-                        <style>
-                            .a,
-                            .b,
-                            .c,
-                            .d {
-                                fill: none;
-                                stroke-linejoin: round;
-                            }
-
-                            .a {
-                                stroke-width: 9px;
-                            }
-
-                            .b,
-                            .c {
-                                stroke-width: 5px;
-                            }
-
-                            .c {
-                                stroke-dasharray: 11.94 11.94;
-                            }
-
-                            .d {
-                                stroke-width: 3px;
-                            }
-                        </style>
-                    </defs>
-                    <title>Empty icon</title>
-                    <polyline class="a"
-                        points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
-                    <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
-                    <path class="c"
-                        d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
-                        transform="translate(-354.28 918.17) rotate(-60.69)" />
-                    <path class="d"
-                        d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
-                        transform="translate(-703.5 -300.22)" />
-                </svg>
-                <h2 class="light-text">No deposit requests.</h2>
-            </div>
-        </section>
-        <section id="withdraw" class="page hide-completely">
-            <div class="container-header">
-                <h2>Withdraw Requests</h2>
-                <button id="fetch_withdraws" onclick="show_withdraw_request()">
-                    Load pending
-                </button>
-                <label class="search" id="search_withdraw">
-                    <input type="search" onkeyup="search_withdraws()" placeholder="Search">
-                </label>
-            </div>
-            <div id="pending_withdrawals_container" class="container"></div>
-            <div id="withdraw_illustration" class="empty">
-                <svg viewBox="0 0 529.94 446.5">
-                    <defs>
-                        <style>
-                            .a,
-                            .b,
-                            .c,
-                            .d {
-                                fill: none;
-                                stroke-linejoin: round;
-                            }
-
-                            .a {
-                                stroke-width: 9px;
-                            }
-
-                            .b,
-                            .c {
-                                stroke-width: 5px;
-                            }
-
-                            .c {
-                                stroke-dasharray: 11.94 11.94;
-                            }
-
-                            .d {
-                                stroke-width: 3px;
-                            }
-                        </style>
-                    </defs>
-                    <title>Empty icon</title>
-                    <polyline class="a"
-                        points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
-                    <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
-                    <path class="c"
-                        d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
-                        transform="translate(-354.28 918.17) rotate(-60.69)" />
-                    <path class="d"
-                        d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
-                        transform="translate(-703.5 -300.22)" />
-                </svg>
-                <h2 class="light-text">No withdraw requests.</h2>
-            </div>
-        </section>
-        <section id="pay_cashier" class="page hide-completely">
-            <div class="container-header">
-                <h2>Pay through cashier Requests</h2>
-                <button id="fetch_pay_requests" onclick="showPayRequests()">
-                    Load pending
-                </button>
-                <label class="search" id="search_withdraw">
-                    <input type="search" onkeyup="search_pay_through_cashier()" placeholder="Search">
-                </label>
-            </div>
-            <div id="pay_requests_container" class="container"></div>
-            <div id="pay_illustration" class="empty">
-                <svg viewBox="0 0 529.94 446.5">
-                    <defs>
-                        <style>
-                            .a,
-                            .b,
-                            .c,
-                            .d {
-                                fill: none;
-                                stroke-linejoin: round;
-                            }
-
-                            .a {
-                                stroke-width: 9px;
-                            }
-
-                            .b,
-                            .c {
-                                stroke-width: 5px;
-                            }
-
-                            .c {
-                                stroke-dasharray: 11.94 11.94;
-                            }
-
-                            .d {
-                                stroke-width: 3px;
-                            }
-                        </style>
-                    </defs>
-                    <title>Empty icon</title>
-                    <polyline class="a"
-                        points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
-                    <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
-                    <path class="c"
-                        d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
-                        transform="translate(-354.28 918.17) rotate(-60.69)" />
-                    <path class="d"
-                        d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
-                        transform="translate(-703.5 -300.22)" />
-                </svg>
-                <h2 class="light-text">No pay requests.</h2>
+            <div class="user-panel">
+                <h4 class="user-type">User</h4>
+                <div class="copy-row">
+                    <h4 class="user-flo-id copy"></h4>
+                    <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                        <title>Copy</title>
+                        <rect x="16" y="16" width="48" height="48" rx="6" />
+                        <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                    </svg>
+                </div>
+                <div class="flex align-items space-between">
+                    <h4>Balance</h4>
+                    <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
+                        <title>refresh balance</title>
+                        <polyline points="42.99 0.16 50.25 21.23 28.78 27.7"/>
+                        <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
+                    </svg>
+                </div>
+                <div id="display_balance" class="grid grid-2">
+                    <div class="balance">
+                        <h5>Rupee</h5>
+                        <h3 class="token-balance">0</h3>
+                    </div>
+                    <div class="balance">
+                        <h5>FLO</h5>
+                        <h3 id="flo_balance">0</h3>
+                    </div>
+                </div>
             </div>
         </section>
         <section id="request_page" class="page hide-completely">
             <h2>Payment Requests</h2>
             <p class="bottom-margin">Your payment requests will appear here.</p>
-            <div id="payment_request_container" class="container">
-                <h4>You don't have any requests.</h4>
-            </div>
+            <sm-tab-header target="payment_request_tab">
+                <sm-tab>Pending</sm-tab>
+                <sm-tab>Approved</sm-tab>
+                <sm-tab>Declined</sm-tab>
+            </sm-tab-header>
+            <sm-tab-panels id="payment_request_tab">
+                <sm-panel id="pending_payment_request_container" class="container">
+                    <h4>You don't have any requests.</h4>
+                </sm-panel>
+                <sm-panel id="approved_payment_request_container" class="container">
+                    <h4>You don't have any requests.</h4>
+                </sm-panel>
+                <sm-panel id="declined_payment_request_container" class="container">
+                    <h4>You don't have any requests.</h4>
+                </sm-panel>
+            </sm-tab-panels>
         </section>
         <section id="activity_page" class="page">
             <h2>Activity</h2>
@@ -738,8 +739,15 @@
             </sm-tab-panels>
         </section>
         <section id="settings_page" class="page hide-completely">
-            <div class="container-header">
-                <h2>Settings</h2>
+            <h2>Settings</h2>
+            <h4>My FLO ID</h4>
+            <div class="copy-row">
+                <h4 class="user-flo-id copy"></h4>
+                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                    <title>Copy</title>
+                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                </svg>
             </div>
             <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
         </section>
@@ -777,13 +785,14 @@
     </script>
     <script src="components.js"></script>
     <script id="onLoadStartUp">
+        const userFloIdContainers = document.querySelectorAll('.user-flo-id')
         function onLoadStartUp() {
             showPopup('main_loader', 'no')
             console.log("Starting the app! Please Wait!")
             floDapps.launchStartUp().then(async result => {
                 console.log(`Welcome ${myFloID}`)
                 await token_app.actions.doShreeGanesh();
-                document.getElementById('user_flo_id').textContent = myFloID
+                userFloIdContainers.forEach(container => container.textContent = myFloID)
                 refresh_balance()
                 hidePopup()
             }).catch(error => console.error(error))
@@ -944,16 +953,17 @@
                                     </div>`;
                 return card;
             },
-            paymentRequest(time, senderAddress, amount, id) {
+            paymentRequest(time, senderAddress, amount, id, enableActions) {
                 let card = document.createElement('div')
-                card.classList.add('request')
+                card.classList.add('request'),
+                markup = ``
 
                 setAttributes(card, {
                     'data-sender-address': senderAddress,
                     'data-amount': amount,
                     'data-payment-request-id': id
                 })
-                card.innerHTML = `   <h5 class="time">${formatedTime(time)}</h5>
+                markup = `   <h5 class="time">${formatedTime(time)}</h5>
                                     <h5>Request by</h5>
                                     <div class="copy-row">
                                         <h4 class="copy">${senderAddress}</h4>
@@ -965,14 +975,18 @@
                                     </div>
                                     <h5 class="label">amount</h5>
                                     <h4>₹ ${amount}</h4>
-                                    <div class="flex">
-                                    <button class="decline-request secondary-btn">
-                                        decline
-                                    </button>
-                                    <button class="send-rupee">
-                                        pay
-                                    </button>
-                                    </div>`;
+                                    `;
+                if(enableActions)
+                markup += `
+                            <div class="flex">
+                                <button class="decline-request secondary-btn">
+                                    decline
+                                </button>
+                                <button class="send-rupee">
+                                    pay
+                                </button>
+                            </div>` 
+                card.innerHTML = markup
                 return card;
             },
             cashierMessage(message) {
@@ -1441,7 +1455,15 @@
                     minutes = new Date(parseInt(time)).getMinutes(),
                     hours = new Date(parseInt(time)).getHours()
                 minutes = minutes < 10 ? `0${minutes}` : minutes
-                let finalHours = hours > 12 ? `${hours - 12}:${minutes} PM` : `${hours}:${minutes} AM`
+                let finalHours = ``;
+                if(hours > 12)
+                    finalHours = `${hours - 12}:${minutes}`
+                else if(hours === 0)
+                    finalHours = `12:${minutes}`
+                else
+                    finalHours = `${hours}:${minutes}`
+                
+                finalHours = hours >= 12 ? `${finalHours} PM` : `${finalHours} AM`
                 return `${finalHours} ${month} ${date} ${year}`;
             } catch (e) {
                 console.error(e);
@@ -1597,7 +1619,7 @@
             })
 
             // Function for accepting payment request
-            document.getElementById('payment_request_container').addEventListener('click', async (e) => {
+            document.getElementById('payment_request_tab').addEventListener('click', async (e) => {
                 if (e.target.closest('.send-rupee')) {
                     let parent = e.target.closest('.request'),
                         senderAddress = parent.dataset.senderAddress,
@@ -11128,6 +11150,12 @@
                 #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                 #!#cashiers=
                 {
+                    "FByrY4vc1NRfbkqAqABtUyhhNzMZsKUjqr": {
+                        "upi_id": "7004780931@upi"
+                    },
+                    "FPFeL5PXzW9bGosUjQYCxTHSMHidnygvvd": {
+                        "upi_id": "7744023898@paytm"
+                    },
                     "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
                         "upi_id": "8507742774@ybl"
                     },
@@ -11239,7 +11267,7 @@
             const allCashierOptions = document.querySelectorAll('.cashier-option'),
                 allUserOptions = document.querySelectorAll('.user-option'),
                 allHelplineOptions = document.querySelectorAll('.helpline-option'),
-                userType = document.getElementById('user_type')
+                userType = document.querySelectorAll('.user-type')
 
             //Cashier startup sequence
             if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
@@ -11255,7 +11283,7 @@
                 show_deposit_request()
                 show_withdraw_request()
                 showPayRequests()
-                userType.textContent = 'Cashier'
+                userType.forEach(user => user.textContent = 'Cashier')
                 showPage(document.getElementById('deposit_page_btn'), 'deposit')
             }
 
@@ -11278,7 +11306,7 @@
                 cashierSelect.innerHTML = cashierList;
                 await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(
                     cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
-                userType.textContent = 'Helpline'
+                userType.forEach(user => user.textContent = 'Cashier')
                 showPage(document.getElementById('helpline_page_btn'), 'helpline_page')
             }
 
@@ -11295,7 +11323,7 @@
                 })
                 show_user_activities()
                 show_payment_requests()
-                userType.textContent = 'User'
+                userType.forEach(user => user.textContent = 'Cashier')
                 showPage(document.getElementById('home_page_btn'), 'home_page')
             }
 
@@ -11357,36 +11385,36 @@
                 let promises = [];
 
                 for (let cashier in token_app.master_configurations.cashiers) {
-                    let p1 = floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
-                        receiverID: cashier,
-                        senderIDs: [myFloID]
-                    })
+                    let p1 = {
+                        func: floCloudAPI.requestGeneralData, 
+                        arg1: token_app.master_configurations.TYPE_DEPOSITS,
+                        arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                    }
 
-                    let p2 = floCloudAPI.requestGeneralData(token_app.master_configurations
-                    .TYPE_WITHDRAWS, {
-                        receiverID: cashier,
-                        senderIDs: [myFloID]
-                    })
+                    let p2 = { 
+                        func: floCloudAPI.requestGeneralData,
+                        arg1: token_app.master_configurations.TYPE_WITHDRAWS,
+                        arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                    }
 
-                    let p3 = floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PAY_THROUGH_CASHIER, {
-                            receiverID: cashier,
-                            senderIDs: [myFloID]
-                        })
+                    let p3 = {
+                        func: floCloudAPI.requestGeneralData,
+                        arg1: token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                        arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                    }
 
-                    promises.push(p1);
-                    promises.push(p2);
-                    promises.push(p3);
-
+                    promises.push(p1, p2, p3);
                 }
 
-                let p4 = floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
-                    receiverID: myFloID
-                })
-
+                let p4 = {
+                    func: floCloudAPI.requestGeneralData,
+                    arg1: token_app.master_configurations.TYPE_MSGES,
+                    arg2: {receiverID: myFloID}
+                }
+                
                 promises.push(p4);
 
-                await Promise.all(promises);
+                await Promise.all(promises.map(prom => prom.func.call(floCloudAPI,prom.arg1, prom.arg2)));
 
                 return promises;
 
@@ -11669,7 +11697,7 @@
                 if (refreshButton) {
                     refreshButton.classList.add('animate-loader')
                 }
-                const current_token_balance = document.getElementById('token_balance').textContent;
+                const current_token_balance = document.querySelector('.token-balance').textContent;
                 if (typeof current_token_balance == "string") {
                     const get_user_rupee_balance = await ajaxGet(
                         'https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' +
@@ -11680,7 +11708,7 @@
                     if (typeof get_user_rupee_balance === "object" && get_user_rupee_balance.balance >= 0) {
                         if (get_user_rupee_balance.balance === null)
                             get_user_rupee_balance.balance = 0;
-                        document.getElementById('token_balance').textContent = get_user_rupee_balance.balance;
+                        document.querySelectorAll('.token-balance').forEach(bal => bal.textContent = get_user_rupee_balance.balance);
                     }
                     /*if (typeof get_user_flo_balance === "object" && get_user_flo_balance.balance >= 0) {
                         if (get_user_flo_balance.balance === null)
@@ -11813,7 +11841,7 @@
     <!-- User functions -->
     <script>
         let depositRequested = 0,
-            depositedRupeeTxId = document.getElementById('deposited_rupee_txId');
+            depositedRupeeTxId = document.getElementById('deposited_rupee_upi');
         function request_rupee_token() {
             try {
                 const request_tokens_btn = document.getElementById('request_tokens_btn');
@@ -11940,7 +11968,7 @@
                 const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
 
                 const txt = `Please send cash to UPI address <strong>${cashier_upi}</strong>. 
-                          Then specify the <strong>amount sent</strong> and <strong>UPI Transaction ID</strong> below.`;
+                          Then specify the <strong>amount sent</strong> and <strong>UPI address you used to send money</strong> below.`;
 
                 document.getElementById('pay_cashier_info').innerHTML = txt;
 
@@ -11950,17 +11978,17 @@
                     const paying_amount_div = document.getElementById('recvr_amount_to_pay')
                     const recvr_id = document.getElementById('recvr_id').value;
                     let amount_to_pay = Number(paying_amount_div.value);
-                    let paid_cashier_upi_txid = document.getElementById('paid_cashier_upi_txid').value;
-                    paid_cashier_upi_txid = toAlphanumeric(paid_cashier_upi_txid);
+                    let paid_cashier_upi = document.getElementById('paid_cashier_upi').value;
+                    paid_cashier_upi = toAlphanumeric(paid_cashier_upi);
                     if (recvr_id.length < 1 ||
                         !floCrypto.validateAddr(recvr_id) ||
                         amount_to_pay <= 0 ||
-                        paid_cashier_upi_txid.length < 1)
+                        paid_cashier_upi.length < 1)
                         return notify("Incomplete information", 'error', '', true);
                     const req_object = {
                         receiver_flo_id: recvr_id,
                         amount: amount_to_pay,
-                        upi_txid: toAlphanumeric(paid_cashier_upi_txid)
+                        upi_txid: toAlphanumeric(paid_cashier_upi)
                     }
 
                     floCloudAPI.sendGeneralData(req_object, token_app.master_configurations
@@ -12146,7 +12174,9 @@
                 let processed_payments_requests = approved_reqs_list.map(m => m.message).concat(declined_reqs_list
                     .map(m => m.message));
 
-                let paymentRequestContainer = document.getElementById("payment_request_container");
+                let pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
+                    approvedPaymentRequestContainer = document.getElementById("approved_payment_request_container"),
+                    declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container");
 
                 for (const m of general_msg) {
                     let {
@@ -12157,13 +12187,40 @@
                         pay_req_id
                     } = m.message;
                     if (processed_payments_requests.includes(pay_req_id || m.message)) continue;
-                    console.log(sender_flo_id, amount, datetime, pay_req_id);
                     if (typeof sender_flo_id !== "string") continue;
+                    frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id, true))
+                }
+                if (frag.children.length)
+                    pendingPaymentRequestContainer.innerHTML = ``;
+                pendingPaymentRequestContainer.append(frag)
+                
+                for (const m of approved_reqs_list) {
+                    let {
+                        sender_flo_id,
+                        receiver_flo_id,
+                        amount,
+                        datetime,
+                        pay_req_id
+                    } = m.message;
                     frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
                 }
                 if (frag.children.length)
-                    paymentRequestContainer.innerHTML = ``;
-                paymentRequestContainer.append(frag)
+                    approvedPaymentRequestContainer.innerHTML = ``;
+                approvedPaymentRequestContainer.append(frag)
+                
+                for (const m of declined_reqs_list) {
+                    let {
+                        sender_flo_id,
+                        receiver_flo_id,
+                        amount,
+                        datetime,
+                        pay_req_id
+                    } = m.message;
+                    frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
+                }
+                if (frag.children.length)
+                    declinedPaymentRequestContainer.innerHTML = ``;
+                declinedPaymentRequestContainer.append(frag)
             } catch (e) {
                 console.error(e);
                 return false

@@ -690,6 +690,7 @@ text-align: center;
 transition: color 0.3s;
 text-transform: capitalize;
 font-family: var(--font-family);
+height: 100%;
 }
 @media (hover: hover){
 :host(.active) .tab{
@@ -1933,7 +1934,8 @@ background: rgba(var(--text-color), 1);
 box-shadow: 0 0.2rem 0.2rem #00000020, 
             0 0.5rem 1rem #00000040; 
 -webkit-tap-highlight-color: transparent;
-transform: scale(0)
+transform: scale(0);
+z-index: 1;
 }
 .hide{
 pointer-events: none;
@@ -1950,9 +1952,10 @@ right: 1rem;
 }
 .left,.right{
 position: absolute;
-width: 2rem;
+width: 3rem;
 height: 100%; 
 transition: opacity 0.3s;
+z-index: 1;
 }
 .left{
 background: linear-gradient(to left, transparent, rgba(var(--foreground-color), 0.6))
@@ -2727,6 +2730,7 @@ height: 0.15rem;
 border-radius: 1rem 1rem 0 0;  
 background: var(--accent-color);
 transition: transform 0.3s, width 0.3s;
+pointer-events: none;
 }
 :host([variant="tab"]) .indicator{
 height: 100%;
