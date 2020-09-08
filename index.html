@@ -11099,7 +11099,6 @@
 <script>
     const token_app = {
         master_configurations: {},
-        //masterFLOAddress: 'FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky',
         actions: {},
         blocked_flo_ids: [],
     };
@@ -11130,27 +11129,6 @@
                 {
                     "FByrY4vc1NRfbkqAqABtUyhhNzMZsKUjqr": {
                         "upi_id": "7004780931@upi"
-                    },
-                    "FPFeL5PXzW9bGosUjQYCxTHSMHidnygvvd": {
-                        "upi_id": "7744023898@paytm"
-                    },
-                    "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
-                        "upi_id": "8507742774@ybl"
-                    },
-                    "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
-                        "upi_id": "8340617958@ybl"
-                    },
-                    "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
-                        "upi_id": "8902496422@ybl"
-                    },
-                    "FBun3694ZdxmD66os9oL5DxMrif3vyVjT3": {
-                        "upi_id": "7004801428@ybl"
-                    },
-                    "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
-                        "upi_id": "aakriti1705sinha@okicici"
-                    },
-                    "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
-                        "upi_id": "krishraj1012-2@okicici"
                     }
                 }`
             text = removeWhiteSpaces(text);
@@ -11412,6 +11390,9 @@
             floCloudAPI.resetObjectData(token_app, floGlobals.application, {
                 receiverID: floGlobals.adminID
             });
+            
+            floGlobals.appObjects["unconfirmed_rupee_deposits"] = {};
+            floCloudAPI.resetObjectData("unconfirmed_rupee_deposits"); 
         }
 
         async function show_deposit_request() {
@@ -11439,7 +11420,7 @@
 
                 let cash_deposits = await compactIDB.readAllData('deposits_flo_txids');
 
-                let cash_deposits_upi_txid_list = Object.values(cash_deposits).map(m => m.upi_txid);
+                let cash_deposits_upi_txid_list = Object.values(cash_deposits).map(m => m.user_upi_txid);
 
                 const general_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0");
 
@@ -11527,14 +11508,37 @@
                         notify(`Transfer unsuccessfull.`);
                         return false;
                     }
-                    // TODO: check https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}
-                    // and then continue
+
                     const input_data = {
                         receiver_flo_id,
                         flo_txid,
                         user_upi_txid,
-                        "datetime": +new Date()
+                        "tokens_transferred": amount_of_tokens_to_transfer,
+                        "datetime": + new Date()
                     }
+
+                    // TODO: check https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}
+                    // and then continue
+
+                    let n=1;
+                    (async function validateDepositTxidInBlockchain() {
+                        notify('Txid '+flo_txid+' validation in process. Please do not close the app until directed.');
+                        let validate_txid = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}`);
+                        
+                        if(typeof validate_txid=="object" && validate_txid.result=="ok") {
+                            // tx registered 
+                        } else if(n<=30) {
+                            validateDepositTxidInBlockchain();
+                            n++;
+                        } else {
+                            floGlobals.appObjects["unconfirmed_rupee_deposits"][flo_txid] = input_data;
+                            let receiverID = floGlobals.adminID;
+                            let senderIDs = [myFloID];
+                            floCloudAPI.updateObjectData(floGlobals.application, { receiverID, senderIDs });
+                            notify('Txid '+flo_txid+' added in Unconfirmed Rupee Deposits.', 'error');
+                        }    
+
+                    })();
 
                     compactIDB.addData('deposits_flo_txids', input_data, "flo_txid");
 
@@ -11568,7 +11572,7 @@
                 input_data["datetime"] = +new Date();
 
                 let token_tx = await ajaxGet('https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/' +
-                    input_data["token_txid"])
+                    input_data["token_txid"]);
                 if (typeof token_tx !== "object") {
                     notify("Transaction not found");
                     return false;
@@ -11609,6 +11613,7 @@
                 notify(error, 'error')
             }
         }
+        
         async function transferTokensManually() {
             try {
                 const send_tokens_btn = document.getElementById('send_tokens_btn');
@@ -11814,12 +11819,39 @@
                 throw new Error(error)
             }
         }
+
+        async function accounting(date='') {
+            try {
+                await floCloudAPI.requestGeneralData(token_app.master_configurations
+                    .TYPE_PROCESSED_DEPOSITS, {
+                    receiverID: myFloID
+                });
+                const cash_deposits = floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_PROCESSED_DEPOSITS, "0");
+                let total = 0;
+                for(t in cash_deposits) {
+                    let data = cash_deposits[t].message;
+
+                    if(typeof date !=='number' 
+                    || (new Date(data.datetime*1000).getDate() !== new Date(date).getDate())) continue;
+                    
+                    let tokens_transferred = Number(data.tokens_transferred);
+                    if(isNaN(tokens_transferred)) tokens_transferred=0;
+                    total += tokens_transferred;
+                }
+                console.log(total);
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
     </script>
 
     <!-- User functions -->
     <script>
         let depositRequested = 0,
             depositedRupeeTxId = document.getElementById('deposited_rupee_txId');
+   
         function request_rupee_token() {
             try {
                 const request_tokens_btn = document.getElementById('request_tokens_btn');
@@ -12090,6 +12122,7 @@
                 console.log(e);
             }
         }
+       
         async function request_payment(receiver_flo_id = '', amount = 0) {
             try {
 
@@ -12199,7 +12232,8 @@
                 console.log(e);
             }
         }
-    </script>
+   
+   </script>
 
     <!-- Helpline -->
     <script>
