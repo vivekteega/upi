@@ -481,6 +481,10 @@
                             <h3 id="token_balance">0</h3>
                         </div>
                         <div class="balance">
+                            <h5>Unconfirmed Rupee</h5>
+                            <h3 id="uncnf_token_balance">0</h3>
+                        </div>
+                        <div class="balance">
                             <h5>FLO</h5>
                             <h3 id="flo_balance">0</h3>
                         </div>
@@ -11523,20 +11527,20 @@
                     let n=1;
                     (async function validateDepositTxidInBlockchain() {
                         notify('Txid '+flo_txid+' validation in process. Please do not close the app until directed.');
-                        let validate_txid = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}`);
+                        //let validate_txid = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}`);
                         
-                        if(typeof validate_txid=="object" && validate_txid.result=="ok") {
-                            // tx registered 
-                        } else if(n<=30) {
-                            validateDepositTxidInBlockchain();
-                            n++;
-                        } else {
+                        // if(typeof validate_txid=="object" && validate_txid.result=="ok") {
+                        //     // tx registered 
+                        // } else if(n<=30) {
+                        //     validateDepositTxidInBlockchain();
+                        //     n++;
+                        // } else {
                             floGlobals.appObjects["unconfirmed_rupee_deposits"][flo_txid] = input_data;
                             let receiverID = floGlobals.adminID;
                             let senderIDs = [myFloID];
-                            floCloudAPI.updateObjectData(floGlobals.application, { receiverID, senderIDs });
+                            floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID, senderIDs });
                             notify('Txid '+flo_txid+' added in Unconfirmed Rupee Deposits.', 'error');
-                        }    
+                        //}    
 
                     })();
 
@@ -11685,19 +11689,22 @@
                     const get_user_rupee_balance = await ajaxGet(
                         'https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' +
                         myFloID)
-                    const get_user_flo_balance = await ajaxGet(`
-                        https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?floAddress=${myFloID}`)
+                    const get_user_unconfirmed_rupee_balance = await get_unconfirmed_balance(myFloID);
+
+                    const get_user_flo_balance = await floBlockchainAPI.getBalance(myFloID)
                     console.log(get_user_flo_balance)
                     if (typeof get_user_rupee_balance === "object" && get_user_rupee_balance.balance >= 0) {
                         if (get_user_rupee_balance.balance === null)
                             get_user_rupee_balance.balance = 0;
                         document.getElementById('token_balance').textContent = get_user_rupee_balance.balance;
                     }
-                    /*if (typeof get_user_flo_balance === "object" && get_user_flo_balance.balance >= 0) {
-                        if (get_user_flo_balance.balance === null)
-                            get_user_flo_balance.balance = 0;
-                        document.getElementById('flo_balance').textContent = get_user_flo_balance.balance;
-                    }*/
+                    if(typeof get_user_unconfirmed_rupee_balance=="number" && !isNaN(get_user_unconfirmed_rupee_balance)) {
+                        document.getElementById('uncnf_token_balance').textContent = get_user_unconfirmed_rupee_balance;
+                    }
+                    if (typeof get_user_flo_balance !== "number" || isNaN(get_user_flo_balance)) {
+                        get_user_flo_balance = 0;
+                    }
+                    document.getElementById('flo_balance').textContent = get_user_flo_balance;
                 }
                 if (refreshButton) {
                     notify('Balance Updated')
@@ -12233,6 +12240,39 @@
             }
         }
    
+        async function get_unconfirmed_balance(flo_id='') {
+            try {
+                let api = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressTransactions?floAddress=${flo_id}`;
+                let token_balance = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${flo_id}`);
+                token_balance = token_balance.balance;
+                let tokens_transfers_tx_list = await ajaxGet(api);
+                tokens_transfers_tx_list = Object.keys(tokens_transfers_tx_list.transactions);
+                let receiverID = floGlobals.adminID;
+                let senderIDs = Object.keys(token_app.master_configurations.cashiers);
+                await floCloudAPI.requestObjectData("unconfirmed_rupee_deposits", { receiverID, senderIDs })
+                let unconfirmed_tx_list = Object.keys(floGlobals.appObjects["unconfirmed_rupee_deposits"]); 
+                //console.log(unconfirmed_tx_list);    
+                //console.log(tokens_transfers_tx_list);
+                //console.log(token_balance);
+
+                let unconfirmed_balance=0;
+                for(ut of unconfirmed_tx_list) {
+                    if(tokens_transfers_tx_list.includes(ut)) {
+                        // remove this item from unconfirmed_tx_list
+                        if(delete floGlobals.appObjects["unconfirmed_rupee_deposits"][ut])
+                            floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID, senderIDs });
+                    } else {
+                        unconfirmed_balance += Number(floGlobals.appObjects["unconfirmed_rupee_deposits"][ut]["tokens_transferred"])
+                    }
+                }    
+                console.log(token_balance, unconfirmed_balance);
+                return unconfirmed_balance;
+            } catch(error) {
+                notify('Failed to get rupee balance.', 'error')
+                throw new Error(error);
+            }
+        }
+
    </script>
 
     <!-- Helpline -->
