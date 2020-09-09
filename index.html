@@ -438,13 +438,13 @@
                             <h5>Rupee</h5>
                         <h3 class="token-balance">0</h3>
                          </div>
-	           	<div class="balance">
+	           	        <div class="balance">
                             <h5>Unconfirmed Rupee</h5>
-                            <h3 id="uncnf_token_balance">0</h3>
+                            <h3 class="uncnf-token-balance">0</h3>
                         </div>
                         <div class="balance">
                             <h5>FLO</h5>
-                        <h3 class="flo-balance" id="flo_balance">0</h3>
+                        <h3 class="flo-balance">0</h3>
                         </div>
                 </div>
             </div>
@@ -663,6 +663,10 @@
                     <div class="balance">
                         <h5>Rupee</h5>
                         <h3 class="token-balance">0</h3>
+                    </div>
+                    <div class="balance">
+                        <h5>Unconfirmed Rupee</h5>
+                        <h3 class="uncnf-token-balance">0</h3>
                     </div>
                     <div class="balance">
                         <h5>FLO</h5>
@@ -11741,12 +11745,12 @@
                         document.querySelectorAll('.token-balance').forEach(bal => bal.textContent = get_user_rupee_balance.balance);
                     }
                     if(typeof get_user_unconfirmed_rupee_balance=="number" && !isNaN(get_user_unconfirmed_rupee_balance)) {
-                        document.getElementById('uncnf_token_balance').textContent = get_user_unconfirmed_rupee_balance;
+                        document.querySelectorAll('.uncnf-token-balance').forEach(elem => elem.textContent = get_user_unconfirmed_rupee_balance);
                     }
                     if (typeof get_user_flo_balance !== "number" || isNaN(get_user_flo_balance)) {
                         get_user_flo_balance = 0;
                     }
-                    document.getElementById('flo_balance').textContent = get_user_flo_balance;
+                    document.querySelectorAll('.flo-balance').forEach(elem => elem.textContent = get_user_flo_balance);
                 }
                 if (refreshButton) {
                     notify('Balance Updated')
