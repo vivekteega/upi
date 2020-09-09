@@ -11161,10 +11161,7 @@
                 {
                     "FByrY4vc1NRfbkqAqABtUyhhNzMZsKUjqr": {
                         "upi_id": "7004780931@upi"
-                    },
-                    "FPFeL5PXzW9bGosUjQYCxTHSMHidnygvvd": {
-                        "upi_id": "7744023898@paytm"
-                    },
+                    }
                     "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
                         "upi_id": "8507742774@ybl"
                     },
@@ -11586,8 +11583,7 @@
                         } else {
                             floGlobals.appObjects["unconfirmed_rupee_deposits"][flo_txid] = input_data;
                             let receiverID = floGlobals.adminID;
-                            let senderIDs = [myFloID];
-                            floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID, senderIDs });
+                            floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID });
                             notify('Txid '+flo_txid+' added in Unconfirmed Rupee Deposits.', 'error');
                         }    
 
@@ -12332,7 +12328,7 @@
                     if(tokens_transfers_tx_list.includes(ut)) {
                         // remove this item from unconfirmed_tx_list
                         if(delete floGlobals.appObjects["unconfirmed_rupee_deposits"][ut])
-                            floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID, senderIDs });
+                            floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID });
                     } else {
                         unconfirmed_balance += Number(floGlobals.appObjects["unconfirmed_rupee_deposits"][ut]["tokens_transferred"])
                     }
