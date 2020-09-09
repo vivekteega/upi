@@ -11576,20 +11576,20 @@
                     let n=1;
                     (async function validateDepositTxidInBlockchain() {
                         notify('Txid '+flo_txid+' validation in process. Please do not close the app until directed.');
-                        //let validate_txid = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}`);
+                        let validate_txid = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}`);
                         
-                        // if(typeof validate_txid=="object" && validate_txid.result=="ok") {
-                        //     // tx registered 
-                        // } else if(n<=30) {
-                        //     validateDepositTxidInBlockchain();
-                        //     n++;
-                        // } else {
+                        if(typeof validate_txid=="object" && validate_txid.result=="ok") {
+                            // tx registered. Do nothing
+                        } else if(n<=30) {
+                            validateDepositTxidInBlockchain();
+                            n++;
+                        } else {
                             floGlobals.appObjects["unconfirmed_rupee_deposits"][flo_txid] = input_data;
                             let receiverID = floGlobals.adminID;
                             let senderIDs = [myFloID];
                             floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID, senderIDs });
                             notify('Txid '+flo_txid+' added in Unconfirmed Rupee Deposits.', 'error');
-                        //}    
+                        }    
 
                     })();
 
@@ -12321,7 +12321,7 @@
                 tokens_transfers_tx_list = Object.keys(tokens_transfers_tx_list.transactions);
                 let receiverID = floGlobals.adminID;
                 let senderIDs = Object.keys(token_app.master_configurations.cashiers);
-                await floCloudAPI.requestObjectData("unconfirmed_rupee_deposits", { receiverID, senderIDs })
+                await floCloudAPI.requestObjectData("unconfirmed_rupee_deposits", { receiverID, senderIDs });
                 let unconfirmed_tx_list = Object.keys(floGlobals.appObjects["unconfirmed_rupee_deposits"]); 
                 //console.log(unconfirmed_tx_list);    
                 //console.log(tokens_transfers_tx_list);
