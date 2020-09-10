@@ -697,19 +697,19 @@ form {
   transform: scale(0.95);
 }
 .options-tab .option:nth-of-type(1) .icon {
-  background: #D32F2F;
+  background: linear-gradient(135deg, #D32F2F 50%, #B71C1C 50%);
 }
 .options-tab .option:nth-of-type(2) .icon {
-  background: #7B1FA2;
+  background: linear-gradient(135deg, #7B1FA2 50%, #4A148C 50%);
 }
 .options-tab .option:nth-of-type(3) .icon {
-  background: #303F9F;
+  background: linear-gradient(135deg, #1976D2 50%, #0D47A1 50%);
 }
 .options-tab .option:nth-of-type(4) .icon {
-  background: #1976D2;
+  background: linear-gradient(135deg, #388E3C 50%, #1B5E20 50%);
 }
 .options-tab .option:nth-of-type(5) .icon {
-  background: #388E3C;
+  background: linear-gradient(135deg, #F57C00 50%, #E65100 50%);
 }
 
 .notification-dot::after {
@@ -744,7 +744,8 @@ sm-tab-header {
 }
 
 sm-tab::part(tab) {
-  padding: 0.8rem 0;
+  padding: 0.8rem 0.4rem;
+  text-transform: uppercase;
 }
 
 sm-panel {
@@ -1099,6 +1100,11 @@ sm-panel {
     display: flex;
     justify-content: center;
     flex-direction: column;
+  }
+
+  .user-panel {
+    position: sticky;
+    top: 1.5rem;
   }
 }
 @media only screen and (min-width: 1920px) {
