@@ -1514,7 +1514,7 @@
                 submitBtn = parent.querySelector("button[type='submit']");
             if (!submitBtn) return;
             if (formElement.hasAttribute('floId')) {
-                if (floCrypto.validateAddr(formElement.value)) {
+                if (floCrypto.validateAddr(formElement.value.trim())) {
                     submitBtn.disabled = false;
                 } else {
                     submitBtn.disabled = true;
@@ -1655,13 +1655,12 @@
                         paymentRequestId = parent.dataset.paymentRequestId;
                     if (await confirmation(
                         `Do want to decline this request? This will remove the request.`)) {
-
                         const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
                             .TYPE_REQUEST_PAYMENT, "0").reverse();
-                        
+
                         const original_req = all_reqs.filter(f=>f.message.pay_req_id===paymentRequestId)
                             .map(m=>m.message)[0];
-                        
+
                         payment_request_status(original_req, 'DECLINED')
                         e.target.closest('.request').remove()
                     }
@@ -11130,7 +11129,7 @@
             try {
                 for (const ds of dataStores) {
                     compactIDB.clearData(ds);
-                }
+                    }
                 return true;
             } catch (e) {
                 console.error(e);
@@ -11729,12 +11728,11 @@
                         hidePopup()
                         return false;
                     } else {
-                        notify(`Transaction successful: ${flo_txid}.`, 'success', '', true);
+                        notify(`Transaction successful: <span class="breakable">${flo_txid}</span>.`, 'success', '', true);
                         if (payingRequested) {
-
                             const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
                             .TYPE_REQUEST_PAYMENT, "0").reverse();
-                        
+
                             const original_req = all_reqs
                             .filter(f=>f.message.pay_req_id===currentPaymentRequest.requestId)
                             .map(m=>m.message)[0];
@@ -12275,7 +12273,7 @@
                         datetime,
                         pay_req_id
                     } = m.message;
-                    if (processed_payments_requests.includes(pay_req_id)) continue;
+                    if (processed_payments_requests.includes(pay_req_id || m.message)) continue;
                     console.log(sender_flo_id, amount, datetime, pay_req_id);
                     if (typeof sender_flo_id !== "string") continue;
                     frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id, true))
