@@ -11616,7 +11616,7 @@
                         receiverID: myFloID
                     });
 
-                    notify(`Transfer successful: <span class="breakable">${flo_txid}</span>.`, 'success', '', true);
+                    notify(`Transfer successful: ${flo_txid}`, 'success', true, true);
 
                     return true;
                 }
@@ -11728,7 +11728,7 @@
                         hidePopup()
                         return false;
                     } else {
-                        notify(`Transaction successful: <span class="breakable">${flo_txid}</span>.`, 'success', '', true);
+                        notify(`Transaction successful: ${flo_txid}`, 'success', true, true);
                         if (payingRequested) {
                             const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
                             .TYPE_REQUEST_PAYMENT, "0").reverse();
@@ -11887,7 +11887,7 @@
                             receiverID: myFloID
                         });
 
-                        notify(`Transaction successful: <span class="breakable">${flo_txid}</span>.   
+                        notify(`Transaction successful: ${flo_txid}. 
                             INR ${amount_to_pay} sent to ${vendor_flo_id}`, 'success', '', true);
                         return true;
                     }
@@ -12084,7 +12084,7 @@
                         senderIDs: [myFloID]
                     });
 
-                    notify(`You have sent cash to <span class="breakable">${recvr_id}</span> through our cashier service (${cashier_upi}). 
+                    notify(`You have sent cash to <div class="breakable">${recvr_id}</div> through our cashier service (${cashier_upi}). 
                         Once the cashier receives your payment, he will transfer it to ${recvr_id}.`, '', true, true);
                     hidePopup()
                 }

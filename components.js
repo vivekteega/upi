@@ -2167,6 +2167,16 @@ box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1),
 background: rgba(var(--foreground-color), 1);
 transition: height 0.3s, transform 0.3s, opacity 0.3s;
 overflow: hidden;
+overflow-wrap: break-word;
+word-wrap: break-word;
+-ms-word-break: break-all;
+word-break: break-all;
+word-break: break-word;
+-ms-hyphens: auto;
+-moz-hyphens: auto;
+-webkit-hyphens: auto;
+hyphens: auto;
+max-width: 100%;
 }
 h4:first-letter,
 p:first-letter{
@@ -2180,7 +2190,16 @@ line-height: 1.6;
 flex: 1;
 color: rgba(var(--text-color), 0.9);
 overflow-wrap: break-word;
+overflow-wrap: break-word;
 word-wrap: break-word;
+-ms-word-break: break-all;
+word-break: break-all;
+word-break: break-word;
+-ms-hyphens: auto;
+-moz-hyphens: auto;
+-webkit-hyphens: auto;
+hyphens: auto;
+max-width: 100%;
 }
 .notification:last-of-type{
 margin-bottom: 0;
@@ -2315,8 +2334,7 @@ customElements.define('sm-notifications', class extends HTMLElement {
             composition += `
         <svg class="notification-icon icon success-icon" viewBox="0 0 64 64">
             <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
-        </svg>
-    `
+        </svg>`
         }
         composition += `
                     <p>${messageBody}</p>
