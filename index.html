@@ -1655,7 +1655,14 @@
                         paymentRequestId = parent.dataset.paymentRequestId;
                     if (await confirmation(
                         `Do want to decline this request? This will remove the request.`)) {
-                        payment_request_status(paymentRequestId, 'DECLINED')
+
+                        const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
+                            .TYPE_REQUEST_PAYMENT, "0").reverse();
+                        
+                        const original_req = all_reqs.filter(f=>f.message.pay_req_id===paymentRequestId)
+                            .map(m=>m.message)[0];
+                        
+                        payment_request_status(original_req, 'DECLINED')
                         e.target.closest('.request').remove()
                     }
                 }
@@ -11130,6 +11137,13 @@
                 return false;
             }
         }
+    
+        function delay(t, v) {
+          return new Promise(function(resolve) {
+            setTimeout(resolve.bind(null, v), t);
+          });
+        }
+    
     </script>
 
 <script>
@@ -11142,23 +11156,25 @@
     token_app.actions = {
 
         parse_flo_comments: async function () {
+            const num=3;
             text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
                 #!#CURRENCY=INR
-                #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST2
-                #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST2
-                #!#TYPE_MSGES=USER_MESSAGES_TEST2
-                #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST2
-                #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST2
-                #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST2
-                #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST2
-                #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST2
-                #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST2
-                #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST2
-                #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST2
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST2
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST2
-                #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST2
-                #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST2
+                #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST${num}
+                #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST${num}
+                #!#TYPE_MSGES=USER_MESSAGES_TEST${num}
+                #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST${num}
+                #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST${num}
+                #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST${num}
+                #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST${num}
+                #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST${num}
+                #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST${num}
+                #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST${num}
+                #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST${num}
+                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST${num}
+                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST${num}
+                #!#TYPE_REQUEST_PAYMENT=REQUEST_PAYMENT_TEST${num}
+                #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST${num}
+                #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST${num}
                 #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
                 #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                 #!#cashiers=
@@ -11574,11 +11590,14 @@
                     let n=1;
                     (async function validateDepositTxidInBlockchain() {
                         notify('Txid '+flo_txid+' validation in process. Please do not close the app until directed.');
+                        
+                        await delay(60000);
+
                         let validate_txid = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}`);
                         
                         if(typeof validate_txid=="object" && validate_txid.result=="ok") {
                             // tx registered. Do nothing
-                        } else if(n<=30) {
+                        } else if(n<=5) {
                             validateDepositTxidInBlockchain();
                             n++;
                         } else {
@@ -11712,8 +11731,16 @@
                     } else {
                         notify(`Transaction successful: ${flo_txid}.`, 'success', '', true);
                         if (payingRequested) {
-                            payment_request_status(currentPaymentRequest.requestId, 'APPROVED')
-                            showPayRequests()
+
+                            const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
+                            .TYPE_REQUEST_PAYMENT, "0").reverse();
+                        
+                            const original_req = all_reqs
+                            .filter(f=>f.message.pay_req_id===currentPaymentRequest.requestId)
+                            .map(m=>m.message)[0];
+
+                            payment_request_status(original_req, 'APPROVED')
+                            showPayRequests();
                         }
                         hidePopup()
                         return true;
@@ -11764,7 +11791,7 @@
 
         async function showPayRequests() {
             try {
-                if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
+                //if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
                 let finished_tasks = await floCloudAPI.requestApplicationData({
                     type: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
@@ -12229,8 +12256,8 @@
                 console.log(approved_reqs_list);
                 console.log(declined_reqs_list);
 
-                let processed_payments_requests = approved_reqs_list.map(m => m.message).concat(declined_reqs_list
-                    .map(m => m.message));
+                let processed_payments_requests = approved_reqs_list.map(m => m.message.pay_req_id).concat(declined_reqs_list
+                    .map(m => m.message.pay_req_id));
 
                 let pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
                     approvedPaymentRequestContainer = document.getElementById("approved_payment_request_container"),
@@ -12248,7 +12275,7 @@
                         datetime,
                         pay_req_id
                     } = m.message;
-                    if (processed_payments_requests.includes(pay_req_id || m.message)) continue;
+                    if (processed_payments_requests.includes(pay_req_id)) continue;
                     console.log(sender_flo_id, amount, datetime, pay_req_id);
                     if (typeof sender_flo_id !== "string") continue;
                     frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id, true))
@@ -12285,10 +12312,10 @@
             }
         }
 
-        function payment_request_status(req_id = '', status = '') {
+        function payment_request_status(req = '', status = '') {
             try {
 
-                if (req_id.lenght < 1) return false;
+                if (typeof req !== 'object') return false;
 
                 if (status === 'DECLINED') {
                     status = token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED;
@@ -12296,11 +12323,11 @@
                     status = token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED;
                 } else return;
 
-                floCloudAPI.sendGeneralData(req_id, status, {
+                floCloudAPI.sendGeneralData(req, status, {
                     receiverID: myFloID
                 });
 
-                console.info(req_id + ' added to declined requests list.');
+                console.log(req);
 
                 return true;
 
