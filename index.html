@@ -140,8 +140,8 @@
                     </svg>
                 </div>
                 <label class="input">
-                    <input id="deposited_rupee_upi" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" type="text" disabled required>
-                    <div class="placeholder">Sender's UPI address</div>
+                    <input id="deposited_rupee_txid" pattern="^[a-zA-z0-9]+" type="text" disabled required>
+                    <div class="placeholder">UPI Transaction Id</div>
                 </label>
             </form>
         </div>
@@ -310,13 +310,8 @@
             <h5>Home</h5>
         </div>
         <div title="requests page" class="navbar-item user-option" onclick="showPage(this, 'request_page')">
-            <svg class="icon" viewBox="0 0 64 64">
-                <title>request</title>
-                <path
-                    d="M24,26.19a8.67,8.67,0,0,1-.24-3.61,8.34,8.34,0,0,1,16.59,1.27c0,8.35-8.66,8.16-8.34,11.58,0,.09,0,4.73,0,4.73" />
-                <line x1="32" y1="47.08" x2="32" y2="48.99" />
-                <path
-                    d="M32,.5h0A31.5,31.5,0,0,1,63.5,32v0A31.5,31.5,0,0,1,32,63.5H2.48a2,2,0,0,1-2-2V32A31.5,31.5,0,0,1,32,.5Z" />
+            <svg class="icon request-icon" viewBox="0 0 64 64">
+                <path d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68"/>
             </svg>
             <h5>requests</h5>
         </div>
@@ -364,46 +359,33 @@
                         <h4>Send</h4>
                 </div>
                 <div class="option" onclick="showPopup('deposit_rupee')">
-                    <svg class="icon banking" viewBox="0 0 52 51.5">
-                        <line x1="4" y1="28" x2="4" y2="19.5" />
-                        <polyline points="4 6 4 1 51 1 51 48 4 48 4 41.5" />
-                        <line x1="9" y1="50" x2="18" y2="50" />
-                        <line x1="36" y1="50" x2="45" y2="50" />
-                        <circle cx="27.5" cy="30" r="9.5" />
-                        <circle cx="27.5" cy="30" r="3.5" />
-                        <rect x="1" y="6" width="6" height="13.5" rx="2.76" />
-                        <rect x="1" y="28" width="6" height="13.5" rx="2.76" />
-                    </svg>
-                        <h4>deposit</h4>
+                    <svg class="icon" viewBox="0 0 64 64">
+                        <title>deposit</title>
+                        <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63"/>
+                        <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16"/>
+                        <path d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32"/>
+                        <path d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z"/>
+                        <polyline points="38.61 44.12 29.54 35.05 20.39 44.2"/>
+                        </svg>
+                    <h4>deposit</h4>
                 </div>
                 <div class="option" onclick="showPopup('withdraw_rupee')">
-                    <svg class="icon banking" viewBox="0 0 52 60">
-                        <line x1="4" y1="33.5" x2="4" y2="25" />
-                        <polyline points="41.52 6.5 51 6.5 51 53.5 41.69 53.5" />
-                        <line x1="9" y1="55.5" x2="14" y2="55.5" />
-                        <line x1="43" y1="55.5" x2="45" y2="55.5" />
-                        <rect x="1" y="11.5" width="6" height="13.5" rx="2.76" />
-                        <rect x="1" y="33.5" width="6" height="13.5" rx="2.76" />
-                        <polyline points="3.81 11.5 3.81 6.5 41.5 1 41.69 59 3.81 53.5 3.81 47" />
-                        <path
-                            d="M35.64,39.19c0,6.31-3.25,11.45-7.22,11.48s-7-4.92-7-11.07,3.13-11.29,7.05-11.48S35.64,32.88,35.64,39.19Z"
-                            transform="translate(-6 -2)" />
-                        <path
-                            d="M31.06,39.32c0,2.31-1.19,4.2-2.64,4.23s-2.62-1.79-2.62-4.08S27,35.3,28.42,35.24,31.06,37,31.06,39.32Z"
-                            transform="translate(-6 -2)" />
+                    <svg class="icon" viewBox="0 0 64 64">
+                        <title>withdraw</title>
+                        <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63"/>
+                        <line x1="29.42" y1="59.04" x2="29.42" y2="34.34"/>
+                        <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62"/>
+                        <path d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32"/>
+                        <path d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z"/>
+                        <polyline points="20.39 50.69 29.45 59.76 38.61 50.6"/>
                     </svg>
-                        <h4>Withdraw</h4>
+                    <h4>Withdraw</h4>
                 </div>
                 <div class="option" onclick="showPopup('request_rupee')">
-                    <svg class="icon" viewBox="0 0 64 64">
-                        <title>request</title>
-                        <path
-                            d="M24,26.19a8.67,8.67,0,0,1-.24-3.61,8.34,8.34,0,0,1,16.59,1.27c0,8.35-8.66,8.16-8.34,11.58,0,.09,0,4.73,0,4.73" />
-                        <line x1="32" y1="47.08" x2="32" y2="48.99" />
-                        <path
-                            d="M32,.5h0A31.5,31.5,0,0,1,63.5,32v0A31.5,31.5,0,0,1,32,63.5H2.48a2,2,0,0,1-2-2V32A31.5,31.5,0,0,1,32,.5Z" />
+                    <svg class="icon request-icon" viewBox="0 0 64 64">
+                        <path d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68"/>
                     </svg>
-                        <h4>Request</h4>
+                    <h4>Request</h4>
                 </div>
                 <div class="option" onclick="showPopup('pay_anyone')">
                     <svg class="icon" viewBox="0 0 64 64">
@@ -416,7 +398,7 @@
                 </sm-carousel>
             </div>
             <div class="user-panel">
-                <h4 class="user-type">User</h4>
+                <h5 class="light-text">My FLO ID</h5>
                     <div class="copy-row">
                     <h4 class="user-flo-id copy"></h4>
                         <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
@@ -427,26 +409,15 @@
                     </div>
                     <div class="flex align-items space-between">
                         <h4>Balance</h4>
-                        <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
-                            <title>refresh balance</title>
-                            <polyline points="42.99 0.16 50.25 21.23 28.78 27.7"/>
-                            <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
-                        </svg>
+                        <sm-button class="small round" onclick="refresh_balance(this)">Check Balance</sm-button>
                     </div>
                     <div class="display-balance grid">
                         <div class="balance">
                             <h5>Rupee</h5>
-                                <p>Digital representation of Indian rupee</p>
-                                <h4 class="token-balance">0</h3>
-                            </div>
-                            <div class="balance">
-                                <h5>FLO</h5>
-                                <p>Your FLO blockchain balance</p>
-                                <h4 class="flo-balance">0</h4>
-                            </div>
+                            <h4 class="token-balance">0</h4>
+                        </div>
                         <div class="balance">
                             <h5>Unconfirmed Rupee</h5>
-                            <p>Rupee that is mid transaction. This represents rupee that is not proccesed yet.</p>
                             <h4 class="uncnf-token-balance">0</h4>
                         </div>
                     </div>
@@ -656,24 +627,16 @@
                 </div>
                 <div class="flex align-items space-between">
                     <h4>Balance</h4>
-                    <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
-                        <title>refresh balance</title>
-                        <polyline points="42.99 0.16 50.25 21.23 28.78 27.7"/>
-                        <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
-                    </svg>
+                    <sm-button class="small round" onclick="refresh_balance(this)">Check Balance</sm-button>
                 </div>
                 <div class="display-balance grid">
                     <div class="balance">
-                        <h5>Rupee</h5>
+                    <h5>Rupee</h5>
                         <h4 class="token-balance">0</h3>
                     </div>
                     <div class="balance">
                         <h5>FLO</h5>
                         <h4 class="flo-balance">0</h4>
-                    </div>
-                    <div class="balance">
-                        <h5>Unconfirmed Rupee</h5>
-                        <h4 class="uncnf-token-balance">0</h4>
                     </div>
                 </div>
             </div>
@@ -11146,310 +11109,300 @@
           });
         }
     
+        function diff_hours(dt2, dt1) {
+            var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+            diff /= (60 * 60);
+            return Math.abs(Math.round(diff));           
+        }
+
     </script>
 
-<script>
-    const token_app = {
-        master_configurations: {},
-        actions: {},
-        blocked_flo_ids: [],
-    };
+    <script>
+        const token_app = {
+            master_configurations: {},
+            actions: {},
+            blocked_flo_ids: [],
+        };
 
-    token_app.actions = {
+        token_app.actions = {
 
-        parse_flo_comments: async function () {
-            const num=3;
-            text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
-                #!#CURRENCY=INR
-                #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST${num}
-                #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST${num}
-                #!#TYPE_MSGES=USER_MESSAGES_TEST${num}
-                #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST${num}
-                #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST${num}
-                #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST${num}
-                #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST${num}
-                #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST${num}
-                #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST${num}
-                #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST${num}
-                #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST${num}
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST${num}
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST${num}
-                #!#TYPE_REQUEST_PAYMENT=REQUEST_PAYMENT_TEST${num}
-                #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST${num}
-                #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST${num}
-                #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
-                #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
-                #!#cashiers=
-                {
-                    "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
-                        "upi_id": "8507742774@ybl"
-                    }
-                }`
-            text = removeWhiteSpaces(text);
-            return text;
-            /*
-                                "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
-                        "upi_id": "8340617958@ybl"
-                    },
-                    "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
-                        "upi_id": "8902496422@ybl"
-                    },
-                    "FBun3694ZdxmD66os9oL5DxMrif3vyVjT3": {
-                        "upi_id": "7004801428@ybl"
-                    },
-                    "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
-                        "upi_id": "aakriti1705sinha@okicici"
-                    },
-                    "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
-                        "upi_id": "krishraj1012-2@okicici"
-                    }
-            */
-            const master_data = await ajaxGet(
-                `${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
-            if (typeof master_data === "object" && typeof master_data.txs === "object") {
-                let text = '';
-                let tx_cmnt_arr = [];
-
-                for (txt of master_data.txs) {
-                    if (txt.vin[0].addr === token_app.masterFLOAddress) {
-                        if (txt.floData.length === 0) break;
-                        tx_cmnt_arr.push(txt.floData);
-                    }
-                }
-
-                tx_cmnt_arr.reverse().map(m => text += m.replace('text:', ''));
+            parse_flo_comments: async function () {
+                const num=3;
+                text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
+                    #!#CURRENCY=INR
+                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST${num}
+                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST${num}
+                    #!#TYPE_MSGES=USER_MESSAGES_TEST${num}
+                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST${num}
+                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST${num}
+                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST${num}
+                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST${num}
+                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST${num}
+                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST${num}
+                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST${num}
+                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST${num}
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST${num}
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST${num}
+                    #!#TYPE_REQUEST_PAYMENT=REQUEST_PAYMENT_TEST${num}
+                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST${num}
+                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST${num}
+                    #!#TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}
+                    #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
+                    #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
+                    #!#cashiers=
+                    {
+                        "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
+                            "upi_id": "8507742774@ybl"
+                        }
+                    }`
+                text = removeWhiteSpaces(text);
                 return text;
-            }
-        },
+                const master_data = await ajaxGet(
+                    `${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
+                if (typeof master_data === "object" && typeof master_data.txs === "object") {
+                    let text = '';
+                    let tx_cmnt_arr = [];
 
-        fetch_configs: async function () {
-            const floData = await this.parse_flo_comments();
-            let RMAssets = floData.trim();
-            let floAssetsArray = RMAssets.split("#!#");
-
-            if (
-                floAssetsArray.length > 0 &&
-                typeof floAssetsArray[0] !== undefined &&
-                floAssetsArray[0].trim() !== "" &&
-                typeof floAssetsArray[1] !== undefined &&
-                floAssetsArray[1].trim() !== ""
-            ) {
-                try {
-                    for (const assets_string of floAssetsArray) {
-
-                        let k = assets_string.split("=");
-
-                        if (k[1].indexOf(",") > 0 && k[1].indexOf("{") == -1) {
-                            k[1] = k[1]
-                                .split(",")
-                                .map(val =>
-                                    !isNaN(val) ? parseFloat(val) : val.trim()
-                                )
-                                .filter(v => ![null, "", undefined, NaN].includes(v));
-                        } else if (!isNaN(k[1])) {
-                            k[1] = parseFloat(k[1]);
+                    for (txt of master_data.txs) {
+                        if (txt.vin[0].addr === token_app.masterFLOAddress) {
+                            if (txt.floData.length === 0) break;
+                            tx_cmnt_arr.push(txt.floData);
                         }
-                        if (typeof k[1] == "string" && k[1].indexOf("{") >= 0) {
-                            k[1] = JSON.parse(k[1].replace(/ /g, ""));
-                        }
+                    }
 
-                        if (typeof token_app.master_configurations !== "object") token_app
-                            .master_configurations = {};
+                    tx_cmnt_arr.reverse().map(m => text += m.replace('text:', ''));
+                    return text;
+                }
+            },
 
-                        Object.defineProperty(
-                            token_app.master_configurations,
-                            k[0], {
-                                value: k[1],
-                                writable: false,
-                                configurable: false,
-                                enumerable: true
+            fetch_configs: async function () {
+                const floData = await this.parse_flo_comments();
+                let RMAssets = floData.trim();
+                let floAssetsArray = RMAssets.split("#!#");
+
+                if (
+                    floAssetsArray.length > 0 &&
+                    typeof floAssetsArray[0] !== undefined &&
+                    floAssetsArray[0].trim() !== "" &&
+                    typeof floAssetsArray[1] !== undefined &&
+                    floAssetsArray[1].trim() !== ""
+                ) {
+                    try {
+                        for (const assets_string of floAssetsArray) {
+
+                            let k = assets_string.split("=");
+
+                            if (k[1].indexOf(",") > 0 && k[1].indexOf("{") == -1) {
+                                k[1] = k[1]
+                                    .split(",")
+                                    .map(val =>
+                                        !isNaN(val) ? parseFloat(val) : val.trim()
+                                    )
+                                    .filter(v => ![null, "", undefined, NaN].includes(v));
+                            } else if (!isNaN(k[1])) {
+                                k[1] = parseFloat(k[1]);
                             }
+                            if (typeof k[1] == "string" && k[1].indexOf("{") >= 0) {
+                                k[1] = JSON.parse(k[1].replace(/ /g, ""));
+                            }
+
+                            if (typeof token_app.master_configurations !== "object") token_app
+                                .master_configurations = {};
+
+                            Object.defineProperty(
+                                token_app.master_configurations,
+                                k[0], {
+                                    value: k[1],
+                                    writable: false,
+                                    configurable: false,
+                                    enumerable: true
+                                }
+                            );
+                        }
+                        deepFreeze(token_app.master_configurations);
+                        return token_app;
+                    } catch (error) {
+                        console.error(
+                            "FATAL ERROR: Failed to fetch master configuration: ",
+                            error
                         );
                     }
-                    deepFreeze(token_app.master_configurations);
-                    return token_app;
-                } catch (error) {
-                    console.error(
-                        "FATAL ERROR: Failed to fetch master configuration: ",
-                        error
-                    );
                 }
-            }
-            return false;
-        },
+                return false;
+            },
 
-        doShreeGanesh: async function () {
+            doShreeGanesh: async function () {
 
-            // fetch configs from master comment
-            await this.fetch_configs();
+                // fetch configs from master comment
+                await this.fetch_configs();
 
-            await this.retrieveLatestContent();
+                await this.retrieveLatestContent();
 
-            request_rupee_token();
+                request_rupee_token();
 
-            withdraw_token_to_get_cash();
+                withdraw_token_to_get_cash();
 
-            transferTokensManually();
+                transferTokensManually();
 
-            const allCashierOptions = document.querySelectorAll('.cashier-option'),
-                allUserOptions = document.querySelectorAll('.user-option'),
-                allHelplineOptions = document.querySelectorAll('.helpline-option'),
-                userType = document.querySelectorAll('.user-type')
+                const allCashierOptions = document.querySelectorAll('.cashier-option'),
+                    allUserOptions = document.querySelectorAll('.user-option'),
+                    allHelplineOptions = document.querySelectorAll('.helpline-option'),
+                    userType = document.querySelectorAll('.user-type')
 
-            //Cashier startup sequence
-            if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-                allCashierOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                show_deposit_request()
-                show_withdraw_request()
-                showPayRequests()
-                userType.forEach(user => user.textContent = 'Cashier')
-                showPage(document.getElementById('deposit_page_btn'), 'deposit')
-            }
+                //Cashier startup sequence
+                if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+                    allCashierOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    show_deposit_request()
+                    show_withdraw_request()
+                    showPayRequests()
+                    userType.forEach(user => user.textContent = 'Cashier')
+                    showPage(document.getElementById('deposit_page_btn'), 'deposit')
+                }
 
-            //Helpline startup sequence
-            else if (token_app.master_configurations.helplineFloId === myFloID) {
-                allCashierOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                let cashierList = ``,
-                    cashierSelect = document.getElementById('select_cashier')
-                cashierList += `<sm-strip-option value = "">Select Cashier...</sm-strip-option>`;
-                for (cashier in token_app.master_configurations.cashiers)
-                    cashierList += `<sm-strip-option value = "${cashier}">${cashier}</sm-strip-option>`
-                cashierSelect.innerHTML = cashierList;
-                await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(
-                    cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
-                userType.forEach(user => user.textContent = 'Cashier')
-                showPage(document.getElementById('helpline_page_btn'), 'helpline_page')
-            }
+                //Helpline startup sequence
+                else if (token_app.master_configurations.helplineFloId === myFloID) {
+                    allCashierOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    let cashierList = ``,
+                        cashierSelect = document.getElementById('select_cashier')
+                    cashierList += `<sm-strip-option value = "">Select Cashier...</sm-strip-option>`;
+                    for (cashier in token_app.master_configurations.cashiers)
+                        cashierList += `<sm-strip-option value = "${cashier}">${cashier}</sm-strip-option>`
+                    cashierSelect.innerHTML = cashierList;
+                    await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(
+                        cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
+                    userType.forEach(user => user.textContent = 'Cashier')
+                    showPage(document.getElementById('helpline_page_btn'), 'helpline_page')
+                }
 
-            //user startup sequence
-            else {
-                allCashierOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                show_user_activities()
-                show_payment_requests()
-                userType.forEach(user => user.textContent = 'User')
-                showPage(document.getElementById('home_page_btn'), 'home_page')
-            }
+                //user startup sequence
+                else {
+                    allCashierOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    show_user_activities()
+                    show_payment_requests()
+                    userType.forEach(user => user.textContent = 'User')
+                    showPage(document.getElementById('home_page_btn'), 'home_page')
+                }
 
-            hidePopup()
+                hidePopup()
 
-            pay_through_cashier();
-        },
+                pay_through_cashier();
+            },
 
-        retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals
-            .subAdmins) {
+            retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals
+                .subAdmins) {
 
-            floCloudAPI.requestObjectData(floGlobals.application, {
-                receiverID,
-                senderIDs
-            });
+                floCloudAPI.requestObjectData(floGlobals.application, {
+                    receiverID,
+                    senderIDs
+                });
 
-            if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-                await Promise.all([floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_DEPOSITS, {
+                if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+                    await Promise.all([floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_DEPOSITS, {
+                                receiverID: myFloID
+                            }),
+
+                        floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
                             receiverID: myFloID
                         }),
 
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
-                        receiverID: myFloID
-                    }),
-
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
-                        receiverID: myFloID
-                    }),
-
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PAY_THROUGH_CASHIER, {
+                        floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
                             receiverID: myFloID
-                        })
-                ])
+                        }),
 
-                return true;
-            } else if (token_app.master_configurations.helplineFloId === myFloID) {
-                await clearCashierData();
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PAY_THROUGH_CASHIER, {
+                                receiverID: myFloID
+                            })
+                    ])
 
-                await Promise.all([
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_DEPOSITS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_WITHDRAWS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_DEPOSITS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_WITHDRAWS_COMPLAINT)
-                ])
+                    return true;
+                } else if (token_app.master_configurations.helplineFloId === myFloID) {
+                    await clearCashierData();
 
-                return true;
-            } else {
+                    await Promise.all([
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_DEPOSITS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_WITHDRAWS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_DEPOSITS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_WITHDRAWS_COMPLAINT)
+                    ])
 
-                let promises = [];
+                    return true;
+                } else {
 
-                for (let cashier in token_app.master_configurations.cashiers) {
-                    let p1 = {
-                        func: floCloudAPI.requestGeneralData, 
-                        arg1: token_app.master_configurations.TYPE_DEPOSITS,
-                        arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                    let promises = [];
+
+                    for (let cashier in token_app.master_configurations.cashiers) {
+                        let p1 = {
+                            func: floCloudAPI.requestGeneralData, 
+                            arg1: token_app.master_configurations.TYPE_DEPOSITS,
+                            arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                        }
+
+                        let p2 = { 
+                            func: floCloudAPI.requestGeneralData,
+                            arg1: token_app.master_configurations.TYPE_WITHDRAWS,
+                            arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                        }
+
+                        let p3 = {
+                            func: floCloudAPI.requestGeneralData,
+                            arg1: token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                            arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                        }
+
+                        promises.push(p1, p2, p3);
                     }
 
-                    let p2 = { 
+                    let p4 = {
                         func: floCloudAPI.requestGeneralData,
-                        arg1: token_app.master_configurations.TYPE_WITHDRAWS,
-                        arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                        arg1: token_app.master_configurations.TYPE_MSGES,
+                        arg2: {receiverID: myFloID}
                     }
 
-                    let p3 = {
-                        func: floCloudAPI.requestGeneralData,
-                        arg1: token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
-                        arg2: {receiverID: cashier, senderIDs: [myFloID]}
-                    }
+                    promises.push(p4);
 
-                    promises.push(p1, p2, p3);
+                    await Promise.all(promises.map(prom => prom.func.call(floCloudAPI,prom.arg1, prom.arg2)));
+
+                    return promises;
+
                 }
-
-                let p4 = {
-                    func: floCloudAPI.requestGeneralData,
-                    arg1: token_app.master_configurations.TYPE_MSGES,
-                    arg2: {receiverID: myFloID}
-                }
-
-                promises.push(p4);
-
-                await Promise.all(promises.map(prom => prom.func.call(floCloudAPI,prom.arg1, prom.arg2)));
-
-                return promises;
 
             }
-
         }
-    }
-</script>
+    </script>
 
     <!-- Cashier functions -->
     <script>
@@ -11464,6 +11417,9 @@
             
             floGlobals.appObjects["unconfirmed_rupee_deposits"] = {};
             floCloudAPI.resetObjectData("unconfirmed_rupee_deposits"); 
+            
+            floGlobals.appObjects["processed_unconfirmed_balance_claim_requests"] = {};
+            floCloudAPI.resetObjectData("processed_unconfirmed_balance_claim_requests"); 
         }
 
         async function show_deposit_request() {
@@ -11573,7 +11529,7 @@
                 if (amount_of_tokens_to_transfer > 0) {
                     let flo_comment = `transfer ${amount_of_tokens_to_transfer} rupee#`;
                     let flo_txid = await floBlockchainAPI.sendTx(myFloID, receiver_flo_id, 0.001, myPrivKey,
-                        flo_comment)
+                        flo_comment);
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
                         notify(`Transfer unsuccessfull.`);
@@ -11757,9 +11713,7 @@
 
         async function refresh_balance(refreshButton) {
             try {
-                if (refreshButton) {
-                    refreshButton.classList.add('animate-loader')
-                }
+                refreshButton.textContent = 'Checking...'
                 const current_token_balance = document.querySelector('.token-balance').textContent;
                 if (typeof current_token_balance == "string") {
                     const get_user_rupee_balance = await ajaxGet(
@@ -11783,8 +11737,8 @@
                     document.querySelectorAll('.flo-balance').forEach(elem => elem.textContent = get_user_flo_balance);
                 }
                 if (refreshButton) {
+                    refreshButton.textContent = 'Check Balance'
                     notify('Balance Updated')
-                    refreshButton.classList.remove('animate-loader')
                 }
                 return true;
             } catch (error) {
@@ -11903,6 +11857,91 @@
             }
         }
 
+        async function display_unconfirmed_balance_claim_requests() {
+            try {
+                // load all user cliams
+                await floCloudAPI.requestGeneralData(token_app.master_configurations
+                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, {
+                    receiverID: myFloID
+                });
+                const unconfirmed_cash_deposit_claims = floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, "0");
+
+                // load processed claims
+                await floCloudAPI.requestObjectData("processed_unconfirmed_balance_claim_requests", { receiverID:floGlobals.adminID });  
+                const processed_unconfirmed_balance_claim_requests_list = floGlobals.appObjects["processed_unconfirmed_balance_claim_requests"];
+                const processed_unconfirmed_balance_claim_requests_txid_arr = Object.keys(processed_unconfirmed_balance_claim_requests_list);
+
+                console.log(unconfirmed_cash_deposit_claims);
+                console.log(processed_unconfirmed_balance_claim_requests_list);
+
+                // Filter out processed items 
+                let fresh_requests = unconfirmed_cash_deposit_claims
+                .filter(f=>!processed_unconfirmed_balance_claim_requests_txid_arr.includes(f.message.flo_txid) 
+                && diff_hours(new Date(), new Date(f.message.datetime))>48);
+
+                // Display fresh requests
+                console.log(fresh_requests);
+                for(fresh_reqs of fresh_requests) {
+                    console.log(fresh_reqs.message);
+                }
+
+                // Sample Output
+
+                // datetime: 1599837964056
+                // flo_txid: "FAKE_TOKEN_TXID_1"
+                // new_flo_txid: "7382fa53b6d64b269fd9b326ec46104cd30480c8e7b193ca441c70b735621a46"
+                // receiver_flo_id: "FAfuoUEe296a8xGrfuM1ywUjTsCcPj47g5"
+                // tokens_transferred: "5"
+                // user_upi_txid: "FRI2054SEPT112020"
+
+                // apply process_unconfirmed_balance_claim_requests on each data
+
+            } catch(error) {
+                throw new Error(error);
+            }
+        }
+
+        async function process_unconfirmed_balance_claim_requests(subject_req) {
+            try {
+                // get txid of new token transfer
+                let flo_comment = `transfer ${subject_req.tokens_transferred} rupee#`;
+                let new_txid = await floBlockchainAPI.sendTx(myFloID, subject_req.receiver_flo_id, 0.001, myPrivKey,
+                    flo_comment);
+
+                let n=1;
+                (async function validateUnconfirmDepositTxidInBlockchain() {
+                    notify('Txid '+new_txid+' validation in process. Please do not close the app until directed.');
+                    
+                    await delay(60000);
+
+                    let validate_txid = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${new_txid}`);
+                    
+                    if(typeof validate_txid=="object" && validate_txid.result=="ok") {
+                        // mark as resolved
+                        subject_req.new_flo_txid = new_txid;
+                        floGlobals.appObjects["processed_unconfirmed_balance_claim_requests"][subject_req.flo_txid] = subject_req;
+                        let receiverID = floGlobals.adminID;
+                        await floCloudAPI.updateObjectData("processed_unconfirmed_balance_claim_requests", { receiverID });
+                        notify('Token transfer for unconfirmed desposit successfull. Txid: '+ new_txid);
+                        
+                    } else if(n<=30) {
+                        validateUnconfirmDepositTxidInBlockchain();
+                        n++;
+                    } else {
+                        console.error('Txid '+new_txid+' could not be confirmed.');
+                        notify('Txid '+new_txid+' could not be confirmed.', 'error', 'fixed');
+                    }    
+                    return true;
+
+                })();
+                
+                return true;
+            } catch(error) {
+                throw new Error(error);
+            }
+        }
+
         async function accounting(date='') {
             try {
                 await floCloudAPI.requestGeneralData(token_app.master_configurations
@@ -11933,7 +11972,7 @@
     <!-- User functions -->
     <script>
         let depositRequested = 0,
-            depositedRupeeTxId = document.getElementById('deposited_rupee_upi');
+            depositedRupeeTxId = document.getElementById('deposited_rupee_txid');
         function request_rupee_token() {
             try {
                 const request_tokens_btn = document.getElementById('request_tokens_btn');
@@ -12200,6 +12239,7 @@
                 console.log(e);
             }
         }
+        
         async function request_payment(receiver_flo_id = '', amount = 0) {
             try {
 
@@ -12356,12 +12396,25 @@
 
                 let unconfirmed_balance=0;
                 for(ut of unconfirmed_tx_list) {
+                    let subject_deposit = floGlobals.appObjects["unconfirmed_rupee_deposits"][ut];
                     if(tokens_transfers_tx_list.includes(ut)) {
                         // remove this item from unconfirmed_tx_list
-                        if(delete floGlobals.appObjects["unconfirmed_rupee_deposits"][ut])
+                        if(delete subject_deposit)
                             floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID });
                     } else {
-                        unconfirmed_balance += Number(floGlobals.appObjects["unconfirmed_rupee_deposits"][ut]["tokens_transferred"])
+                        unconfirmed_balance += Number(subject_deposit["tokens_transferred"]);
+                        let dt1 = new Date(subject_deposit["datetime"]);
+                        let dt2 = new Date();
+                        // If 48 hours has passed since unconfirmed balance and is not already claimed, send claim request
+                        if(diff_hours(dt2, dt1) >= 48 && subject_deposit.unconfirmed_balance_claimed===false) {
+                            const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
+                            floCloudAPI.sendGeneralData(subject_deposit, token_app.master_configurations
+                                .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, {
+                                receiverID: cashier
+                            });
+                            subject_deposit["unconfirmed_balance_claimed"] = true;
+                            floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID });
+                        }
                     }
                 }    
                 console.log(token_balance, unconfirmed_balance);
