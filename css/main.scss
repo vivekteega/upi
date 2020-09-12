@@ -10,7 +10,7 @@
 }
 
 body {
-    --accent-color: #303F9F;
+    --accent-color: #2237CD;
     --text-color: 17, 17, 17;
     --text-color-light: 85, 85, 85;
     --foreground-color: 255, 255, 255;
@@ -598,7 +598,12 @@ form {
     justify-content: space-between;
 }
 
-#display_balance {
+.display-balance {
+    gap: 1rem;
+    grid-auto-flow: row;
+    .balance{
+        width: 100%;
+    }
     .icon {
         height: 1.4rem;
         width: 1.4rem;
@@ -688,34 +693,51 @@ form {
 .user-panel {
     position: relative;
     padding: 1.5rem;
-    border-radius: 0.6rem;
-    background: radial-gradient(circle at top left, #EF6C00 20%, #C51162 30%, #4A148C 40%, #251f44);
-    box-shadow: 0 0.1rem 0.1rem #00000020, 0 2rem 1rem -1rem #00000040;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, var(--accent-color), #2F2B76);
     color: rgba(var(--foreground-color), 1);
+    box-shadow: 0 0.1rem 0.1rem #00000010, 0 1rem 1rem -1rem #00000010;
     align-self: flex-start;
-    .icon {
+    .icon{
         stroke: rgba(var(--foreground-color), 1);
     }
-
     .copy-row {
-        margin-bottom: 1.5rem;
-        text-shadow: 0.1rem 0.1rem 0.1rem #000000;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: solid 1px rgba(var(--foreground-color), 0.3);
     }
-
     .grid {
-        margin-top: 0.5rem;
-        grid-template-columns: 1fr 1fr;
-
+        gap: 1.5rem;
+        margin-top: 1rem;
         h5 {
+            font-size: 1rem;
             font-weight: 500;
-            color: rgba(var(--foreground-color), 0.8);
         }
+        h4{
+            font-size: 1.2rem;
+        }
+        P{
+            font-size: 0.8rem;
+            opacity: 0.9;
+            color: rgba(var(--foreground-color), 1);
+            margin-bottom: 0 !important;
+            max-width: 30ch;
+        }
+    }
+}
+.balance{
+    display: grid;
+    gap: 0 1rem;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: '. balance' '. balance';
+    align-items: center;
+    h4{
+        grid-area: balance;
     }
 }
 
 .user-type {
     font-weight: 500;
-    color: rgba(var(--foreground-color), 0.9);
 }
 
 .options-tab {
@@ -820,7 +842,7 @@ sm-tab-header {
 }
 sm-tab::part(tab){
     padding: 0.8rem 0.4rem;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 sm-panel{
     width: 100%;
@@ -1095,7 +1117,6 @@ sm-panel{
 
     h3 {
         width: 100%;
-        text-transform: uppercase;
         font-weight: 400;
         word-spacing: 0.16em;
     }

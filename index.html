@@ -433,20 +433,23 @@
                             <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
                         </svg>
                     </div>
-                    <div id="display_balance" class="grid grid-2">
+                    <div class="display-balance grid">
                         <div class="balance">
                             <h5>Rupee</h5>
-                        <h3 class="token-balance">0</h3>
-                         </div>
-	           	        <div class="balance">
-                            <h5>Unconfirmed Rupee</h5>
-                            <h3 class="uncnf-token-balance">0</h3>
-                        </div>
+                                <p>Digital representation of Indian rupee</p>
+                                <h4 class="token-balance">0</h3>
+                            </div>
+                            <div class="balance">
+                                <h5>FLO</h5>
+                                <p>Your FLO blockchain balance</p>
+                                <h4 class="flo-balance">0</h4>
+                            </div>
                         <div class="balance">
-                            <h5>FLO</h5>
-                        <h3 class="flo-balance">0</h3>
+                            <h5>Unconfirmed Rupee</h5>
+                            <p>Rupee that is mid transaction. This represents rupee that is not proccesed yet.</p>
+                            <h4 class="uncnf-token-balance">0</h4>
                         </div>
-                </div>
+                    </div>
             </div>
         </section>
         <section id="deposit" class="page hide-completely">
@@ -659,18 +662,18 @@
                         <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
                     </svg>
                 </div>
-                <div id="display_balance" class="grid grid-2">
+                <div class="display-balance grid">
                     <div class="balance">
                         <h5>Rupee</h5>
-                        <h3 class="token-balance">0</h3>
-                    </div>
-                    <div class="balance">
-                        <h5>Unconfirmed Rupee</h5>
-                        <h3 class="uncnf-token-balance">0</h3>
+                        <h4 class="token-balance">0</h3>
                     </div>
                     <div class="balance">
                         <h5>FLO</h5>
-                        <h3 class="flo-balance">0</h3>
+                        <h4 class="flo-balance">0</h4>
+                    </div>
+                    <div class="balance">
+                        <h5>Unconfirmed Rupee</h5>
+                        <h4 class="uncnf-token-balance">0</h4>
                     </div>
                 </div>
             </div>
@@ -1655,7 +1658,13 @@
                         paymentRequestId = parent.dataset.paymentRequestId;
                     if (await confirmation(
                         `Do want to decline this request? This will remove the request.`)) {
-                        payment_request_status(paymentRequestId, 'DECLINED')
+                        const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
+                            .TYPE_REQUEST_PAYMENT, "0").reverse();
+
+                        const original_req = all_reqs.filter(f=>f.message.pay_req_id===paymentRequestId)
+                            .map(m=>m.message)[0];
+
+                        payment_request_status(original_req, 'DECLINED')
                         e.target.closest('.request').remove()
                     }
                 }
@@ -11123,7 +11132,7 @@
             try {
                 for (const ds of dataStores) {
                     compactIDB.clearData(ds);
-                }
+                    }
                 return true;
             } catch (e) {
                 console.error(e);
@@ -11174,8 +11183,12 @@
                 {
                     "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
                         "upi_id": "8507742774@ybl"
-                    },
-                    "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
+                    }
+                }`
+            text = removeWhiteSpaces(text);
+            return text;
+            /*
+                                "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
                         "upi_id": "8340617958@ybl"
                     },
                     "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
@@ -11190,9 +11203,7 @@
                     "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
                         "upi_id": "krishraj1012-2@okicici"
                     }
-                }`
-            text = removeWhiteSpaces(text);
-            return text;
+            */
             const master_data = await ajaxGet(
                 `${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
             if (typeof master_data === "object" && typeof master_data.txs === "object") {
@@ -11610,7 +11621,7 @@
                         receiverID: myFloID
                     });
 
-                    notify(`Transfer successful: <span class="breakable">${flo_txid}</span>.`, 'success', '', true);
+                    notify(`Transfer successful: ${flo_txid}`, 'success', true, true);
 
                     return true;
                 }
@@ -11722,10 +11733,17 @@
                         hidePopup()
                         return false;
                     } else {
-                        notify(`Transaction successful: <span class="breakable">${flo_txid}</span>.`, 'success', '', true);
+                        notify(`Transaction successful: ${flo_txid}`, 'success', true, true);
                         if (payingRequested) {
-                            payment_request_status(currentPaymentRequest.requestId, 'APPROVED')
-                            showPayRequests()
+                            const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
+                            .TYPE_REQUEST_PAYMENT, "0").reverse();
+
+                            const original_req = all_reqs
+                            .filter(f=>f.message.pay_req_id===currentPaymentRequest.requestId)
+                            .map(m=>m.message)[0];
+
+                            payment_request_status(original_req, 'APPROVED')
+                            showPayRequests();
                         }
                         hidePopup()
                         return true;
@@ -11776,7 +11794,7 @@
 
         async function showPayRequests() {
             try {
-                if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
+                //if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
                 let finished_tasks = await floCloudAPI.requestApplicationData({
                     type: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
@@ -11874,7 +11892,7 @@
                             receiverID: myFloID
                         });
 
-                        notify(`Transaction successful: <span class="breakable">${flo_txid}</span>.   
+                        notify(`Transaction successful: ${flo_txid}. 
                             INR ${amount_to_pay} sent to ${vendor_flo_id}`, 'success', '', true);
                         return true;
                     }
@@ -12071,7 +12089,7 @@
                         senderIDs: [myFloID]
                     });
 
-                    notify(`You have sent cash to <span class="breakable">${recvr_id}</span> through our cashier service (${cashier_upi}). 
+                    notify(`You have sent cash to <div class="breakable">${recvr_id}</div> through our cashier service (${cashier_upi}). 
                         Once the cashier receives your payment, he will transfer it to ${recvr_id}.`, '', true, true);
                     hidePopup()
                 }
