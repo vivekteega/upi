@@ -281,6 +281,9 @@ input{
     border: solid 1px rgba(var(--text-color), 0.2);
     padding: 0.6em 1em;
 }
+.helper-text:empty{
+    padding: 0;
+}
 @media (any-hover: hover){
     .icon:hover{
         background: rgba(var(--text-color), 0.1);
@@ -288,19 +291,19 @@ input{
 }
 </style>
 <div class="outer-container">
-<label part="input" class="input">
-    <slot name="icon"></slot>
-    <div class="container">
-        <input/>
-        <div part="placeholder" class="label"></div>
-    </div>
-    <svg class="icon clear hide" viewBox="0 0 64 64">
-        <title>clear</title>
-        <line x1="64" y1="0" x2="0" y2="64"/>
-        <line x1="64" y1="64" x2="0" y2="0"/>
-    </svg>
-</label>
-<div class="helper-text hide"></div>
+    <label part="input" class="input">
+        <slot name="icon"></slot>
+        <div class="container">
+            <input/>
+            <div part="placeholder" class="label"></div>
+        </div>
+        <svg class="icon clear hide" viewBox="0 0 64 64">
+            <title>clear</title>
+            <line x1="64" y1="0" x2="0" y2="64"/>
+            <line x1="64" y1="64" x2="0" y2="0"/>
+        </svg>
+    </label>
+    <div class="helper-text hide"></div>
 </div>
 `;
 customElements.define('sm-input',
@@ -401,6 +404,9 @@ customElements.define('sm-input',
             }
             if (this.hasAttribute('required')) {
                 this.input.setAttribute('required', '')
+            }
+            if (this.hasAttribute('pattern')) {
+                this.input.setAttribute('pattern', this.getAttribute('pattern'))
             }
             if (this.hasAttribute('readonly')) {
                 this.input.setAttribute('readonly', '')
@@ -1675,7 +1681,7 @@ bottom: 0;
 left: 0;
 right: 0;
 place-items: center;
-background: #00000060;
+background: rgba(0, 0, 0, 0.6);
 z-index: 10;
 transition: opacity 0.3s ease;
 }
@@ -1724,8 +1730,7 @@ pointer-events: none;
     align-self: center;
     border-radius: 0.4rem;
     height: auto;
-    transform: translateY(0) scale(0.9);
-    box-shadow: 0 2rem 2rem #00000040;
+    box-shadow: 0 3rem 2rem -0.5rem #00000040;
 }
 }
 @media screen and (max-width: 640px){
@@ -1782,28 +1787,29 @@ customElements.define('sm-popup', class extends HTMLElement {
         this.pinned = pinned
         this.popupStack = popupStack
         this.popupContainer.classList.remove('hide')
-        if (window.innerWidth < 648)
-            this.popup.style.transform = 'translateY(0)';
-        else
-            this.popup.style.transform = 'scale(1)';
+        this.popup.style.transform = 'translateY(0)';
         document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
     }
     hide() {
         this.removeAttribute('open')
-        if (window.innerWidth < 648)
+        if (window.innerWidth < 648) {
             this.popup.style.transform = 'translateY(100%)';
-        else
+        }
+        else {
             this.popup.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                this.popup.style.transform = 'translateY(100%) scale(1)'
+            }, 300)
+        }
         this.popupContainer.classList.add('hide')
-        if (typeof this.popupStack !== 'undefined') {
-            this.popupStack.pop()
-            if (this.popupStack.items.length === 0) {
+        /*if (typeof this.popupStack !== 'undefined') {
+            if (this.popupStack.items.length === 1) {
                 this.resumeScrolling()
             }
         }
-        else {
+        else {*/
             this.resumeScrolling()
-        }
+        //}
 
         if (this.inputFields.length) {
             setTimeout(() => {
@@ -1815,6 +1821,7 @@ customElements.define('sm-popup', class extends HTMLElement {
                 })
             }, 300);
         }
+        return this;
     }
 
     handleTouchStart(e) {
@@ -1882,7 +1889,7 @@ customElements.define('sm-popup', class extends HTMLElement {
         })
 
         this.popupBodySlot.addEventListener('slotchange', () => {
-            this.inputFields = this.popupBodySlot.assignedElements().filter(element => element.tagName === 'SM-INPUT' || element.tagName === 'SM-CHECKBOX' || element.tagName === 'TEXTAREA' || element.type === 'radio')
+            this.inputFields = this.querySelectorAll('sm-input', 'sm-checkbox', 'textarea', 'radio')
         })
 
         this.popupHeader.addEventListener('touchstart', (e) => {
@@ -1945,24 +1952,25 @@ opacity: 0;
 transform: scale(1)
 }
 .previous-item{
-left: 1rem;
+    left: 1rem;
 }
 .next-item{
-right: 1rem;
+    right: 1rem;
 }
 .left,.right{
-position: absolute;
-width: 3rem;
-height: 100%; 
-transition: opacity 0.3s;
-z-index: 1;
+    pointer-events: none;
+    position: absolute;
+    width: 3rem;
+    height: 100%; 
+    transition: opacity 0.3s;
+    z-index: 1;
 }
 .left{
-background: linear-gradient(to left, transparent, rgba(var(--foreground-color), 0.6))
+    background: radial-gradient(closest-corner circle at -50%, rgba(var(--text-color), 0.3), transparent);
 }
 .right{
-right: 0;
-background: linear-gradient(to right, transparent, rgba(var(--foreground-color), 0.6))
+    right: 0;
+    background: radial-gradient(farthest-side circle at 150%, rgba(var(--text-color), 0.3), transparent);
 }
 .carousel-container{
 position: relative;

@@ -14,262 +14,194 @@
         <source src="https://rmservices.duckdns.org/files/notification-sound.mp3" type="audio/mpeg">
         <source src="https://rmservices.duckdns.org/files/notification-sound.ogg" type="audio/ogg">
     </audio>
-    <div class="popup-container hide">
-        <div id="confirmation" class="popup">
-            <p id="confirm_message"></p>
-            <div class="btns">
-                <button class="hover cancel-btn">Cancel</button>
-                <button class="hover submit-btn">OK</button>
-            </div>
+    <sm-popup id="confirmation">
+        <p id="confirm_message"></p>
+        <div class="btns">
+            <button class="hover cancel-btn">Cancel</button>
+            <button class="hover submit-btn">OK</button>
         </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="prompt" class="popup">
-            <h4 id="prompt_message">Some input required</h4>
-            <label class="input">
-                <input id="prompt_field" type="text">
-            </label>
-            <div class="btns">
-                <button class="hover cancel-btn">Cancel</button>
-                <button class="hover submit-btn">Ok</button>
-            </div>
+    </sm-popup>
+    <sm-popup id="prompt">
+        <h4 id="prompt_message">Some input required</h4>
+        <sm-input id="prompt_field"></sm-input>
+        <div class="btns">
+            <button class="hover cancel-btn">Cancel</button>
+            <button class="hover submit-btn">Ok</button>
         </div>
-    </div>
+    </sm-popup>
     <sm-notifications id="show_message"></sm-notifications>
     <!-- Loading screen-->
-    <div class="popup-container solid-background hide">
-        <div id="main_loader" class="popup">
-            <svg id="loader" viewBox="0 0 73 73">
-                <title>Loader</title>
-                <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-            </svg>
-            <h4 id="tip_container">Loading Blockchain UPI </h4>
-            <sm-button onclick="signOut()">Reset</sm-button>
-        </div>
-    </div>
+    <section id="main_loader" class="grid hide-completely">
+        <svg id="loader" viewBox="0 0 73 73">
+            <title>Loader</title>
+            <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+        </svg>
+        <h4 id="tip_container">Loading Blockchain UPI </h4>
+        <sm-button onclick="signOut()">Sign Out</sm-button>
+    </section>
     <!-- Sign in popup-->
-    <div class="popup-container solid-background hide">
-        <div id="sign_in_popup" class="popup">
-            <div class="container-header">
-                <h3>Sign In</h3>
-            </div>
-            <h4 class="expand light-text">Welcome to RanchiMall Blockchain UPI.<br>Please enter your FLO private key to
-                continue.</h4>
-            <form class="expand" autocomplete="off" onsubmit="return false">
-                <label class="input">
-                    <input id="get_priv_key_field" type="password" minlength="40" required>
-                    <div class="placeholder">Private Key</div>
-                </label>
-                <button id="sign_in_btn" class="primary-btn expand" type="submit" disabled>
-                    Sign In
-                </button>
-            </form>
+    <sm-popup id="sign_in_popup">
+        <div class="container-header">
+            <h3>Sign In</h3>
         </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="cash_transfer" class="popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
+        <h4 class="expand light-text">Welcome to RanchiMall Blockchain UPI.<br>Please enter your FLO private key to
+            continue.</h4>
+        <sm-input id="get_priv_key_field" placeholder="Private Key" type="password" required animate></sm-input>
+        <button id="sign_in_btn" class="primary-btn expand" type="submit" disabled>
+            Sign In
+        </button>
+    </sm-popup>
+    <sm-popup id="cash_transfer">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Send Rupee</h4>
+            <button id="send_tokens_btn" class="action expand" type="submit" disabled>
+                <h4 class="expand primary-btn">
+                    Send
+                </h4>
+                <svg viewBox="0 0 73 73" class="loader">
+                    <path
+                        d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
                 </svg>
-                <h4>Send Rupee</h4>
-                <button id="send_tokens_btn" class="action expand" type="submit" disabled>
-                    <h4 class="expand primary-btn">
-                        Send
-                    </h4>
-                    <svg viewBox="0 0 73 73" class="loader">
-                        <path
-                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                    </svg>
-                </button>
-            </div>
+            </button>
+        </header>
+        <p>
+            Send Rupees to any FLO address.<br>
+            *Requires Rupee to be deposited first.
+        </p>
+            <sm-input floId id="token_receiver" placeholder="Reciever's FLO ID" required animate></sm-input>
+            <sm-input id="token_amount" placeholder="amount" type="number" min="1" required animate></sm-input>
+    </sm-popup>
+    <sm-popup id="deposit_rupee">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Deposit rupee</h4>
+            <button id="request_tokens_btn" class="action expand" type="submit" disabled>
+                <h4 class="primary-btn expand">
+                    Continue
+                </h4>
+                <svg viewBox="0 0 73 73" class="loader">
+                    <path
+                        d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                </svg>
+            </button>
+        </header>
+        <section id="deposit_amount_section">
             <p>
-                Send Rupees to any FLO address.<br>
-                *Requires Rupee to be deposited first.
+                Deposit rupee through UPI to use as digital currency powered by FLO blockchain.
             </p>
-            <form autocomplete="off" onsubmit="return false">
-                <label class="input">
-                    <input floId id="token_receiver" type="text" required>
-                    <div class="placeholder">Reciever's FLO ID</div>
-                </label>
-                <label class="input">
-                    <input id="token_amount" inputmode="numeric" type="number" min="1" required>
-                    <div class="placeholder">Amount</div>
-                </label>
-            </form>
-        </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="deposit_rupee" class="popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
+            <sm-input id="token_amount_to_buy" placeholder="Amount" type="number" min="1" required animate></sm-input>
+        </section>
+        <section id="upi_txId_section" class="hide-completely top-padding">
+            <p id="send_amount_to_deposit"></p>
+            <div class="copy-row">
+                <h4 id="send_cash_to_deposit" class="copy"></h4>
+                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                    <title>Copy</title>
+                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
                 </svg>
-                <h4>Deposit rupee</h4>
-                <button id="request_tokens_btn" class="action expand" type="submit" disabled>
+            </div>
+            <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" pattern="^[a-zA-z0-9]+" disabled required animate></sm-input>
+        </section>
+    </sm-popup>
+    <sm-popup id="withdraw_rupee">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Withdraw rupee</h4>
+            <button id="withdraw_cash_btn" class="action expand" type="submit" disabled>
+                <h4 class="primary-btn expand">
+                    withdraw
+                </h4>
+                <svg viewBox="0 0 73 73" class="loader">
+                    <path
+                        d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                </svg>
+            </button>
+        </header>
+        <p>
+            Withdraw or redeem your Rupee back to your specified UPI address.
+        </p>
+        <sm-input id="user_withdraw_upi" placeholder="Reciever's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" required animate></sm-input>
+        <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" required animate></sm-input>
+    </sm-popup>
+    <sm-popup id="request_rupee">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Request rupee</h3>
+                <button id="request_rupee_btn" class="action expand" type="submit" disabled>
                     <h4 class="primary-btn expand">
-                        Continue
+                        request
                     </h4>
                     <svg viewBox="0 0 73 73" class="loader">
                         <path
                             d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
                     </svg>
                 </button>
-            </div>
-            <form id="deposit_amount_section" autocomplete="off" onsubmit="return false">
-                <p>
-                    Deposit rupee through UPI to use as digital currency powered by FLO blockchain.
-                </p>
-                <label class="input">
-                    <input id="token_amount_to_buy" inputmode="numeric" type="number" min="1" required>
-                    <div class="placeholder">Amount</div>
-                </label>
-            </form>
-            <form id="upi_txId_section" class="hide-completely top-padding" autocomplete="off" onsubmit="return false">
-                <p id="send_amount_to_deposit"></p>
-                <div class="copy-row">
-                    <h4 id="send_cash_to_deposit" class="copy"></h4>
-                    <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                        <title>Copy</title>
-                        <rect x="16" y="16" width="48" height="48" rx="6" />
-                        <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                    </svg>
-                </div>
-                <label class="input">
-                    <input id="deposited_rupee_txid" pattern="^[a-zA-z0-9]+" type="text" disabled required>
-                    <div class="placeholder">UPI Transaction Id</div>
-                </label>
-            </form>
-        </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="withdraw_rupee" class="popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
+        </header>
+        <p>
+            Request Rupee from other's using FLO address.
+        </p>
+        <sm-input floId id="requested_address" placeholder="Request from" required animate></sm-input>
+        <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" required animate></sm-input>
+    </sm-popup>
+    <sm-popup id="pay_anyone">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Pay through cashier</h4>
+            <button id="cnf_cash_payment" class="action expand" type="submit" disabled>
+                <h4 class="primary-btn expand">
+                    pay
+                </h4>
+                <svg viewBox="0 0 73 73" class="loader">
+                    <path
+                        d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
                 </svg>
-                <h4>Withdraw rupee</h4>
-                <button id="withdraw_cash_btn" class="action expand" type="submit" disabled>
-                    <h4 class="primary-btn expand">
-                        withdraw
-                    </h4>
-                    <svg viewBox="0 0 73 73" class="loader">
-                        <path
-                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                    </svg>
-                </button>
-            </div>
-            <p>
-                Withdraw or redeem your Rupee back to your specified UPI address.
-            </p>
-            <form autocomplete="off" onsubmit="return false">
-                <label class="input">
-                    <input id="user_withdraw_upi" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" type="text" required>
-                    <div class="placeholder">Reciever's UPI address</div>
-                </label>
-                <label class="input">
-                    <input id="withdraw_cash_amount" type="number" min="1" inputmode="numeric" required>
-                    <div class="placeholder">amount</div>
-                </label>
-            </form>
-        </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="request_rupee" class="popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
-                </svg>
-                <h4>Request rupee</h3>
-                    <button id="request_rupee_btn" class="action expand" type="submit" disabled>
-                        <h4 class="primary-btn expand">
-                            request
-                        </h4>
-                        <svg viewBox="0 0 73 73" class="loader">
-                            <path
-                                d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                        </svg>
-                    </button>
-            </div>
-            <p>
-                Request Rupee from other's using FLO address.
-            </p>
-            <form autocomplete="off" onsubmit="return false">
-                <label class="input">
-                    <input floId id="requested_address" minlength="20" type="text" required>
-                    <div class="placeholder">Request from</div>
-                </label>
-                <label class="input">
-                    <input id="requested_amount" type="number" min="1" inputmode="numeric" required>
-                    <div class="placeholder">amount</div>
-                </label>
-            </form>
-        </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="pay_anyone" class="popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
-                </svg>
-                <h4>Pay through cashier</h4>
-                <button id="cnf_cash_payment" class="action expand" type="submit" disabled>
-                    <h4 class="primary-btn expand">
-                        pay
-                    </h4>
-                    <svg viewBox="0 0 73 73" class="loader">
-                        <path
-                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                    </svg>
-                </button>
-            </div>
-            <p>
-                Don't have enough Rupee balance? Pay to our cashier through UPI and your cash will be
-                sent as Rupee.
-            </p>
-            <p id="pay_cashier_info"></p>
-            <form autocomplete="off" onsubmit="return false">
-                <label class="input">
-                    <input floId id="recvr_id" type="text" required>
-                    <div class="placeholder">Reciever's FLO ID</div>
-                </label>
-                <label class="input">
-                    <input id="recvr_amount_to_pay" type="number" min="1" inputmode="numeric" required>
-                    <div class="placeholder">Amount</div>
-                </label>
-                <label class="input">
-                    <input id="paid_cashier_upi" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" type="text" required>
-                    <div class="placeholder">Sender's UPI address</div>
-                </label>
-            </form>
-        </div>
-    </div>
+            </button>
+        </header>
+        <p>
+            Don't have enough Rupee balance? Pay to our cashier through UPI and your cash will be
+            sent as Rupee.
+        </p>
+        <p id="pay_cashier_info"></p>
+        <sm-input floId id="recvr_id" placeholder="Reciever's FLO ID" required animaate></sm-input>
+        <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" required animate></sm-input>
+        <sm-input id="paid_cashier_upi" placeholder="Sender's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" required animate></sm-input>
+    </sm-popup>
     <!-- Report popup-->
-    <div class="popup-container hide">
-        <div class="popup" id="report_popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
-                </svg>
-                <h4>Report</h4>
-                <button id="report_btn" class="primary-btn">report</button>
-            </div>
-            <textarea name="complaint" placeholder="Please describe issue in detail." id="complaint_field"
-                rows="10"></textarea>
-        </div>
-    </div>
+    <sm-popup id="report_popup">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Report</h4>
+            <button id="report_btn" class="primary-btn">report</button>
+        </header>
+        <textarea name="complaint" placeholder="Please describe issue in detail." id="complaint_field"
+            rows="10"></textarea>
+    </sm-popup>
 
     <header id="main_header" class="flex hide-completely">
         <svg viewBox="0 0 180 105.7" class="hide-completely">
@@ -395,7 +327,7 @@
                     <h4>pay through cashier</h4>
                     </a>
                     </div>
-                </sm-carousel>
+                </sm-carousel> 
             </div>
             <div class="user-panel">
                 <h5 class="light-text">My FLO ID</h5>
@@ -767,14 +699,14 @@
     <script id="onLoadStartUp">
         const userFloIdContainers = document.querySelectorAll('.user-flo-id')
         function onLoadStartUp() {
-            showPopup('main_loader', 'no')
+            showLoader()
             console.log("Starting the app! Please Wait!")
             floDapps.launchStartUp().then(async result => {
                 console.log(`Welcome ${myFloID}`)
                 await token_app.actions.doShreeGanesh();
                 userFloIdContainers.forEach(container => container.textContent = myFloID)
                 refresh_balance()
-                hidePopup()
+                hideLoader()
             }).catch(error => console.error(error))
         }
     </script>
@@ -1251,65 +1183,44 @@
             zIndex = 10;
 
         function showPopup(popup, permission) {
-            document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
             let thisPopup = document.getElementById(popup);
-            thisPopup.parentNode.classList.remove('hide');
-            thisPopup.classList.add('no-transformations');
             popupStack.push({
                 popup,
                 permission
             })
-            zIndex++;
-            thisPopup.parentNode.setAttribute('style', `z-index: ${zIndex}`)
-            document.getElementById('main_page')
-            setTimeout(() => {
-                thisPopup.querySelectorAll('.input').forEach(input => {
-                    animateInput(input)
-                    formValidation(input.firstElementChild)
-                })
-            }, 100);
-            if (popup === 'main_loader') {
-                loader.classList.add('animate-loader')
-                document.querySelector('main').classList.add('hide-completely')
-                document.querySelector('#main_header').classList.add('hide-completely')
-                document.querySelector('#navbar').classList.add('hide-completely')
-            }
+            zIndex++
+            thisPopup.setAttribute('style', `z-index: ${zIndex}`)
+            thisPopup.show(permission, popupStack)
             return thisPopup;
         }
 
         // hides the popup or modal 
         function hidePopup() {
-            const scrollY = document.body.style.top;
-            window.scrollTo(0, parseInt(scrollY || '0') * -1);
-            setTimeout(() => {
-                document.body.setAttribute('style', `overflow: auto; top: initial`)
-            }, 300);
             if (popupStack.peek() === undefined)
                 return;
             let {
-                popup,
-                permission
+                permission, popup
             } = popupStack.pop();
-            thisPopup = document.getElementById(popup);
-            thisPopup.closest('.popup-container').classList.add('hide');
-            thisPopup.closest('.popup').classList.remove('no-transformations');
+            let thisPopup = document.getElementById(popup),
+            submitButton = thisPopup.querySelector('button[type="submit"]')
+            if(submitButton)
+                submitButton.disabled = true;
+            thisPopup.hide()
+            zIndex--
             setTimeout(() => {
-                clearAllInputs(thisPopup)
-                zIndex--;
-                thisPopup.parentNode.setAttribute('style', `z-index: ${zIndex}`)
                 if (thisPopup.querySelector('.action')) {
                     btnLoading(thisPopup.querySelector('.action'), 'stop')
                     thisPopup.querySelector("button[type='submit']").disabled = true;
                 }
             }, 400)
-            if (popup === 'main_loader' || popup === 'sign_in_popup') {
+            if (popup === 'sign_in_popup') {
                 loader.classList.remove('animate-loader')
                 document.querySelector('main').classList.remove('hide-completely')
                 document.querySelector('#navbar').classList.remove('hide-completely')
                 document.querySelector('#main_header').classList.remove('hide-completely')
             }
             if (popup === 'prompt') {
-                if (thisPopup.querySelector('input').value == '')
+                if (thisPopup.querySelector('sm-input').value == '')
                     thisPopup.querySelector('.cancel-btn').click()
             }
             if (popup === 'cash_transfer') {
@@ -1326,13 +1237,6 @@
             }
         }
 
-        addEventListener('mousedown', e => {
-            if (e.target.classList.contains('popup-container') && popupStack.peek() !== undefined && popupStack
-                .peek().permission !== 'no') {
-                hidePopup()
-            }
-        })
-
         function btnLoading(btn, option) {
             if (typeof btn === 'string')
                 btn = document.getElementById(btn);
@@ -1345,6 +1249,22 @@
             }
         }
 
+        const loaderPage = document.getElementById('main_loader')
+        function showLoader(){
+            loaderPage.classList.remove('hide-completely')
+            loader.classList.add('animate-loader')
+            document.querySelector('main').classList.add('hide-completely')
+            document.querySelector('#navbar').classList.add('hide-completely')
+            document.querySelector('#main_header').classList.add('hide-completely')
+        }
+        function hideLoader(){
+            loaderPage.classList.add('hide-completely')
+            loader.classList.remove('animate-loader')
+            document.querySelector('main').classList.remove('hide-completely')
+            document.querySelector('#navbar').classList.remove('hide-completely')
+            document.querySelector('#main_header').classList.remove('hide-completely')
+        }
+
 
         function setAttributes(el, attrs) {
             for (var key in attrs) {
@@ -1353,12 +1273,6 @@
         }
 
         function clearAllInputs(parent) {
-            parent.querySelectorAll("input").forEach((field) => {
-                field.value = '';
-                if (field.closest('.input')) {
-                    field.closest('.input').classList.remove('animate-label')
-                }
-            })
             if (parent.querySelectorAll("textarea"))
                 parent.querySelectorAll("textarea").forEach((field) => {
                     field.value = '';
@@ -1389,11 +1303,11 @@
                 showPopup('confirmation')
                 popup.querySelector('#confirm_message').textContent = message;
                 popup.querySelector('.submit-btn').onclick = () => {
-                    hidePopup()
+                    popup.hide()
                     resolve(true);
                 }
                 popup.querySelector('.cancel-btn').onclick = () => {
-                    hidePopup()
+                    popup.hide()
                     resolve(false);
                 }
             })
@@ -1403,7 +1317,7 @@
         let askPrompt = function (message, defaultVal) {
             return new Promise(resolve => {
                 let popup = document.getElementById('prompt'),
-                    input = popup.querySelector('input');
+                    input = popup.querySelector('sm-input');
                 if (defaultVal)
                     input.value = defaultVal;
                 showPopup('prompt')
@@ -1411,15 +1325,16 @@
                 input.addEventListener('keyup', e => {
                     if (e.key === 'Enter') {
                         resolve(input.value);
-                        hidePopup()
+                        popup.hide()
                     }
                 })
                 popup.querySelector('#prompt_message').textContent = message;
                 popup.querySelector('.submit-btn').onclick = () => {
+                    popup.hide()
                     resolve(input.value);
                 }
                 popup.querySelector('.cancel-btn').onclick = () => {
-                    hidePopup()
+                    popup.hide()
                     resolve(null);
                 }
             })
@@ -1458,25 +1373,13 @@
             notify('Copied', 'success')
         }
 
-        // prevents non numerical input on firefox 
-        function preventNonNumericalInput(e) {
-            e = e || window.event;
-            let charCode = (typeof e.which == "undefined") ? e.keyCode : e.which,
-                charStr = String.fromCharCode(charCode);
-
-            if (!charStr.match(/[+-]?([0-9]*[.])?[0-9]+/))
-                e.preventDefault();
-        }
-
         function areInputsEmpty(parent) {
-            let allInputs = parent.querySelectorAll(".input input:not(:disabled)");
-            return [...allInputs].every(input => input.checkValidity())
+            let allInputs = parent.querySelectorAll("sm-input:not([disabled])");
+            return [...allInputs].every(input => input.isValid)
         }
 
-        function formValidation(formElement, e) {
-            if (formElement.getAttribute('type') === 'number' && typeof e !== 'undefined')
-                preventNonNumericalInput(e);
-            let parent = formElement.closest('.popup'),
+        function formValidation(formElement) {
+            let parent = formElement.closest('sm-popup'),
                 submitBtn = parent.querySelector("button[type='submit']");
             if (!submitBtn) return;
             if (formElement.hasAttribute('floId')) {
@@ -1484,6 +1387,7 @@
                     submitBtn.disabled = false;
                 } else {
                     submitBtn.disabled = true;
+                    return
                 }
             }
             if (areInputsEmpty(parent))
@@ -1492,44 +1396,24 @@
                 submitBtn.disabled = true;
         }
 
-        function animateInput(parent) {
-            if (parent.firstElementChild.value !== '')
-                parent.classList.add('animate-label')
-            else
-                parent.classList.remove('animate-label')
-        }
-
         let allForms = document.querySelectorAll('form'),
             payingRequested = false,
             currentPaymentRequest;
         const tokenReceiver = document.getElementById('token_receiver'),
             tokenAmount = document.getElementById('token_amount')
         window.addEventListener('load', () => {
-            allForms.forEach((form) => {
-                form.addEventListener('input', (e) => {
-                    if (e.target.closest('.input')) {
-                        let parent = e.target.closest('.input');
-                        animateInput(parent)
-                        formValidation(parent.firstElementChild, e)
-                    }
-                })
-                form.addEventListener('keyup', (e) => {
-                    if (e.target.closest('.input')) {
-                        if (e.key === 'Enter') {
-                            e.target.closest('.popup').querySelector("button[type='submit']")
-                                .click();
-                        }
-                    }
-                })
+            document.addEventListener('input', e => {
+                if (e.target.closest('sm-input')) {
+                    formValidation(e.target.closest('sm-input'))
+                }
             })
-            allForms.forEach((form) => {
-                form.addEventListener('blur', (e) => {
-                    if (e.target.closest('.input')) {
-                        let parent = e.target.closest('.input');
-                        if (parent.firstElementChild.value === '')
-                            parent.classList.remove('animate-label')
+            document.addEventListener('keyup', (e) => {
+                if (e.target.closest('sm-input')) {
+                    if (e.key === 'Enter') {
+                        e.target.closest('sm-popup').querySelector("button[type='submit']")
+                            .click();
                     }
-                }, true)
+                }
             })
 
             // Function for confirming deposit requests 
@@ -1673,7 +1557,7 @@
 
         function signIn() {
             return new Promise((resolve, reject) => {
-                hidePopup()
+                hideLoader()
                 showPopup('sign_in_popup', 'no')
                 let signInBtn = document.getElementById('sign_in_btn'),
                     privateKeyInput = document.getElementById('get_priv_key_field')
@@ -10699,7 +10583,7 @@
                                 else {
                                     resolve(inputVal)
                                     hidePopup()
-                                    showPopup('main_loader', 'no')
+                                    showLoader()
                                 }
                             })
                         }
@@ -11307,7 +11191,7 @@
                     showPage(document.getElementById('home_page_btn'), 'home_page')
                 }
 
-                hidePopup()
+                //Hide loader
 
                 pay_through_cashier();
             },
@@ -11662,14 +11546,12 @@
                     if (token_receiver.length < 1 || !floCrypto.validateAddr(token_receiver)) {
                         err_msg = `Invalid receiver FLO address.`;
                         notify(err_msg, 'error');
-                        hidePopup();
                         return false;
                     }
 
                     if (typeof sender_token_balance !== "object") {
                         err_msg = `Failed to load Sender balance.`;
                         notify(err_msg, 'error');
-                        hidePopup()
                         return false;
                     }
 
@@ -11713,7 +11595,8 @@
 
         async function refresh_balance(refreshButton) {
             try {
-                refreshButton.textContent = 'Checking...'
+                if (refreshButton)
+                    refreshButton.textContent = 'Checking...'
                 const current_token_balance = document.querySelector('.token-balance').textContent;
                 if (typeof current_token_balance == "string") {
                     const get_user_rupee_balance = await ajaxGet(
@@ -11742,6 +11625,9 @@
                 }
                 return true;
             } catch (error) {
+                if (refreshButton)
+                    refreshButton.textContent = 'Check Balance'
+                notify('unable load balance')
                 throw new Error(error);
             }
         }

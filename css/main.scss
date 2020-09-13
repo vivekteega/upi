@@ -347,60 +347,6 @@ textarea {
     padding: 0.8rem;
 }
 
-.input {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    position: relative;
-    padding: 0.8em;
-    margin-bottom: 1.5em;
-    border-radius: 0.2rem;
-    background: rgba(var(--text-color), 0.1);
-    border: 0.1em solid transparent;
-    cursor: text;
-
-    &:last-of-type {
-        margin-bottom: 0;
-    }
-
-    &:focus-within {
-        border: 0.1em solid var(--accent-color);
-    }
-
-    .placeholder {
-        opacity: .6;
-        font-weight: 500;
-        font-size: 1em;
-        position: absolute;
-        transition: transform 0.3s ease;
-        transform-origin: left;
-        pointer-events: none;
-        will-change: contents;
-        text-transform: capitalize;
-    }
-
-    input {
-        flex: 1;
-        font-size: 1rem;
-        border: none;
-        background: transparent;
-        outline: none;
-        color: rgba(var(--text-color), 1);
-    }
-}
-
-.animate-label {
-    input {
-        transform: translateY(0.5em);
-    }
-
-    .placeholder {
-        transform: translateY(-60%) scale(0.7);
-        opacity: 1;
-        color: var(--accent-color);
-    }
-}
-
 *:empty + .empty-state {
     display: grid;
 }
@@ -461,70 +407,6 @@ form {
     width: 100%;
 }
 
-.popup-container {
-    display: grid;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    place-items: center;
-    background: rgba($color: #000000, $alpha: 0.4);
-    z-index: 10;
-    transition: opacity 0.3s ease;
-
-    .popup {
-        flex-direction: column;
-        align-self: flex-end;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        width: 100%;
-        border-radius: 0.5rem 0.5rem 0 0;
-        padding: 1.5rem;
-        position: relative;
-        display: flex;
-        background: rgba(var(--foreground-color), 1);
-        transform: translateY(100%);
-        transition: transform 0.3s;
-        box-shadow: 0 2rem 2rem rgba($color: #000000, $alpha: 0.24);
-        overflow-y: auto;
-
-        h5 {
-            margin: 0.5rem 0;
-        }
-
-        button:first-of-type {
-            margin-left: auto;
-        }
-
-        .container-header {
-            display: flex;
-            align-items: center;
-            padding: 0;
-            margin-bottom: 1rem;
-
-            h4 {
-                flex: 1;
-            }
-
-            button {
-                width: auto;
-            }
-
-            .icon {
-                cursor: pointer;
-                padding-right: 0.4rem;
-                margin-right: 0.3rem;
-                stroke-width: 8;
-            }
-        }
-
-        p {
-            margin-bottom: 1.5rem !important;
-        }
-    }
-}
-
 #confirmation,
 #prompt {
     flex-direction: column;
@@ -536,10 +418,6 @@ form {
     h4 {
         font-weight: 500;
         margin-bottom: 1.5rem;
-    }
-
-    .input {
-        margin-bottom: 1rem;
     }
 
     .btns {
@@ -562,6 +440,33 @@ form {
     margin-bottom: 1em;
 }
 
+sm-popup{
+    sm-input:not(:last-of-type) {
+        margin-bottom: 1rem;
+    }
+    p{
+        margin-block-end: 1rem;
+    }
+}
+
+.popup-header{
+    padding: 1.5rem;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .icon{
+        margin-right: 1rem;
+        padding: 0.2rem;
+        stroke-width: 10;
+        cursor: pointer;
+    }
+    button{
+        width: auto;
+        margin-left: auto;
+    }
+}
+
 #sign_in_popup {
     h3 {
         margin-top: 2rem;
@@ -579,10 +484,6 @@ form {
     p {
         margin-top: 1rem;
         margin-bottom: 0 !important;
-    }
-
-    .input {
-        background: rgba(var(--text-color), 0.1);
     }
 }
 
@@ -673,9 +574,9 @@ form {
     padding: 1rem 0 4rem 0;
     .left {
         padding: 1.5rem 0;
-        align-self: flex-start;
         width: auto;
-        border-radius: 0.5rem;
+        background: rgba(var(--text-color), 0.06);
+        border-radius: 0.6rem;
         h3, h4, p {
             padding: 0 1.5rem;
         }
@@ -696,7 +597,7 @@ form {
 .user-panel {
     position: relative;
     padding: 1.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.6rem;
     background: linear-gradient(135deg, var(--accent-color), #2F2B76);
     color: rgba(var(--foreground-color), 1);
     box-shadow: 0 0.1rem 0.1rem #00000010, 0 1rem 1rem -1rem #00000010;
@@ -742,9 +643,8 @@ form {
     font-weight: 500;
 }
 
-.options-tab {
+.options-tab {      
     margin: 1rem 0;
-    border-radius: 0.5reem;
     .option {
         position: relative;
         display: flex;
@@ -1062,15 +962,15 @@ sm-panel{
 
 
 #main_loader {
-    box-shadow: none;
-    background: none;
     text-align: center;
-    align-items: center;
-    flex-direction: column;
-
+    place-content: center;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    left: 0;
     sm-button {
         margin-left: 0;
-        margin-top: 1.5rem;
+        margin-top: 1rem;
     }
 
     svg {
@@ -1109,7 +1009,6 @@ sm-panel{
         gap: 1.5rem;
         grid-template-areas: '.''left';
         grid-template-columns: minmax(0, 1fr);
-        align-items: flex-start;
         .left {
             grid-area: left;
         }
@@ -1126,14 +1025,8 @@ sm-panel{
         margin-left: 6rem;
     }
 
-    .popup-container {
-        .popup {
-            transform: translateY(0) scale(0.96);
-            width: 24rem;
-            align-self: center;
-            border-radius: 0.4rem;
-            height: auto;
-        }
+    sm-popup::part(popup){
+        width: 24rem;
     }
 
     #confirmation {
