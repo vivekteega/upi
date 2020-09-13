@@ -11156,6 +11156,7 @@
         master_configurations: {},
         actions: {},
         blocked_flo_ids: [],
+        personal_data: null,
     };
 
     token_app.actions = {
@@ -11164,6 +11165,7 @@
             const num=3;
             text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
                 #!#CURRENCY=INR
+                #!#TYPE_UPI_APP=UPI_APP_TEST${num}
                 #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST${num}
                 #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST${num}
                 #!#TYPE_MSGES=USER_MESSAGES_TEST${num}
@@ -11181,6 +11183,10 @@
                 #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST${num}
                 #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST${num}
                 #!#TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}
+                #!#TYPE_SENT_TOKENS=TYPE_SENT_TOKENS_TEST${num}
+                #!#TYPE_MY_PERSONAL_DATA=TYPE_MY_PERSONAL_DATA_TEST${num}
+                #!#TYPE_UNCONFIRMED_RUPEE_DEPOSITS=TYPE_UNCONFIRMED_RUPEE_DEPOSITS_TEST${num} 
+                #!#TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}  
                 #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
                 #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                 #!#cashiers=
@@ -11355,7 +11361,12 @@
             });
 
             if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-                await Promise.all([floCloudAPI.requestGeneralData(token_app.master_configurations
+                
+                await Promise.all([
+                    
+                    create_root_structure(),
+                    
+                    floCloudAPI.requestGeneralData(token_app.master_configurations
                         .TYPE_DEPOSITS, {
                             receiverID: myFloID
                         }),
@@ -11379,6 +11390,9 @@
                 await clearCashierData();
 
                 await Promise.all([
+
+                    create_root_structure(),
+    
                     floCloudAPI.requestGeneralData(token_app.master_configurations
                         .TYPE_FILE_DEPOSITS_COMPLAINT),
                     floCloudAPI.requestGeneralData(token_app.master_configurations
@@ -11429,7 +11443,9 @@
                 promises.push(p4);
 
                 await Promise.all(promises.map(prom => prom.func.call(floCloudAPI,prom.arg1, prom.arg2)));
-
+                
+                create_root_structure();
+                
                 return promises;
 
             }
@@ -11440,20 +11456,37 @@
 
     <!-- Cashier functions -->
     <script>
+
+        async function reset_cloud_object(object_name, options) {
+            try {
+                if(typeof floGlobals.appObjects[object_name] !== 'object' 
+                || floGlobals.appObjects[object_name]==null) {
+                    floCloudAPI.requestObjectData(object_name, options)
+                    .then(resp=>{
+                        if(typeof floGlobals.appObjects[object_name] !== 'object' 
+                        || floGlobals.appObjects[object_name]==null) {
+                            floGlobals.appObjects[object_name] = {};
+                            floCloudAPI.resetObjectData(object_name)
+                            .then(()=>floCloudAPI.requestObjectData(object_name, options))
+                            .then(()=>true);
+                        } else return false;
+                    });
+                } else return false;
+            } catch(error) {
+                throw new Error(error);
+            }
+        }
         // Create root structure
-        function create_root_structure() {
-            token_app.requests = {};
-            token_app.requests.deposits = {};
-            token_app.requests.withdraws = {};
-            floCloudAPI.resetObjectData(token_app, floGlobals.application, {
-                receiverID: floGlobals.adminID
-            });
+        async function create_root_structure() {
             
-            floGlobals.appObjects["unconfirmed_rupee_deposits"] = {};
-            floCloudAPI.resetObjectData("unconfirmed_rupee_deposits"); 
-            
-            floGlobals.appObjects["processed_unconfirmed_balance_claim_requests"] = {};
-            floCloudAPI.resetObjectData("processed_unconfirmed_balance_claim_requests"); 
+            let promises = [];
+            promises.push(reset_cloud_object(token_app.master_configurations.TYPE_MY_PERSONAL_DATA));
+            if(Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+                promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
+                promises.push(reset_cloud_object(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS));
+            }
+
+            return Promise.all(promises);
         }
 
         async function show_deposit_request() {
@@ -11595,9 +11628,9 @@
                             validateDepositTxidInBlockchain();
                             n++;
                         } else {
-                            floGlobals.appObjects["unconfirmed_rupee_deposits"][flo_txid] = input_data;
+                            floGlobals.appObjects[token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS][flo_txid] = input_data;
                             let receiverID = floGlobals.adminID;
-                            floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID });
+                            floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS, { receiverID });
                             notify('Txid '+flo_txid+' added in Unconfirmed Rupee Deposits.', 'error');
                         }    
 
@@ -11724,7 +11757,7 @@
                         return false;
                     } else {
                         notify(`Transaction successful: ${flo_txid}`, 'success', true, true);
-                        if (payingRequested) {
+                        if (payingRequested===true) {
                             const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
                             .TYPE_REQUEST_PAYMENT, "0").reverse();
 
@@ -11734,6 +11767,13 @@
 
                             payment_request_status(original_req, 'APPROVED')
                             showPayRequests();
+                        } else if(payingRequested===false) {
+                            let receiverID = myFloID;
+                            floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid]={
+                                token_sender, token_receiver, token_amount, token_name_radio, 
+                                flo_txid, "datetime": + new Date()      
+                            };
+                            floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_SENT_TOKENS, options = {receiverID});
                         }
                         hidePopup()
                         return true;
@@ -11904,8 +11944,10 @@
                     .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, "0");
 
                 // load processed claims
-                await floCloudAPI.requestObjectData("processed_unconfirmed_balance_claim_requests", { receiverID:floGlobals.adminID });  
-                const processed_unconfirmed_balance_claim_requests_list = floGlobals.appObjects["processed_unconfirmed_balance_claim_requests"];
+                const cashiersList = Object.keys(token_app.master_configurations.cashiers);
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, 
+                { receiverID:floGlobals.adminID, senderIDs:cashiersList });  
+                const processed_unconfirmed_balance_claim_requests_list = floGlobals.appObjects[TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS];
                 const processed_unconfirmed_balance_claim_requests_txid_arr = Object.keys(processed_unconfirmed_balance_claim_requests_list);
 
                 console.log(unconfirmed_cash_deposit_claims);
@@ -11956,9 +11998,9 @@
                     if(typeof validate_txid=="object" && validate_txid.result=="ok") {
                         // mark as resolved
                         subject_req.new_flo_txid = new_txid;
-                        floGlobals.appObjects["processed_unconfirmed_balance_claim_requests"][subject_req.flo_txid] = subject_req;
+                        floGlobals.appObjects[TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS][subject_req.flo_txid] = subject_req;
                         let receiverID = floGlobals.adminID;
-                        await floCloudAPI.updateObjectData("processed_unconfirmed_balance_claim_requests", { receiverID });
+                        await floCloudAPI.updateObjectData(TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, { receiverID });
                         notify('Token transfer for unconfirmed desposit successfull. Txid: '+ new_txid);
                         
                     } else if(n<=30) {
@@ -12201,9 +12243,8 @@
                     frag.append(render.depositActivity(usr_deposits.vectorClock, upi_txid, deposit_amount))
                 }
                     
-                    depositActivityContainer.innerHTML = ``;
+                depositActivityContainer.innerHTML = ``;
                 depositActivityContainer.append(frag)
-
 
                 for (usr_withdraws of withdraw_msg) {
                     let {
@@ -12228,14 +12269,14 @@
                         amount))
                 }
 
-                    payCashierActivityContainer.innerHTML = ``;
+                payCashierActivityContainer.innerHTML = ``;
                 payCashierActivityContainer.append(frag)
 
                 for (msg of user_msg) {
                     frag.append(render.cashierMessage(msg))
                 }
 
-                    cashierMessageContainer.innerHTML = ``;
+                cashierMessageContainer.innerHTML = ``;
                 cashierMessageContainer.append(frag)
             } catch (e) {
                 notify(e, 'error');
@@ -12309,21 +12350,19 @@
             }
         }
 
-        async function show_payment_requests() {
+        async function show_payment_requests(requests_received=true, recvr_id='') {
             try {
+
+                let options = {receiverID: myFloID};
+                if(requests_received!==true) {
+                    options = {receiverID: recvr_id, senderIDs: [myFloID]}
+                }
+
                 await Promise.all([
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT, {
-                        receiverID: myFloID
-                    }),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_REQUEST_PAYMENT_DECLINED, {
-                        receiverID: myFloID
-                    }),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_REQUEST_PAYMENT_APPROVED, {
-                        receiverID: myFloID
-                    })
-                ])
+                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT, options),
+                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED, options),
+                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED, options)
+                ]);
                 const general_msg = floDapps.getNextGeneralData(token_app.master_configurations
                     .TYPE_REQUEST_PAYMENT, "0").reverse(),
                     declined_reqs_list = floDapps.getNextGeneralData(token_app.master_configurations
@@ -12424,19 +12463,21 @@
                 tokens_transfers_tx_list = Object.keys(tokens_transfers_tx_list.transactions);
                 let receiverID = floGlobals.adminID;
                 let senderIDs = Object.keys(token_app.master_configurations.cashiers);
-                await floCloudAPI.requestObjectData("unconfirmed_rupee_deposits", { receiverID, senderIDs });
-                let unconfirmed_tx_list = Object.keys(floGlobals.appObjects["unconfirmed_rupee_deposits"]); 
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS, 
+                { receiverID, senderIDs });
+                let unconfirmed_tx_list = Object.keys(floGlobals.appObjects[token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS]); 
                 //console.log(unconfirmed_tx_list);    
                 //console.log(tokens_transfers_tx_list);
                 //console.log(token_balance);
 
                 let unconfirmed_balance=0;
                 for(ut of unconfirmed_tx_list) {
-                    let subject_deposit = floGlobals.appObjects["unconfirmed_rupee_deposits"][ut];
+                    let subject_deposit = floGlobals.appObjects[token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS][ut];
+                    if(subject_deposit.receiver_flo_id!==myFloID) continue;
                     if(tokens_transfers_tx_list.includes(ut)) {
                         // remove this item from unconfirmed_tx_list
                         if(delete subject_deposit)
-                            floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID });
+                            floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS, { receiverID });
                     } else {
                         unconfirmed_balance += Number(subject_deposit["tokens_transferred"]);
                         let dt1 = new Date(subject_deposit["datetime"]);
@@ -12449,7 +12490,7 @@
                                 receiverID: cashier
                             });
                             subject_deposit["unconfirmed_balance_claimed"] = true;
-                            floCloudAPI.updateObjectData("unconfirmed_rupee_deposits", { receiverID });
+                            floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS, { receiverID });
                         }
                     }
                 }    
@@ -12457,6 +12498,57 @@
                 return unconfirmed_balance;
             } catch(error) {
                 notify('Failed to get rupee balance.', 'error')
+                throw new Error(error);
+            }
+        }
+
+        async function get_sent_rupee_list() {
+            try {
+                let senderIDs = [myFloID];
+                let receiverID = myFloID;
+                floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid]={
+                    token_sender, token_receiver, token_amount, token_name_radio, 
+                    flo_txid, "datetime": + new Date()      
+                };
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_SENT_TOKENS, 
+                options = { receiverID, senderIDs });
+
+                const sent_tokens_list = Object.keys(floGlobals.appObjects
+                [token_app.master_configurations.TYPE_SENT_TOKENS]); 
+
+                console.log(sent_tokens_list);
+                // #todo: while displying validate senderIDs===myFloID
+            
+            } catch(error) {
+                throw new Error(error);
+            }
+        }
+
+        async function update_my_personal_data(upi_id) {
+            try {
+                let senderIDs = [myFloID];
+                let receiverID = myFloID;
+
+                floGlobals.appObjects[token_app.master_configurations.TYPE_MY_PERSONAL_DATA][myFloID]={
+                    myFloID, "myUPI":upi_id, "last_update": + new Date()      
+                };
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_MY_PERSONAL_DATA, 
+                options = { receiverID, senderIDs });
+
+                await floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_MY_PERSONAL_DATA, 
+                options = { receiverID, senderIDs });
+
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_MY_PERSONAL_DATA, 
+                options = { receiverID, senderIDs });
+
+                const sent_tokens_list = Object.keys(floGlobals.appObjects
+                [token_app.master_configurations.TYPE_MY_PERSONAL_DATA]); 
+
+                notify('Personal information updated successfully.')
+
+                return sent_tokens_list;
+
+            } catch(error) {
                 throw new Error(error);
             }
         }
