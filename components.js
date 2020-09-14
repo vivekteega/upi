@@ -204,6 +204,7 @@ border: none;
 .input {
     display: flex;
     align-items: center;
+    text-align: left;
     position: relative;
     gap: 1em;
     padding: 0.7em 1em;
@@ -1666,72 +1667,79 @@ const smPopup = document.createElement('template')
 smPopup.innerHTML = `
 <style>
 *{
-padding: 0;
-margin: 0;
-box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 } 
 :host{
-display: grid;
+    display: grid;
 }
 .popup-container{
-display: grid;
-position: fixed;
-top: 0;
-bottom: 0;
-left: 0;
-right: 0;
-place-items: center;
-background: rgba(0, 0, 0, 0.6);
-z-index: 10;
-transition: opacity 0.3s ease;
+    display: grid;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    place-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+:host(.stacked) .popup{
+    transform: scale(0.9) translateY(-1rem) !important;
 }
 .popup{
-display: flex;
-flex-direction: column;
-position: relative;
-align-self: flex-end;
-align-items: flex-start;
-width: 100%;
-border-radius: 0.5rem 0.5rem 0 0;
-transform: translateY(100%);
-transition: transform 0.3s;
-background: rgba(var(--foreground-color), 1);
-box-shadow: 0 -1rem 2rem #00000020;
-max-height: 100vh;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-self: flex-end;
+    align-items: flex-start;
+    width: calc(100% - 1rem);
+    border-radius: 0.8rem;
+    transform: translateY(100%);
+    transition: transform 0.3s;
+    background: rgba(var(--foreground-color), 1);
+    box-shadow: 0 -1rem 2rem #00000020;
+    max-height: 100vh;
 }
 .container-header{
-display: flex;
-width: 100%;
-align-items: center;
+    display: flex;
+    width: 100%;
+    align-items: center;
 }
 .popup-top{
-display: flex;
-width: 100%;
+    display: flex;
+    width: 100%;
 }
 .popup-body{
-flex: 1;
-width: 100%;
-padding: 1.5rem;
-overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    padding: 1.5rem;
+    overflow-y: auto;
 }
 .heading{
-font-weight: 400;
+    font-weight: 400;
 }
 .heading:first-letter{
-text-transform: uppercase;
+    text-transform: uppercase;
 }
 .hide{
-opacity: 0;
-pointer-events: none;
+    opacity: 0;
+    pointer-events: none;
 }
 @media screen and (min-width: 640px){
-.popup{
-    width: max-content;
-    align-self: center;
-    border-radius: 0.4rem;
-    height: auto;
-    box-shadow: 0 3rem 2rem -0.5rem #00000040;
-}
+    .popup{
+        width: max-content;
+        align-self: center;
+        border-radius: 0.4rem;
+        height: auto;
+        transform: translateY(1rem);
+        box-shadow: 0 3rem 2rem -0.5rem #00000040;
+    }
 }
 @media screen and (max-width: 640px){
 .popup-top{
@@ -1772,7 +1780,7 @@ customElements.define('sm-popup', class extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({ mode: 'open' }).append(smPopup.content.cloneNode(true))
-        
+
         this.allowClosing = false
     }
 
@@ -1785,9 +1793,6 @@ customElements.define('sm-popup', class extends HTMLElement {
     }
 
     show(pinned, popupStack) {
-        setTimeout(() => {
-            this.allowClosing = true
-        }, 300);
         this.setAttribute('open', '')
         this.pinned = pinned
         this.popupStack = popupStack
@@ -1796,29 +1801,21 @@ customElements.define('sm-popup', class extends HTMLElement {
         document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
     }
     hide() {
-        if (!this.allowClosing) return
-        setTimeout(() => {
-            this.allowClosing = false
-        }, 300);
         this.removeAttribute('open')
-        if (window.innerWidth < 648) {
+        if(window.innerWidth < 640)
             this.popup.style.transform = 'translateY(100%)';
-        }
-        else {
-            this.popup.style.transform = 'scale(0.9)';
-            setTimeout(() => {
-                this.popup.style.transform = 'translateY(100%) scale(1)'
-            }, 300)
-        }
+        else
+            this.popup.style.transform = 'translateY(1rem)';
         this.popupContainer.classList.add('hide')
-        /*if (typeof this.popupStack !== 'undefined') {
-            if (this.popupStack.items.length === 1) {
+        if (typeof this.popupStack !== 'undefined') {
+            this.popupStack.pop()
+            if (this.popupStack.items.length === 0) {
                 this.resumeScrolling()
             }
         }
-        else {*/
+        else {
             this.resumeScrolling()
-        //}
+        }
 
         if (this.inputFields.length) {
             setTimeout(() => {
@@ -1830,7 +1827,14 @@ customElements.define('sm-popup', class extends HTMLElement {
                 })
             }, 300);
         }
-        return this;
+        this.dispatchEvent(
+            new CustomEvent("popupclosed", {
+                bubbles: true,
+                detail: {
+                    popup: this
+                }
+            })
+        )
     }
 
     handleTouchStart(e) {
@@ -2173,27 +2177,28 @@ transform: none;
 opacity: 1;
 }
 .notification{
-display: flex;
-opacity: 0;
-padding: 1rem 1.5rem;
-transform: translateY(-1rem);
-position: relative;
-border-radius: 0.3rem;
-box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1),
-            0.5rem 1rem 2rem rgba(0, 0, 0, 0.1);
-background: rgba(var(--foreground-color), 1);
-transition: height 0.3s, transform 0.3s, opacity 0.3s;
-overflow: hidden;
-overflow-wrap: break-word;
-word-wrap: break-word;
--ms-word-break: break-all;
-word-break: break-all;
-word-break: break-word;
--ms-hyphens: auto;
--moz-hyphens: auto;
--webkit-hyphens: auto;
-hyphens: auto;
-max-width: 100%;
+    display: flex;
+    opacity: 0;
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.5rem;
+    transform: translateY(-1rem);
+    position: relative;
+    border-radius: 0.3rem;
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1),
+                0.5rem 1rem 2rem rgba(0, 0, 0, 0.1);
+    background: rgba(var(--foreground-color), 1);
+    transition: height 0.3s, transform 0.3s, opacity 0.3s;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    max-width: 100%;
 }
 h4:first-letter,
 p:first-letter{
@@ -2264,7 +2269,7 @@ stroke-width: 6;
     transform: translateX(1rem);
 }
 }
-@media screen and (max-width: 640px){
+@media screen and (any-hover: none){
 .close{
     display: none
 }

@@ -240,7 +240,7 @@ input:invalid {
   background: none;
 }
 .action h4 {
-  padding: 0.5rem 0.8rem;
+  padding: 0.5rem 1.2rem;
   font-size: 0.9rem;
   clip-path: circle(100%);
   transition: clip-path 0.3s;
@@ -382,10 +382,6 @@ textarea {
   background: rgba(var(--foreground-color), 1) !important;
 }
 
-form {
-  width: 100%;
-}
-
 #confirmation,
 #prompt {
   flex-direction: column;
@@ -419,6 +415,16 @@ form {
   margin-bottom: 1em;
 }
 
+sm-popup .illustration {
+  position: relative;
+  height: 4rem;
+  width: 4rem;
+  padding: 1rem;
+  stroke: var(--accent-color);
+  margin-bottom: 1rem;
+  border-radius: 5rem;
+  background: rgba(var(--text-color), 0.06);
+}
 sm-popup sm-input:not(:last-of-type) {
   margin-bottom: 1rem;
 }
@@ -442,6 +448,17 @@ sm-popup p {
 .popup-header button {
   width: auto;
   margin-left: auto;
+}
+
+details, summary {
+  margin-bottom: 1rem;
+}
+
+details p {
+  border-radius: 0.2rem;
+  padding: 0.5rem 1rem;
+  background: rgba(var(--text-color), 0.06);
+  margin-bottom: 0;
 }
 
 #sign_in_popup h3 {
@@ -929,6 +946,50 @@ sm-panel {
 
 #send_amount_to_deposit {
   margin-bottom: 0 !important;
+}
+
+@keyframes popup {
+  0% {
+    stroke-dashoffset: 50;
+    transform: translateY(4rem) scale(0.2, 0.6);
+  }
+  40% {
+    transform: translateY(0) scale(0.2);
+  }
+  41% {
+    transform: translateY(0) scale(0.2);
+  }
+  50% {
+    stroke-dashoffset: 50;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+#success_section h4, #failure_section h4 {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+#success_svg, #failure_svg {
+  height: 5rem;
+  width: 5rem;
+  stroke-width: 4;
+  align-self: center;
+  stroke: none;
+  stroke-dasharray: 50;
+  fill: rgba(var(--text-color), 0.06);
+  animation: popup 2s forwards infinite cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#success_svg polyline {
+  fill: none;
+  stroke: #00C853;
+}
+
+#failure_svg line {
+  stroke: #EF5350;
 }
 
 @media only screen and (max-width: 640px) {
