@@ -1772,6 +1772,8 @@ customElements.define('sm-popup', class extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({ mode: 'open' }).append(smPopup.content.cloneNode(true))
+        
+        this.allowClosing = false
     }
 
     resumeScrolling() {
@@ -1783,6 +1785,9 @@ customElements.define('sm-popup', class extends HTMLElement {
     }
 
     show(pinned, popupStack) {
+        setTimeout(() => {
+            this.allowClosing = true
+        }, 300);
         this.setAttribute('open', '')
         this.pinned = pinned
         this.popupStack = popupStack
@@ -1791,6 +1796,10 @@ customElements.define('sm-popup', class extends HTMLElement {
         document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
     }
     hide() {
+        if (!this.allowClosing) return
+        setTimeout(() => {
+            this.allowClosing = false
+        }, 300);
         this.removeAttribute('open')
         if (window.innerWidth < 648) {
             this.popup.style.transform = 'translateY(100%)';
