@@ -11496,8 +11496,8 @@
             
             let promises = [];
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_MY_PERSONAL_DATA));
+            promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
             if(Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-                promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
                 promises.push(reset_cloud_object(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS));
             }
 
@@ -12181,6 +12181,10 @@
                     notify('Failed to send withdraw request to cashier.', 'error');
                     return true;
                 }
+            
+                const user_withdraw_upi = document.getElementById('user_withdraw_upi'); 
+                user_withdraw_upi.value = get_user_payment_details();
+
             } catch (error) {
                 throw new Error(error)
             }
@@ -12539,29 +12543,29 @@
             }
         }
 
-        async function update_my_personal_data(upi_id) {
+        function get_user_payment_details() {
             try {
-                let senderIDs = [myFloID];
-                let receiverID = myFloID;
+                const pay_key = `pay_key_${myFloID}`;
+                var pay_id = localStorage.getItem(pay_key);
+                if(typeof pay_id !=='string' || pay_id.length<1) throw new Error('Invalid payment id.');
+                return pay_id;
+            } catch(error) {
+                notify('Please update your UPI or payment details in settings.', 'error', '', true);
+                throw new Error(error)
+            }
+        }
 
-                floGlobals.appObjects[token_app.master_configurations.TYPE_MY_PERSONAL_DATA][myFloID]={
-                    myFloID, "myUPI":upi_id, "last_update": + new Date()      
-                };
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_MY_PERSONAL_DATA, 
-                options = { receiverID, senderIDs });
+        async function update_my_payment_details(payment_id='') {
+            try {
+                // todo: validate upi_id
 
-                await floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_MY_PERSONAL_DATA, 
-                options = { receiverID, senderIDs });
+                const pay_key = `pay_key_${myFloID}`;
 
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_MY_PERSONAL_DATA, 
-                options = { receiverID, senderIDs });
+                localStorage.setItem(pay_key, payment_id);
 
-                const sent_tokens_list = Object.keys(floGlobals.appObjects
-                [token_app.master_configurations.TYPE_MY_PERSONAL_DATA]); 
+                notify('Your payment details updated successfully.')
 
-                notify('Personal information updated successfully.')
-
-                return sent_tokens_list;
+                return true;
 
             } catch(error) {
                 throw new Error(error);
