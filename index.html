@@ -53,7 +53,7 @@
             Sign In
         </button>
     </sm-popup>
-    <sm-popup id="cash_transfer" open>
+    <sm-popup id="cash_transfer">
         <header class="popup-header" slot="header">
             <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
                 <title>close</title>
@@ -61,14 +61,6 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
             <h4>Send Rupee</h4>
-            <button id="send_tokens_btn" class="action expand" type="submit" disabled>
-                <h4 class="expand primary-btn">
-                    Send
-                </h4>
-                <svg viewBox="0 0 73 73" class="loader">
-                    <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                </svg>
-            </button>
         </header>
         <svg class="icon illustration" viewBox="0 0 64 64">
             <path
@@ -80,6 +72,14 @@
         </p>
         <sm-input floId id="token_receiver" placeholder="Reciever's FLO ID" required animate></sm-input>
         <sm-input id="token_amount" placeholder="Amount" type="number" min="1" required animate></sm-input>
+        <button id="send_tokens_btn" class="action expand" type="submit" disabled>
+            <h4 class="expand primary-btn">
+                Send
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
+                <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+        </button>
     </sm-popup>
     <sm-popup id="deposit_rupee">
         <header class="popup-header" slot="header">
@@ -89,14 +89,6 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
             <h4>Deposit rupee</h4>
-            <button id="request_tokens_btn" class="action expand" type="submit" disabled>
-                <h4 class="primary-btn expand">
-                    Continue
-                </h4>
-                <svg viewBox="0 0 73 73" class="loader">
-                    <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                </svg>
-            </button>
         </header>
         <svg class="icon illustration" viewBox="0 0 64 64">
             <title>deposit</title>
@@ -128,6 +120,14 @@
             <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" pattern="^[a-zA-z0-9]+" disabled
                 required animate></sm-input>
         </section>
+        <button id="request_tokens_btn" class="action expand" type="submit" disabled>
+            <h4 class="primary-btn expand">
+                Continue
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
+                <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+        </button>
     </sm-popup>
     <sm-popup id="withdraw_rupee">
         <header class="popup-header" slot="header">
@@ -137,14 +137,6 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
             <h4>Withdraw rupee</h4>
-            <button id="withdraw_cash_btn" class="action expand" type="submit" disabled>
-                <h4 class="primary-btn expand">
-                    withdraw
-                </h4>
-                <svg viewBox="0 0 73 73" class="loader">
-                    <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                </svg>
-            </button>
         </header>
         <svg class="icon illustration" viewBox="0 0 64 64">
             <title>withdraw</title>
@@ -163,6 +155,14 @@
         <sm-input id="user_withdraw_upi" placeholder="Reciever's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+"
             required animate></sm-input>
         <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" required animate></sm-input>
+        <button id="withdraw_cash_btn" class="action expand" type="submit" disabled>
+            <h4 class="primary-btn expand">
+                withdraw
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
+                <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+        </button>
     </sm-popup>
     <sm-popup id="request_rupee">
         <header class="popup-header" slot="header">
@@ -172,15 +172,6 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
             <h4>Request rupee</h3>
-                <button id="request_rupee_btn" class="action expand" type="submit" disabled>
-                    <h4 class="primary-btn expand">
-                        request
-                    </h4>
-                    <svg viewBox="0 0 73 73" class="loader">
-                        <path
-                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                    </svg>
-                </button>
         </header>
         <svg class="icon request-icon illustration" viewBox="0 0 64 64">
             <path
@@ -191,6 +182,15 @@
         </p>
         <sm-input floId id="requested_address" placeholder="Request from" required animate></sm-input>
         <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" required animate></sm-input>
+        <button id="request_rupee_btn" class="action expand" type="submit" disabled>
+            <h4 class="primary-btn expand">
+                request
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
+                <path
+                    d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+        </button>
     </sm-popup>
     <sm-popup id="pay_anyone">
         <header class="popup-header" slot="header">
@@ -200,14 +200,6 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
             <h4>Pay through cashier</h4>
-            <button id="cnf_cash_payment" class="action expand" type="submit" disabled>
-                <h4 class="primary-btn expand">
-                    pay
-                </h4>
-                <svg viewBox="0 0 73 73" class="loader">
-                    <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                </svg>
-            </button>
         </header>
         <svg class="icon illustration" viewBox="0 0 64 64">
             <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
@@ -227,6 +219,14 @@
         <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" required animate></sm-input>
         <sm-input id="paid_cashier_upi" placeholder="Sender's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" required
             animate></sm-input>
+        <button id="cnf_cash_payment" class="action expand" type="submit" disabled>
+            <h4 class="primary-btn expand">
+                pay
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
+                <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+        </button>
     </sm-popup>
     <sm-popup id="transaction_result">
         <header class="popup-header" slot="header">
@@ -272,10 +272,10 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
             <h4>Report</h4>
-            <button id="report_btn" class="primary-btn">report</button>
         </header>
         <textarea name="complaint" placeholder="Please describe issue in detail." id="complaint_field"
             rows="10"></textarea>
+        <button id="report_btn" class="primary-btn">report</button>
     </sm-popup>
 
     <header id="main_header" class="flex hide-completely">
@@ -789,9 +789,9 @@
             console.log("Starting the app! Please Wait!")
             floDapps.launchStartUp().then(async result => {
                 console.log(`Welcome ${myFloID}`)
+                refresh_balance()
                 await token_app.actions.doShreeGanesh();
                 userFloIdContainers.forEach(container => container.textContent = myFloID)
-                refresh_balance()
                 hideLoader()
             }).catch(error => console.error(error))
         }
@@ -1269,19 +1269,11 @@
             zIndex = 10;
 
         function showPopup(popup, permission) {
-            console.log(popupStack.peek())
-            if (popupStack.peek() !== undefined){
-                let prevPopup = document.getElementById(popupStack.peek().popup)
-                prevPopup.classList.add('stacked')
-            }
+            console.log(popupStack)
             let thisPopup = document.getElementById(popup);
-            popupStack.push({
-                popup,
-                permission
-            })
             zIndex++
             thisPopup.setAttribute('style', `z-index: ${zIndex}`)
-            thisPopup.show(permission, popupStack)
+            popupStack = thisPopup.show(permission, popupStack)
             return thisPopup;
         }
 
@@ -1289,51 +1281,45 @@
         function hidePopup() {
             if (popupStack.peek() === undefined)
                 return;
-            let {
-                permission, popup
-            } = popupStack.pop();
-            let thisPopup = document.getElementById(popup),
+            thisPopup.hide()
+        }
+
+        document.addEventListener('popupclosed', e => {
+            popupStack = e.detail.popupStack    
+            let thisPopup = e.detail.popup,
                 submitButton = thisPopup.querySelector('button[type="submit"]')
             if (submitButton)
                 submitButton.disabled = true;
-            thisPopup.hide()
-            zIndex--
             setTimeout(() => {
                 if (thisPopup.querySelector('.action')) {
                     btnLoading(thisPopup.querySelector('.action'), 'stop')
                     thisPopup.querySelector("button[type='submit']").disabled = true;
                 }
             }, 400)
-            if (popup === 'prompt') {
-                if (thisPopup.querySelector('sm-input').value == '')
-                    thisPopup.querySelector('.cancel-btn').click()
-            }
-        }
-
-        document.addEventListener('popupclosed', e => {
-            if (popupStack.peek() !== undefined){
-                let prevPopup = document.getElementById(popupStack.peek().popup)
-                prevPopup.classList.remove('stacked')
-            }
+            zIndex--
             switch(e.detail.popup.id){
                 case 'sign_in_popup' :
                     loader.classList.remove('animate-loader')
                     document.querySelector('main').classList.remove('hide-completely')
                     document.querySelector('#navbar').classList.remove('hide-completely')
                     document.querySelector('#main_header').classList.remove('hide-completely')
-                    break;
+                break;
                 case 'cash_transfer' : 
                     payingRequested = false;
                     tokenReceiver.disabled = false
                     tokenAmount.disabled = false
-                    break;
+                break;
                 case 'deposit_rupee': 
                     depositRequested = 0;
                     document.getElementById('upi_txId_section').classList.add('hide-completely')
                     document.getElementById('deposit_amount_section').classList.remove('hide-completely')
                     depositedRupeeTxId.disabled = true
                     document.getElementById('request_tokens_btn').children[0].textContent = 'Continue'
-                    break;
+                break;
+                case 'prompt':
+                if (thisPopup.querySelector('sm-input').value == '')
+                    thisPopup.querySelector('.cancel-btn').click()
+                break
             }
         })
 
@@ -10572,6 +10558,8 @@
                             deposits_flo_txids: {},
                             cash_sent_details: {},
                             pay_thru_cashier: {},
+                            //user UPIs
+                            userUpis: {}
                         }
                         //add other given objectStores
                         for (o in this.appObs)
@@ -11086,32 +11074,32 @@
         }
 
         function delay(t, v) {
-            return new Promise(function (resolve) {
-                setTimeout(resolve.bind(null, v), t);
-            });
+          return new Promise(function(resolve) {
+            setTimeout(resolve.bind(null, v), t);
+          });
         }
-
+    
         function diff_hours(dt2, dt1) {
-            var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+            var diff =(dt2.getTime() - dt1.getTime()) / 1000;
             diff /= (60 * 60);
-            return Math.abs(Math.round(diff));
+            return Math.abs(Math.round(diff));           
         }
 
     </script>
 
-    <script>
-        const token_app = {
-            master_configurations: {},
-            actions: {},
-            blocked_flo_ids: [],
-            personal_data: null,
-        };
+<script>
+    const token_app = {
+        master_configurations: {},
+        actions: {},
+        blocked_flo_ids: [],
+        personal_data: null,
+    };
 
-        token_app.actions = {
+    token_app.actions = {
 
-            parse_flo_comments: async function () {
-                const num = 4;
-                text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
+        parse_flo_comments: async function () {
+            const num=4;
+            text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
                 #!#CURRENCY=INR
                 #!#TYPE_UPI_APP=UPI_APP_TEST${num}
                 #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST${num}
@@ -11143,8 +11131,8 @@
                         "upi_id": "8507742774@ybl"
                     }
                 }`
-                /*
-                ,
+            /*
+            ,
                     "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
                         "upi_id": "8340617958@ybl"
                     },
@@ -11160,41 +11148,41 @@
                     "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
                         "upi_id": "krishraj1012-2@okicici"
                     }
-                */
-                text = removeWhiteSpaces(text);
-                return text;
-                const master_data = await ajaxGet(
-                    `${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
-                if (typeof master_data === "object" && typeof master_data.txs === "object") {
-                    let text = '';
-                    let tx_cmnt_arr = [];
+            */
+            text = removeWhiteSpaces(text);
+            return text;
+            const master_data = await ajaxGet(
+                `${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
+            if (typeof master_data === "object" && typeof master_data.txs === "object") {
+                let text = '';
+                let tx_cmnt_arr = [];
 
-                    for (txt of master_data.txs) {
-                        if (txt.vin[0].addr === token_app.masterFLOAddress) {
-                            if (txt.floData.length === 0) break;
-                            tx_cmnt_arr.push(txt.floData);
-                        }
+                for (txt of master_data.txs) {
+                    if (txt.vin[0].addr === token_app.masterFLOAddress) {
+                        if (txt.floData.length === 0) break;
+                        tx_cmnt_arr.push(txt.floData);
                     }
-
-                    tx_cmnt_arr.reverse().map(m => text += m.replace('text:', ''));
-                    return text;
                 }
-            },
 
-            fetch_configs: async function () {
-                const floData = await this.parse_flo_comments();
-                let RMAssets = floData.trim();
-                let floAssetsArray = RMAssets.split("#!#");
+                tx_cmnt_arr.reverse().map(m => text += m.replace('text:', ''));
+                return text;
+            }
+        },
 
-                if (
-                    floAssetsArray.length > 0 &&
-                    typeof floAssetsArray[0] !== undefined &&
-                    floAssetsArray[0].trim() !== "" &&
-                    typeof floAssetsArray[1] !== undefined &&
-                    floAssetsArray[1].trim() !== ""
-                ) {
-                    try {
-                        for (const assets_string of floAssetsArray) {
+        fetch_configs: async function () {
+            const floData = await this.parse_flo_comments();
+            let RMAssets = floData.trim();
+            let floAssetsArray = RMAssets.split("#!#");
+
+            if (
+                floAssetsArray.length > 0 &&
+                typeof floAssetsArray[0] !== undefined &&
+                floAssetsArray[0].trim() !== "" &&
+                typeof floAssetsArray[1] !== undefined &&
+                floAssetsArray[1].trim() !== ""
+            ) {
+                try {
+                    for (const assets_string of floAssetsArray) {
 
                             let k = assets_string.split("=");
 
@@ -11447,8 +11435,8 @@
 
             let promises = [];
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_MY_PERSONAL_DATA));
+            promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
             if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-                promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
                 promises.push(reset_cloud_object(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS));
             }
 
@@ -11780,14 +11768,11 @@
                     document.querySelectorAll('.flo-balance').forEach(elem => elem.textContent = get_user_flo_balance);
                 }
                 if (refreshButton) {
-                    refreshButton.textContent = 'Check Balance'
                     notify('Balance Updated')
+                    refreshButton.classList.remove('animate-loader')
                 }
                 return true;
             } catch (error) {
-                if (refreshButton)
-                    refreshButton.textContent = 'Check Balance'
-                notify('unable load balance')
                 throw new Error(error);
             }
         }
@@ -12110,7 +12095,7 @@
                         flo_comment)
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
-                        notify(`Transaction unsuccessfull.`, 'error');
+                        notify(`Transaction unsuccessful.`, 'error');
                         hidePopup()
                         return false;
                     }
@@ -12136,6 +12121,10 @@
                     notify('Failed to send withdraw request to cashier.', 'error');
                     return true;
                 }
+            
+                const user_withdraw_upi = document.getElementById('user_withdraw_upi'); 
+                user_withdraw_upi.value = get_user_payment_details();
+
             } catch (error) {
                 throw new Error(error)
             }
@@ -12424,9 +12413,11 @@
             }
         }
 
-        async function get_unconfirmed_balance(flo_id = '', token_balance = 0) {
+        async function get_unconfirmed_balance(flo_id='') {
             try {
                 let api = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressTransactions?floAddress=${flo_id}`;
+                let token_balance = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${flo_id}`);
+                token_balance = token_balance.balance;
                 let tokens_transfers_tx_list = await ajaxGet(api);
                 tokens_transfers_tx_list = Object.keys(tokens_transfers_tx_list.transactions);
                 let receiverID = floGlobals.adminID;
@@ -12465,7 +12456,7 @@
                 console.log(token_balance, unconfirmed_balance);
                 return unconfirmed_balance;
             } catch (error) {
-                notify('Failed to get unconfirmed rupee balance.', 'error')
+                notify('Failed to get rupee balance.', 'error')
                 throw new Error(error);
             }
         }
@@ -12492,29 +12483,33 @@
             }
         }
 
-        async function update_my_personal_data(upi_id) {
+        function get_user_payment_details() {
             try {
-                let senderIDs = [myFloID];
-                let receiverID = myFloID;
+                const pay_key = `pay_key_${myFloID}`;
+                var pay_id = localStorage.getItem(pay_key);
+                if(typeof pay_id !=='string' || pay_id.length<1) throw new Error('Invalid payment id.');
+                return pay_id;
+            } catch(error) {
+                notify('Please update your UPI or payment details in settings.', 'error', '', true);
+                throw new Error(error)
+            }
+        }
 
-                floGlobals.appObjects[token_app.master_configurations.TYPE_MY_PERSONAL_DATA][myFloID] = {
-                    myFloID, "myUPI": upi_id, "last_update": + new Date()
-                };
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_MY_PERSONAL_DATA,
-                    options = { receiverID, senderIDs });
+        async function update_my_payment_details(userUpi='') {
+            try {
+                
+                compactIDB.writeData('userUpis', userUpi, userUpi)   
 
-                await floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_MY_PERSONAL_DATA,
-                    options = { receiverID, senderIDs });
+                console.log(await compactIDB.readAllData('userUpis'))
+                // todo: validate upi_id
 
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_MY_PERSONAL_DATA,
-                    options = { receiverID, senderIDs });
+                /*const pay_key = `pay_key_${myFloID}`;
 
-                const sent_tokens_list = Object.keys(floGlobals.appObjects
-                [token_app.master_configurations.TYPE_MY_PERSONAL_DATA]);
+                localStorage.setItem(pay_key, payment_id);*/
 
-                notify('Personal information updated successfully.')
+                notify('Your payment details updated successfully.')
 
-                return sent_tokens_list;
+                return true;
 
             } catch (error) {
                 throw new Error(error);

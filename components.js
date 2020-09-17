@@ -211,6 +211,7 @@ border: none;
     border-radius: 0.3em;
     transition: opacity 0.3s;
     background: rgba(var(--text-color), 0.1);
+    box-shadow: 0 0 0 0.1em rgba(var(--text-color), 0.2) inset;
     font-family: var(--font-family);
     width: 100%
     outline: none;
@@ -1495,7 +1496,7 @@ customElements.define('sm-strip-select', class extends HTMLElement {
     set value(val) {
         this.setAttribute('value', val)
     }
-    scrollLeft() {
+    scrollLeft = () => {
         this.select.scrollBy({
             top: 0,
             left: -this.scrollDistance,
@@ -1503,7 +1504,7 @@ customElements.define('sm-strip-select', class extends HTMLElement {
         })
     }
 
-    scrollRight() {
+    scrollRight = () => {
         this.select.scrollBy({
             top: 0,
             left: this.scrollDistance,
@@ -1579,13 +1580,13 @@ customElements.define('sm-strip-select', class extends HTMLElement {
                 previousOption = firstElement;
             }
         });
-        this.nextArrow.addEventListener('click', this.scrollRight.bind(this))
-        this.previousArrow.addEventListener('click', this.scrollLeft.bind(this))
+        this.nextArrow.addEventListener('click', this.scrollRight)
+        this.previousArrow.addEventListener('click', this.scrollLeft)
     }
 
     disconnectedCallback() {
-        this.nextArrow.removeEventListener('click', this.scrollRight.bind(this))
-        this.previousArrow.removeEventListener('click', this.scrollLeft.bind(this))
+        this.nextArrow.removeEventListener('click', this.scrollRight)
+        this.previousArrow.removeEventListener('click', this.scrollLeft)
     }
 })
 
@@ -1687,7 +1688,7 @@ smPopup.innerHTML = `
     transition: opacity 0.3s ease;
 }
 :host(.stacked) .popup{
-    transform: scale(0.9) translateY(-1rem) !important;
+    transform: scale(0.9) translateY(-2rem) !important;
 }
 .popup{
     margin-bottom: 0.5rem;
@@ -1784,7 +1785,7 @@ customElements.define('sm-popup', class extends HTMLElement {
         this.allowClosing = false
     }
 
-    resumeScrolling() {
+    resumeScrolling = () => {
         const scrollY = document.body.style.top;
         window.scrollTo(0, parseInt(scrollY || '0') * -1);
         setTimeout(() => {
@@ -1792,15 +1793,26 @@ customElements.define('sm-popup', class extends HTMLElement {
         }, 300);
     }
 
-    show(pinned, popupStack) {
+    show = (pinned, popupStack) => {
+        if(popupStack)
+            this.popupStack = popupStack
+        if (this.popupStack && !this.hasAttribute('open')) {
+            this.popupStack.push({
+                popup: this,
+                permission: pinned
+            })
+            if (this.popupStack.items.length > 1){
+                this.popupStack.items[this.popupStack.items.length - 2].popup.classList.add('stacked')
+            }
+        }
         this.setAttribute('open', '')
         this.pinned = pinned
-        this.popupStack = popupStack
         this.popupContainer.classList.remove('hide')
         this.popup.style.transform = 'translateY(0)';
         document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
+        return this.popupStack
     }
-    hide() {
+    hide = () => {
         this.removeAttribute('open')
         if(window.innerWidth < 640)
             this.popup.style.transform = 'translateY(100%)';
@@ -1809,7 +1821,10 @@ customElements.define('sm-popup', class extends HTMLElement {
         this.popupContainer.classList.add('hide')
         if (typeof this.popupStack !== 'undefined') {
             this.popupStack.pop()
-            if (this.popupStack.items.length === 0) {
+            if (this.popupStack.items.length){
+                this.popupStack.items[this.popupStack.items.length - 1].popup.classList.remove('stacked')
+            }
+            else {
                 this.resumeScrolling()
             }
         }
@@ -1831,19 +1846,20 @@ customElements.define('sm-popup', class extends HTMLElement {
             new CustomEvent("popupclosed", {
                 bubbles: true,
                 detail: {
-                    popup: this
+                    popup: this,
+                    popupStack: this.popupStack
                 }
             })
         )
     }
 
-    handleTouchStart(e) {
+    handleTouchStart = (e) => {
         this.touchStartY = e.changedTouches[0].clientY
         this.popup.style.transition = 'initial'
         this.touchStartTime = e.timeStamp
     }
 
-    handleTouchMove(e) {
+    handleTouchMove = (e) => {
         e.preventDefault()
         if (this.touchStartY < e.changedTouches[0].clientY) {
             this.offset = e.changedTouches[0].clientY - this.touchStartY;
@@ -1854,8 +1870,8 @@ customElements.define('sm-popup', class extends HTMLElement {
             this.popup.style.transform = `translateY(-${this.offset}px)`
         }*/
     }
-
-    handleTouchEnd(e) {
+    
+    handleTouchEnd = (e) => {
         this.touchEndTime = e.timeStamp
         cancelAnimationFrame(this.touchEndAnimataion)
         this.touchEndY = e.changedTouches[0].clientY
@@ -1874,7 +1890,7 @@ customElements.define('sm-popup', class extends HTMLElement {
         }
     }
 
-    movePopup() {
+    movePopup = () => {
         this.popup.style.transform = `translateY(${this.offset}px)`
     }
 
@@ -1916,9 +1932,9 @@ customElements.define('sm-popup', class extends HTMLElement {
         })
     }
     disconnectedCallback() {
-        this.popupHeader.removeEventListener('touchstart', this.handleTouchStart.bind(this))
-        this.popupHeader.removeEventListener('touchmove', this.handleTouchMove.bind(this))
-        this.popupHeader.removeEventListener('touchend', this.handleTouchEnd.bind(this))
+        this.popupHeader.removeEventListener('touchstart', this.handleTouchStart)
+        this.popupHeader.removeEventListener('touchmove', this.handleTouchMove)
+        this.popupHeader.removeEventListener('touchend', this.handleTouchEnd)
     }
 })
 
@@ -2060,7 +2076,7 @@ customElements.define('sm-carousel', class extends HTMLElement {
         this.attachShadow({ mode: 'open' }).append(smCarousel.content.cloneNode(true))
     }
 
-    scrollLeft() {
+    scrollLeft = () => {
         this.carousel.scrollBy({
             top: 0,
             left: -this.scrollDistance,
@@ -2068,7 +2084,7 @@ customElements.define('sm-carousel', class extends HTMLElement {
         })
     }
 
-    scrollRight() {
+    scrollRight = () => {
         this.carousel.scrollBy({
             top: 0,
             left: this.scrollDistance,
@@ -2134,13 +2150,13 @@ customElements.define('sm-carousel', class extends HTMLElement {
                 this.scrollRight()
         })
 
-        this.nextArrow.addEventListener('click', this.scrollRight.bind(this))
-        this.previousArrow.addEventListener('click', this.scrollLeft.bind(this))
+        this.nextArrow.addEventListener('click', this.scrollRight)
+        this.previousArrow.addEventListener('click', this.scrollLeft)
     }
 
     disconnectedCallback() {
-        this.nextArrow.removeEventListener('click', this.scrollRight.bind(this))
-        this.previousArrow.removeEventListener('click', this.scrollLeft.bind(this))
+        this.nextArrow.removeEventListener('click', this.scrollRight)
+        this.previousArrow.removeEventListener('click', this.scrollLeft)
     }
 })
 
@@ -2285,14 +2301,14 @@ customElements.define('sm-notifications', class extends HTMLElement {
         this.shadow = this.attachShadow({ mode: 'open' }).append(smNotifications.content.cloneNode(true))
     }
 
-    handleTouchStart(e) {
+    handleTouchStart =(e) => {
         this.notification = e.target.closest('.notification')
         this.touchStartX = e.changedTouches[0].clientX
         this.notification.style.transition = 'initial'
         this.touchStartTime = e.timeStamp
     }
 
-    handleTouchMove(e) {
+    handleTouchMove = (e) => {
         e.preventDefault()
         if (this.touchStartX < e.changedTouches[0].clientX) {
             this.offset = e.changedTouches[0].clientX - this.touchStartX;
@@ -2304,7 +2320,7 @@ customElements.define('sm-notifications', class extends HTMLElement {
         }
     }
 
-    handleTouchEnd(e) {
+    handleTouchEnd = (e) => {
         this.notification.style.transition = 'transform 0.3s, opacity 0.3s'
         this.touchEndTime = e.timeStamp
         cancelAnimationFrame(this.touchEndAnimataion)
@@ -2334,11 +2350,11 @@ customElements.define('sm-notifications', class extends HTMLElement {
         this.notification.style.transform = `translateX(${this.offset}px)`
     }
 
-    resetPosition() {
+    resetPosition = () => {
         this.notification.style.transform = `translateX(0)`
     }
 
-    push(messageBody, type, pinned) {
+    push = (messageBody, type, pinned) => {
         let notification = document.createElement('div'),
             composition = ``
         notification.classList.add('notification')
@@ -2384,12 +2400,12 @@ customElements.define('sm-notifications', class extends HTMLElement {
         else {
             notification.setAttribute('style', `transform: translateY(0); opacity: 1`)
         }
-        notification.addEventListener('touchstart', this.handleTouchStart.bind(this))
-        notification.addEventListener('touchmove', this.handleTouchMove.bind(this))
-        notification.addEventListener('touchend', this.handleTouchEnd.bind(this))
+        notification.addEventListener('touchstart', this.handleTouchStart)
+        notification.addEventListener('touchmove', this.handleTouchMove)
+        notification.addEventListener('touchend', this.handleTouchEnd)
     }
 
-    removeNotification(notification, toLeft) {
+    removeNotification = (notification, toLeft) => {
         if (!this.offset)
             this.offset = 0;
 

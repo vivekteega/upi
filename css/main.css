@@ -431,6 +431,12 @@ sm-popup sm-input:not(:last-of-type) {
 sm-popup p {
   margin-block-end: 1rem;
 }
+sm-popup .action {
+  margin-top: 1.5rem;
+}
+sm-popup .action h4 {
+  padding: 0.8rem 1.6rem;
+}
 
 .popup-header {
   padding: 1.5rem;
