@@ -568,7 +568,6 @@ details p {
 #home_page .left {
   padding: 1.5rem 0;
   width: auto;
-  background: rgba(var(--text-color), 0.06);
   border-radius: 0.6rem;
 }
 #home_page .left h3, #home_page .left h4, #home_page .left p {
@@ -577,9 +576,6 @@ details p {
 #home_page .left h3 {
   font-size: 2rem;
   margin-bottom: 1rem;
-}
-#home_page sm-carousel::part(carousel) {
-  padding: 0 1.5rem;
 }
 #home_page .user-panel {
   margin: 0 1.5rem;
@@ -638,6 +634,12 @@ details p {
 .options-tab {
   margin: 1rem 0;
 }
+.options-tab > .grid {
+  min-width: 100vw;
+  padding: 0 1.5rem;
+  grid-auto-flow: column;
+  gap: 0.2rem;
+}
 .options-tab .option {
   position: relative;
   display: flex;
@@ -645,12 +647,12 @@ details p {
   align-items: center;
   text-align: center;
   border-radius: 0.4rem;
-  margin-right: 1rem;
   margin-bottom: 1rem;
   width: 5rem;
   min-width: 5rem;
   text-transform: capitalize;
   transition: transform 0.3s;
+  -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 }
 .options-tab .option .icon {
@@ -1007,6 +1009,7 @@ sm-panel {
   }
   #home_page .left, #deposit .left {
     grid-area: left;
+    background: rgba(var(--text-color), 0.06);
   }
 
   sm-select {
@@ -1076,6 +1079,17 @@ sm-panel {
     display: grid;
     gap: 1.5rem;
     grid-template-columns: minmax(0, 1fr) 24rem;
+  }
+
+  .options-tab > .grid {
+    gap: 1rem;
+    min-width: auto;
+  }
+  .options-tab .grid:first-of-type {
+    padding-right: 0;
+  }
+  .options-tab .grid:last-of-type {
+    padding-left: 0;
   }
 }
 @media only screen and (min-width: 800px) {

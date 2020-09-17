@@ -442,6 +442,7 @@ customElements.define('sm-input',
             if (oldValue !== newValue) {
                 if (name === 'placeholder')
                     this.shadowRoot.querySelector('.label').textContent = newValue;
+                    this.setAttribute('aria-label', newValue);
             }
         }
     })
@@ -1673,6 +1674,7 @@ smPopup.innerHTML = `
     box-sizing: border-box;
 } 
 :host{
+    position: fixed;
     display: grid;
 }
 .popup-container{
@@ -1684,8 +1686,8 @@ smPopup.innerHTML = `
     right: 0;
     place-items: center;
     background: rgba(0, 0, 0, 0.6);
-    z-index: 10;
     transition: opacity 0.3s ease;
+    z-index: 10;
 }
 :host(.stacked) .popup{
     transform: scale(0.9) translateY(-2rem) !important;
@@ -1944,41 +1946,41 @@ const smCarousel = document.createElement('template')
 smCarousel.innerHTML = `
 <style>
 *{
-padding: 0;
-margin: 0;
-box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 } 
 :host{
-display: flex;
+    display: flex;
 }
 .icon {
-position: absolute;
-display: flex;
-fill: none;
-height: 2.6rem;
-width: 2.6rem;
-border-radius: 3rem;
-padding: 0.9rem;
-stroke: rgba(var(--foreground-color), 0.8);
-stroke-width: 14;
-overflow: visible;
-stroke-linecap: round;
-stroke-linejoin: round;
-cursor: pointer;
-min-width: 0;
-background: rgba(var(--text-color), 1);
-box-shadow: 0 0.2rem 0.2rem #00000020, 
-            0 0.5rem 1rem #00000040; 
--webkit-tap-highlight-color: transparent;
-transform: scale(0);
-z-index: 1;
+    position: absolute;
+    display: flex;
+    fill: none;
+    height: 2.6rem;
+    width: 2.6rem;
+    border-radius: 3rem;
+    padding: 0.9rem;
+    stroke: rgba(var(--foreground-color), 0.8);
+    stroke-width: 14;
+    overflow: visible;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    cursor: pointer;
+    min-width: 0;
+    background: rgba(var(--text-color), 1);
+    box-shadow: 0 0.2rem 0.2rem #00000020, 
+                0 0.5rem 1rem #00000040; 
+    -webkit-tap-highlight-color: transparent;
+    transform: scale(0);
+    z-index: 1;
 }
 .hide{
-pointer-events: none;
-opacity: 0;
+    pointer-events: none;
+    opacity: 0;
 }
 .expand{
-transform: scale(1)
+    transform: scale(1)
 }
 .previous-item{
     left: 1rem;
@@ -1986,41 +1988,46 @@ transform: scale(1)
 .next-item{
     right: 1rem;
 }
-.left,.right{
-    pointer-events: none;
-    position: absolute;
-    width: 3rem;
-    height: 100%; 
-    transition: opacity 0.3s;
-    z-index: 1;
-}
-.left{
-    background: radial-gradient(closest-corner circle at -50%, rgba(var(--text-color), 0.3), transparent);
-}
-.right{
-    right: 0;
-    background: radial-gradient(farthest-side circle at 150%, rgba(var(--text-color), 0.3), transparent);
-}
 .carousel-container{
-position: relative;
-display: flex;
-width: 100%;
-align-items: center;
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
 }
 .carousel{
-display: flex;
-max-width: 100%;
-overflow: auto hidden;
-scroll-snap-type: x mandatory;
+    display: flex;
+    max-width: 100%;
+    width: 100%;
+    overflow: auto hidden;
+    scroll-snap-type: x mandatory;
+}
+.indicators{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: -1rem;
+    gap: 1rem;
+    width: 100%;
+}
+.dot{
+    position: relative;
+    padding: 0.2rem;
+    background: rgba(var(--text-color), 0.3);
+    border-radius: 1rem;
+    transition: 0.2s;
+}
+.dot.active{
+    transform: scale(1.5);
+    background: var(--accent-color);
 }
 slot::slotted(*){
-scroll-snap-align: center;
+    scroll-snap-align: center;
 }
 :host([align-items="start"]) slot::slotted(*){
-scroll-snap-align: start;
+    scroll-snap-align: start;
 }
 :host([align-items="center"]) slot::slotted(*){
-scroll-snap-align: center;
+    scroll-snap-align: center;
 }
 :host([align-items="end"]) slot::slotted(*){
 scroll-snap-align: end;
@@ -2054,19 +2061,18 @@ scroll-snap-align: end;
 }
 </style>
 <div class="carousel-container">
-<div class="left"></div>
-<svg class="icon previous-item" viewBox="4 0 64 64">
-<title>Previous</title>
-<polyline points="48.01 0.35 16.35 32 48.01 63.65"/>
-</svg>
-<div part="carousel" class="carousel">
-<slot></slot>
-</div>
-<svg class="icon next-item" viewBox="-6 0 64 64">
-<title>Next</title>
-<polyline points="15.99 0.35 47.65 32 15.99 63.65"/>
-</svg>
-<div class="right"></div>
+    <svg class="icon previous-item" viewBox="4 0 64 64">
+    <title>Previous</title>
+    <polyline points="48.01 0.35 16.35 32 48.01 63.65"/>
+    </svg>
+    <div part="carousel" class="carousel">
+    <slot></slot>
+    </div>
+    <svg class="icon next-item" viewBox="-6 0 64 64">
+    <title>Next</title>
+    <polyline points="15.99 0.35 47.65 32 15.99 63.65"/>
+    </svg>
+    <div class="indicators"></div>
 </div>
 `;
 
@@ -2074,6 +2080,10 @@ customElements.define('sm-carousel', class extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({ mode: 'open' }).append(smCarousel.content.cloneNode(true))
+    }
+
+    static get observedAttributes() {
+        return ['indicator']
     }
 
     scrollLeft = () => {
@@ -2098,32 +2108,50 @@ customElements.define('sm-carousel', class extends HTMLElement {
         this.carouselSlot = this.shadowRoot.querySelector('slot')
         this.nextArrow = this.shadowRoot.querySelector('.next-item')
         this.previousArrow = this.shadowRoot.querySelector('.previous-item')
-        this.nextGradient = this.shadowRoot.querySelector('.right')
-        this.previousGradient = this.shadowRoot.querySelector('.left')
+        this.indicatorsContainer = this.shadowRoot.querySelector('.indicators')
         this.carouselItems
+        this.indicators
+        this.showIndicator = false
         this.scrollDistance = this.carouselContainer.getBoundingClientRect().width / 3
-        const firstElementObserver = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) {
-                this.previousArrow.classList.remove('expand')
-                this.previousGradient.classList.add('hide')
-            }
-            else {
-                this.previousArrow.classList.add('expand')
-                this.previousGradient.classList.remove('hide')
-            }
-        }, {
-            root: this.carouselContainer,
-            threshold: 0.9
-        })
-        const lastElementObserver = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) {
-                this.nextArrow.classList.remove('expand')
-                this.nextGradient.classList.add('hide')
-            }
-            else {
-                this.nextArrow.classList.add('expand')
-                this.nextGradient.classList.remove('hide')
-            }
+        let frag = document.createDocumentFragment();
+        if (this.hasAttribute('indicator'))
+            this.showIndicator = true
+        
+        
+        let firstVisible = false,
+            lastVisible = false
+        const allElementsObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if(this.showIndicator)
+                    if (entry.isIntersecting) {
+                        this.indicators[parseInt(entry.target.attributes.rank.textContent)].classList.add('active')
+                    }
+                    else
+                        this.indicators[parseInt(entry.target.attributes.rank.textContent)].classList.remove('active')
+                if (!entry.target.previousElementSibling)
+                    if(entry.isIntersecting) {
+                        this.previousArrow.classList.remove('expand')
+                        firstVisible = true
+                    }
+                    else {
+                        this.previousArrow.classList.add('expand')
+                        firstVisible = false
+                    }
+                if (!entry.target.nextElementSibling)
+                    if(entry.isIntersecting) {
+                        this.nextArrow.classList.remove('expand')
+                        lastVisible = true
+                    }
+                    else {
+                        this.nextArrow.classList.add('expand')
+
+                        lastVisible = false
+                    }
+                if (firstVisible && lastVisible)
+                    this.indicatorsContainer.classList.add('hide')
+                else
+                    this.indicatorsContainer.classList.remove('hide')
+            })
         }, {
             root: this.carouselContainer,
             threshold: 0.9
@@ -2139,8 +2167,18 @@ customElements.define('sm-carousel', class extends HTMLElement {
 
         this.carouselSlot.addEventListener('slotchange', e => {
             this.carouselItems = this.carouselSlot.assignedElements()
-            firstElementObserver.observe(this.carouselItems[0])
-            lastElementObserver.observe(this.carouselItems[this.carouselItems.length - 1])
+            this.carouselItems.forEach(item => allElementsObserver.observe(item))
+            if(this.showIndicator){
+                this.indicatorsContainer.innerHTML = ``
+                this.carouselItems.forEach((item, index) => {
+                    let dot = document.createElement('div')
+                    dot.classList.add('dot')
+                    frag.append(dot)
+                    item.setAttribute('rank', index)
+                })
+                this.indicatorsContainer.append(frag)
+                this.indicators = this.indicatorsContainer.children
+            }
         })
 
         this.addEventListener('keyup', e => {
@@ -2152,6 +2190,15 @@ customElements.define('sm-carousel', class extends HTMLElement {
 
         this.nextArrow.addEventListener('click', this.scrollRight)
         this.previousArrow.addEventListener('click', this.scrollLeft)
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'indicator') {
+            if (this.hasAttribute('indicator'))
+                this.showIndicator = true
+            else
+                this.showIndicator = false
+        }
     }
 
     disconnectedCallback() {

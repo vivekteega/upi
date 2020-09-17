@@ -598,7 +598,6 @@ details{
     .left {
         padding: 1.5rem 0;
         width: auto;
-        background: rgba(var(--text-color), 0.06);
         border-radius: 0.6rem;
         h3, h4, p {
             padding: 0 1.5rem;
@@ -607,10 +606,6 @@ details{
             font-size: 2rem;
             margin-bottom: 1rem;
         }
-    }
-
-    sm-carousel::part(carousel) {
-        padding: 0 1.5rem;
     }
     .user-panel{
         margin: 0 1.5rem;
@@ -668,6 +663,12 @@ details{
 
 .options-tab {      
     margin: 1rem 0;
+    & > .grid{  
+        min-width: 100vw;
+        padding: 0 1.5rem;
+        grid-auto-flow: column;
+        gap: 0.2rem;
+    }
     .option {
         position: relative;
         display: flex;
@@ -675,12 +676,12 @@ details{
         align-items: center;
         text-align: center;
         border-radius: 0.4rem;
-        margin-right: 1rem;
         margin-bottom: 1rem;
         width: 5rem;
         min-width: 5rem;
         text-transform: capitalize;
         transition: transform 0.3s;
+        -webkit-tap-highlight-color: transparent;
         cursor: pointer;
         .icon {
             height: 3rem;
@@ -1082,6 +1083,7 @@ sm-panel{
         grid-template-columns: minmax(0, 1fr);
         .left {
             grid-area: left;
+            background: rgba(var(--text-color), 0.06);
         }
     }
 
@@ -1155,6 +1157,18 @@ sm-panel{
         display: grid;
         gap: 1.5rem;
         grid-template-columns: minmax(0, 1fr) 24rem;
+    }
+    .options-tab{
+        & > .grid{
+            gap: 1rem;
+            min-width: auto;
+        }
+        .grid:first-of-type{
+            padding-right: 0;
+        }
+        .grid:last-of-type{
+            padding-left: 0;
+        }
     }
 }
 
