@@ -344,22 +344,22 @@ customElements.define('sm-input',
             return this.shadowRoot.querySelector('input').checkValidity()
         }
 
-        focusIn() {
+        focusIn = () => {
             this.shadowRoot.querySelector('input').focus()
         }
 
-        focusOut() {
+        focusOut = () => {
             this.shadowRoot.querySelector('input').blur()
         }
 
-        preventNonNumericalInput(e) {
+        preventNonNumericalInput = (e) => {
             let keyCode = e.keyCode;
-            if (!((keyCode > 47 && keyCode < 56) || (keyCode > 36 && keyCode < 39) || (keyCode > 95 && keyCode < 104) || keyCode === 110 || (keyCode > 7 && keyCode < 19))) {
+            if (!((keyCode > 47 && keyCode < 56) || (keyCode > 36 && keyCode < 39) || (keyCode > 95 && keyCode < 106) || keyCode === 110 || (keyCode > 7 && keyCode < 19))) {
                 e.preventDefault();
             }
         }
 
-        fireEvent() {
+        fireEvent = () => {
             let event = new Event('input', {
                 bubbles: true,
                 cancelable: true,
@@ -368,7 +368,7 @@ customElements.define('sm-input',
             this.dispatchEvent(event);
         }
 
-        checkInput() {
+        checkInput = () => {
             if (!this.hasAttribute('placeholder') || this.getAttribute('placeholder') === '')
                 return;
             if (this.input.value !== '') {
@@ -407,6 +407,10 @@ customElements.define('sm-input',
             if (this.hasAttribute('required')) {
                 this.input.setAttribute('required', '')
             }
+            if (this.hasAttribute('min')) {
+                let minValue = this.getAttribute('min')
+                this.input.setAttribute('min', minValue)
+            }
             if (this.hasAttribute('pattern')) {
                 this.input.setAttribute('pattern', this.getAttribute('pattern'))
             }
@@ -420,6 +424,7 @@ customElements.define('sm-input',
             if (this.hasAttribute('type')) {
                 if (this.getAttribute('type') === 'number') {
                     this.input.setAttribute('inputmode', 'numeric')
+                    this.input.setAttribute('type', 'number')
                 }
                 else
                     this.input.setAttribute('type', this.getAttribute('type'))

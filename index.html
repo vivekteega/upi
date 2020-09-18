@@ -71,7 +71,12 @@
             *Requires Rupee to be deposited first.
         </p>
         <sm-input floId id="token_receiver" placeholder="Reciever's FLO ID" required animate></sm-input>
-        <sm-input id="token_amount" placeholder="Amount" type="number" min="1" required animate></sm-input>
+        <sm-input id="token_amount" placeholder="Amount" type="number" min="1" required animate>
+            <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                <title>rupee-symbol</title>
+                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+            </svg>
+        </sm-input>
         <button id="send_tokens_btn" class="action expand" type="submit" disabled>
             <h4 class="expand primary-btn">
                 Send
@@ -88,7 +93,7 @@
                 <line x1="64" y1="0" x2="0" y2="64" />
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
-            <h4>Deposit rupee</h4>
+            <h4>Deposit</h4>
         </header>
         <svg class="icon illustration" viewBox="0 0 64 64">
             <title>deposit</title>
@@ -103,9 +108,14 @@
         <sm-button onclick="showPopup('transaction_result')">result</sm-button>
         <section id="deposit_amount_section">
             <p>
-                Deposit rupee through UPI.
+                Add money through UPI.
             </p>
-            <sm-input id="token_amount_to_buy" placeholder="Amount" type="number" min="1" required animate></sm-input>
+            <sm-input id="token_amount_to_buy" placeholder="Amount" type="number" min="1" required animate>
+                <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                    <title>rupee-symbol</title>
+                    <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+                </svg>
+            </sm-input>
         </section>
         <section id="upi_txId_section" class="hide-completely">
             <p id="send_amount_to_deposit"></p>
@@ -154,7 +164,12 @@
         </p>
         <sm-input id="user_withdraw_upi" placeholder="Reciever's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+"
             required animate></sm-input>
-        <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" required animate></sm-input>
+        <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" required animate>
+            <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                <title>rupee-symbol</title>
+                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+            </svg>
+        </sm-input>
         <button id="withdraw_cash_btn" class="action expand" type="submit" disabled>
             <h4 class="primary-btn expand">
                 withdraw
@@ -181,7 +196,12 @@
             Request Rupee from other's using FLO address.
         </p>
         <sm-input floId id="requested_address" placeholder="Request from" required animate></sm-input>
-        <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" required animate></sm-input>
+        <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" required animate>
+            <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                <title>rupee-symbol</title>
+                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+            </svg>
+        </sm-input>
         <button id="request_rupee_btn" class="action expand" type="submit" disabled>
             <h4 class="primary-btn expand">
                 request
@@ -216,7 +236,12 @@
         </details>
         <p id="pay_cashier_info"></p>
         <sm-input floId id="recvr_id" placeholder="Reciever's FLO ID" required animaate></sm-input>
-        <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" required animate></sm-input>
+        <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" required animate>
+            <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                <title>rupee-symbol</title>
+                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+            </svg>
+        </sm-input>
         <sm-input id="paid_cashier_upi" placeholder="Sender's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" required
             animate></sm-input>
         <button id="cnf_cash_payment" class="action expand" type="submit" disabled>
@@ -331,7 +356,7 @@
                 <line y1="32.5" x2="19" y2="32.5" />
                 <line x1="7" y1="50" x2="26" y2="50" />
             </svg>
-            <h5>Activity</h5>
+            <h5>Transactions</h5>
         </div>
         <div title="helpline page" class="navbar-item helpline-option" id="helpline_page_btn"
             onclick="showPage(this, 'helpline_page')">
@@ -449,7 +474,7 @@
             <div class="left">
                 <h3>Transaction Requests</h3>
                 <sm-tab-header target="requests_to_cashier">
-                    <sm-tab>Deposits</sm-tab>
+                    <sm-tab></sm-tab>
                     <sm-tab>Withdrawals</sm-tab>
                     <sm-tab>Pay Through Cashier</sm-tab>
                 </sm-tab-header>
@@ -686,7 +711,7 @@
             </sm-tab-panels>
         </section>
         <section id="activity_page" class="page">
-            <h3>Activity</h3>
+            <h3>Transactions</h3>
             <p class="bottom-margin">*If your request isn't completed in 12hrs, use <strong>REPORT</strong> to get
                 assistance from our helpline.</p>
             <sm-tab-header target="user_activities">
@@ -754,6 +779,7 @@
                     <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
         </section>
     </main>
+    <script src="components.js"></script>
     <script id="floGlobals">
         /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
         const floGlobals = {
@@ -785,7 +811,6 @@
             generalVC: {}
         }
     </script>
-    <script src="components.js"></script>
     <script id="onLoadStartUp">
         const userFloIdContainers = document.querySelectorAll('.user-flo-id')
         function onLoadStartUp() {
@@ -794,9 +819,9 @@
             floDapps.launchStartUp().then(async result => {
                 console.log(`Welcome ${myFloID}`)
                 refresh_balance()
-                await token_app.actions.doShreeGanesh();
                 userFloIdContainers.forEach(container => container.textContent = myFloID)
                 hideLoader()
+                await token_app.actions.doShreeGanesh();
             }).catch(error => console.error(error))
         }
     </script>
@@ -1544,6 +1569,7 @@
                         }
                     }
             })
+
             let currentRequest = null;
             document.getElementById('activity_page').addEventListener('click', (e) => {
                 if (e.target.closest('.report')) {
@@ -11132,10 +11158,7 @@
                 {
                     "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
                         "upi_id": "8507742774@ybl"
-                    }
-                }`
-            /*
-            ,
+                    },
                     "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
                         "upi_id": "8340617958@ybl"
                     },
@@ -11151,7 +11174,7 @@
                     "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
                         "upi_id": "krishraj1012-2@okicici"
                     }
-            */
+                }`
             text = removeWhiteSpaces(text);
             return text;
             const master_data = await ajaxGet(
@@ -11233,14 +11256,6 @@
                 // fetch configs from master comment
                 await this.fetch_configs();
 
-                await this.retrieveLatestContent();
-
-                request_rupee_token();
-
-                withdraw_token_to_get_cash();
-
-                transferTokensManually();
-
                 const allCashierOptions = document.querySelectorAll('.cashier-option'),
                     allUserOptions = document.querySelectorAll('.user-option'),
                     allHelplineOptions = document.querySelectorAll('.helpline-option'),
@@ -11303,9 +11318,18 @@
                     userType.forEach(user => user.textContent = 'User')
                     showPage(document.getElementById('home_page_btn'), 'home_page')
                 }
+                
 
                 hidePopup()
 
+                await this.retrieveLatestContent();
+
+                request_rupee_token();
+
+                withdraw_token_to_get_cash();
+
+                transferTokensManually();
+                
                 pay_through_cashier();
             },
 
@@ -11602,7 +11626,6 @@
                     });
 
                     notify(`Transfer successful: ${flo_txid}`, 'success', true, true);
-
                     return true;
                 }
             } catch (error) {
@@ -12024,7 +12047,7 @@
                         document.getElementById('deposit_amount_section').classList.add('hide-completely')
                         depositedRupeeTxId.disabled = false
                         request_tokens_btn.disabled = true
-                        request_tokens_btn.children[0].textContent = 'Deposit'
+                        request_tokens_btn.children[0].textContent = 'Request'
                     }
                     if (depositRequested === 1) {
                         btnLoading('request_tokens_btn', 'start')

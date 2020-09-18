@@ -16,9 +16,10 @@ body {
     --foreground-color: 255, 255, 255;
     --background-color: #e8e8e8;
     --dark-shade: #dadada;
-    background: var(--foreground-color);
+    background: linear-gradient(rgba(var(--foreground-color), 0.1), rgba(var(--foreground-color), 0.3)),url(back.svg) no-repeat fixed;
     color: rgba(var(--text-color), 1);
     font-size: 16px;
+    background-size: cover;
 }
 
 a {
@@ -1075,6 +1076,12 @@ sm-panel{
     }
 }
 
+.rupee-symbol{
+    height: 1rem;
+    width: 1rem;
+    fill: rgba(var(--text-color), 0.5);
+}
+
 @media only screen and (max-width: 640px) {
     #home_page, #deposit{
         display: grid;
@@ -1097,7 +1104,9 @@ sm-panel{
         padding: 0 2rem;
         margin-left: 6rem;
     }
-
+    sm-popup{
+        background: rgba(var(--foreground-color), 1);
+    }
     sm-popup::part(popup){
         width: 24rem;
     }
@@ -1152,12 +1161,6 @@ sm-panel{
             display: inline-flex;
         }
     }
-
-    #home_page, #deposit {
-        display: grid;
-        gap: 1.5rem;
-        grid-template-columns: minmax(0, 1fr) 24rem;
-    }
     .options-tab{
         & > .grid{
             gap: 1rem;
@@ -1199,6 +1202,11 @@ sm-panel{
     .user-panel{
         position: sticky;
         top: 1.5rem;
+    }
+    #home_page, #deposit {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: minmax(0, 1fr) 24rem;
     }
 }
 
