@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blockchain UPI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
 </head>
 
@@ -14,262 +16,292 @@
         <source src="https://rmservices.duckdns.org/files/notification-sound.mp3" type="audio/mpeg">
         <source src="https://rmservices.duckdns.org/files/notification-sound.ogg" type="audio/ogg">
     </audio>
-    <div class="popup-container hide">
-        <div id="confirmation" class="popup">
-            <p id="confirm_message"></p>
-            <div class="btns">
-                <button class="hover cancel-btn">Cancel</button>
-                <button class="hover submit-btn">OK</button>
-            </div>
+    <sm-popup id="confirmation">
+        <p id="confirm_message"></p>
+        <div class="btns">
+            <button class="hover cancel-btn">Cancel</button>
+            <button class="hover submit-btn">OK</button>
         </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="prompt" class="popup">
-            <h4 id="prompt_message">Some input required</h4>
-            <label class="input">
-                <input id="prompt_field" type="text">
-            </label>
-            <div class="btns">
-                <button class="hover cancel-btn">Cancel</button>
-                <button class="hover submit-btn">Ok</button>
-            </div>
+    </sm-popup>
+    <sm-popup id="prompt">
+        <h4 id="prompt_message">Some input required</h4>
+        <sm-input id="prompt_field"></sm-input>
+        <div class="btns">
+            <button class="hover cancel-btn">Cancel</button>
+            <button class="hover submit-btn">Ok</button>
         </div>
-    </div>
+    </sm-popup>
     <sm-notifications id="show_message"></sm-notifications>
     <!-- Loading screen-->
-    <div class="popup-container solid-background hide">
-        <div id="main_loader" class="popup">
-            <svg id="loader" viewBox="0 0 73 73">
-                <title>Loader</title>
+    <section id="main_loader" class="grid hide-completely">
+        <svg id="loader" viewBox="0 0 73 73">
+            <title>Loader</title>
+            <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+        </svg>
+        <h4 id="tip_container">Loading Blockchain UPI </h4>
+        <sm-button onclick="signOut()">Sign Out</sm-button>
+    </section>
+    <!-- Sign in popup-->
+    <sm-popup id="sign_in_popup">
+        <div class="container-header">
+            <h3>Sign In</h3>
+        </div>
+        <h4 class="expand light-text">Welcome to RanchiMall Blockchain UPI.<br>Please enter your FLO private key to
+            continue.</h4>
+        <sm-input id="get_priv_key_field" placeholder="Private Key" type="password" required animate></sm-input>
+        <button id="sign_in_btn" class="primary-btn expand" type="submit" disabled>
+            Sign In
+        </button>
+    </sm-popup>
+    <sm-popup id="cash_transfer">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Send Rupee</h4>
+        </header>
+        <svg class="icon illustration" viewBox="0 0 64 64">
+            <path
+                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+        </svg>
+        <p>
+            Send rupee to any FLO address.<br>
+            *Requires Rupee to be deposited first.
+        </p>
+        <sm-input floId id="token_receiver" placeholder="Reciever's FLO ID" required animate></sm-input>
+        <sm-input id="token_amount" placeholder="Amount" type="number" min="1" required animate>
+            <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                <title>rupee-symbol</title>
+                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+            </svg>
+        </sm-input>
+        <button id="send_tokens_btn" class="action expand" type="submit" disabled>
+            <h4 class="expand primary-btn">
+                Send
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
                 <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
             </svg>
-            <h4 id="tip_container">Loading Blockchain UPI </h4>
-            <sm-button onclick="signOut()">Reset</sm-button>
-        </div>
-    </div>
-    <!-- Sign in popup-->
-    <div class="popup-container solid-background hide">
-        <div id="sign_in_popup" class="popup">
-            <div class="container-header">
-                <h3>Sign In</h3>
-            </div>
-            <h4 class="expand light-text">Welcome to RanchiMall Blockchain UPI.<br>Please enter your FLO private key to
-                continue.</h4>
-            <form class="expand" autocomplete="off" onsubmit="return false">
-                <label class="input">
-                    <input id="get_priv_key_field" type="password" minlength="40" required>
-                    <div class="placeholder">Private Key</div>
-                </label>
-                <button id="sign_in_btn" class="primary-btn expand" type="submit" disabled>
-                    Sign In
-                </button>
-            </form>
-        </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="cash_transfer" class="popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
-                </svg>
-                <h4>Send Rupee</h4>
-                <button id="send_tokens_btn" class="action expand" type="submit" disabled>
-                    <h4 class="expand primary-btn">
-                        Send
-                    </h4>
-                    <svg viewBox="0 0 73 73" class="loader">
-                        <path
-                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                    </svg>
-                </button>
-            </div>
+        </button>
+    </sm-popup>
+    <sm-popup id="deposit_rupee">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Deposit</h4>
+        </header>
+        <svg class="icon illustration" viewBox="0 0 64 64">
+            <title>deposit</title>
+            <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
+            <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
+            <path
+                d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+            <path
+                d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+            <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
+        </svg>
+        <sm-button onclick="showPopup('transaction_result')">result</sm-button>
+        <section id="deposit_amount_section">
             <p>
-                Send Rupees to any FLO address.<br>
-                *Requires Rupee to be deposited first.
+                Add money through UPI.
             </p>
-            <form autocomplete="off" onsubmit="return false">
-                <label class="input">
-                    <input floId id="token_receiver" type="text" required>
-                    <div class="placeholder">Reciever's FLO ID</div>
-                </label>
-                <label class="input">
-                    <input id="token_amount" inputmode="numeric" type="number" min="1" required>
-                    <div class="placeholder">Amount</div>
-                </label>
-            </form>
-        </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="deposit_rupee" class="popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
+            <sm-input id="token_amount_to_buy" placeholder="Amount" type="number" min="1" required animate>
+                <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                    <title>rupee-symbol</title>
+                    <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
                 </svg>
-                <h4>Deposit rupee</h4>
-                <button id="request_tokens_btn" class="action expand" type="submit" disabled>
-                    <h4 class="primary-btn expand">
-                        Continue
-                    </h4>
-                    <svg viewBox="0 0 73 73" class="loader">
-                        <path
-                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                    </svg>
-                </button>
-            </div>
-            <form id="deposit_amount_section" autocomplete="off" onsubmit="return false">
-                <p>
-                    Deposit rupee through UPI to use as digital currency powered by FLO blockchain.
-                </p>
-                <label class="input">
-                    <input id="token_amount_to_buy" inputmode="numeric" type="number" min="1" required>
-                    <div class="placeholder">Amount</div>
-                </label>
-            </form>
-            <form id="upi_txId_section" class="hide-completely top-padding" autocomplete="off" onsubmit="return false">
-                <p id="send_amount_to_deposit"></p>
-                <div class="copy-row">
-                    <h4 id="send_cash_to_deposit" class="copy"></h4>
-                    <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                        <title>Copy</title>
-                        <rect x="16" y="16" width="48" height="48" rx="6" />
-                        <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                    </svg>
-                </div>
-                <label class="input">
-                    <input id="deposited_rupee_txid" pattern="^[a-zA-z0-9]+" type="text" disabled required>
-                    <div class="placeholder">Transaction Id of the deposited amount</div>
-                </label>
-            </form>
-        </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="withdraw_rupee" class="popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
+            </sm-input>
+        </section>
+        <section id="upi_txId_section" class="hide-completely">
+            <p id="send_amount_to_deposit"></p>
+            <div class="copy-row">
+                <h4 id="send_cash_to_deposit" class="copy"></h4>
+                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                    <title>Copy</title>
+                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
                 </svg>
-                <h4>Withdraw rupee</h4>
-                <button id="withdraw_cash_btn" class="action expand" type="submit" disabled>
-                    <h4 class="primary-btn expand">
-                        withdraw
-                    </h4>
-                    <svg viewBox="0 0 73 73" class="loader">
-                        <path
-                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                    </svg>
-                </button>
             </div>
-            <p>
-                Withdraw or redeem your Rupee back to your specified UPI address.
-            </p>
-            <form autocomplete="off" onsubmit="return false">
-                <label class="input">
-                    <input id="user_withdraw_upi" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" type="text" required>
-                    <div class="placeholder">Reciever's UPI address</div>
-                </label>
-                <label class="input">
-                    <input id="withdraw_cash_amount" type="number" min="1" inputmode="numeric" required>
-                    <div class="placeholder">amount</div>
-                </label>
-            </form>
-        </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="request_rupee" class="popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
-                </svg>
-                <h4>Request rupee</h3>
-                    <button id="request_rupee_btn" class="action expand" type="submit" disabled>
-                        <h4 class="primary-btn expand">
-                            request
-                        </h4>
-                        <svg viewBox="0 0 73 73" class="loader">
-                            <path
-                                d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                        </svg>
-                    </button>
-            </div>
-            <p>
-                Request Rupee from other's using FLO address.
-            </p>
-            <form autocomplete="off" onsubmit="return false">
-                <label class="input">
-                    <input floId id="requested_address" minlength="20" type="text" required>
-                    <div class="placeholder">Request from</div>
-                </label>
-                <label class="input">
-                    <input id="requested_amount" type="number" min="1" inputmode="numeric" required>
-                    <div class="placeholder">amount</div>
-                </label>
-            </form>
-        </div>
-    </div>
-    <div class="popup-container hide">
-        <div id="pay_anyone" class="popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
-                </svg>
-                <h4>Pay through cashier</h4>
-                <button id="cnf_cash_payment" class="action expand" type="submit" disabled>
-                    <h4 class="primary-btn expand">
-                        pay
-                    </h4>
-                    <svg viewBox="0 0 73 73" class="loader">
-                        <path
-                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                    </svg>
-                </button>
-            </div>
+            <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" pattern="^[a-zA-z0-9]+" disabled
+                required animate></sm-input>
+        </section>
+        <button id="request_tokens_btn" class="action expand" type="submit" disabled>
+            <h4 class="primary-btn expand">
+                Continue
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
+                <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+        </button>
+    </sm-popup>
+    <sm-popup id="withdraw_rupee">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Withdraw rupee</h4>
+        </header>
+        <svg class="icon illustration" viewBox="0 0 64 64">
+            <title>withdraw</title>
+            <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
+            <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
+            <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
+            <path
+                d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+            <path
+                d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+            <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
+        </svg>
+        <p>
+            Withdraw or redeem your Rupee back to your specified UPI address.
+        </p>
+        <sm-input id="user_withdraw_upi" placeholder="Reciever's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+"
+            required animate></sm-input>
+        <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" required animate>
+            <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                <title>rupee-symbol</title>
+                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+            </svg>
+        </sm-input>
+        <button id="withdraw_cash_btn" class="action expand" type="submit" disabled>
+            <h4 class="primary-btn expand">
+                withdraw
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
+                <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+        </button>
+    </sm-popup>
+    <sm-popup id="request_rupee">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Request rupee</h3>
+        </header>
+        <svg class="icon request-icon illustration" viewBox="0 0 64 64">
+            <path
+                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+        </svg>
+        <p>
+            Request Rupee from other's using FLO address.
+        </p>
+        <sm-input floId id="requested_address" placeholder="Request from" required animate></sm-input>
+        <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" required animate>
+            <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                <title>rupee-symbol</title>
+                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+            </svg>
+        </sm-input>
+        <button id="request_rupee_btn" class="action expand" type="submit" disabled>
+            <h4 class="primary-btn expand">
+                request
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
+                <path
+                    d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+        </button>
+    </sm-popup>
+    <sm-popup id="pay_anyone">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Pay through cashier</h4>
+        </header>
+        <svg class="icon illustration" viewBox="0 0 64 64">
+            <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
+            <rect height="64" width="64" rx="8"></rect>
+        </svg>
+        <details>
+            <summary>
+                What is this?
+            </summary>
             <p>
                 Don't have enough Rupee balance? Pay to our cashier through UPI and your cash will be
                 sent as Rupee.
             </p>
-            <p id="pay_cashier_info"></p>
-            <form autocomplete="off" onsubmit="return false">
-                <label class="input">
-                    <input floId id="recvr_id" type="text" required>
-                    <div class="placeholder">Reciever's FLO ID</div>
-                </label>
-                <label class="input">
-                    <input id="recvr_amount_to_pay" type="number" min="1" inputmode="numeric" required>
-                    <div class="placeholder">Amount</div>
-                </label>
-                <label class="input">
-                    <input id="paid_cashier_upi" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" type="text" required>
-                    <div class="placeholder">Sender's UPI address</div>
-                </label>
-            </form>
-        </div>
-    </div>
-    <!-- Report popup-->
-    <div class="popup-container hide">
-        <div class="popup" id="report_popup">
-            <div class="container-header">
-                <svg class="icon" onclick="hidePopup()" viewBox="0 0 64 64">
-                    <title>close</title>
-                    <line x1="64" y1="0" x2="0" y2="64" />
-                    <line x1="64" y1="64" x2="0" y2="0" />
+        </details>
+        <p id="pay_cashier_info"></p>
+        <sm-input floId id="recvr_id" placeholder="Reciever's FLO ID" required animaate></sm-input>
+        <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" required animate>
+            <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                <title>rupee-symbol</title>
+                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+            </svg>
+        </sm-input>
+        <sm-input id="paid_cashier_upi" placeholder="Sender's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" required
+            animate></sm-input>
+        <button id="cnf_cash_payment" class="action expand" type="submit" disabled>
+            <h4 class="primary-btn expand">
+                pay
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
+                <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+        </button>
+    </sm-popup>
+    <sm-popup id="transaction_result">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+        </header>
+        <section id="success_section" class="flex direction-column">            
+            <svg id="success_svg" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                <title>success</title>
+                <ellipse cx="32" cy="32" rx="31.5" ry="31.49"/>
+                <polyline points="17.04 30.48 27.92 41.36 46.96 22.32"/>
+            </svg>
+            <h4>Transaction Successful</h4>
+            <div class="copy-row">
+                <h4 id="successful_transaction_id" class="copy"></h4>
+                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                    <title>Copy</title>
+                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
                 </svg>
-                <h4>Report</h4>
-                <button id="report_btn" class="primary-btn">report</button>
             </div>
-            <textarea name="complaint" placeholder="Please describe issue in detail." id="complaint_field"
-                rows="10"></textarea>
-        </div>
-    </div>
+        </section>
+        <section id="failure_section" class="hide-completely flex direction-column">
+            <svg id="failure_svg" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                <title>failure</title>
+                <ellipse cx="32" cy="32" rx="31.5" ry="31.49"/>
+                <line x1="22.5" y1="22.5" x2="41.5" y2="41.5"/>
+                <line x1="41.5" y1="22.5" x2="22.5" y2="41.5"/>
+            </svg>
+            <h4>Transaction Failed</h4>
+        </section>
+        <p id="transaction_message"></p>
+    </sm-popup>
+    <!-- Report popup-->
+    <sm-popup id="report_popup">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Report</h4>
+        </header>
+        <textarea name="complaint" placeholder="Please describe issue in detail." id="complaint_field"
+            rows="10"></textarea>
+        <button id="report_btn" class="primary-btn">report</button>
+    </sm-popup>
 
     <header id="main_header" class="flex hide-completely">
         <svg viewBox="0 0 180 105.7" class="hide-completely">
@@ -310,13 +342,9 @@
             <h5>Home</h5>
         </div>
         <div title="requests page" class="navbar-item user-option" onclick="showPage(this, 'request_page')">
-            <svg class="icon" viewBox="0 0 64 64">
-                <title>request</title>
+            <svg class="icon request-icon" viewBox="0 0 64 64">
                 <path
-                    d="M24,26.19a8.67,8.67,0,0,1-.24-3.61,8.34,8.34,0,0,1,16.59,1.27c0,8.35-8.66,8.16-8.34,11.58,0,.09,0,4.73,0,4.73" />
-                <line x1="32" y1="47.08" x2="32" y2="48.99" />
-                <path
-                    d="M32,.5h0A31.5,31.5,0,0,1,63.5,32v0A31.5,31.5,0,0,1,32,63.5H2.48a2,2,0,0,1-2-2V32A31.5,31.5,0,0,1,32,.5Z" />
+                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
             </svg>
             <h5>requests</h5>
         </div>
@@ -328,7 +356,7 @@
                 <line y1="32.5" x2="19" y2="32.5" />
                 <line x1="7" y1="50" x2="26" y2="50" />
             </svg>
-            <h5>Activity</h5>
+            <h5>Transactions</h5>
         </div>
         <div title="helpline page" class="navbar-item helpline-option" id="helpline_page_btn"
             onclick="showPage(this, 'helpline_page')">
@@ -346,8 +374,12 @@
         <div title="profile page" class="navbar-item" onclick="showPage(this, 'settings_page')">
             <svg class="icon" viewBox="0 0 64 64">
                 <title>settings</title>
-                <path d="M41,62.92a1.7,1.7,0,0,1-1.45-.83L37,57.7a2.63,2.63,0,0,0-2.27-1.34h-.26a23.91,23.91,0,0,1-5,0h-.26A2.63,2.63,0,0,0,27,57.7l-2.54,4.39a1.67,1.67,0,0,1-1.44.83,1.72,1.72,0,0,1-.83-.22L10.33,55.86a1.67,1.67,0,0,1-.61-2.27l2.54-4.41a2.61,2.61,0,0,0-.12-2.85A23.77,23.77,0,0,1,9.65,42,2.65,2.65,0,0,0,7.24,40.5H2.17A1.67,1.67,0,0,1,.5,38.83V25.17A1.67,1.67,0,0,1,2.17,23.5H7.24A2.64,2.64,0,0,0,9.65,22a25,25,0,0,1,2.49-4.31,2.63,2.63,0,0,0,.12-2.85l-2.54-4.4a1.67,1.67,0,0,1,.61-2.27L22.17,1.3A1.72,1.72,0,0,1,23,1.08a1.67,1.67,0,0,1,1.44.83L27,6.3a2.63,2.63,0,0,0,2.27,1.34h.26a23.91,23.91,0,0,1,5,0h.26A2.63,2.63,0,0,0,37,6.3l2.53-4.39A1.7,1.7,0,0,1,41,1.08a1.72,1.72,0,0,1,.83.22L53.67,8.14a1.67,1.67,0,0,1,.61,2.27l-2.54,4.41a2.61,2.61,0,0,0,.12,2.85A24.46,24.46,0,0,1,54.35,22a2.65,2.65,0,0,0,2.41,1.52h5.07a1.67,1.67,0,0,1,1.67,1.67V38.83a1.67,1.67,0,0,1-1.67,1.67H56.76A2.63,2.63,0,0,0,54.35,42a24.63,24.63,0,0,1-2.49,4.31,2.63,2.63,0,0,0-.12,2.85l2.54,4.4a1.68,1.68,0,0,1-.61,2.27L41.83,62.7A1.72,1.72,0,0,1,41,62.92Z"/>
-                <path d="M23,1.58h0a1.16,1.16,0,0,1,1,.58l2.54,4.39a3.14,3.14,0,0,0,2.7,1.59l.31,0C30.37,8,31.19,8,32,8s1.63,0,2.44.12l.31,0a3.14,3.14,0,0,0,2.7-1.59L40,2.16a1.16,1.16,0,0,1,1-.58,1.1,1.1,0,0,1,.58.16L53.42,8.57a1.16,1.16,0,0,1,.42,1.59L51.3,14.57a3.15,3.15,0,0,0,.15,3.4,23.69,23.69,0,0,1,2.45,4.21A3.12,3.12,0,0,0,56.76,24h5.07A1.17,1.17,0,0,1,63,25.17V38.83A1.17,1.17,0,0,1,61.83,40H56.76a3.11,3.11,0,0,0-2.86,1.82,24.33,24.33,0,0,1-2.44,4.23,3.11,3.11,0,0,0-.15,3.39l2.53,4.4a1.13,1.13,0,0,1,.12.88,1.17,1.17,0,0,1-.54.71L41.58,62.26a1.08,1.08,0,0,1-.58.16,1.16,1.16,0,0,1-1-.58l-2.54-4.39a3.14,3.14,0,0,0-2.7-1.59l-.31,0C33.63,56,32.81,56,32,56s-1.63,0-2.44-.12l-.31,0a3.14,3.14,0,0,0-2.7,1.59L24,61.84a1.16,1.16,0,0,1-1,.58,1.1,1.1,0,0,1-.58-.16L10.58,55.43a1.16,1.16,0,0,1-.42-1.59l2.54-4.41a3.15,3.15,0,0,0-.15-3.4,23.69,23.69,0,0,1-2.45-4.21A3.12,3.12,0,0,0,7.24,40H2.17A1.17,1.17,0,0,1,1,38.83V25.17A1.17,1.17,0,0,1,2.17,24H7.24a3.11,3.11,0,0,0,2.86-1.82A24.33,24.33,0,0,1,12.54,18a3.11,3.11,0,0,0,.15-3.39l-2.53-4.4a1.16,1.16,0,0,1,.42-1.59L22.42,1.74A1.08,1.08,0,0,1,23,1.58m0-1a2.11,2.11,0,0,0-1.08.29L10.08,7.7a2.17,2.17,0,0,0-.79,3l2.54,4.4a2.15,2.15,0,0,1-.1,2.31,24.92,24.92,0,0,0-2.54,4.4A2.13,2.13,0,0,1,7.24,23H2.17A2.17,2.17,0,0,0,0,25.17V38.83A2.17,2.17,0,0,0,2.17,41H7.24a2.13,2.13,0,0,1,1.95,1.23,25.25,25.25,0,0,0,2.55,4.39,2.13,2.13,0,0,1,.09,2.31L9.29,53.34a2.17,2.17,0,0,0,.79,3l11.84,6.83a2.11,2.11,0,0,0,1.08.29,2.17,2.17,0,0,0,1.88-1.08L27.41,58a2.14,2.14,0,0,1,1.84-1.09h.21a24.88,24.88,0,0,0,5.08,0h.21A2.14,2.14,0,0,1,36.59,58l2.53,4.39A2.17,2.17,0,0,0,41,63.42a2.11,2.11,0,0,0,1.08-.29L53.92,56.3a2.17,2.17,0,0,0,.79-3l-2.54-4.4a2.15,2.15,0,0,1,.1-2.31,24.92,24.92,0,0,0,2.54-4.4A2.13,2.13,0,0,1,56.76,41h5.07A2.17,2.17,0,0,0,64,38.83V25.17A2.17,2.17,0,0,0,61.83,23H56.76a2.13,2.13,0,0,1-1.95-1.23,25.25,25.25,0,0,0-2.55-4.39,2.13,2.13,0,0,1-.09-2.31l2.54-4.41a2.17,2.17,0,0,0-.79-3L42.08.87A2.11,2.11,0,0,0,41,.58a2.17,2.17,0,0,0-1.88,1.08L36.59,6.05a2.14,2.14,0,0,1-1.84,1.09h-.21a24.88,24.88,0,0,0-5.08,0h-.21a2.14,2.14,0,0,1-1.84-1.09L24.88,1.66A2.17,2.17,0,0,0,23,.58Z"/><circle class="a" cx="32" cy="32" r="11.5"/><path d="M32,21A11,11,0,1,1,21,32,11,11,0,0,1,32,21m0-1A12,12,0,1,0,44,32,12,12,0,0,0,32,20Z"/>
+                <path
+                    d="M41,62.92a1.7,1.7,0,0,1-1.45-.83L37,57.7a2.63,2.63,0,0,0-2.27-1.34h-.26a23.91,23.91,0,0,1-5,0h-.26A2.63,2.63,0,0,0,27,57.7l-2.54,4.39a1.67,1.67,0,0,1-1.44.83,1.72,1.72,0,0,1-.83-.22L10.33,55.86a1.67,1.67,0,0,1-.61-2.27l2.54-4.41a2.61,2.61,0,0,0-.12-2.85A23.77,23.77,0,0,1,9.65,42,2.65,2.65,0,0,0,7.24,40.5H2.17A1.67,1.67,0,0,1,.5,38.83V25.17A1.67,1.67,0,0,1,2.17,23.5H7.24A2.64,2.64,0,0,0,9.65,22a25,25,0,0,1,2.49-4.31,2.63,2.63,0,0,0,.12-2.85l-2.54-4.4a1.67,1.67,0,0,1,.61-2.27L22.17,1.3A1.72,1.72,0,0,1,23,1.08a1.67,1.67,0,0,1,1.44.83L27,6.3a2.63,2.63,0,0,0,2.27,1.34h.26a23.91,23.91,0,0,1,5,0h.26A2.63,2.63,0,0,0,37,6.3l2.53-4.39A1.7,1.7,0,0,1,41,1.08a1.72,1.72,0,0,1,.83.22L53.67,8.14a1.67,1.67,0,0,1,.61,2.27l-2.54,4.41a2.61,2.61,0,0,0,.12,2.85A24.46,24.46,0,0,1,54.35,22a2.65,2.65,0,0,0,2.41,1.52h5.07a1.67,1.67,0,0,1,1.67,1.67V38.83a1.67,1.67,0,0,1-1.67,1.67H56.76A2.63,2.63,0,0,0,54.35,42a24.63,24.63,0,0,1-2.49,4.31,2.63,2.63,0,0,0-.12,2.85l2.54,4.4a1.68,1.68,0,0,1-.61,2.27L41.83,62.7A1.72,1.72,0,0,1,41,62.92Z" />
+                <path
+                    d="M23,1.58h0a1.16,1.16,0,0,1,1,.58l2.54,4.39a3.14,3.14,0,0,0,2.7,1.59l.31,0C30.37,8,31.19,8,32,8s1.63,0,2.44.12l.31,0a3.14,3.14,0,0,0,2.7-1.59L40,2.16a1.16,1.16,0,0,1,1-.58,1.1,1.1,0,0,1,.58.16L53.42,8.57a1.16,1.16,0,0,1,.42,1.59L51.3,14.57a3.15,3.15,0,0,0,.15,3.4,23.69,23.69,0,0,1,2.45,4.21A3.12,3.12,0,0,0,56.76,24h5.07A1.17,1.17,0,0,1,63,25.17V38.83A1.17,1.17,0,0,1,61.83,40H56.76a3.11,3.11,0,0,0-2.86,1.82,24.33,24.33,0,0,1-2.44,4.23,3.11,3.11,0,0,0-.15,3.39l2.53,4.4a1.13,1.13,0,0,1,.12.88,1.17,1.17,0,0,1-.54.71L41.58,62.26a1.08,1.08,0,0,1-.58.16,1.16,1.16,0,0,1-1-.58l-2.54-4.39a3.14,3.14,0,0,0-2.7-1.59l-.31,0C33.63,56,32.81,56,32,56s-1.63,0-2.44-.12l-.31,0a3.14,3.14,0,0,0-2.7,1.59L24,61.84a1.16,1.16,0,0,1-1,.58,1.1,1.1,0,0,1-.58-.16L10.58,55.43a1.16,1.16,0,0,1-.42-1.59l2.54-4.41a3.15,3.15,0,0,0-.15-3.4,23.69,23.69,0,0,1-2.45-4.21A3.12,3.12,0,0,0,7.24,40H2.17A1.17,1.17,0,0,1,1,38.83V25.17A1.17,1.17,0,0,1,2.17,24H7.24a3.11,3.11,0,0,0,2.86-1.82A24.33,24.33,0,0,1,12.54,18a3.11,3.11,0,0,0,.15-3.39l-2.53-4.4a1.16,1.16,0,0,1,.42-1.59L22.42,1.74A1.08,1.08,0,0,1,23,1.58m0-1a2.11,2.11,0,0,0-1.08.29L10.08,7.7a2.17,2.17,0,0,0-.79,3l2.54,4.4a2.15,2.15,0,0,1-.1,2.31,24.92,24.92,0,0,0-2.54,4.4A2.13,2.13,0,0,1,7.24,23H2.17A2.17,2.17,0,0,0,0,25.17V38.83A2.17,2.17,0,0,0,2.17,41H7.24a2.13,2.13,0,0,1,1.95,1.23,25.25,25.25,0,0,0,2.55,4.39,2.13,2.13,0,0,1,.09,2.31L9.29,53.34a2.17,2.17,0,0,0,.79,3l11.84,6.83a2.11,2.11,0,0,0,1.08.29,2.17,2.17,0,0,0,1.88-1.08L27.41,58a2.14,2.14,0,0,1,1.84-1.09h.21a24.88,24.88,0,0,0,5.08,0h.21A2.14,2.14,0,0,1,36.59,58l2.53,4.39A2.17,2.17,0,0,0,41,63.42a2.11,2.11,0,0,0,1.08-.29L53.92,56.3a2.17,2.17,0,0,0,.79-3l-2.54-4.4a2.15,2.15,0,0,1,.1-2.31,24.92,24.92,0,0,0,2.54-4.4A2.13,2.13,0,0,1,56.76,41h5.07A2.17,2.17,0,0,0,64,38.83V25.17A2.17,2.17,0,0,0,61.83,23H56.76a2.13,2.13,0,0,1-1.95-1.23,25.25,25.25,0,0,0-2.55-4.39,2.13,2.13,0,0,1-.09-2.31l2.54-4.41a2.17,2.17,0,0,0-.79-3L42.08.87A2.11,2.11,0,0,0,41,.58a2.17,2.17,0,0,0-1.88,1.08L36.59,6.05a2.14,2.14,0,0,1-1.84,1.09h-.21a24.88,24.88,0,0,0-5.08,0h-.21a2.14,2.14,0,0,1-1.84-1.09L24.88,1.66A2.17,2.17,0,0,0,23,.58Z" />
+                <circle class="a" cx="32" cy="32" r="11.5" />
+                <path d="M32,21A11,11,0,1,1,21,32,11,11,0,0,1,32,21m0-1A12,12,0,1,0,44,32,12,12,0,0,0,32,20Z" />
             </svg>
             <h5>Settings</h5>
         </div>
@@ -356,96 +388,85 @@
         <section class="page hide-completely" id="home_page">
             <div class="left">
                 <h4>Rupee actions</h4>
-                <sm-carousel class="options-tab">
-                <div class="option" onclick="showPopup('cash_transfer')">
-                    <svg class="icon" viewBox="0 0 64 64">
-                            <path d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68"/>
-                    </svg>
-                        <h4>Send</h4>
-                </div>
-                <div class="option" onclick="showPopup('deposit_rupee')">
-                    <svg class="icon banking" viewBox="0 0 52 51.5">
-                        <line x1="4" y1="28" x2="4" y2="19.5" />
-                        <polyline points="4 6 4 1 51 1 51 48 4 48 4 41.5" />
-                        <line x1="9" y1="50" x2="18" y2="50" />
-                        <line x1="36" y1="50" x2="45" y2="50" />
-                        <circle cx="27.5" cy="30" r="9.5" />
-                        <circle cx="27.5" cy="30" r="3.5" />
-                        <rect x="1" y="6" width="6" height="13.5" rx="2.76" />
-                        <rect x="1" y="28" width="6" height="13.5" rx="2.76" />
-                    </svg>
-                        <h4>deposit</h4>
-                </div>
-                <div class="option" onclick="showPopup('withdraw_rupee')">
-                    <svg class="icon banking" viewBox="0 0 52 60">
-                        <line x1="4" y1="33.5" x2="4" y2="25" />
-                        <polyline points="41.52 6.5 51 6.5 51 53.5 41.69 53.5" />
-                        <line x1="9" y1="55.5" x2="14" y2="55.5" />
-                        <line x1="43" y1="55.5" x2="45" y2="55.5" />
-                        <rect x="1" y="11.5" width="6" height="13.5" rx="2.76" />
-                        <rect x="1" y="33.5" width="6" height="13.5" rx="2.76" />
-                        <polyline points="3.81 11.5 3.81 6.5 41.5 1 41.69 59 3.81 53.5 3.81 47" />
-                        <path
-                            d="M35.64,39.19c0,6.31-3.25,11.45-7.22,11.48s-7-4.92-7-11.07,3.13-11.29,7.05-11.48S35.64,32.88,35.64,39.19Z"
-                            transform="translate(-6 -2)" />
-                        <path
-                            d="M31.06,39.32c0,2.31-1.19,4.2-2.64,4.23s-2.62-1.79-2.62-4.08S27,35.3,28.42,35.24,31.06,37,31.06,39.32Z"
-                            transform="translate(-6 -2)" />
-                    </svg>
-                        <h4>Withdraw</h4>
-                </div>
-                <div class="option" onclick="showPopup('request_rupee')">
-                    <svg class="icon" viewBox="0 0 64 64">
-                        <title>request</title>
-                        <path
-                            d="M24,26.19a8.67,8.67,0,0,1-.24-3.61,8.34,8.34,0,0,1,16.59,1.27c0,8.35-8.66,8.16-8.34,11.58,0,.09,0,4.73,0,4.73" />
-                        <line x1="32" y1="47.08" x2="32" y2="48.99" />
-                        <path
-                            d="M32,.5h0A31.5,31.5,0,0,1,63.5,32v0A31.5,31.5,0,0,1,32,63.5H2.48a2,2,0,0,1-2-2V32A31.5,31.5,0,0,1,32,.5Z" />
-                    </svg>
-                        <h4>Request</h4>
-                </div>
-                <div class="option" onclick="showPopup('pay_anyone')">
-                    <svg class="icon" viewBox="0 0 64 64">
-                        <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
-                        <rect height="64" width="64" rx="8"></rect>
-                    </svg>
-                    <h4>pay through cashier</h4>
-                    </a>
+                <sm-carousel class="options-tab" indicator>
+                    <div class="grid">
+                        <div class="option" onclick="showPopup('cash_transfer')">
+                            <svg class="icon" viewBox="0 0 64 64">
+                                <path
+                                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                            </svg>
+                            <h4>Send</h4>
+                        </div>
+                        <div class="option" onclick="showPopup('deposit_rupee')">
+                            <svg class="icon" viewBox="0 0 64 64">
+                                <title>deposit</title>
+                                <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
+                                <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
+                                <path
+                                    d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+                                <path
+                                    d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+                                <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
+                            </svg>
+                            <h4>deposit</h4>
+                        </div>
+                        <div class="option" onclick="showPopup('withdraw_rupee')">
+                            <svg class="icon" viewBox="0 0 64 64">
+                                <title>withdraw</title>
+                                <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
+                                <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
+                                <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
+                                <path
+                                    d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+                                <path
+                                    d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+                                <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
+                            </svg>
+                            <h4>Withdraw</h4>
+                        </div>
+                        <div class="option" onclick="showPopup('request_rupee')">
+                            <svg class="icon request-icon" viewBox="0 0 64 64">
+                                <path
+                                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                            </svg>
+                            <h4>Request</h4>
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="option" onclick="showPopup('pay_anyone')">
+                            <svg class="icon" viewBox="0 0 64 64">
+                                <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
+                                <rect height="64" width="64" rx="8"></rect>
+                            </svg>
+                            <h4>pay through cashier</h4>
+                            </a>
+                        </div>
                     </div>
                 </sm-carousel>
             </div>
             <div class="user-panel">
-                <h4 class="user-type">User</h4>
-                    <div class="copy-row">
+                <h5 class="light-text">My FLO ID</h5>
+                <div class="copy-row">
                     <h4 class="user-flo-id copy"></h4>
-                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                            <title>Copy</title>
-                            <rect x="16" y="16" width="48" height="48" rx="6" />
-                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                        </svg>
+                    <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                        <title>Copy</title>
+                        <rect x="16" y="16" width="48" height="48" rx="6" />
+                        <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                    </svg>
+                </div>
+                <div class="flex align-items space-between">
+                    <h4>Balance</h4>
+                    <sm-button class="small round" onclick="refresh_balance(this)">Check Balance</sm-button>
+                </div>
+                <div class="display-balance grid">
+                    <div class="balance">
+                        <h5>Rupee</h5>
+                        <h4 class="token-balance">0</h4>
                     </div>
-                    <div class="flex align-items space-between">
-                        <h4>Balance</h4>
-                        <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
-                            <title>refresh balance</title>
-                            <polyline points="42.99 0.16 50.25 21.23 28.78 27.7"/>
-                            <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
-                        </svg>
+                    <div class="balance">
+                        <h5>Unconfirmed Rupee</h5>
+                        <h4 class="uncnf-token-balance">0</h4>
                     </div>
-                    <div id="display_balance" class="grid grid-2">
-                        <div class="balance">
-                            <h5>Rupee</h5>
-                        <h3 class="token-balance">0</h3>
-                         </div>
-	           	        <div class="balance">
-                            <h5>Unconfirmed Rupee</h5>
-                            <h3 class="uncnf-token-balance">0</h3>
-                        </div>
-                        <div class="balance">
-                            <h5>FLO</h5>
-                        <h3 class="flo-balance">0</h3>
-                        </div>
                 </div>
             </div>
         </section>
@@ -453,189 +474,189 @@
             <div class="left">
                 <h3>Transaction Requests</h3>
                 <sm-tab-header target="requests_to_cashier">
-                    <sm-tab>Deposits</sm-tab>
+                    <sm-tab></sm-tab>
                     <sm-tab>Withdrawals</sm-tab>
                     <sm-tab>Pay Through Cashier</sm-tab>
                 </sm-tab-header>
                 <sm-tab-panels id="requests_to_cashier">
                     <sm-panel>
-            <div class="container-header">
+                        <div class="container-header">
                             <sm-button id="fetch_deposits" onclick="show_deposit_request()">
-                    Load pending
+                                Load pending
                             </sm-button>
-            </div>
-            <div id="pending_deposits_container" class="container"></div>
+                        </div>
+                        <div id="pending_deposits_container" class="container"></div>
                         <div id="deposit_illustration" class="empty-state">
-                <svg viewBox="0 0 529.94 446.5">
-                    <defs>
-                        <style>
-                            .a,
-                            .b,
-                            .c,
-                            .d {
-                                fill: none;
-                                stroke-linejoin: round;
-                            }
+                            <svg viewBox="0 0 529.94 446.5">
+                                <defs>
+                                    <style>
+                                        .a,
+                                        .b,
+                                        .c,
+                                        .d {
+                                            fill: none;
+                                            stroke-linejoin: round;
+                                        }
 
-                            .a {
-                                stroke-width: 9px;
-                            }
+                                        .a {
+                                            stroke-width: 9px;
+                                        }
 
-                            .b,
-                            .c {
-                                stroke-width: 5px;
-                            }
+                                        .b,
+                                        .c {
+                                            stroke-width: 5px;
+                                        }
 
-                            .c {
-                                stroke-dasharray: 11.94 11.94;
-                            }
+                                        .c {
+                                            stroke-dasharray: 11.94 11.94;
+                                        }
 
-                            .d {
-                                stroke-width: 3px;
-                            }
-                        </style>
-                    </defs>
-                    <title>Empty icon</title>
-                    <polyline class="a"
-                        points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
-                    <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
-                    <path class="c"
-                        d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
-                        transform="translate(-354.28 918.17) rotate(-60.69)" />
-                    <path class="d"
-                        d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
-                        transform="translate(-703.5 -300.22)" />
-                </svg>
+                                        .d {
+                                            stroke-width: 3px;
+                                        }
+                                    </style>
+                                </defs>
+                                <title>Empty icon</title>
+                                <polyline class="a"
+                                    points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
+                                <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
+                                <path class="c"
+                                    d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
+                                    transform="translate(-354.28 918.17) rotate(-60.69)" />
+                                <path class="d"
+                                    d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
+                                    transform="translate(-703.5 -300.22)" />
+                            </svg>
                             <h4 class="light-text">No deposit requests.</h4>
-            </div>
+                        </div>
                     </sm-panel>
                     <sm-panel>
-            <div class="container-header">
+                        <div class="container-header">
                             <sm-button id="fetch_withdraws" onclick="show_withdraw_request()">Load pending</sm-button>
-            </div>
-            <div id="pending_withdrawals_container" class="container"></div>
+                        </div>
+                        <div id="pending_withdrawals_container" class="container"></div>
                         <div id="withdraw_illustration" class="empty-state">
-                <svg viewBox="0 0 529.94 446.5">
-                    <defs>
-                        <style>
-                            .a,
-                            .b,
-                            .c,
-                            .d {
-                                fill: none;
-                                stroke-linejoin: round;
-                            }
+                            <svg viewBox="0 0 529.94 446.5">
+                                <defs>
+                                    <style>
+                                        .a,
+                                        .b,
+                                        .c,
+                                        .d {
+                                            fill: none;
+                                            stroke-linejoin: round;
+                                        }
 
-                            .a {
-                                stroke-width: 9px;
-                            }
+                                        .a {
+                                            stroke-width: 9px;
+                                        }
 
-                            .b,
-                            .c {
-                                stroke-width: 5px;
-                            }
+                                        .b,
+                                        .c {
+                                            stroke-width: 5px;
+                                        }
 
-                            .c {
-                                stroke-dasharray: 11.94 11.94;
-                            }
+                                        .c {
+                                            stroke-dasharray: 11.94 11.94;
+                                        }
 
-                            .d {
-                                stroke-width: 3px;
-                            }
-                        </style>
-                    </defs>
-                    <title>Empty icon</title>
-                    <polyline class="a"
-                        points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
-                    <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
-                    <path class="c"
-                        d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
-                        transform="translate(-354.28 918.17) rotate(-60.69)" />
-                    <path class="d"
-                        d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
-                        transform="translate(-703.5 -300.22)" />
-                </svg>
+                                        .d {
+                                            stroke-width: 3px;
+                                        }
+                                    </style>
+                                </defs>
+                                <title>Empty icon</title>
+                                <polyline class="a"
+                                    points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
+                                <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
+                                <path class="c"
+                                    d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
+                                    transform="translate(-354.28 918.17) rotate(-60.69)" />
+                                <path class="d"
+                                    d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
+                                    transform="translate(-703.5 -300.22)" />
+                            </svg>
                             <h4 class="light-text">No withdraw requests.</h4>
-            </div>
+                        </div>
                     </sm-panel>
                     <sm-panel>
-            <div class="container-header">
+                        <div class="container-header">
                             <sm-button id="fetch_pay_requests" onclick="showPayRequests()">
-                    Load pending
+                                Load pending
                             </sm-button>
-            </div>
-            <div id="pay_requests_container" class="container"></div>
+                        </div>
+                        <div id="pay_requests_container" class="container"></div>
                         <div id="pay_illustration" class="empty-state">
-                <svg viewBox="0 0 529.94 446.5">
-                    <defs>
-                        <style>
-                            .a,
-                            .b,
-                            .c,
-                            .d {
-                                fill: none;
-                                stroke-linejoin: round;
-                            }
+                            <svg viewBox="0 0 529.94 446.5">
+                                <defs>
+                                    <style>
+                                        .a,
+                                        .b,
+                                        .c,
+                                        .d {
+                                            fill: none;
+                                            stroke-linejoin: round;
+                                        }
 
-                            .a {
-                                stroke-width: 9px;
-                            }
+                                        .a {
+                                            stroke-width: 9px;
+                                        }
 
-                            .b,
-                            .c {
-                                stroke-width: 5px;
-                            }
+                                        .b,
+                                        .c {
+                                            stroke-width: 5px;
+                                        }
 
-                            .c {
-                                stroke-dasharray: 11.94 11.94;
-                            }
+                                        .c {
+                                            stroke-dasharray: 11.94 11.94;
+                                        }
 
-                            .d {
-                                stroke-width: 3px;
-                            }
-                        </style>
-                    </defs>
-                    <title>Empty icon</title>
-                    <polyline class="a"
-                        points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
-                    <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
-                    <path class="c"
-                        d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
-                        transform="translate(-354.28 918.17) rotate(-60.69)" />
-                    <path class="d"
-                        d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
-                        transform="translate(-703.5 -300.22)" />
-                    <path class="d"
-                        d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
-                        transform="translate(-703.5 -300.22)" />
-                </svg>
+                                        .d {
+                                            stroke-width: 3px;
+                                        }
+                                    </style>
+                                </defs>
+                                <title>Empty icon</title>
+                                <polyline class="a"
+                                    points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
+                                <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
+                                <path class="c"
+                                    d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
+                                    transform="translate(-354.28 918.17) rotate(-60.69)" />
+                                <path class="d"
+                                    d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
+                                    transform="translate(-703.5 -300.22)" />
+                            </svg>
                             <h4 class="light-text">No pay requests.</h4>
                         </div>
                     </sm-panel>
@@ -653,24 +674,16 @@
                 </div>
                 <div class="flex align-items space-between">
                     <h4>Balance</h4>
-                    <svg class="icon" onclick="refresh_balance(this)" viewBox="0 0 64 64">
-                        <title>refresh balance</title>
-                        <polyline points="42.99 0.16 50.25 21.23 28.78 27.7"/>
-                        <path d="M56.61,44.63A24.65,24.65,0,0,1,50,56.24a25.1,25.1,0,0,1-35.31,0,24.67,24.67,0,0,1,0-35,25.1,25.1,0,0,1,35.31,0"/>
-                    </svg>
+                    <sm-button class="small round" onclick="refresh_balance(this)">Check Balance</sm-button>
                 </div>
-                <div id="display_balance" class="grid grid-2">
+                <div class="display-balance grid">
                     <div class="balance">
                         <h5>Rupee</h5>
-                        <h3 class="token-balance">0</h3>
-                    </div>
-                    <div class="balance">
-                        <h5>Unconfirmed Rupee</h5>
-                        <h3 class="uncnf-token-balance">0</h3>
+                        <h4 class="token-balance">0</h3>
                     </div>
                     <div class="balance">
                         <h5>FLO</h5>
-                        <h3 class="flo-balance">0</h3>
+                        <h4 class="flo-balance">0</h4>
                     </div>
                 </div>
             </div>
@@ -698,7 +711,7 @@
             </sm-tab-panels>
         </section>
         <section id="activity_page" class="page">
-            <h3>Activity</h3>
+            <h3>Transactions</h3>
             <p class="bottom-margin">*If your request isn't completed in 12hrs, use <strong>REPORT</strong> to get
                 assistance from our helpline.</p>
             <sm-tab-header target="user_activities">
@@ -728,7 +741,7 @@
         </section>
         <section id="helpline_page" class="page hide-completely">
             <div class="container-header">
-                <h3>Complaints</<h3>
+                <h3>Complaints<h3>
             </div>
             <h5 class="label">Select Cashier</h5>
             <sm-strip-select name="cashier" id="select_cashier"></sm-strip-select>
@@ -754,18 +767,19 @@
         </section>
         <section id="settings_page" class="page hide-completely">
             <h3 class="bottom-margin">Settings<h3>
-            <h4>My FLO ID</h4>
-            <div class="copy-row">
-                <h4 class="user-flo-id copy"></h4>
-                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                    <title>Copy</title>
-                    <rect x="16" y="16" width="48" height="48" rx="6" />
-                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                </svg>
-            </div>
-            <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
+                    <h4>My FLO ID</h4>
+                    <div class="copy-row">
+                        <h4 class="user-flo-id copy"></h4>
+                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                            <title>Copy</title>
+                            <rect x="16" y="16" width="48" height="48" rx="6" />
+                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                        </svg>
+                    </div>
+                    <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
         </section>
     </main>
+    <script src="components.js"></script>
     <script id="floGlobals">
         /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
         const floGlobals = {
@@ -797,18 +811,17 @@
             generalVC: {}
         }
     </script>
-    <script src="components.js"></script>
     <script id="onLoadStartUp">
         const userFloIdContainers = document.querySelectorAll('.user-flo-id')
         function onLoadStartUp() {
-            showPopup('main_loader', 'no')
+            showLoader()
             console.log("Starting the app! Please Wait!")
             floDapps.launchStartUp().then(async result => {
                 console.log(`Welcome ${myFloID}`)
-                await token_app.actions.doShreeGanesh();
-                userFloIdContainers.forEach(container => container.textContent = myFloID)
                 refresh_balance()
-                hidePopup()
+                userFloIdContainers.forEach(container => container.textContent = myFloID)
+                hideLoader()
+                await token_app.actions.doShreeGanesh();
             }).catch(error => console.error(error))
         }
     </script>
@@ -970,7 +983,7 @@
             paymentRequest(time, senderAddress, amount, id, enableActions) {
                 let card = document.createElement('div')
                 card.classList.add('request'),
-                markup = ``
+                    markup = ``
 
                 setAttributes(card, {
                     'data-sender-address': senderAddress,
@@ -990,8 +1003,8 @@
                                     <h5 class="label">amount</h5>
                                     <h4>₹ ${amount}</h4>
                                     `;
-                if(enableActions)
-                markup += `
+                if (enableActions)
+                    markup += `
                                     <div class="flex">
                                     <button class="decline-request secondary-btn">
                                         decline
@@ -999,7 +1012,7 @@
                                     <button class="send-rupee">
                                         pay
                                     </button>
-                            </div>` 
+                            </div>`
                 card.innerHTML = markup
                 return card;
             },
@@ -1285,85 +1298,56 @@
             zIndex = 10;
 
         function showPopup(popup, permission) {
-            document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
             let thisPopup = document.getElementById(popup);
-            thisPopup.parentNode.classList.remove('hide');
-            thisPopup.classList.add('no-transformations');
-            popupStack.push({
-                popup,
-                permission
-            })
-            zIndex++;
-            thisPopup.parentNode.setAttribute('style', `z-index: ${zIndex}`)
-            document.getElementById('main_page')
-            setTimeout(() => {
-                thisPopup.querySelectorAll('.input').forEach(input => {
-                    animateInput(input)
-                    formValidation(input.firstElementChild)
-                })
-            }, 100);
-            if (popup === 'main_loader') {
-                loader.classList.add('animate-loader')
-                document.querySelector('main').classList.add('hide-completely')
-                document.querySelector('#main_header').classList.add('hide-completely')
-                document.querySelector('#navbar').classList.add('hide-completely')
-            }
+            zIndex++
+            thisPopup.setAttribute('style', `z-index: ${zIndex}`)
+            popupStack = thisPopup.show(permission, popupStack)
             return thisPopup;
         }
 
         // hides the popup or modal 
         function hidePopup() {
-            const scrollY = document.body.style.top;
-            window.scrollTo(0, parseInt(scrollY || '0') * -1);
-            setTimeout(() => {
-                document.body.setAttribute('style', `overflow: auto; top: initial`)
-            }, 300);
             if (popupStack.peek() === undefined)
                 return;
-            let {
-                popup,
-                permission
-            } = popupStack.pop();
-            thisPopup = document.getElementById(popup);
-            thisPopup.closest('.popup-container').classList.add('hide');
-            thisPopup.closest('.popup').classList.remove('no-transformations');
+            thisPopup.hide()
+        }
+
+        document.addEventListener('popupclosed', e => {
+            popupStack = e.detail.popupStack    
+            let thisPopup = e.detail.popup,
+                submitButton = thisPopup.querySelector('button[type="submit"]')
+            if (submitButton)
+                submitButton.disabled = true;
             setTimeout(() => {
-                clearAllInputs(thisPopup)
-                zIndex--;
-                thisPopup.parentNode.setAttribute('style', `z-index: ${zIndex}`)
                 if (thisPopup.querySelector('.action')) {
                     btnLoading(thisPopup.querySelector('.action'), 'stop')
                     thisPopup.querySelector("button[type='submit']").disabled = true;
                 }
             }, 400)
-            if (popup === 'main_loader' || popup === 'sign_in_popup') {
-                loader.classList.remove('animate-loader')
-                document.querySelector('main').classList.remove('hide-completely')
-                document.querySelector('#navbar').classList.remove('hide-completely')
-                document.querySelector('#main_header').classList.remove('hide-completely')
-            }
-            if (popup === 'prompt') {
-                if (thisPopup.querySelector('input').value == '')
+            zIndex--
+            switch(e.detail.popup.id){
+                case 'sign_in_popup' :
+                    loader.classList.remove('animate-loader')
+                    document.querySelector('main').classList.remove('hide-completely')
+                    document.querySelector('#navbar').classList.remove('hide-completely')
+                    document.querySelector('#main_header').classList.remove('hide-completely')
+                break;
+                case 'cash_transfer' : 
+                    payingRequested = false;
+                    tokenReceiver.disabled = false
+                    tokenAmount.disabled = false
+                break;
+                case 'deposit_rupee': 
+                    depositRequested = 0;
+                    document.getElementById('upi_txId_section').classList.add('hide-completely')
+                    document.getElementById('deposit_amount_section').classList.remove('hide-completely')
+                    depositedRupeeTxId.disabled = true
+                    document.getElementById('request_tokens_btn').children[0].textContent = 'Continue'
+                break;
+                case 'prompt':
+                if (thisPopup.querySelector('sm-input').value == '')
                     thisPopup.querySelector('.cancel-btn').click()
-            }
-            if (popup === 'cash_transfer') {
-                payingRequested = false;
-                tokenReceiver.disabled = false
-                tokenAmount.disabled = false
-            }
-            if (popup === 'deposit_rupee') {
-                depositRequested = 0;
-                document.getElementById('upi_txId_section').classList.add('hide-completely')
-                document.getElementById('deposit_amount_section').classList.remove('hide-completely')
-                depositedRupeeTxId.disabled = true
-                document.getElementById('request_tokens_btn').children[0].textContent = 'Continue'
-            }
-        }
-
-        addEventListener('mousedown', e => {
-            if (e.target.classList.contains('popup-container') && popupStack.peek() !== undefined && popupStack
-                .peek().permission !== 'no') {
-                hidePopup()
+                break
             }
         })
 
@@ -1379,6 +1363,22 @@
             }
         }
 
+        const loaderPage = document.getElementById('main_loader')
+        function showLoader() {
+            loaderPage.classList.remove('hide-completely')
+            loader.classList.add('animate-loader')
+            document.querySelector('main').classList.add('hide-completely')
+            document.querySelector('#navbar').classList.add('hide-completely')
+            document.querySelector('#main_header').classList.add('hide-completely')
+        }
+        function hideLoader() {
+            loaderPage.classList.add('hide-completely')
+            loader.classList.remove('animate-loader')
+            document.querySelector('main').classList.remove('hide-completely')
+            document.querySelector('#navbar').classList.remove('hide-completely')
+            document.querySelector('#main_header').classList.remove('hide-completely')
+        }
+
 
         function setAttributes(el, attrs) {
             for (var key in attrs) {
@@ -1387,12 +1387,6 @@
         }
 
         function clearAllInputs(parent) {
-            parent.querySelectorAll("input").forEach((field) => {
-                field.value = '';
-                if (field.closest('.input')) {
-                    field.closest('.input').classList.remove('animate-label')
-                }
-            })
             if (parent.querySelectorAll("textarea"))
                 parent.querySelectorAll("textarea").forEach((field) => {
                     field.value = '';
@@ -1423,11 +1417,11 @@
                 showPopup('confirmation')
                 popup.querySelector('#confirm_message').textContent = message;
                 popup.querySelector('.submit-btn').onclick = () => {
-                    hidePopup()
+                    popup.hide()
                     resolve(true);
                 }
                 popup.querySelector('.cancel-btn').onclick = () => {
-                    hidePopup()
+                    popup.hide()
                     resolve(false);
                 }
             })
@@ -1437,7 +1431,7 @@
         let askPrompt = function (message, defaultVal) {
             return new Promise(resolve => {
                 let popup = document.getElementById('prompt'),
-                    input = popup.querySelector('input');
+                    input = popup.querySelector('sm-input');
                 if (defaultVal)
                     input.value = defaultVal;
                 showPopup('prompt')
@@ -1445,15 +1439,16 @@
                 input.addEventListener('keyup', e => {
                     if (e.key === 'Enter') {
                         resolve(input.value);
-                        hidePopup()
+                        popup.hide()
                     }
                 })
                 popup.querySelector('#prompt_message').textContent = message;
                 popup.querySelector('.submit-btn').onclick = () => {
+                    popup.hide()
                     resolve(input.value);
                 }
                 popup.querySelector('.cancel-btn').onclick = () => {
-                    hidePopup()
+                    popup.hide()
                     resolve(null);
                 }
             })
@@ -1470,13 +1465,13 @@
                     hours = new Date(parseInt(time)).getHours()
                 minutes = minutes < 10 ? `0${minutes}` : minutes
                 let finalHours = ``;
-                if(hours > 12)
+                if (hours > 12)
                     finalHours = `${hours - 12}:${minutes}`
-                else if(hours === 0)
+                else if (hours === 0)
                     finalHours = `12:${minutes}`
                 else
                     finalHours = `${hours}:${minutes}`
-                
+
                 finalHours = hours >= 12 ? `${finalHours} PM` : `${finalHours} AM`
                 return `${finalHours} ${month} ${date} ${year}`;
             } catch (e) {
@@ -1492,45 +1487,25 @@
             notify('Copied', 'success')
         }
 
-        // prevents non numerical input on firefox 
-        function preventNonNumericalInput(e) {
-            e = e || window.event;
-            let charCode = (typeof e.which == "undefined") ? e.keyCode : e.which,
-                charStr = String.fromCharCode(charCode);
-
-            if (!charStr.match(/[+-]?([0-9]*[.])?[0-9]+/))
-                e.preventDefault();
+        function areInputsValid(parent) {
+            let allInputs = parent.querySelectorAll("sm-input:not([disabled])");
+            return [...allInputs].every(input => {
+                if(input.hasAttribute('floId')){
+                    if(floCrypto.validateAddr(input.value.trim())) return true
+                }
+                else
+                    return input.isValid
+            })
         }
 
-        function areInputsEmpty(parent) {
-            let allInputs = parent.querySelectorAll(".input input:not(:disabled)");
-            return [...allInputs].every(input => input.checkValidity())
-        }
-
-        function formValidation(formElement, e) {
-            if (formElement.getAttribute('type') === 'number' && typeof e !== 'undefined')
-                preventNonNumericalInput(e);
-            let parent = formElement.closest('.popup'),
+        function formValidation(formElement) {
+            let parent = formElement.closest('sm-popup'),
                 submitBtn = parent.querySelector("button[type='submit']");
             if (!submitBtn) return;
-            if (formElement.hasAttribute('floId')) {
-                if (floCrypto.validateAddr(formElement.value.trim())) {
-                    submitBtn.disabled = false;
-                } else {
-                    submitBtn.disabled = true;
-                }
-            }
-            if (areInputsEmpty(parent))
+            if (areInputsValid(parent))
                 submitBtn.disabled = false;
             else
                 submitBtn.disabled = true;
-        }
-
-        function animateInput(parent) {
-            if (parent.firstElementChild.value !== '')
-                parent.classList.add('animate-label')
-            else
-                parent.classList.remove('animate-label')
         }
 
         let allForms = document.querySelectorAll('form'),
@@ -1539,31 +1514,18 @@
         const tokenReceiver = document.getElementById('token_receiver'),
             tokenAmount = document.getElementById('token_amount')
         window.addEventListener('load', () => {
-            allForms.forEach((form) => {
-                form.addEventListener('input', (e) => {
-                    if (e.target.closest('.input')) {
-                        let parent = e.target.closest('.input');
-                        animateInput(parent)
-                        formValidation(parent.firstElementChild, e)
-                    }
-                })
-                form.addEventListener('keyup', (e) => {
-                    if (e.target.closest('.input')) {
-                        if (e.key === 'Enter') {
-                            e.target.closest('.popup').querySelector("button[type='submit']")
-                                .click();
-                        }
-                    }
-                })
+            document.addEventListener('input', e => {
+                if (e.target.closest('sm-input')) {
+                    formValidation(e.target.closest('sm-input'))
+                }
             })
-            allForms.forEach((form) => {
-                form.addEventListener('blur', (e) => {
-                    if (e.target.closest('.input')) {
-                        let parent = e.target.closest('.input');
-                        if (parent.firstElementChild.value === '')
-                            parent.classList.remove('animate-label')
+            document.addEventListener('keyup', (e) => {
+                if (e.target.closest('sm-input')) {
+                    if (e.key === 'Enter') {
+                        e.target.closest('sm-popup').querySelector("button[type='submit']")
+                            .click();
                     }
-                }, true)
+                }
             })
 
             // Function for confirming deposit requests 
@@ -1607,6 +1569,7 @@
                         }
                     }
             })
+
             let currentRequest = null;
             document.getElementById('activity_page').addEventListener('click', (e) => {
                 if (e.target.closest('.report')) {
@@ -1658,8 +1621,8 @@
                         const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
                             .TYPE_REQUEST_PAYMENT, "0").reverse();
 
-                        const original_req = all_reqs.filter(f=>f.message.pay_req_id===paymentRequestId)
-                            .map(m=>m.message)[0];
+                        const original_req = all_reqs.filter(f => f.message.pay_req_id === paymentRequestId)
+                            .map(m => m.message)[0];
 
                         payment_request_status(original_req, 'DECLINED')
                         e.target.closest('.request').remove()
@@ -1707,7 +1670,7 @@
 
         function signIn() {
             return new Promise((resolve, reject) => {
-                hidePopup()
+                hideLoader()
                 showPopup('sign_in_popup', 'no')
                 let signInBtn = document.getElementById('sign_in_btn'),
                     privateKeyInput = document.getElementById('get_priv_key_field')
@@ -10624,6 +10587,8 @@
                             deposits_flo_txids: {},
                             cash_sent_details: {},
                             pay_thru_cashier: {},
+                            //user UPIs
+                            userUpis: {}
                         }
                         //add other given objectStores
                         for (o in this.appObs)
@@ -10733,7 +10698,7 @@
                                 else {
                                     resolve(inputVal)
                                     hidePopup()
-                                    showPopup('main_loader', 'no')
+                                    showLoader()
                                 }
                             })
                         }
@@ -11129,14 +11094,14 @@
             try {
                 for (const ds of dataStores) {
                     compactIDB.clearData(ds);
-                    }
+                }
                 return true;
             } catch (e) {
                 console.error(e);
                 return false;
             }
         }
-    
+
         function delay(t, v) {
           return new Promise(function(resolve) {
             setTimeout(resolve.bind(null, v), t);
@@ -11245,259 +11210,260 @@
                 try {
                     for (const assets_string of floAssetsArray) {
 
-                        let k = assets_string.split("=");
+                            let k = assets_string.split("=");
 
-                        if (k[1].indexOf(",") > 0 && k[1].indexOf("{") == -1) {
-                            k[1] = k[1]
-                                .split(",")
-                                .map(val =>
-                                    !isNaN(val) ? parseFloat(val) : val.trim()
-                                )
-                                .filter(v => ![null, "", undefined, NaN].includes(v));
-                        } else if (!isNaN(k[1])) {
-                            k[1] = parseFloat(k[1]);
-                        }
-                        if (typeof k[1] == "string" && k[1].indexOf("{") >= 0) {
-                            k[1] = JSON.parse(k[1].replace(/ /g, ""));
-                        }
+                            if (k[1].indexOf(",") > 0 && k[1].indexOf("{") == -1) {
+                                k[1] = k[1]
+                                    .split(",")
+                                    .map(val =>
+                                        !isNaN(val) ? parseFloat(val) : val.trim()
+                                    )
+                                    .filter(v => ![null, "", undefined, NaN].includes(v));
+                            } else if (!isNaN(k[1])) {
+                                k[1] = parseFloat(k[1]);
+                            }
+                            if (typeof k[1] == "string" && k[1].indexOf("{") >= 0) {
+                                k[1] = JSON.parse(k[1].replace(/ /g, ""));
+                            }
 
-                        if (typeof token_app.master_configurations !== "object") token_app
-                            .master_configurations = {};
+                            if (typeof token_app.master_configurations !== "object") token_app
+                                .master_configurations = {};
 
-                        Object.defineProperty(
-                            token_app.master_configurations,
-                            k[0], {
+                            Object.defineProperty(
+                                token_app.master_configurations,
+                                k[0], {
                                 value: k[1],
                                 writable: false,
                                 configurable: false,
                                 enumerable: true
                             }
+                            );
+                        }
+                        deepFreeze(token_app.master_configurations);
+                        return token_app;
+                    } catch (error) {
+                        console.error(
+                            "FATAL ERROR: Failed to fetch master configuration: ",
+                            error
                         );
                     }
-                    deepFreeze(token_app.master_configurations);
-                    return token_app;
-                } catch (error) {
-                    console.error(
-                        "FATAL ERROR: Failed to fetch master configuration: ",
-                        error
-                    );
                 }
-            }
-            return false;
-        },
+                return false;
+            },
 
-        doShreeGanesh: async function () {
+            doShreeGanesh: async function () {
 
-            // fetch configs from master comment
-            await this.fetch_configs();
+                // fetch configs from master comment
+                await this.fetch_configs();
 
-            await this.retrieveLatestContent();
+                const allCashierOptions = document.querySelectorAll('.cashier-option'),
+                    allUserOptions = document.querySelectorAll('.user-option'),
+                    allHelplineOptions = document.querySelectorAll('.helpline-option'),
+                    userType = document.querySelectorAll('.user-type')
 
-            request_rupee_token();
+                //Cashier startup sequence
+                if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+                    allCashierOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    show_deposit_request()
+                    show_withdraw_request()
+                    showPayRequests()
+                    userType.forEach(user => user.textContent = 'Cashier')
+                    showPage(document.getElementById('deposit_page_btn'), 'deposit')
+                }
 
-            withdraw_token_to_get_cash();
+                //Helpline startup sequence
+                else if (token_app.master_configurations.helplineFloId === myFloID) {
+                    allCashierOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    let cashierList = ``,
+                        cashierSelect = document.getElementById('select_cashier')
+                    cashierList += `<sm-strip-option value = "">Select Cashier...</sm-strip-option>`;
+                    for (cashier in token_app.master_configurations.cashiers)
+                        cashierList += `<sm-strip-option value = "${cashier}">${cashier}</sm-strip-option>`
+                    cashierSelect.innerHTML = cashierList;
+                    await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(
+                        cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
+                    userType.forEach(user => user.textContent = 'Cashier')
+                    showPage(document.getElementById('helpline_page_btn'), 'helpline_page')
+                }
 
-            transferTokensManually();
-
-            const allCashierOptions = document.querySelectorAll('.cashier-option'),
-                allUserOptions = document.querySelectorAll('.user-option'),
-                allHelplineOptions = document.querySelectorAll('.helpline-option'),
-                userType = document.querySelectorAll('.user-type')
-
-            //Cashier startup sequence
-            if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-                allCashierOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                show_deposit_request()
-                show_withdraw_request()
-                showPayRequests()
-                userType.forEach(user => user.textContent = 'Cashier')
-                showPage(document.getElementById('deposit_page_btn'), 'deposit')
-            }
-
-            //Helpline startup sequence
-            else if (token_app.master_configurations.helplineFloId === myFloID) {
-                allCashierOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                let cashierList = ``,
-                    cashierSelect = document.getElementById('select_cashier')
-                cashierList += `<sm-strip-option value = "">Select Cashier...</sm-strip-option>`;
-                for (cashier in token_app.master_configurations.cashiers)
-                    cashierList += `<sm-strip-option value = "${cashier}">${cashier}</sm-strip-option>`
-                cashierSelect.innerHTML = cashierList;
-                await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(
-                    cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
-                userType.forEach(user => user.textContent = 'Cashier')
-                showPage(document.getElementById('helpline_page_btn'), 'helpline_page')
-            }
-
-            //user startup sequence
-            else {
-                allCashierOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                show_user_activities()
-                show_payment_requests()
-                userType.forEach(user => user.textContent = 'User')
-                showPage(document.getElementById('home_page_btn'), 'home_page')
-            }
-
-            hidePopup()
-
-            pay_through_cashier();
-        },
-
-        retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals
-            .subAdmins) {
-
-            floCloudAPI.requestObjectData(floGlobals.application, {
-                receiverID,
-                senderIDs
-            });
-
-            if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+                //user startup sequence
+                else {
+                    allCashierOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    show_user_activities()
+                    show_payment_requests()
+                    userType.forEach(user => user.textContent = 'User')
+                    showPage(document.getElementById('home_page_btn'), 'home_page')
+                }
                 
-                await Promise.all([
-                    
-                    create_root_structure(),
-                    
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_DEPOSITS, {
+
+                hidePopup()
+
+                await this.retrieveLatestContent();
+
+                request_rupee_token();
+
+                withdraw_token_to_get_cash();
+
+                transferTokensManually();
+                
+                pay_through_cashier();
+            },
+
+            retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals
+                .subAdmins) {
+
+                floCloudAPI.requestObjectData(floGlobals.application, {
+                    receiverID,
+                    senderIDs
+                });
+
+                if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+
+                    await Promise.all([
+
+                        create_root_structure(),
+
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_DEPOSITS, {
                             receiverID: myFloID
                         }),
 
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
-                        receiverID: myFloID
-                    }),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
+                            receiverID: myFloID
+                        }),
 
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
-                        receiverID: myFloID
-                    }),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
+                            receiverID: myFloID
+                        }),
 
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PAY_THROUGH_CASHIER, {
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PAY_THROUGH_CASHIER, {
                             receiverID: myFloID
                         })
-                ])
+                    ])
 
-                return true;
-            } else if (token_app.master_configurations.helplineFloId === myFloID) {
-                await clearCashierData();
+                    return true;
+                } else if (token_app.master_configurations.helplineFloId === myFloID) {
+                    await clearCashierData();
 
-                await Promise.all([
+                    await Promise.all([
 
-                    create_root_structure(),
-    
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_DEPOSITS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_WITHDRAWS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_DEPOSITS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_WITHDRAWS_COMPLAINT)
-                ])
+                        create_root_structure(),
 
-                return true;
-            } else {
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_DEPOSITS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_WITHDRAWS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_DEPOSITS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_WITHDRAWS_COMPLAINT)
+                    ])
 
-                let promises = [];
+                    return true;
+                } else {
 
-                for (let cashier in token_app.master_configurations.cashiers) {
-                    let p1 = {
-                        func: floCloudAPI.requestGeneralData, 
-                        arg1: token_app.master_configurations.TYPE_DEPOSITS,
-                        arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                    let promises = [];
+
+                    for (let cashier in token_app.master_configurations.cashiers) {
+                        let p1 = {
+                            func: floCloudAPI.requestGeneralData,
+                            arg1: token_app.master_configurations.TYPE_DEPOSITS,
+                            arg2: { receiverID: cashier, senderIDs: [myFloID] }
+                        }
+
+                        let p2 = {
+                            func: floCloudAPI.requestGeneralData,
+                            arg1: token_app.master_configurations.TYPE_WITHDRAWS,
+                            arg2: { receiverID: cashier, senderIDs: [myFloID] }
+                        }
+
+                        let p3 = {
+                            func: floCloudAPI.requestGeneralData,
+                            arg1: token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                            arg2: { receiverID: cashier, senderIDs: [myFloID] }
+                        }
+
+                        promises.push(p1, p2, p3);
                     }
 
-                    let p2 = { 
+                    let p4 = {
                         func: floCloudAPI.requestGeneralData,
-                        arg1: token_app.master_configurations.TYPE_WITHDRAWS,
-                        arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                        arg1: token_app.master_configurations.TYPE_MSGES,
+                        arg2: { receiverID: myFloID }
                     }
 
-                    let p3 = {
-                        func: floCloudAPI.requestGeneralData,
-                        arg1: token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
-                        arg2: {receiverID: cashier, senderIDs: [myFloID]}
-                    }
+                    promises.push(p4);
 
-                    promises.push(p1, p2, p3);
+                    await Promise.all(promises.map(prom => prom.func.call(floCloudAPI, prom.arg1, prom.arg2)));
+
+                    create_root_structure();
+
+                    return promises;
+
                 }
-
-                let p4 = {
-                    func: floCloudAPI.requestGeneralData,
-                    arg1: token_app.master_configurations.TYPE_MSGES,
-                    arg2: {receiverID: myFloID}
-                }
-
-                promises.push(p4);
-
-                await Promise.all(promises.map(prom => prom.func.call(floCloudAPI,prom.arg1, prom.arg2)));
-                
-                create_root_structure();
-                
-                return promises;
 
             }
-
         }
-    }
-</script>
+    </script>
 
     <!-- Cashier functions -->
     <script>
 
         async function reset_cloud_object(object_name, options) {
             try {
-                if(typeof floGlobals.appObjects[object_name] !== 'object' 
-                || floGlobals.appObjects[object_name]==null) {
+                if (typeof floGlobals.appObjects[object_name] !== 'object'
+                    || floGlobals.appObjects[object_name] == null) {
                     floCloudAPI.requestObjectData(object_name, options)
-                    .then(resp=>{
-                        if(typeof floGlobals.appObjects[object_name] !== 'object' 
-                        || floGlobals.appObjects[object_name]==null) {
-                            floGlobals.appObjects[object_name] = {};
-                            floCloudAPI.resetObjectData(object_name)
-                            .then(()=>floCloudAPI.requestObjectData(object_name, options))
-                            .then(()=>true);
-                        } else return false;
-                    });
+                        .then(resp => {
+                            if (typeof floGlobals.appObjects[object_name] !== 'object'
+                                || floGlobals.appObjects[object_name] == null) {
+                                floGlobals.appObjects[object_name] = {};
+                                floCloudAPI.resetObjectData(object_name)
+                                    .then(() => floCloudAPI.requestObjectData(object_name, options))
+                                    .then(() => true);
+                            } else return false;
+                        });
                 } else return false;
-            } catch(error) {
+            } catch (error) {
                 throw new Error(error);
             }
         }
         // Create root structure
         async function create_root_structure() {
-            
+
             let promises = [];
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_MY_PERSONAL_DATA));
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
-            if(Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+            if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                 promises.push(reset_cloud_object(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS));
             }
 
@@ -11629,25 +11595,25 @@
                     // TODO: check https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}
                     // and then continue
 
-                    let n=1;
+                    let n = 1;
                     (async function validateDepositTxidInBlockchain() {
-                        notify('Txid '+flo_txid+' validation in process. Please do not close the app until directed.');
-                        
+                        notify('Txid ' + flo_txid + ' validation in process. Please do not close the app until directed.');
+
                         await delay(60000);
 
                         let validate_txid = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${flo_txid}`);
-                        
-                        if(typeof validate_txid=="object" && validate_txid.result=="ok") {
+
+                        if (typeof validate_txid == "object" && validate_txid.result == "ok") {
                             // tx registered. Do nothing
-                        } else if(n<=5) {
+                        } else if (n <= 5) {
                             validateDepositTxidInBlockchain();
                             n++;
                         } else {
                             floGlobals.appObjects[token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS][flo_txid] = input_data;
                             let receiverID = floGlobals.adminID;
                             floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS, { receiverID });
-                            notify('Txid '+flo_txid+' added in Unconfirmed Rupee Deposits.', 'error');
-                        }    
+                            notify('Txid ' + flo_txid + ' added in Unconfirmed Rupee Deposits.', 'error');
+                        }
 
                     })();
 
@@ -11660,7 +11626,6 @@
                     });
 
                     notify(`Transfer successful: ${flo_txid}`, 'success', true, true);
-
                     return true;
                 }
             } catch (error) {
@@ -11724,7 +11689,7 @@
                 notify(error, 'error')
             }
         }
-        
+
         async function transferTokensManually() {
             try {
                 const send_tokens_btn = document.getElementById('send_tokens_btn');
@@ -11772,23 +11737,23 @@
                         return false;
                     } else {
                         notify(`Transaction successful: ${flo_txid}`, 'success', true, true);
-                        if (payingRequested===true) {
+                        if (payingRequested === true) {
                             const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
-                            .TYPE_REQUEST_PAYMENT, "0").reverse();
+                                .TYPE_REQUEST_PAYMENT, "0").reverse();
 
                             const original_req = all_reqs
-                            .filter(f=>f.message.pay_req_id===currentPaymentRequest.requestId)
-                            .map(m=>m.message)[0];
+                                .filter(f => f.message.pay_req_id === currentPaymentRequest.requestId)
+                                .map(m => m.message)[0];
 
                             payment_request_status(original_req, 'APPROVED')
                             showPayRequests();
-                        } else if(payingRequested===false) {
+                        } else if (payingRequested === false) {
                             let receiverID = myFloID;
-                            floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid]={
-                                token_sender, token_receiver, token_amount, token_name_radio, 
-                                flo_txid, "datetime": + new Date()      
+                            floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
+                                token_sender, token_receiver, token_amount, token_name_radio,
+                                flo_txid, "datetime": + new Date()
                             };
-                            floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_SENT_TOKENS, options = {receiverID});
+                            floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_SENT_TOKENS, options = { receiverID });
                         }
                         hidePopup()
                         return true;
@@ -11802,24 +11767,25 @@
 
         async function refresh_balance(refreshButton) {
             try {
-                if (refreshButton) {
-                    refreshButton.classList.add('animate-loader')
-                }
+                if (refreshButton)
+                    refreshButton.textContent = 'Checking...'
                 const current_token_balance = document.querySelector('.token-balance').textContent;
                 if (typeof current_token_balance == "string") {
                     const get_user_rupee_balance = await ajaxGet(
                         'https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' +
                         myFloID)
-                    const get_user_unconfirmed_rupee_balance = await get_unconfirmed_balance(myFloID);
 
-                    const get_user_flo_balance = await floBlockchainAPI.getBalance(myFloID)
-                    console.log(get_user_flo_balance)
                     if (typeof get_user_rupee_balance === "object" && get_user_rupee_balance.balance >= 0) {
                         if (get_user_rupee_balance.balance === null)
                             get_user_rupee_balance.balance = 0;
                         document.querySelectorAll('.token-balance').forEach(bal => bal.textContent = get_user_rupee_balance.balance);
                     }
-                    if(typeof get_user_unconfirmed_rupee_balance=="number" && !isNaN(get_user_unconfirmed_rupee_balance)) {
+                    const get_user_unconfirmed_rupee_balance = await get_unconfirmed_balance(myFloID, get_user_rupee_balance.balance);
+
+                    const get_user_flo_balance = await floBlockchainAPI.getBalance(myFloID)
+                    console.log(get_user_flo_balance)
+
+                    if (typeof get_user_unconfirmed_rupee_balance == "number" && !isNaN(get_user_unconfirmed_rupee_balance)) {
                         document.querySelectorAll('.uncnf-token-balance').forEach(elem => elem.textContent = get_user_unconfirmed_rupee_balance);
                     }
                     if (typeof get_user_flo_balance !== "number" || isNaN(get_user_flo_balance)) {
@@ -11960,8 +11926,8 @@
 
                 // load processed claims
                 const cashiersList = Object.keys(token_app.master_configurations.cashiers);
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, 
-                { receiverID:floGlobals.adminID, senderIDs:cashiersList });  
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS,
+                    { receiverID: floGlobals.adminID, senderIDs: cashiersList });
                 const processed_unconfirmed_balance_claim_requests_list = floGlobals.appObjects[TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS];
                 const processed_unconfirmed_balance_claim_requests_txid_arr = Object.keys(processed_unconfirmed_balance_claim_requests_list);
 
@@ -11970,12 +11936,12 @@
 
                 // Filter out processed items 
                 let fresh_requests = unconfirmed_cash_deposit_claims
-                .filter(f=>!processed_unconfirmed_balance_claim_requests_txid_arr.includes(f.message.flo_txid) 
-                && diff_hours(new Date(), new Date(f.message.datetime))>48);
+                    .filter(f => !processed_unconfirmed_balance_claim_requests_txid_arr.includes(f.message.flo_txid)
+                        && diff_hours(new Date(), new Date(f.message.datetime)) > 48);
 
                 // Display fresh requests
                 console.log(fresh_requests);
-                for(fresh_reqs of fresh_requests) {
+                for (fresh_reqs of fresh_requests) {
                     console.log(fresh_reqs.message);
                 }
 
@@ -11990,7 +11956,7 @@
 
                 // apply process_unconfirmed_balance_claim_requests on each data
 
-            } catch(error) {
+            } catch (error) {
                 throw new Error(error);
             }
         }
@@ -12002,40 +11968,40 @@
                 let new_txid = await floBlockchainAPI.sendTx(myFloID, subject_req.receiver_flo_id, 0.001, myPrivKey,
                     flo_comment);
 
-                let n=1;
+                let n = 1;
                 (async function validateUnconfirmDepositTxidInBlockchain() {
-                    notify('Txid '+new_txid+' validation in process. Please do not close the app until directed.');
-                    
+                    notify('Txid ' + new_txid + ' validation in process. Please do not close the app until directed.');
+
                     await delay(60000);
 
                     let validate_txid = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/${new_txid}`);
-                    
-                    if(typeof validate_txid=="object" && validate_txid.result=="ok") {
+
+                    if (typeof validate_txid == "object" && validate_txid.result == "ok") {
                         // mark as resolved
                         subject_req.new_flo_txid = new_txid;
                         floGlobals.appObjects[TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS][subject_req.flo_txid] = subject_req;
                         let receiverID = floGlobals.adminID;
                         await floCloudAPI.updateObjectData(TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, { receiverID });
-                        notify('Token transfer for unconfirmed desposit successfull. Txid: '+ new_txid);
-                        
-                    } else if(n<=30) {
+                        notify('Token transfer for unconfirmed desposit successfull. Txid: ' + new_txid);
+
+                    } else if (n <= 30) {
                         validateUnconfirmDepositTxidInBlockchain();
                         n++;
                     } else {
-                        console.error('Txid '+new_txid+' could not be confirmed.');
-                        notify('Txid '+new_txid+' could not be confirmed.', 'error', 'fixed');
-                    }    
+                        console.error('Txid ' + new_txid + ' could not be confirmed.');
+                        notify('Txid ' + new_txid + ' could not be confirmed.', 'error', 'fixed');
+                    }
                     return true;
 
                 })();
-                
+
                 return true;
-            } catch(error) {
+            } catch (error) {
                 throw new Error(error);
             }
         }
 
-        async function accounting(date='') {
+        async function accounting(date = '') {
             try {
                 await floCloudAPI.requestGeneralData(token_app.master_configurations
                     .TYPE_PROCESSED_DEPOSITS, {
@@ -12044,18 +12010,18 @@
                 const cash_deposits = floDapps.getNextGeneralData(token_app.master_configurations
                     .TYPE_PROCESSED_DEPOSITS, "0");
                 let total = 0;
-                for(t in cash_deposits) {
+                for (t in cash_deposits) {
                     let data = cash_deposits[t].message;
 
-                    if(typeof date !=='number' 
-                    || (new Date(data.datetime*1000).getDate() !== new Date(date).getDate())) continue;
-                    
+                    if (typeof date !== 'number'
+                        || (new Date(data.datetime * 1000).getDate() !== new Date(date).getDate())) continue;
+
                     let tokens_transferred = Number(data.tokens_transferred);
-                    if(isNaN(tokens_transferred)) tokens_transferred=0;
+                    if (isNaN(tokens_transferred)) tokens_transferred = 0;
                     total += tokens_transferred;
                 }
                 console.log(total);
-            } catch(e) {
+            } catch (e) {
                 console.log(e);
             }
         }
@@ -12081,7 +12047,7 @@
                         document.getElementById('deposit_amount_section').classList.add('hide-completely')
                         depositedRupeeTxId.disabled = false
                         request_tokens_btn.disabled = true
-                        request_tokens_btn.children[0].textContent = 'Deposit'
+                        request_tokens_btn.children[0].textContent = 'Request'
                     }
                     if (depositRequested === 1) {
                         btnLoading('request_tokens_btn', 'start')
@@ -12155,7 +12121,7 @@
                         flo_comment)
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
-                        notify(`Transaction unsuccessfull.`, 'error');
+                        notify(`Transaction unsuccessful.`, 'error');
                         hidePopup()
                         return false;
                     }
@@ -12183,7 +12149,7 @@
                 }
             
                 const user_withdraw_upi = document.getElementById('user_withdraw_upi'); 
-                user_withdraw_upi.value = get_user_payment_details();
+                //user_withdraw_upi.value = get_user_payment_details();
 
             } catch (error) {
                 throw new Error(error)
@@ -12261,7 +12227,7 @@
                     } = usr_deposits.message;
                     frag.append(render.depositActivity(usr_deposits.vectorClock, upi_txid, deposit_amount))
                 }
-                    
+
                 depositActivityContainer.innerHTML = ``;
                 depositActivityContainer.append(frag)
 
@@ -12274,7 +12240,7 @@
                     frag.append(render.withdrawActivity(usr_withdraws.vectorClock, token_txid, withdrawer_upi,
                         withdraw_amount))
                 }
-                    withdrawActivityContainer.innerHTML = ``;
+                withdrawActivityContainer.innerHTML = ``;
                 withdrawActivityContainer.append(frag)
 
                 for (cashier_message of pay_thru_cashier_msg) {
@@ -12335,7 +12301,7 @@
                 console.log(e);
             }
         }
-        
+
         async function request_payment(receiver_flo_id = '', amount = 0) {
             try {
 
@@ -12369,12 +12335,12 @@
             }
         }
 
-        async function show_payment_requests(requests_received=true, recvr_id='') {
+        async function show_payment_requests(requests_received = true, recvr_id = '') {
             try {
 
-                let options = {receiverID: myFloID};
-                if(requests_received!==true) {
-                    options = {receiverID: recvr_id, senderIDs: [myFloID]}
+                let options = { receiverID: myFloID };
+                if (requests_received !== true) {
+                    options = { receiverID: recvr_id, senderIDs: [myFloID] }
                 }
 
                 await Promise.all([
@@ -12399,7 +12365,7 @@
                 let pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
                     approvedPaymentRequestContainer = document.getElementById("approved_payment_request_container"),
                     declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container");
-                    
+
                 pendingPaymentRequestContainer.innerHTML = ``;
                 approvedPaymentRequestContainer.innerHTML = ``;
                 declinedPaymentRequestContainer.innerHTML = ``;
@@ -12418,7 +12384,7 @@
                     frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id, true))
                 }
                 pendingPaymentRequestContainer.append(frag)
-                
+
                 for (const m of approved_reqs_list) {
                     let {
                         sender_flo_id,
@@ -12430,7 +12396,7 @@
                     frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
                 }
                 approvedPaymentRequestContainer.append(frag)
-                
+
                 for (const m of declined_reqs_list) {
                     let {
                         sender_flo_id,
@@ -12472,7 +12438,7 @@
                 console.log(e);
             }
         }
-   
+
         async function get_unconfirmed_balance(flo_id='') {
             try {
                 let api = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressTransactions?floAddress=${flo_id}`;
@@ -12482,27 +12448,27 @@
                 tokens_transfers_tx_list = Object.keys(tokens_transfers_tx_list.transactions);
                 let receiverID = floGlobals.adminID;
                 let senderIDs = Object.keys(token_app.master_configurations.cashiers);
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS, 
-                { receiverID, senderIDs });
-                let unconfirmed_tx_list = Object.keys(floGlobals.appObjects[token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS]); 
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS,
+                    { receiverID, senderIDs });
+                let unconfirmed_tx_list = Object.keys(floGlobals.appObjects[token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS]);
                 //console.log(unconfirmed_tx_list);    
                 //console.log(tokens_transfers_tx_list);
                 //console.log(token_balance);
 
-                let unconfirmed_balance=0;
-                for(ut of unconfirmed_tx_list) {
+                let unconfirmed_balance = 0;
+                for (ut of unconfirmed_tx_list) {
                     let subject_deposit = floGlobals.appObjects[token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS][ut];
-                    if(subject_deposit.receiver_flo_id!==myFloID) continue;
-                    if(tokens_transfers_tx_list.includes(ut)) {
+                    if (subject_deposit.receiver_flo_id !== myFloID) continue;
+                    if (tokens_transfers_tx_list.includes(ut)) {
                         // remove this item from unconfirmed_tx_list
-                        if(delete subject_deposit)
+                        if (delete subject_deposit)
                             floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS, { receiverID });
                     } else {
                         unconfirmed_balance += Number(subject_deposit["tokens_transferred"]);
                         let dt1 = new Date(subject_deposit["datetime"]);
                         let dt2 = new Date();
                         // If 48 hours has passed since unconfirmed balance and is not already claimed, send claim request
-                        if(diff_hours(dt2, dt1) >= 48 && subject_deposit.unconfirmed_balance_claimed===false) {
+                        if (diff_hours(dt2, dt1) >= 48 && subject_deposit.unconfirmed_balance_claimed === false) {
                             const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
                             floCloudAPI.sendGeneralData(subject_deposit, token_app.master_configurations
                                 .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, {
@@ -12512,10 +12478,10 @@
                             floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS, { receiverID });
                         }
                     }
-                }    
+                }
                 console.log(token_balance, unconfirmed_balance);
                 return unconfirmed_balance;
-            } catch(error) {
+            } catch (error) {
                 notify('Failed to get rupee balance.', 'error')
                 throw new Error(error);
             }
@@ -12525,20 +12491,20 @@
             try {
                 let senderIDs = [myFloID];
                 let receiverID = myFloID;
-                floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid]={
-                    token_sender, token_receiver, token_amount, token_name_radio, 
-                    flo_txid, "datetime": + new Date()      
+                floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
+                    token_sender, token_receiver, token_amount, token_name_radio,
+                    flo_txid, "datetime": + new Date()
                 };
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_SENT_TOKENS, 
-                options = { receiverID, senderIDs });
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_SENT_TOKENS,
+                    options = { receiverID, senderIDs });
 
                 const sent_tokens_list = Object.keys(floGlobals.appObjects
-                [token_app.master_configurations.TYPE_SENT_TOKENS]); 
+                [token_app.master_configurations.TYPE_SENT_TOKENS]);
 
                 console.log(sent_tokens_list);
                 // #todo: while displying validate senderIDs===myFloID
-            
-            } catch(error) {
+
+            } catch (error) {
                 throw new Error(error);
             }
         }
@@ -12555,19 +12521,23 @@
             }
         }
 
-        async function update_my_payment_details(payment_id='') {
+        async function update_my_payment_details(userUpi='') {
             try {
+                
+                compactIDB.writeData('userUpis', userUpi, userUpi)   
+
+                console.log(await compactIDB.readAllData('userUpis'))
                 // todo: validate upi_id
 
-                const pay_key = `pay_key_${myFloID}`;
+                /*const pay_key = `pay_key_${myFloID}`;
 
-                localStorage.setItem(pay_key, payment_id);
+                localStorage.setItem(pay_key, payment_id);*/
 
                 notify('Your payment details updated successfully.')
 
                 return true;
 
-            } catch(error) {
+            } catch (error) {
                 throw new Error(error);
             }
         }
@@ -12672,12 +12642,6 @@
                     container.append(frag)
                 else
                     container.innerHTML = `<h4>No complaints available.</h4>`
-
-                // Display both this_user_deposit and this_cashier_processed_user_deposit
-                // side by side and attach button to mark resolved
-
-                // After resolving the dispute mark it as resolved
-                // set onclick event => mark_complaint_resolved(order_type='deposit', input_data={});
 
             } catch (e) {
                 console.error(e);
