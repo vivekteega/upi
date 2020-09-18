@@ -68,10 +68,10 @@
         </svg>
         <p>
             Send rupee to any FLO address.<br>
-            *Requires Rupee to be deposited first.
+            <strong>Make sure you hav enough balance.</strong> 
         </p>
         <sm-input floId id="token_receiver" placeholder="Reciever's FLO ID" required animate></sm-input>
-        <sm-input id="token_amount" placeholder="Amount" type="number" min="1" required animate>
+        <sm-input id="token_amount" placeholder="Amount" type="number" min="1" max="100000" required animate>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
@@ -105,34 +105,30 @@
                 d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
             <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
         </svg>
-        <sm-button onclick="showPopup('transaction_result')">result</sm-button>
-        <section id="deposit_amount_section">
-            <p>
-                Add money through UPI.
-            </p>
-            <sm-input id="token_amount_to_buy" placeholder="Amount" type="number" min="1" required animate>
-                <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
-                    <title>rupee-symbol</title>
-                    <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
-                </svg>
-            </sm-input>
-        </section>
-        <section id="upi_txId_section" class="hide-completely">
-            <p id="send_amount_to_deposit"></p>
-            <div class="copy-row">
-                <h4 id="send_cash_to_deposit" class="copy"></h4>
-                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                    <title>Copy</title>
-                    <rect x="16" y="16" width="48" height="48" rx="6" />
-                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                </svg>
-            </div>
-            <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" pattern="^[a-zA-z0-9]+" disabled
-                required animate></sm-input>
-        </section>
+        <p>
+            Add money through UPI.
+        </p>
+        <sm-button onclick="showPopup('transaction_result')">show</sm-button>
+        <p id="send_amount_to_deposit">Pay ₹0 to UPI Id below.</p>
+        <div class="copy-row">
+            <h4 id="send_cash_to_deposit" class="copy"></h4>
+            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                <title>Copy</title>
+                <rect x="16" y="16" width="48" height="48" rx="6" />
+                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+            </svg>
+        </div>
+        <sm-input id="token_amount_to_buy" placeholder="Amount" type="number" min="1" max="100000" required animate>
+            <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
+                <title>rupee-symbol</title>
+                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+            </svg>
+        </sm-input>
+        <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" pattern="^[a-zA-z0-9]+"
+        required animate></sm-input>
         <button id="request_tokens_btn" class="action expand" type="submit" disabled>
             <h4 class="primary-btn expand">
-                Continue
+                Deposit
             </h4>
             <svg viewBox="0 0 73 73" class="loader">
                 <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
@@ -162,14 +158,14 @@
         <p>
             Withdraw or redeem your Rupee back to your specified UPI address.
         </p>
-        <sm-input id="user_withdraw_upi" placeholder="Reciever's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+"
-            required animate></sm-input>
-        <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" required animate>
+        <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" max="100000" required animate>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
             </svg>
         </sm-input>
+        <sm-input id="user_withdraw_upi" placeholder="Reciever's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+"
+            required animate></sm-input>
         <button id="withdraw_cash_btn" class="action expand" type="submit" disabled>
             <h4 class="primary-btn expand">
                 withdraw
@@ -196,7 +192,7 @@
             Request Rupee from other's using FLO address.
         </p>
         <sm-input floId id="requested_address" placeholder="Request from" required animate></sm-input>
-        <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" required animate>
+        <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" max="100000" required animate>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
@@ -235,8 +231,8 @@
             </p>
         </details>
         <p id="pay_cashier_info"></p>
-        <sm-input floId id="recvr_id" placeholder="Reciever's FLO ID" required animaate></sm-input>
-        <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" required animate>
+        <sm-input floId id="recvr_id" placeholder="Reciever's FLO ID" required animate></sm-input>
+        <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" max="100000" required animate>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
@@ -261,21 +257,12 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
         </header>
-        <section id="success_section" class="flex direction-column">            
+        <section id="success_section" class="flex direction-column hide-completely">            
             <svg id="success_svg" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <title>success</title>
                 <ellipse cx="32" cy="32" rx="31.5" ry="31.49"/>
                 <polyline points="17.04 30.48 27.92 41.36 46.96 22.32"/>
             </svg>
-            <h4>Transaction Successful</h4>
-            <div class="copy-row">
-                <h4 id="successful_transaction_id" class="copy"></h4>
-                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                    <title>Copy</title>
-                    <rect x="16" y="16" width="48" height="48" rx="6" />
-                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                </svg>
-            </div>
         </section>
         <section id="failure_section" class="hide-completely flex direction-column">
             <svg id="failure_svg" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
@@ -284,9 +271,17 @@
                 <line x1="22.5" y1="22.5" x2="41.5" y2="41.5"/>
                 <line x1="41.5" y1="22.5" x2="22.5" y2="41.5"/>
             </svg>
-            <h4>Transaction Failed</h4>
         </section>
+        <h4 id="transaction_heading"></h4>
         <p id="transaction_message"></p>
+        <div class="copy-row">
+            <h4 id="successful_transaction_id" class="copy"></h4>
+            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                <title>Copy</title>
+                <rect x="16" y="16" width="48" height="48" rx="6" />
+                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+            </svg>
+        </div>
     </sm-popup>
     <!-- Report popup-->
     <sm-popup id="report_popup">
@@ -356,7 +351,7 @@
                 <line y1="32.5" x2="19" y2="32.5" />
                 <line x1="7" y1="50" x2="26" y2="50" />
             </svg>
-            <h5>Transactions</h5>
+            <h5>Activity</h5>
         </div>
         <div title="helpline page" class="navbar-item helpline-option" id="helpline_page_btn"
             onclick="showPage(this, 'helpline_page')">
@@ -711,7 +706,7 @@
             </sm-tab-panels>
         </section>
         <section id="activity_page" class="page">
-            <h3>Transactions</h3>
+            <h3>Activity</h3>
             <p class="bottom-margin">*If your request isn't completed in 12hrs, use <strong>REPORT</strong> to get
                 assistance from our helpline.</p>
             <sm-tab-header target="user_activities">
@@ -1308,10 +1303,18 @@
         // hides the popup or modal 
         function hidePopup() {
             if (popupStack.peek() === undefined)
-                return;
-            thisPopup.hide()
+            return;
+            popupStack.peek().popup.hide()
         }
-
+        
+        document.addEventListener('popupopened', e => {
+            let thisPopup = e.detail.popup
+            switch(e.detail.popup.id){
+                case 'deposit_rupee' :
+                    request_rupee_token()
+                    break;
+                }
+            })
         document.addEventListener('popupclosed', e => {
             popupStack = e.detail.popupStack    
             let thisPopup = e.detail.popup,
@@ -1337,12 +1340,12 @@
                     tokenReceiver.disabled = false
                     tokenAmount.disabled = false
                 break;
-                case 'deposit_rupee': 
-                    depositRequested = 0;
-                    document.getElementById('upi_txId_section').classList.add('hide-completely')
-                    document.getElementById('deposit_amount_section').classList.remove('hide-completely')
-                    depositedRupeeTxId.disabled = true
-                    document.getElementById('request_tokens_btn').children[0].textContent = 'Continue'
+                case 'transaction_result' : 
+                    transactionHeading.textContent = ''
+                    transactionMessage.innerHTML = ''
+                    transactionSuccessId.textContent = ''
+                    transactionSuccessSection.classList.add('hide-completely')
+                    transactionFailedSection.classList.add('hide-completely')
                 break;
                 case 'prompt':
                 if (thisPopup.querySelector('sm-input').value == '')
@@ -1508,15 +1511,21 @@
                 submitBtn.disabled = true;
         }
 
-        let allForms = document.querySelectorAll('form'),
-            payingRequested = false,
+        let payingRequested = false,
             currentPaymentRequest;
-        const tokenReceiver = document.getElementById('token_receiver'),
-            tokenAmount = document.getElementById('token_amount')
+        const   tokenReceiver = document.getElementById('token_receiver'),
+                tokenAmount = document.getElementById('token_amount'),
+                depositRupeeAmount = document.getElementById('token_amount_to_buy')
+
         window.addEventListener('load', () => {
             document.addEventListener('input', e => {
                 if (e.target.closest('sm-input')) {
-                    formValidation(e.target.closest('sm-input'))
+                    let input = e.target.closest('sm-input')
+                    formValidation(input)
+                    if(input.id === 'token_amount_to_buy'){
+                        let amount = input.value < 1 ? 0 : input.value
+                        document.getElementById('send_amount_to_deposit').innerHTML = `Pay <b>₹${amount}</b> to UPI Id below.`;
+                    }
                 }
             })
             document.addEventListener('keyup', (e) => {
@@ -1602,7 +1611,7 @@
                         senderAddress = parent.dataset.senderAddress,
                         amount = parent.dataset.amount,
                         paymentRequestId = parent.dataset.paymentRequestId;;
-                    let popup = showPopup('cash_transfer');
+                    showPopup('cash_transfer');
                     payingRequested = true;
                     currentPaymentRequest = {
                         paymentRequest: parent,
@@ -1647,6 +1656,27 @@
             })
 
         })
+
+        const   transactionSuccessSection = document.getElementById('success_section'),
+                transactionFailedSection = document.getElementById('failure_section'),
+                transactionSuccessId = document.getElementById('successful_transaction_id'),
+                transactionHeading = document.getElementById('transaction_heading'),
+                transactionMessage = document.getElementById('transaction_message')
+
+        function showTrasactionStatus(status, heading, message, transactionId){
+            transactionHeading.textContent = heading
+            transactionMessage.innerHTML = message
+            transactionSuccessId.textContent = transactionId
+            if(status === 'success'){
+                transactionSuccessSection.classList.remove('hide-completely')
+                transactionFailedSection.classList.add('hide-completely')
+            }
+            else{
+                transactionSuccessSection.classList.add('hide-completely')
+                transactionFailedSection.classList.remove('hide-completely')
+            }
+            showPopup('transaction_result')
+        }
 
         let allPages = document.querySelectorAll('.page'),
             allTabs = document.querySelectorAll('.navbar-item');
@@ -11158,7 +11188,10 @@
                 {
                     "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
                         "upi_id": "8507742774@ybl"
-                    },
+                    }
+                }`
+            /*
+            ,
                     "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
                         "upi_id": "8340617958@ybl"
                     },
@@ -11174,7 +11207,7 @@
                     "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
                         "upi_id": "krishraj1012-2@okicici"
                     }
-                }`
+            */
             text = removeWhiteSpaces(text);
             return text;
             const master_data = await ajaxGet(
@@ -11318,9 +11351,6 @@
                     userType.forEach(user => user.textContent = 'User')
                     showPage(document.getElementById('home_page_btn'), 'home_page')
                 }
-                
-
-                hidePopup()
 
                 await this.retrieveLatestContent();
 
@@ -11709,14 +11739,12 @@
                     if (token_receiver.length < 1 || !floCrypto.validateAddr(token_receiver)) {
                         err_msg = `Invalid receiver FLO address.`;
                         notify(err_msg, 'error');
-                        hidePopup();
                         return false;
                     }
 
                     if (typeof sender_token_balance !== "object") {
                         err_msg = `Failed to load Sender balance.`;
                         notify(err_msg, 'error');
-                        hidePopup()
                         return false;
                     }
 
@@ -11782,23 +11810,25 @@
                     }
                     const get_user_unconfirmed_rupee_balance = await get_unconfirmed_balance(myFloID, get_user_rupee_balance.balance);
 
-                    const get_user_flo_balance = await floBlockchainAPI.getBalance(myFloID)
-                    console.log(get_user_flo_balance)
 
                     if (typeof get_user_unconfirmed_rupee_balance == "number" && !isNaN(get_user_unconfirmed_rupee_balance)) {
                         document.querySelectorAll('.uncnf-token-balance').forEach(elem => elem.textContent = get_user_unconfirmed_rupee_balance);
                     }
+                    /*
+                    const get_user_flo_balance = await floBlockchainAPI.getBalance(myFloID)
+                    console.log(get_user_flo_balance)
                     if (typeof get_user_flo_balance !== "number" || isNaN(get_user_flo_balance)) {
                         get_user_flo_balance = 0;
                     }
-                    document.querySelectorAll('.flo-balance').forEach(elem => elem.textContent = get_user_flo_balance);
+                    document.querySelectorAll('.flo-balance').forEach(elem => elem.textContent = get_user_flo_balance);*/
                 }
                 if (refreshButton) {
                     notify('Balance Updated')
-                    refreshButton.classList.remove('animate-loader')
+                    refreshButton.textContent = 'Check Balance'
                 }
                 return true;
             } catch (error) {
+                notify("Unable to load balance", 'error')
                 throw new Error(error);
             }
         }
@@ -12030,48 +12060,37 @@
 
     <!-- User functions -->
     <script>
-        let depositRequested = 0,
-            depositedRupeeTxId = document.getElementById('deposited_rupee_txid');
+        let depositedRupeeTxId = document.getElementById('deposited_rupee_txid');
         function request_rupee_token() {
             try {
                 const request_tokens_btn = document.getElementById('request_tokens_btn');
                 const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
                 const token_amount_to_buy = document.getElementById('token_amount_to_buy');
+                const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+                document.getElementById('send_cash_to_deposit').textContent = cashier_upi;
                 request_tokens_btn.onclick = async function () {
-                    if (depositRequested === 0) {
-                        if (typeof myFloID !== "string" || myFloID.length < 1) return;
-                        const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                        document.getElementById('send_cash_to_deposit').innerHTML = cashier_upi;
-                        document.getElementById('send_amount_to_deposit').innerHTML = `Please pay <b>₹${token_amount_to_buy.value}</b> to UPI Id below.`;
-                        document.getElementById('upi_txId_section').classList.remove('hide-completely')
-                        document.getElementById('deposit_amount_section').classList.add('hide-completely')
-                        depositedRupeeTxId.disabled = false
-                        request_tokens_btn.disabled = true
-                        request_tokens_btn.children[0].textContent = 'Request'
+                    if (typeof myFloID !== "string" || myFloID.length < 1) return;
+                    btnLoading('request_tokens_btn', 'start')
+                    let upi_txid = depositedRupeeTxId.value
+                    let request_object = {
+                        user_flo_id: myFloID,
+                        upi_txid: upi_txid,
+                        deposit_amount: token_amount_to_buy.value
                     }
-                    if (depositRequested === 1) {
-                        btnLoading('request_tokens_btn', 'start')
-                        let upi_txid = depositedRupeeTxId.value
-                        let request_object = {
-                            user_flo_id: myFloID,
-                            upi_txid: upi_txid,
-                            deposit_amount: token_amount_to_buy.value
-                        }
-                        if (typeof upi_txid === "string" && upi_txid.length > 1) {
-                            floCloudAPI.sendGeneralData(request_object, token_app.master_configurations
-                                .TYPE_DEPOSITS, {
-                                receiverID: cashier
-                            }).then(result => {
-                                console.log(result);
-                                notify('Deposit request sent.', 'success');
-                                hidePopup()
-                            })
-                            return true;
-                        }
-                        hidePopup()
-                        return false;
+                    if (typeof upi_txid === "string" && upi_txid.length > 1) {
+                        floCloudAPI.sendGeneralData(request_object, token_app.master_configurations
+                            .TYPE_DEPOSITS, {
+                            receiverID: cashier
+                        }).then(result => {
+                            console.log(result);
+                            hidePopup()
+                            showTrasactionStatus('success', 'Deposit request sent.', 'It may take upto 48 hours for deposited amount to be reflected in your account.')
+                            btnLoading('request_tokens_btn', 'stop')
+                        })
+                        return true;
                     }
-                    depositRequested = depositRequested === 1 ? 0 : 1
+                    hidePopup()
+                    return false;
                 }
             } catch (error) {
                 throw new Error(error)
@@ -12439,11 +12458,9 @@
             }
         }
 
-        async function get_unconfirmed_balance(flo_id='') {
+        async function get_unconfirmed_balance(flo_id='', token_balance) {
             try {
                 let api = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressTransactions?floAddress=${flo_id}`;
-                let token_balance = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${flo_id}`);
-                token_balance = token_balance.balance;
                 let tokens_transfers_tx_list = await ajaxGet(api);
                 tokens_transfers_tx_list = Object.keys(tokens_transfers_tx_list.transactions);
                 let receiverID = floGlobals.adminID;

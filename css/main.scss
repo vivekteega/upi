@@ -66,7 +66,9 @@ p {
     max-width: 60ch;
     color: rgba(var(--text-color), 0.9);
 }
-
+strong{
+    font-weight: 500;
+}
 button {
     position: relative;
     display: inline-flex;
@@ -1047,10 +1049,24 @@ sm-panel{
         stroke-dashoffset: 0;
     }
 }
-#success_section, #failure_section{
-    h4{
-        text-align: center;
+#transaction_result{
+    z-index: 12;
+    &::part(popup){
+        background-image: url(card-back.svg);
+        background-size: cover;
+        background-position-y: -4rem;
+        background-repeat: no-repeat;
+    }
+    .copy-row{
         margin-top: 1rem;
+    }
+    h4, p{
+        text-align: center;
+    }
+    & > h4{
+        font-size: 1.2rem;
+        margin-top: 6rem;
+        margin-bottom: 0.5rem;
     }
 }
 #success_svg, #failure_svg{
@@ -1060,8 +1076,8 @@ sm-panel{
     align-self: center;
     stroke: none;
     stroke-dasharray: 50;
-    fill: rgba(var(--text-color), 0.06);
-    animation: popup 2s forwards infinite cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    fill: rgba(var(--foreground-color), 0.8);
+    animation: popup 2s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 #success_svg{
@@ -1080,6 +1096,12 @@ sm-panel{
     height: 1rem;
     width: 1rem;
     fill: rgba(var(--text-color), 0.5);
+}
+
+#deposit_rupee{
+    .copy-row{
+        margin-bottom: 1rem;
+    }
 }
 
 @media only screen and (max-width: 640px) {

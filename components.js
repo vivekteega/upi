@@ -368,7 +368,7 @@ customElements.define('sm-input',
             this.dispatchEvent(event);
         }
 
-        checkInput = () => {
+        checkInput = (e) => {
             if (!this.hasAttribute('placeholder') || this.getAttribute('placeholder') === '')
                 return;
             if (this.input.value !== '') {
@@ -397,6 +397,8 @@ customElements.define('sm-input',
             this.helperText = this.shadowRoot.querySelector('.helper-text')
             this.valueChanged = false;
             this.readonly = false
+            this.min
+            this.max
             this.animate = this.hasAttribute('animate')
             this.input = this.shadowRoot.querySelector('input')
             this.shadowRoot.querySelector('.label').textContent = this.getAttribute('placeholder')
@@ -410,6 +412,12 @@ customElements.define('sm-input',
             if (this.hasAttribute('min')) {
                 let minValue = this.getAttribute('min')
                 this.input.setAttribute('min', minValue)
+                this.min = parseInt(minValue)
+            }
+            if (this.hasAttribute('max')) {
+                let maxValue = this.getAttribute('max')
+                this.input.setAttribute('max', maxValue)
+                this.max = parseInt(maxValue)
             }
             if (this.hasAttribute('pattern')) {
                 this.input.setAttribute('pattern', this.getAttribute('pattern'))
@@ -1817,6 +1825,15 @@ customElements.define('sm-popup', class extends HTMLElement {
         this.popupContainer.classList.remove('hide')
         this.popup.style.transform = 'translateY(0)';
         document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
+        this.dispatchEvent(
+            new CustomEvent("popupopened", {
+                bubbles: true,
+                detail: {
+                    popup: this,
+                    popupStack: this.popupStack
+                }
+            })
+        ) 
         return this.popupStack
     }
     hide = () => {
