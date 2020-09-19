@@ -210,14 +210,13 @@ border: none;
     padding: 0.7em 1em;
     border-radius: 0.3em;
     transition: opacity 0.3s;
-    background: rgba(var(--text-color), 0.1);
+    background: rgba(var(--text-color), 0.06);
     box-shadow: 0 0 0 0.1em rgba(var(--text-color), 0.2) inset;
     font-family: var(--font-family);
     width: 100%
     outline: none;
     min-width: 0;
 }
-
 input:focus{
     caret-color: var(--accent-color);
 }
@@ -2024,11 +2023,12 @@ smCarousel.innerHTML = `
     scroll-snap-type: x mandatory;
 }
 .indicators{
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
     justify-content: center;
     position: absolute;
     bottom: -1rem;
-    gap: 1rem;
+    gap: 0.5rem;
     width: 100%;
 }
 .dot{

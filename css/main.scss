@@ -408,7 +408,6 @@ textarea {
 #confirmation,
 #prompt {
     flex-direction: column;
-
     p {
         margin: 1rem;
     }
@@ -418,17 +417,10 @@ textarea {
         margin-bottom: 1.5rem;
     }
 
-    .btns {
-        display: flex;
-        justify-content: right;
-        width: 100%;
-
-        button {
-            background: none;
-        }
-
-        button:first-of-type {
+    .flex {
+        sm-button:first-of-type {
             margin-right: 0.6em;
+            margin-left: auto;
         }
     }
 }
@@ -832,7 +824,7 @@ sm-panel{
 
 .page {
     padding: 1rem 1.5rem;
-    padding-bottom: 4rem;
+    padding-bottom: 5rem;
 
     .container-header {
         display: grid;
@@ -1054,13 +1046,22 @@ sm-panel{
     &::part(popup){
         background-image: url(card-back.svg);
         background-size: cover;
-        background-position-y: -4rem;
+        background-position-y: -3rem;
         background-repeat: no-repeat;
     }
     .copy-row{
+        grid-template-areas: 'label label' '. .';
         margin-top: 1rem;
+        gap: 0 1rem;
+        h4{
+            font-weight: 500;
+        }
     }
-    h4, p{
+    h5{
+        grid-area: label;
+        color: rgba(var(--text-color), 0.7);
+    }
+    h4, h5, p{
         text-align: center;
     }
     & > h4{
@@ -1076,7 +1077,7 @@ sm-panel{
     align-self: center;
     stroke: none;
     stroke-dasharray: 50;
-    fill: rgba(var(--foreground-color), 0.8);
+    fill: rgba(var(--foreground-color), 1);
     animation: popup 2s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -1101,6 +1102,37 @@ sm-panel{
 #deposit_rupee{
     .copy-row{
         margin-bottom: 1rem;
+    }
+}
+
+.activity{
+    display: grid;
+    background: rgba(var(--text-color), 0.06);
+    border-radius: 0.6rem;
+    padding: 1rem 1.2rem;
+    gap: 0 1rem;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 'icon type amount' 'icon time time';
+    .icon{
+        grid-area: icon;
+        height: 3rem;
+        width: 3rem;
+        padding: 0.8rem;
+        background: rgba(var(--text-color), 0.06);
+        border-radius: 2rem;
+    }
+    .activity-type{
+        grid-area: type;
+    }
+    .activity-amount{
+        text-align: right;
+        grid-area: amount;
+    }
+    .activity-time{
+        text-align: right;
+        grid-area: time;
+        color: rgba(var(--text-color), 0.7);
+        font-weight: 500;
     }
 }
 
@@ -1171,7 +1203,7 @@ sm-panel{
     }
 
     .page {
-        padding-bottom: 2em;
+        padding-bottom: 2rem;
     }
 
     #sign_in_popup {
