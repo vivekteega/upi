@@ -1705,14 +1705,13 @@ smPopup.innerHTML = `
     transform: scale(0.9) translateY(-2rem) !important;
 }
 .popup{
-    margin-bottom: 0.5rem;
     display: flex;
     flex-direction: column;
     position: relative;
     align-self: flex-end;
     align-items: flex-start;
-    width: calc(100% - 1rem);
-    border-radius: 0.8rem;
+    width: 100%;
+    border-radius: 0.8rem 0.8rem 0 0;
     transform: translateY(100%);
     transition: transform 0.3s;
     background: rgba(var(--foreground-color), 1);

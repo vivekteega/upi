@@ -68,7 +68,7 @@
         </svg>
         <p>
             Send rupee to any FLO address.<br>
-            <strong>Make sure you hav enough balance.</strong> 
+            <strong>Make sure you have enough balance.</strong> 
         </p>
         <sm-input floId id="token_receiver" placeholder="Reciever's FLO ID" required animate></sm-input>
         <sm-input id="token_amount" placeholder="Amount" type="number" min="1" max="100000" required animate>
@@ -163,8 +163,8 @@
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
             </svg>
         </sm-input>
-        <sm-input id="user_withdraw_upi" placeholder="Reciever's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+"
-            required animate></sm-input>
+        <div class="upi-container"></div>
+        <sm-button class="add-upi empty-state" variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
         <button id="withdraw_cash_btn" class="action expand" type="submit" disabled>
             <h4 class="primary-btn expand">
                 withdraw
@@ -237,8 +237,9 @@
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
             </svg>
         </sm-input>
-        <sm-input id="paid_cashier_upi" placeholder="Sender's UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" required
-            animate></sm-input>
+        <div class="upi-container"></div>
+        <div class="empty-state">Add an UPI address for completing the transaction.</div>
+        <sm-button class="add-upi empty-state" variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
         <button id="cnf_cash_payment" class="action expand" type="submit" disabled>
             <h4 class="primary-btn expand">
                 pay
@@ -282,6 +283,26 @@
                 <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
             </svg>
         </div>
+    </sm-popup>
+    <sm-popup id="add_upi_popup">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Add UPI address</h4>
+        </header>
+        <sm-input id="add_upi_input" placeholder="UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+"
+        required animate></sm-input>
+        <button class="expand action" type="submit" onclick="addUserUPI()" disabled>
+            <h4 class="primary-btn expand">
+                Add address
+            </h4>
+            <svg viewBox="0 0 73 73" class="loader">
+                <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+            </svg>
+        </button>
     </sm-popup>
     <!-- Report popup-->
     <sm-popup id="report_popup">
@@ -718,11 +739,11 @@
             </sm-tab-header>
             <sm-tab-panels id="user_activities">
                 <sm-panel>
-                    <div id="sent_activity_container" class="container activity-container"></div>
+                    <div id="sent_activity_container" class="activity-container"></div>
                     <h4 class="empty-state">You haven't sent any rupee yet.</h4>
                 </sm-panel>
                 <sm-panel>
-                    <div id="deposit_activity_container" class="container activity-container"></div>
+                    <div id="deposit_activity_container" class="activity-container"></div>
                     <h4 class="empty-state">You haven't deposited rupee yet.</h4>
                 </sm-panel>
                 <sm-panel>
@@ -767,16 +788,20 @@
         </section>
         <section id="settings_page" class="page hide-completely">
             <h3 class="bottom-margin">Settings<h3>
-                    <h4>My FLO ID</h4>
-                    <div class="copy-row">
-                        <h4 class="user-flo-id copy"></h4>
-                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                            <title>Copy</title>
-                            <rect x="16" y="16" width="48" height="48" rx="6" />
-                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                        </svg>
-                    </div>
-                    <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
+            <h4>My FLO ID</h4>
+            <div class="copy-row">
+                <h4 class="user-flo-id copy"></h4>
+                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                    <title>Copy</title>
+                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                </svg>
+            </div>
+            <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>
+            <h4>My UPIs</h4>
+            <div class="upi-container"></div>
+            <div class="empty-state">Add UPI address for easier access during various transactions.</div>
+            <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
         </section>
     </main>
     <script src="components.js"></script>
@@ -819,6 +844,7 @@
             floDapps.launchStartUp().then(async result => {
                 console.log(`Welcome ${myFloID}`)
                 refresh_balance()
+                renderUserUPI()
                 userFloIdContainers.forEach(container => container.textContent = myFloID)
                 hideLoader()
                 await token_app.actions.doShreeGanesh();
@@ -1559,14 +1585,19 @@
         }
 
         function areInputsValid(parent) {
-            let allInputs = parent.querySelectorAll("sm-input:not([disabled])");
-            return [...allInputs].every(input => {
-                if(input.hasAttribute('floId')){
-                    if(floCrypto.validateAddr(input.value.trim())) return true
-                }
-                else
-                    return input.isValid
-            })
+            let allInputs = parent.querySelectorAll("sm-input:not([disabled])"),
+                inputsFilled = [...allInputs].every(input => {
+                    if(input.hasAttribute('floId')){
+                        if(floCrypto.validateAddr(input.value.trim())) return true
+                    }
+                    else
+                        return input.isValid
+                })
+            let allRadios = parent.querySelectorAll("input[type='radio']")
+            if(allRadios.length)
+                return inputsFilled && parent.querySelector('[checked]')
+            else
+                return inputsFilled
         }
 
         function formValidation(formElement) {
@@ -1760,12 +1791,60 @@
             })
             document.getElementById(page).classList.remove('hide-completely')
             btn.classList.add('active', 'shrink')
-            if (page === 'activity_page') {
-                show_user_activities()
-            }
             if (page === 'request_page') {
                 show_payment_requests()
             }
+        }
+
+        const addUpiInput = document.getElementById('add_upi_input')
+        let defaultUPI = localStorage.getItem('defaultUPI')
+        
+        async function addUserUPI() {
+            userUPI = addUpiInput.value
+            compactIDB.addData('userUPIs', userUPI, userUPI)
+            .then( success => {
+                if(!defaultUPI)
+                    setDefaultUPI(userUPI)
+                notify('UPI address added', 'success')
+                hidePopup()
+                renderUserUPI()
+            })
+            .catch (error => {
+                notify('UPI address already added.', 'error')
+                throw new Error(error);
+            })
+        }
+
+        function setDefaultUPI(upiAddress){
+            localStorage.setItem('defaultUPI', upiAddress)
+            defaultUPI = upiAddress
+        }
+        const UPIContainers =  document.querySelectorAll('.upi-container')
+        async function renderUserUPI(){
+            let upis = await compactIDB.readAllData('userUPIs')
+            UPIContainers.forEach(container => {
+                let randomGroup = floCrypto.randString(6, true),
+                    radios = ``
+                for(upi in upis){
+                    let checked = upi === defaultUPI ? 'checked': ''
+                    radios += `
+                    <label class="select">
+                        <input type="radio" name="${randomGroup}" value="${upi}" ${checked}>
+                        <svg class="radio" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="outer-ring" cx="32" cy="32" r="30"/>
+                            <circle class="inner-disc" cx="32" cy="32" r="16"/>
+                        </svg>
+                        <span>${upi}</span>
+                        <div class="outer"></div>
+                    `
+                    if(upi === defaultUPI)
+                        radios += `
+                        <h5 class="tag">Default</h5>`
+                    radios += '</label>'
+                }
+                container.innerHTML = `<h5>Select UPI address</h5>` + radios
+            })
+
         }
 
         function signIn() {
@@ -10688,7 +10767,7 @@
                             cash_sent_details: {},
                             pay_thru_cashier: {},
                             //user UPIs
-                            userUpis: {}
+                            userUPIs: {}
                         }
                         //add other given objectStores
                         for (o in this.appObs)
@@ -11416,19 +11495,20 @@
                     allUserOptions.forEach(option => {
                         option.classList.remove('hide-completely')
                     })
+                    userType.forEach(user => user.textContent = 'User')
                     show_user_activities()
                     show_payment_requests()
-                    userType.forEach(user => user.textContent = 'User')
                     showPage(document.getElementById('home_page_btn'), 'home_page')
                 }
 
-                await this.retrieveLatestContent();
-
+                
                 withdraw_token_to_get_cash();
-
+                
                 transferTokensManually();
                 
                 pay_through_cashier();
+
+                await this.retrieveLatestContent();
             },
 
             retrieveLatestContent: async function (receiverID = floGlobals.adminID, senderIDs = floGlobals
@@ -12164,14 +12244,21 @@
             }
         }
 
+
+        const withdrawRupeePopup = document.getElementById('withdraw_rupee')
         function withdraw_token_to_get_cash() {
             try {
                 const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
                 const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
                 withdraw_cash_btn.onclick = async function () {
+                    let selectedUPI = withdrawRupeePopup.querySelector('input[type="radio"]:checked');
+                    if(!selectedUPI){
+                        notify('Add an UPI address to withdraw money.', 'error')
+                        return
+                    }
                     btnLoading('withdraw_cash_btn', 'start')
                     const withdraw_cash_amount = Number(document.getElementById('withdraw_cash_amount').value);
-                    const user_withdraw_upi = String(document.getElementById('user_withdraw_upi').value);
+                    const user_withdraw_upi = selectedUPI.value
                     const token_balance_url =
                         `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${myFloID}`;
                     const user_token_balance_object = await ajaxGet(token_balance_url);
@@ -12226,6 +12313,7 @@
             }
         }
 
+        const payCashierPopup = document.getElementById('pay_anyone')
         function pay_through_cashier() {
             try {
                 const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
@@ -12238,11 +12326,16 @@
 
                 const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
                 cnf_cash_payment_btn.onclick = function () {
+                    let selectedUPI = payCashierPopup.querySelector('input[type="radio"]:checked');
+                    if(!selectedUPI){
+                        notify('Add an UPI address to pay through cashier.', 'error')
+                        return
+                    }
                     btnLoading('withdraw_cash_btn', 'start')
                     const paying_amount_div = document.getElementById('recvr_amount_to_pay')
                     const recvr_id = document.getElementById('recvr_id').value;
                     let amount_to_pay = Number(paying_amount_div.value);
-                    let paid_cashier_upi = document.getElementById('paid_cashier_upi').value;
+                    let paid_cashier_upi = selectedUPI.value;
                     paid_cashier_upi = toAlphanumeric(paid_cashier_upi);
                     if (recvr_id.length < 1 ||
                         !floCrypto.validateAddr(recvr_id) ||
@@ -12261,9 +12354,10 @@
                         senderIDs: [myFloID]
                     });
 
-                    notify(`You have sent cash to <div class="breakable">${recvr_id}</div> through our cashier service (${cashier_upi}). 
-                        Once the cashier receives your payment, he will transfer it to ${recvr_id}.`, '', true, true);
                     hidePopup()
+                    showTrasactionStatus('success', 'Pay through cashier Request sent.', `Sent to: <b class="breakable">${recvr_id}</b><br>
+                        through cashier UPI: <b>${cashier_upi}</b>.<br><br>
+                        Once the cashier receives your payment, they will transfer it to intended receiver.`);
                 }
 
             } catch (error) {
@@ -12569,22 +12663,6 @@
 
                 console.log(sent_tokens_list);
                 // #todo: while displying validate senderIDs===myFloID
-
-            } catch (error) {
-                throw new Error(error);
-            }
-        }
-
-        async function update_my_payment_details(userUpi='') {
-            try {
-                
-                compactIDB.writeData('userUpis', userUpi, userUpi)   
-
-                console.log(await compactIDB.readAllData('userUpis'))
-
-                notify('Your payment details updated successfully.')
-
-                return true;
 
             } catch (error) {
                 throw new Error(error);
