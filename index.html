@@ -79,7 +79,7 @@
             <strong>Make sure you have enough balance.</strong> 
         </p>
         <sm-input floId id="token_receiver" placeholder="Reciever's FLO ID" required animate></sm-input>
-        <sm-input id="token_amount" placeholder="Amount" type="number" min="1" max="100000" required animate>
+        <sm-input id="token_amount" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
@@ -125,7 +125,7 @@
                 <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
             </svg>
         </div>
-        <sm-input id="token_amount_to_buy" placeholder="Amount" type="number" min="1" max="100000" required animate>
+        <sm-input id="token_amount_to_buy" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
@@ -165,7 +165,7 @@
         <p>
             Withdraw or redeem your Rupee back to your specified UPI address.
         </p>
-        <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" max="100000" required animate>
+        <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
@@ -202,7 +202,7 @@
             Request Rupee from other's using FLO address.
         </p>
         <sm-input floId id="requested_address" placeholder="Request from" required animate></sm-input>
-        <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" max="100000" required animate>
+        <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
@@ -241,7 +241,7 @@
         </details>
         <p id="pay_cashier_info"></p>
         <sm-input floId id="recvr_id" placeholder="Reciever's FLO ID" required animate></sm-input>
-        <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" max="100000" required animate>
+        <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
@@ -806,6 +806,9 @@
             <div class="empty-state">Add UPI address for easier access during various transactions.</div>
             <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
         </section>
+        <section id="transaction_page" class="page">
+
+        </section>
     </main>
     <script src="components.js"></script>
     <script id="floGlobals">
@@ -917,13 +920,13 @@
                 return card;
             },
             activityCard(obj){
-                console.log(obj)
                 let {type, amount, timeStamp, receiver} = obj;
                 let card = document.createElement('div'),
                     composition = ``,
                     icon,
                     sign,
-                    transaction
+                    transaction,
+                    className
                 card.classList.add('activity')
                 switch(type){
                     case 'sent':
@@ -934,6 +937,7 @@
                             </svg>
                         `
                         sign = '-'
+                        className = 'withdrawn'
                         transaction = 'Sent to'
                     break;
                     case 'deposit':
@@ -950,6 +954,7 @@
                             </svg>
                         `
                         sign = '+'
+                        className = 'deposited'
                         transaction = 'Deposited'
                     break;
                     case 'withdraw':
@@ -967,6 +972,7 @@
                             </svg>
                         `
                         sign = '-'
+                        className = 'withdrawn'
                         transaction = 'withdrawn to'
                     break;
                     case 'payCashier':
@@ -977,6 +983,7 @@
                             </svg>
                         `
                         sign = '-'
+                        className = 'withdrawn'
                         transaction = 'Paid to'
                     break;
                 }
@@ -985,11 +992,11 @@
                     <h4 class="activity-type">${transaction}</h4>`
                 if(receiver)
                     composition += `
-                        <h4 class="activity-receiver">${receiver}</h4>
+                        <h4 class="activity-receiver ">${receiver}</h4>
                     `
                 composition += `
-                    <h4 class="activity-amount">${sign} ₹${amount}</h4>
-                    <h5 class="activity-time">${formatedTime(timeStamp)}</h5>
+                    <h4 class="activity-amount ${className}">${sign} ₹${amount}</h4>
+                    <h5 class="activity-time">${formatedTime(timeStamp, true)}</h5>
                 `
                 card.innerHTML = composition;
                 return card;
@@ -1480,7 +1487,7 @@
         }
 
         const currentYear = new Date().getFullYear()
-        function formatedTime(time) {
+        function formatedTime(time, relative) {
             try {
                 if(time.indexOf('_'))
                     time = time.split('_')[0]
@@ -1490,7 +1497,8 @@
                     date = timeFrag[2],
                     year = timeFrag[3],
                     minutes = new Date(parseInt(time)).getMinutes(),
-                    hours = new Date(parseInt(time)).getHours()
+                    hours = new Date(parseInt(time)).getHours(),
+                    currentTime = new Date().toString().split(' ')
                 minutes = minutes < 10 ? `0${minutes}` : minutes
                 let finalHours = ``;
                 if (hours > 12)
@@ -1501,8 +1509,15 @@
                     finalHours = `${hours}:${minutes}`
 
                 finalHours = hours >= 12 ? `${finalHours} PM` : `${finalHours} AM`
-                if(year == currentYear)
-                    return `${finalHours} ${month} ${date}`;
+                if(relative){
+                    if(year == currentYear){
+                        if(currentTime[1] === month && date === currentTime[2])
+                            return `${finalHours} ${month} ${date}`;
+                        else
+                            return ` ${date} ${month}`;
+                    
+                    }
+                }
                 else
                     return `${finalHours} ${month} ${date} ${year}`;
             } catch (e) {
@@ -12328,7 +12343,7 @@
 
         async function show_all_user_activities() {
             try {
-                //await token_app.actions.retrieveLatestContent();
+                await token_app.actions.retrieveLatestContent();
 
                 const deposit_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0")
                     .reverse();

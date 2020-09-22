@@ -759,9 +759,6 @@ sm-panel {
 .deposited {
   color: #007732;
 }
-.deposited::before {
-  content: "+ ";
-}
 
 .decline-request {
   margin-right: 0.5rem !important;
@@ -769,9 +766,6 @@ sm-panel {
 
 .withdrawn {
   color: #d43125;
-}
-.withdrawn::before {
-  content: "- ";
 }
 
 .container {
@@ -1048,6 +1042,8 @@ sm-panel {
   grid-template-columns: auto 1fr auto;
   grid-template-areas: "icon type amount" "icon receiver time";
   max-width: 70ch;
+  align-items: center;
+  cursor: pointer;
 }
 .activity .icon {
   grid-area: icon;
@@ -1061,11 +1057,15 @@ sm-panel {
   grid-area: type;
   text-transform: capitalize;
   font-weight: 400;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 .activity .activity-receiver {
   grid-area: receiver;
   font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .activity .activity-amount {
   text-align: right;
