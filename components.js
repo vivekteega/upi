@@ -223,7 +223,9 @@ input:focus{
 .input:focus-within{
     box-shadow: 0 0 0 0.1em var(--accent-color) inset;
 }
-
+.disabled{
+    pointer-events: none;
+}
 .label {
     user-select: none;
     opacity: .7;
@@ -343,6 +345,13 @@ customElements.define('sm-input',
             return this.shadowRoot.querySelector('input').checkValidity()
         }
 
+        set disabled(value) {
+            if (value)
+                this.shadowRoot.querySelector('.input').classList.add('disabled')
+            else
+                this.shadowRoot.querySelector('.input').classList.remove('disabled')
+        }
+
         focusIn = () => {
             this.shadowRoot.querySelector('input').focus()
         }
@@ -423,7 +432,10 @@ customElements.define('sm-input',
             }
             if (this.hasAttribute('readonly')) {
                 this.input.setAttribute('readonly', '')
-                this.readonly = true
+                this.readonly = true        
+            }
+            if (this.hasAttribute('readonly')) {
+                this.inputParent.classList.add('disabled')
             }
             if (this.hasAttribute('helper-text')) {
                 this.helperText.textContent = this.getAttribute('helper-text')
