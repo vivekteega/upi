@@ -47,8 +47,6 @@ smButton.innerHTML = `
         text-transform: capitalize;
         font-size: 0.9em;
         font-weight: 500;
-        color: rgba(var(--text-color), 0.9);
-        font-family: var(--font-family);
         background: rgba(var(--text-color), 0.1); 
         -webkit-tap-highlight-color: transparent;
         outline: none;
@@ -722,7 +720,6 @@ word-spacing: 0.1em;
 text-align: center;
 transition: color 0.3s;
 text-transform: capitalize;
-font-family: var(--font-family);
 height: 100%;
 }
 @media (hover: hover){
@@ -1728,7 +1725,7 @@ smPopup.innerHTML = `
     transition: transform 0.3s;
     background: rgba(var(--foreground-color), 1);
     box-shadow: 0 -1rem 2rem #00000020;
-    max-height: 100vh;
+    max-height: 90vh;
 }
 .container-header{
     display: flex;
@@ -2872,6 +2869,9 @@ pointer-events: none;
 height: 100%;
 border-radius: 0.3rem;
 }
+:host(.round) .indicator{
+    border-radius: 3rem;
+}
 :host([variant="tab"]) .tab-header{
 border-bottom: none; 
 }
@@ -2879,11 +2879,10 @@ border-bottom: none;
 display: none;
 }
 :host([variant="tab"]) .tab-header{
-gap: 0;
-display: inline-grid;
-justify-self: flex-start;
-background: rgba(var(--text-color), 0.1);
-border-radius: 0.3rem;
+    gap: 0.2rem;
+    display: inline-grid;
+    justify-self: flex-start;
+    border-radius: 0.3rem;
 }
 :host([variant="tab"]) slot::slotted(.active){
 color: rgba(var(--foreground-color), 1);

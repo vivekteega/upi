@@ -70,14 +70,20 @@
                 </svg>
             </button>
         </header>
-        <svg class="icon illustration" viewBox="0 0 64 64">
-            <path
-                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
-        </svg>
         <p>
-            Send rupee to any FLO address.<br>
-            <strong>Make sure you have enough balance.</strong> 
+            Send rupee to any FLO address.
         </p>
+        <details>
+            <summary>
+                How to send rupee?
+            </summary>
+            <h5>Step 1</h5>
+            <p>Enter receiver's FLO address.</p>
+            <h5>Step 2</h5>
+            <p>Enter the amount you want to send.</p>
+            <h5>Step 3</h5>
+            <p>Press <strong>Send</strong> button.</p>
+        </details>
         <sm-input floId id="token_receiver" placeholder="Reciever's FLO ID" required animate></sm-input>
         <sm-input id="token_amount" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
@@ -103,19 +109,26 @@
                 </svg>
             </button>
         </header>
-        <svg class="icon illustration" viewBox="0 0 64 64">
-            <title>deposit</title>
-            <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
-            <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
-            <path
-                d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-            <path
-                d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-            <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
-        </svg>
         <p>
-            Add money through UPI.
+            Deposit money through UPI.
         </p>
+        <details>
+            <summary>
+                How to deposit money?
+            </summary>
+            <h5>Step 1</h5>
+            <p>Copy UPI address shown below.</p>
+            <h5>Step 2</h5>
+            <p>Open any UPI app of your preference and send money to copied UPI address. <strong>(Do not close this browser)</strong></p>
+            <h5>Step 3</h5>
+            <p>Copy the UPI transaction ID shown after transaction was successful.</p>
+            <h5>Step 4</h5>
+            <p>Enter the amount you sent to copied address</p>
+            <h5>Step 5</h5>
+            <p>Then enter the UPI transaction ID you copied when was transaction completed.</p>
+            <h5>Step 6</h5>
+            <p>Press <strong>Deposit</strong> button</p>
+        </details>
         <p id="send_amount_to_deposit">Pay <b>₹0</b> to UPI Id below.</p>
         <div class="copy-row">
             <h4 id="send_cash_to_deposit" class="copy"></h4>
@@ -151,20 +164,20 @@
                 </svg>
             </button>
         </header>
-        <svg class="icon illustration" viewBox="0 0 64 64">
-            <title>withdraw</title>
-            <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
-            <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
-            <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
-            <path
-                d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-            <path
-                d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-            <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
-        </svg>
         <p>
-            Withdraw or redeem your Rupee back to your specified UPI address.
+            Withdraw or redeem your rupee to your specified UPI address.
         </p>
+        <details>
+            <summary>
+                How to withdraw rupee?
+            </summary>
+            <h5>Step 1</h5>
+            <p>Enter amount you want to withdraw</p>
+            <h5>Step 2</h5>
+            <p>Select UPI address you want to withdraw rupee to. <strong>If you haven't added UPI address, add one using 'Add UPI address' button.</strong></p>
+            <h5>Step 3</h5>
+            <p>Press <strong>Withdraw</strong> button</p>
+        </details>
         <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
@@ -194,10 +207,6 @@
                 </svg>
             </button>
         </header>
-        <svg class="icon request-icon illustration" viewBox="0 0 64 64">
-            <path
-                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
-        </svg>
         <p>
             Request Rupee from other's using FLO address.
         </p>
@@ -226,10 +235,6 @@
                 </svg>
             </button>
         </header>
-        <svg class="icon illustration" viewBox="0 0 64 64">
-            <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
-            <rect height="64" width="64" rx="8"></rect>
-        </svg>
         <details>
             <summary>
                 What is this?
@@ -463,24 +468,24 @@
                             <div class="tt-icon">?</div>
                             <p class="tooltip-text">Your wallet balance</p>
                         </div>
-                        <h4 class="token-balance">0</h4>
                         <h5>Rupee</h5>
+                        <h4 class="token-balance">0</h4>
                     </div>
                     <div class="balance">
                         <div class="tooltip help">
                             <div class="tt-icon">?</div>
-                            <p class="tooltip-text">Money that is pending after deposit.</p>
+                            <p class="tooltip-text">Money that is in-process after deposit.</p>
                         </div>
-                        <h4 class="uncnf-token-balance">0</h4>
                         <h5>In-process</h5>
+                        <h4 class="uncnf-token-balance">0</h4>
                     </div>
                     <div class="balance">
                         <div class="tooltip help"> 
                             <div class="tt-icon">?</div>
                             <p class="tooltip-text">FLO balance required for each transaction.</p>
                         </div>
-                        <h4 class="flo-balance">0</h4>
                         <h5>FLO</h5>
+                        <h4 class="flo-balance">0</h4>
                     </div>
                 </div>
             </div>
@@ -488,7 +493,7 @@
         <section id="deposit" class="page hide-completely">
             <div class="left">
                 <h3>Transaction Requests</h3>
-                <sm-tab-header target="requests_to_cashier">
+                <sm-tab-header variant="tab" class="round" target="requests_to_cashier">
                     <sm-tab>Deposits</sm-tab>
                     <sm-tab>Withdrawals</sm-tab>
                     <sm-tab>Pay Through Cashier</sm-tab>
@@ -696,7 +701,7 @@
         </section>
         <section id="request_page" class="page hide-completely">
             <h3>Payment Requests</h3>
-            <sm-tab-header target="payment_request_tab">
+            <sm-tab-header variant="tab" class="round" target="payment_request_tab">
                 <sm-tab>Pending</sm-tab>
                 <sm-tab>Approved</sm-tab>
                 <sm-tab>Declined</sm-tab>
@@ -720,7 +725,7 @@
             <h3>Activity</h3>
             <p class="bottom-margin">*If your request isn't completed in 12hrs, use <strong>REPORT</strong> to get
                 assistance from our helpline.</p>
-            <sm-tab-header target="user_activities">
+            <sm-tab-header variant="tab" class="round" target="user_activities">
                 <sm-tab>Sent</sm-tab>
                 <sm-tab>Deposits</sm-tab>
                 <sm-tab>Withdrawals</sm-tab>
@@ -756,7 +761,7 @@
             </div>
             <h5 class="label">Select Cashier</h5>
             <sm-strip-select name="cashier" id="select_cashier"></sm-strip-select>
-            <sm-tab-header target="all_complaints">
+            <sm-tab-header variant="tab" class="round" target="all_complaints">
                 <sm-tab>Deposit</sm-tab>
                 <sm-tab>Withdraw</sm-tab>
                 <sm-tab>Pay through cashier</sm-tab>
@@ -789,11 +794,13 @@
                         </svg>
                     </div>
             </section>
-            <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>    
             <h4>My UPIs</h4>
             <div class="upi-container"></div>
             <div class="empty-state">Add UPI address for easier access during various transactions.</div>
             <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
+            <h4>Sign Out</h4>
+            <p>Signing out will erase all the data stored in local storage and Indexed DB. This will remove saved private key, UPI addresses.</p>
+            <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>    
         </section>
         <section id="transaction_page" class="page">
 
@@ -1501,7 +1508,7 @@
                 if(relative){
                     if(year == currentYear){
                         if(currentTime[1] === month && date === currentTime[2])
-                            return `${finalHours} ${month} ${date}`;
+                            return `${finalHours}`;
                         else
                             return ` ${date} ${month}`;
                     
@@ -1692,6 +1699,10 @@
                 }
             })
 
+            document.getElementById('settings_page').addEventListener('change', e => {
+                setPrimaryUPI(e.target.value)
+            })
+
         })
 
         const   transactionSuccessSection = document.getElementById('success_section'),
@@ -1742,7 +1753,7 @@
             compactIDB.addData('userUPIs', userUPI, userUPI)
             .then( success => {
                 if(!defaultUPI)
-                    setDefaultUPI(userUPI)
+                    setPrimaryUPI(userUPI)
                 notify('UPI address added', 'success')
                 hidePopup()
                 renderUserUPI()
@@ -1753,8 +1764,9 @@
             })
         }
 
-        function setDefaultUPI(upiAddress){
+        function setPrimaryUPI(upiAddress){
             localStorage.setItem(`defaultUPI${myFloID}`, upiAddress)
+            renderUserUPI()
             defaultUPI = upiAddress
         }
         const UPIContainers =  document.querySelectorAll('.upi-container')
@@ -1777,7 +1789,7 @@
                     `
                     if(upi === defaultUPI)
                         radios += `
-                        <h5 class="tag">Default</h5>`
+                        <h5 class="tag">Primary</h5>`
                     radios += '</label>'
                 }
                 container.innerHTML = radios
@@ -1802,6 +1814,7 @@
                 document.querySelector('main').classList.add('hide-completely')
                 document.getElementById('navbar').classList.add('hide-completely')
                 document.getElementById('main_header').classList.add('hide-completely')
+                localStorage.removeItem(`defaultUPI${myFloID}`)
                 floDapps.clearCredentials()
                 compactIDB.deleteDB().then((message) => {
                     delete token_app.master_configurations;
