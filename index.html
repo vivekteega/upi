@@ -459,14 +459,26 @@
                 </div>
                 <div class="display-balance grid">
                     <div class="balance">
+                        <div class="tooltip help">
+                            <div class="tt-icon">?</div>
+                            <p class="tooltip-text">Your wallet balance</p>
+                        </div>
                         <h4 class="token-balance">0</h4>
                         <h5>Rupee</h5>
                     </div>
                     <div class="balance">
+                        <div class="tooltip help">
+                            <div class="tt-icon">?</div>
+                            <p class="tooltip-text">Money that is pending after deposit.</p>
+                        </div>
                         <h4 class="uncnf-token-balance">0</h4>
                         <h5>In-process</h5>
                     </div>
                     <div class="balance">
+                        <div class="tooltip help"> 
+                            <div class="tt-icon">?</div>
+                            <p class="tooltip-text">FLO balance required for each transaction.</p>
+                        </div>
                         <h4 class="flo-balance">0</h4>
                         <h5>FLO</h5>
                     </div>
@@ -1652,8 +1664,8 @@
                         paymentRequestId = parent.dataset.paymentRequestId;
                     if (await confirmation(
                         `Do want to decline this request?`)) {
-                        const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
-                            .TYPE_REQUEST_PAYMENT, "0").reverse();
+                        const all_reqs = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                            .TYPE_REQUEST_PAYMENT, "0").reverse());
 
                         const original_req = all_reqs.filter(f => f.message.pay_req_id === paymentRequestId)
                             .map(m => m.message)[0];
@@ -11219,6 +11231,12 @@
             return Math.abs(Math.round(diff));           
         }
 
+        function removeDuplicates(sample_object) {
+            jsonObject = sample_object.map(JSON.stringify);
+            uniqueSet = new Set(jsonObject);
+            return Array.from(uniqueSet).map(JSON.parse);
+        }
+
     </script>
 
 <script>
@@ -11623,7 +11641,7 @@
 
                 let cash_deposits_upi_txid_list = Object.values(cash_deposits).map(m => m.user_upi_txid);
 
-                const general_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0");
+                const general_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0"));
 
                 let depositsContainer = document.getElementById("pending_deposits_container");
                 depositsContainer.innerHTML = ``;
@@ -11662,8 +11680,8 @@
                     receiverID: myFloID
                 });
 
-                const general_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
-                    "0");
+                const general_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
+                    "0"));
 
                 if (typeof general_msg !== "object") {
                     notify(`No data available in withdraws.`);
@@ -11862,8 +11880,8 @@
                     } else {
                         showTrasactionStatus('success', 'Rupee Sent', 'It may take upto 48 working hours for transaction to be completed.', flo_txid);
                         if (payingRequested === true) {
-                            const all_reqs = floDapps.getNextGeneralData(token_app.master_configurations
-                                .TYPE_REQUEST_PAYMENT, "0").reverse();
+                            const all_reqs = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                                .TYPE_REQUEST_PAYMENT, "0").reverse());
 
                             const original_req = all_reqs
                                 .filter(f => f.message.pay_req_id === currentPaymentRequest.requestId)
@@ -11952,8 +11970,8 @@
                     receiverID: myFloID
                 });
 
-                const user_requests = floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_PAY_THROUGH_CASHIER, "0");
+                const user_requests = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_PAY_THROUGH_CASHIER, "0"));
 
                 let pay_thru_cashier = await compactIDB.readAllData('pay_thru_cashier');
                 let pay_thru_cashier_list = Object.values(pay_thru_cashier).map(m => m.upi_txid);
@@ -12047,8 +12065,8 @@
                     .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, {
                     receiverID: myFloID
                 });
-                const unconfirmed_cash_deposit_claims = floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, "0");
+                const unconfirmed_cash_deposit_claims = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, "0"));
 
                 // load processed claims
                 const cashiersList = Object.keys(token_app.master_configurations.cashiers);
@@ -12133,8 +12151,8 @@
                     .TYPE_PROCESSED_DEPOSITS, {
                     receiverID: myFloID
                 });
-                const cash_deposits = floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_PROCESSED_DEPOSITS, "0");
+                const cash_deposits = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_PROCESSED_DEPOSITS, "0"));
                 let total = 0;
                 for (t in cash_deposits) {
                     let data = cash_deposits[t].message;
@@ -12322,14 +12340,14 @@
             try {
                 await token_app.actions.retrieveLatestContent();
 
-                const deposit_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0")
-                    .reverse();
-                const withdraw_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
-                    "0").reverse();
-                const user_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0")
-                    .reverse();
-                const pay_thru_cashier_msg = floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_PAY_THROUGH_CASHIER, "0").reverse();
+                const deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0")
+                    .reverse());
+                const withdraw_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
+                    "0").reverse());
+                const user_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0")
+                    .reverse());
+                const pay_thru_cashier_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_PAY_THROUGH_CASHIER, "0").reverse());
 
                 console.log(deposit_msg, withdraw_msg, user_msg)
                 for (usr_deposits of deposit_msg) {
@@ -12394,8 +12412,8 @@
 
                 switch (req_type) {
                     case token_app.master_configurations.TYPE_DEPOSITS:
-                        const deposit_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0")
-                        .reverse();
+                        const deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0")
+                        .reverse());
 
                         for (usr_deposits of deposit_msg) {
                             let {
@@ -12410,8 +12428,8 @@
                         break;
                     
                     case token_app.master_configurations.TYPE_WITHDRAWS:
-                        const withdraw_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
-                        "0").reverse();
+                        const withdraw_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
+                        "0").reverse());
 
                         for (usr_withdraws of withdraw_msg) {
                             let {
@@ -12427,8 +12445,8 @@
                         break;
 
                     case token_app.master_configurations.TYPE_MSGES:
-                        const user_msg = floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0")
-                        .reverse();
+                        const user_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0")
+                        .reverse());
 
                         for (cashier_message of pay_thru_cashier_msg) {
                             console.log(cashier_message)
@@ -12446,8 +12464,8 @@
                         break;
                 
                     case token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER:
-                        const pay_thru_cashier_msg = floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_PAY_THROUGH_CASHIER, "0").reverse();
+                        const pay_thru_cashier_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                        .TYPE_PAY_THROUGH_CASHIER, "0").reverse());
 
                         for (msg of user_msg) {
                             frag.append(render.cashierMessage(msg))
@@ -12546,12 +12564,12 @@
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED, options),
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED, options)
                 ]);
-                const general_msg = floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_REQUEST_PAYMENT, "0").reverse(),
-                    declined_reqs_list = floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_REQUEST_PAYMENT_DECLINED, "0").reverse(),
-                    approved_reqs_list = floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_REQUEST_PAYMENT_APPROVED, "0").reverse();
+                const general_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_REQUEST_PAYMENT, "0").reverse()),
+                    declined_reqs_list = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                        .TYPE_REQUEST_PAYMENT_DECLINED, "0").reverse()),
+                    approved_reqs_list = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                        .TYPE_REQUEST_PAYMENT_APPROVED, "0").reverse());
 
                 console.log(general_msg);
                 console.log(approved_reqs_list);
@@ -12753,15 +12771,15 @@
                 console.log(unprocessed_deposits_complaints);
 
                 for (const udc of unprocessed_deposits_complaints) {
-                    let all_users_deposits = floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_DEPOSITS, "0");
+                    let all_users_deposits = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                        .TYPE_DEPOSITS, "0"));
                     let this_user_deposit = all_users_deposits.filter(f => f.vectorClock === udc.message.order_vc);
                     let this_user_deposit_upi_txid_list = this_user_deposit.map(m => m.message.upi_txid);
 
                     let userData = {},
                         cashierData = {};
-                    let all_cashier_processed_deposits = floDapps
-                        .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_DEPOSITS, "0");
+                    let all_cashier_processed_deposits = removeDuplicates(floDapps
+                        .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_DEPOSITS, "0"));
                     console.log(udc)
                     let this_cashier_processed_user_deposit = all_cashier_processed_deposits
                         .filter(f => this_user_deposit_upi_txid_list.includes(f.message.user_upi_txid));
@@ -12849,16 +12867,16 @@
                     .filter(orders_comparer(Object.values(processed_withdraws_complaints)));
 
                 for (const udc of unprocessed_withdraws_complaints) {
-                    let all_users_withdraws = floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_WITHDRAWS, "0");
+                    let all_users_withdraws = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                        .TYPE_WITHDRAWS, "0"));
                     let this_user_withdraws = all_users_withdraws.filter(f => f.vectorClock === udc.message
                         .order_vc);
                     console.log(this_user_withdraws);
 
                     let this_user_withdraws_token_txid_list = this_user_withdraws.map(m => m.message.token_txid);
 
-                    let all_cashier_processed_withdraws = floDapps
-                        .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS, "0");
+                    let all_cashier_processed_withdraws = removeDuplicates(floDapps
+                        .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS, "0"));
 
                     let this_cashier_processed_user_withdraws = all_cashier_processed_withdraws
                         .filter(f => this_user_withdraws_token_txid_list.includes(f.message.token_txid));
@@ -12954,8 +12972,8 @@
                     .filter(orders_comparer(Object.values(processed_pay_thru_cashier_complaints)));
 
                 for (const udc of unprocessed_pay_thru_cashier_complaints) {
-                    let all_users_pay_thru_cashier = floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_PAY_THROUGH_CASHIER, "0");
+                    let all_users_pay_thru_cashier = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                        .TYPE_PAY_THROUGH_CASHIER, "0"));
                     let this_user_pay_thru_cashier = all_users_pay_thru_cashier.filter(f => f.vectorClock === udc
                         .message.order_vc);
                     console.log(this_user_pay_thru_cashier);
@@ -12963,8 +12981,8 @@
                     let this_user_pay_thru_cashier_upi_txid_list = this_user_pay_thru_cashier.map(m => m.message
                         .upi_txid);
 
-                    let all_cashier_processed_pay_thru_cashier = floDapps
-                        .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS, "0");
+                    let all_cashier_processed_pay_thru_cashier = removeDuplicates(floDapps
+                        .getNextGeneralData(token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS, "0"));
 
                     let this_cashier_processed_user_pay_thru_cashier = all_cashier_processed_pay_thru_cashier
                         .filter(f => this_user_pay_thru_cashier_upi_txid_list.includes(f.message.upi_txid));

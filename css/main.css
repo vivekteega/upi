@@ -540,6 +540,7 @@ details p {
   margin-top: 1rem;
 }
 .display-balance .balance {
+  position: relative;
   display: flex;
   flex-direction: column;
   border-radius: 1rem;
@@ -548,7 +549,7 @@ details p {
 }
 .display-balance .balance h4 {
   margin-top: 2.5rem;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 }
 .display-balance .balance h5 {
   opacity: 0.8;
@@ -557,13 +558,18 @@ details p {
   background: rgba(var(--text-color), 0.06);
 }
 .display-balance .balance:nth-of-type(2) {
-  background: #C70039;
-  color: rgba(var(--foreground-color), 1);
+  background: linear-gradient(#ff4857, #fd946a);
 }
 .display-balance .balance:nth-of-type(3) {
   grid-area: flo;
-  background: #040618;
   color: rgba(var(--foreground-color), 1);
+  background: linear-gradient(#051575, #0d014e);
+}
+.display-balance .balance:nth-of-type(3) .tooltip {
+  color: rgba(var(--text-color), 1);
+}
+.display-balance .balance .tooltip {
+  margin-left: auto;
 }
 .display-balance .icon {
   height: 1.4rem;
@@ -573,14 +579,48 @@ details p {
   cursor: pointer;
 }
 
+.tooltip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  cursor: help;
+  display: flex;
+  flex-direction: column;
+  background: rgba(var(--foreground-color), 1);
+  z-index: 1;
+  transition: clip-path 0.3s;
+  clip-path: circle(0.8rem at calc(100% - 1.25rem) 1.15rem);
+}
+.tooltip .tt-icon {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  font-weight: 600;
+}
+.tooltip .tooltip-text {
+  padding: 1.5rem;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+.tooltip:hover {
+  clip-path: circle(100%);
+}
+
 .user-type {
   font-weight: 500;
 }
 
 .options-tab {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   padding: 1.5rem;
+  gap: 2rem 0.2rem;
 }
 .options-tab .option {
   position: relative;
@@ -589,8 +629,6 @@ details p {
   align-items: center;
   text-align: center;
   border-radius: 0.4rem;
-  margin-bottom: 1rem;
-  margin-right: 1rem;
   width: 5rem;
   text-transform: capitalize;
   transition: transform 0.3s;
@@ -1186,7 +1224,12 @@ sm-panel {
     margin-top: 1rem;
   }
   #home_page .balance h4 {
-    margin-top: 2rem;
+    margin-top: 1rem;
+  }
+
+  .options-tab {
+    grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+    gap: 1rem;
   }
 
   #settings_page > h4 {
