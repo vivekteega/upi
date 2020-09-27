@@ -1907,7 +1907,7 @@ customElements.define('sm-popup', class extends HTMLElement {
 
     handleTouchStart = (e) => {
         this.touchStartY = e.changedTouches[0].clientY
-        this.popup.style.transition = 'initial'
+        this.popup.style.transition = 'transform 0.1s'
         this.touchStartTime = e.timeStamp
     }
 

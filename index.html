@@ -129,7 +129,7 @@
             <h5>Step 6</h5>
             <p>Press <strong>Deposit</strong> button</p>
         </details>
-        <p id="send_amount_to_deposit">Pay <b>₹0</b> to UPI Id below.</p>
+        <p class="message">Send money to UPI ID below.</p>
         <div class="copy-row">
             <h4 id="send_cash_to_deposit" class="copy"></h4>
             <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
@@ -255,7 +255,15 @@
                 sent as Rupee.
             </p>
         </details>
-        <p id="pay_cashier_info"></p>
+        <p class="message">Send money to UPI ID below.</p>
+        <div class="copy-row">
+            <h4 id="pay_cashier_info" class="copy"></h4>
+            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                <title>Copy</title>
+                <rect x="16" y="16" width="48" height="48" rx="6" />
+                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+            </svg>
+        </div>
         <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
@@ -713,21 +721,21 @@
             <h3>Payment Requests</h3>
             <sm-tab-header variant="tab" class="round" target="payment_request_tab">
                 <sm-tab>Pending</sm-tab>
-                <sm-tab>Approved</sm-tab>
+                <sm-tab>Paid</sm-tab>
                 <sm-tab>Declined</sm-tab>
             </sm-tab-header>
             <sm-tab-panels id="payment_request_tab">
                 <sm-panel>
                     <div id="pending_payment_request_container" class="container"></div>
-                    <h4 class="empty-state">You don't have any requests.</h4>
+                    <h4 class="empty-state">You don't have any pending requests.</h4>
                 </sm-panel>
                 <sm-panel>
-                    <div id="approved_payment_request_container" class="container"></div>
-                    <h4 class="empty-state">You don't have any requests.</h4>
+                    <div id="paid_payment_request_container" class="container"></div>
+                    <h4 class="empty-state">No paid requests.</h4>
                 </sm-panel>
                 <sm-panel>
                     <div id="declined_payment_request_container" class="container"></div>
-                    <h4 class="empty-state">You don't have any requests.</h4>
+                    <h4 class="empty-state">No declined requests.</h4>
                 </sm-panel>
             </sm-tab-panels>
         </section>
@@ -793,16 +801,16 @@
         </section>
         <section id="settings_page" class="page hide-completely">
             <h3 class="bottom-margin">Settings<h3>
-                <section>
-                    <h4>My FLO ID</h4>
-                    <div class="copy-row">
-                        <h4 class="user-flo-id copy"></h4>
-                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                            <title>Copy</title>
-                            <rect x="16" y="16" width="48" height="48" rx="6" />
-                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                        </svg>
-                    </div>
+            <section>
+                <h4>My FLO ID</h4>
+                <div class="copy-row">
+                    <h4 class="user-flo-id copy"></h4>
+                    <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                        <title>Copy</title>
+                        <rect x="16" y="16" width="48" height="48" rx="6" />
+                        <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                    </svg>
+                </div>
             </section>
             <h4>My UPIs</h4>
             <div class="upi-container"></div>
@@ -813,6 +821,7 @@
             <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>    
         </section>
         <section id="transaction_page" class="page">
+            <h3 class="bottom-margin">Transaction</h3>
 
         </section>
     </main>
@@ -1342,7 +1351,8 @@
         document.addEventListener('popupopened', e => {
             let thisPopup = e.detail.popup,
                 firstInput = thisPopup.querySelector('sm-input')
-            firstInput.focusIn()
+            if(firstInput)
+                firstInput.focusIn()
             switch(e.detail.popup.id){
                 case 'deposit_rupee' :
                     request_rupee_token()
@@ -1582,10 +1592,6 @@
                 if (e.target.closest('sm-input')) {
                     let input = e.target.closest('sm-input')
                     formValidation(input)
-                    if(input.id === 'token_amount_to_buy'){
-                        let amount = input.value < 1 ? 0 : input.value
-                        document.getElementById('send_amount_to_deposit').innerHTML = `Pay <b>₹${amount}</b> to UPI Id below.`;
-                    }
                 }
             })
             document.addEventListener('keyup', (e) => {
@@ -1769,8 +1775,6 @@
         }
 
         const addUpiInput = document.getElementById('add_upi_input')
-
-        
         async function addUserUPI() {
             userUPI = addUpiInput.value
             compactIDB.addData('userUPIs', userUPI, userUPI)
@@ -1795,6 +1799,8 @@
 
         function removeUPI(upi){
             compactIDB.removeData('userUPIs', upi)
+            if(upi === defaultUPI)
+                localStorage.removeItem(`defaultUPI${myFloID}`)
             renderUserUPI()
         }
 
@@ -1820,13 +1826,15 @@
                     if(upi === defaultUPI)
                         radios += `
                         <h5 class="tag">Primary</h5>`
-                    radios += `
-                            <svg class="icon remove" viewBox="0 0 64 64">
-                                <title>Remove this UPI</title>
-                                <line x1="64" y1="0" x2="0" y2="64"/>
-                                <line x1="64" y1="64" x2="0" y2="0"/>
-                            </svg>
-                        </div>`
+                    if(container.closest('#settings_page'))
+                        radios += `
+                                <svg class="icon remove" viewBox="0 0 64 64">
+                                    <title>Remove this UPI</title>
+                                    <line x1="64" y1="0" x2="0" y2="64"/>
+                                    <line x1="64" y1="64" x2="0" y2="0"/>
+                                </svg>`
+                    radios +=`
+                    </div>`
                 }
                 container.innerHTML = radios
             })
@@ -11491,7 +11499,7 @@
                 userType.forEach(user => user.textContent = 'User')
                 show_all_user_activities()
                 show_payment_requests()
-                showPage(document.getElementById('home_page_btn'), 'home_page')
+                showPage(document.getElementById('home_page_btn'), 'transaction_page')
                     
                 withdraw_token_to_get_cash();
         
@@ -11962,28 +11970,29 @@
                     refreshButton.textContent = 'Checking...'
                 const current_token_balance = document.querySelector('.token-balance').textContent;
                 if (typeof current_token_balance == "string") {
-                    const get_user_rupee_balance = await ajaxGet(
+                    const [get_user_rupee_balance, get_user_flo_balance] = await Promise.all([ ajaxGet(
                         'https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' +
-                        myFloID)
+                        myFloID),
+                        floBlockchainAPI.getBalance(myFloID)
+                    ])
 
                     if (typeof get_user_rupee_balance === "object" && get_user_rupee_balance.balance >= 0) {
                         if (get_user_rupee_balance.balance === null)
                             get_user_rupee_balance.balance = 0;
                         document.querySelectorAll('.token-balance').forEach(bal => bal.textContent = get_user_rupee_balance.balance);
                     }
-                    const get_user_unconfirmed_rupee_balance = await get_unconfirmed_balance(myFloID, get_user_rupee_balance.balance);
 
-
-                    if (typeof get_user_unconfirmed_rupee_balance == "number" && !isNaN(get_user_unconfirmed_rupee_balance)) {
-                        document.querySelectorAll('.uncnf-token-balance').forEach(elem => elem.textContent = get_user_unconfirmed_rupee_balance);
-                    }
-                    
-                    const get_user_flo_balance = await floBlockchainAPI.getBalance(myFloID)
                     console.log(get_user_flo_balance)
                     if (typeof get_user_flo_balance !== "number" || isNaN(get_user_flo_balance)) {
                         get_user_flo_balance = 0;
                     }
                     document.querySelectorAll('.flo-balance').forEach(elem => elem.textContent = get_user_flo_balance);
+
+                    const get_user_unconfirmed_rupee_balance = await get_unconfirmed_balance(myFloID, get_user_rupee_balance.balance);
+                    if (typeof get_user_unconfirmed_rupee_balance == "number" && !isNaN(get_user_unconfirmed_rupee_balance)) {
+                        document.querySelectorAll('.uncnf-token-balance').forEach(elem => elem.textContent = get_user_unconfirmed_rupee_balance);
+                    }
+                    
                 }
                 if (refreshButton) {
                     notify('Balance Updated')
@@ -12334,10 +12343,7 @@
                 const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
                 const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
 
-                const txt = `Please send cash to UPI address <strong>${cashier_upi}</strong>. 
-                          Then specify the <strong>amount sent</strong> and <strong>UPI address you used to send money</strong> below.`;
-
-                document.getElementById('pay_cashier_info').innerHTML = txt;
+                document.getElementById('pay_cashier_info').textContent = cashier_upi;
 
                 const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
                 cnf_cash_payment_btn.onclick = function () {
@@ -12628,7 +12634,7 @@
                     .map(m => m.message.pay_req_id));
 
                 let pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
-                    approvedPaymentRequestContainer = document.getElementById("approved_payment_request_container"),
+                    approvedPaymentRequestContainer = document.getElementById("paid_payment_request_container"),
                     declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container");
 
                 pendingPaymentRequestContainer.innerHTML = ``;

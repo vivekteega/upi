@@ -14,7 +14,7 @@ body {
   --text-color: 17, 17, 17;
   --text-color-light: 85, 85, 85;
   --foreground-color: 255, 255, 255;
-  --background-color: #e8e8e8;
+  --background-color: rgba(var(--foreground-color), 1);
   --dark-shade: #dadada;
   --hue: 255;
   --saturation: 61%;
@@ -22,6 +22,18 @@ body {
   color: rgba(var(--text-color), 1);
   font-size: 16px;
   background-size: cover;
+}
+
+body[data-theme=dark] {
+  --accent-color: #a293d0;
+  --text-color: 238, 238, 238;
+  --text-color-light: 170, 170, 170;
+  --foreground-color: 26, 26, 26;
+  --background-color: #111;
+  background-color: var(--background-color);
+}
+body[data-theme=dark] .balance:nth-of-type(3) {
+  color: rgba(var(--text-color), 1);
 }
 
 a {
@@ -394,6 +406,12 @@ sm-popup .action h4 {
   padding: 0.5rem 1rem;
   font-weight: 500;
 }
+sm-popup .message {
+  margin-bottom: 0.2rem;
+}
+sm-popup .message + .copy-row {
+  margin-bottom: 1.5rem;
+}
 sm-popup h5:not(.tag) {
   font-family: "Roboto", sans-serif;
   margin-bottom: 0.4rem;
@@ -494,7 +512,8 @@ details p {
   position: relative;
   text-align: center;
   cursor: pointer;
-  padding: 0.3em;
+  padding: 0.3rem;
+  padding-top: 0.8rem;
   border-radius: 0.4em;
   opacity: 0.6;
   color: rgba(var(--text-color), 1);
@@ -551,7 +570,15 @@ details p {
   gap: 0.8rem;
   margin-top: 1rem;
 }
-.display-balance .balance {
+.display-balance .icon {
+  height: 1.4rem;
+  width: 1.4rem;
+  padding: 0.3rem;
+  stroke-width: 10;
+  cursor: pointer;
+}
+
+.balance {
   height: 10rem;
   position: relative;
   display: flex;
@@ -560,7 +587,7 @@ details p {
   padding: 1rem;
   justify-content: flex-end;
 }
-.display-balance .balance h4 {
+.balance h4 {
   font-size: 2.5rem;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
@@ -568,46 +595,39 @@ details p {
   word-break: break-all;
   flex: 1;
 }
-.display-balance .balance h5 {
+.balance h5 {
   opacity: 0.8;
   margin-bottom: 0.2rem;
 }
-.display-balance .balance .tooltip {
+.balance .tooltip {
   border-radius: 1rem;
   color: rgba(var(--text-color), 1);
 }
-.display-balance .balance:nth-of-type(1) {
+.balance:nth-of-type(1) {
   background: url(bg-art2.svg) bottom, linear-gradient(200deg, rgba(var(--text-color), 0.1), rgba(var(--text-color), 0.2));
   background-size: cover;
 }
-.display-balance .balance:nth-of-type(1) .tooltip {
+.balance:nth-of-type(1) .tooltip {
   box-shadow: 0 0 0 0.4rem rgba(var(--text-color), 0.1) inset;
 }
-.display-balance .balance:nth-of-type(2) {
+.balance:nth-of-type(2) {
   background: url(bg-art1.svg), linear-gradient(135deg, #fd946a, #ff4857);
   background-size: cover;
 }
-.display-balance .balance:nth-of-type(2) .tooltip {
+.balance:nth-of-type(2) .tooltip {
   box-shadow: 0 0 0 0.4rem #ff4857 inset;
 }
-.display-balance .balance:nth-of-type(3) {
+.balance:nth-of-type(3) {
   grid-area: flo;
   color: rgba(var(--foreground-color), 1);
   background: url(bg-art3.svg) bottom no-repeat, linear-gradient(270deg, #2f69e6, #1b0980);
   background-size: cover;
 }
-.display-balance .balance:nth-of-type(3) .tooltip {
+.balance:nth-of-type(3) .tooltip {
   box-shadow: 0 0 0 0.4rem #1b0980 inset;
 }
-.display-balance .balance .tooltip {
+.balance .tooltip {
   margin-left: auto;
-}
-.display-balance .icon {
-  height: 1.4rem;
-  width: 1.4rem;
-  padding: 0.3rem;
-  stroke-width: 10;
-  cursor: pointer;
 }
 
 .tooltip {
@@ -717,7 +737,7 @@ details p {
 sm-tab-header {
   position: sticky;
   top: 0;
-  background: rgba(var(--foreground-color), 1);
+  background: var(--background-color);
   z-index: 2;
   padding: 1rem 0;
   margin-bottom: 1rem;
@@ -968,10 +988,6 @@ sm-panel {
   margin-bottom: 1.5rem;
 }
 
-#send_amount_to_deposit {
-  margin-bottom: 0 !important;
-}
-
 @keyframes popup {
   0% {
     stroke-dashoffset: 50;
@@ -1073,6 +1089,7 @@ sm-panel {
   width: 3rem;
   padding: 0.8rem;
   background: rgba(var(--text-color), 0.06);
+  background-size: cover;
   border-radius: 2rem;
 }
 .activity .activity-type {
@@ -1152,7 +1169,6 @@ sm-panel {
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .select .remove {
-  display: none;
   width: 3rem;
   height: 2rem;
   padding: 0.7rem;
@@ -1178,9 +1194,12 @@ sm-panel {
   width: max-content;
 }
 
-#settings_page .remove {
-  display: block;
+#activity_page .empty-state,
+#request_page .empty-state,
+#settings_page .empty-state {
+  justify-content: left;
 }
+
 #settings_page > h4 {
   margin-top: 2rem;
   margin-bottom: 0.5rem;
@@ -1190,9 +1209,6 @@ sm-panel {
 }
 #settings_page sm-button {
   margin-top: 0.8rem;
-}
-#settings_page .empty-state {
-  justify-content: left;
 }
 
 @media only screen and (max-width: 640px) {
@@ -1221,7 +1237,7 @@ sm-panel {
 
   body {
     padding: 0 2rem;
-    margin-left: 11rem;
+    margin-left: 4rem;
   }
 
   sm-popup {
@@ -1252,16 +1268,14 @@ sm-panel {
   #navbar .navbar-item {
     display: flex;
     width: auto;
-    padding: 0.8rem;
+    padding: 0.8rem 1.2rem;
   }
   #navbar .navbar-item .icon {
     height: 1.2rem;
     width: 1.2rem;
-    margin-right: 0.8rem;
   }
   #navbar .navbar-item h5 {
-    font-size: 0.9rem;
-    margin: 0;
+    display: none;
   }
   #navbar .navbar-item:hover {
     opacity: 1;
@@ -1270,7 +1284,7 @@ sm-panel {
     margin: 1.5rem 1rem;
   }
   #navbar .logo h4 {
-    font-size: 1rem;
+    display: none;
   }
   #navbar .logo .main-logo {
     height: 1.2rem;
@@ -1309,6 +1323,10 @@ sm-panel {
   }
 }
 @media only screen and (min-width: 800px) {
+  body {
+    margin-left: 11rem;
+  }
+
   .complaint {
     gap: 0 1.5rem;
     grid-template-columns: 1fr 1fr;
@@ -1325,6 +1343,19 @@ sm-panel {
     display: flex;
     justify-content: center;
     flex-direction: column;
+  }
+
+  #navbar .navbar-item h5 {
+    font-size: 0.9rem;
+    margin: 0;
+    display: block;
+  }
+  #navbar .icon {
+    margin-right: 0.8rem;
+  }
+  #navbar .logo h4 {
+    display: block;
+    font-size: 1rem;
   }
 
   .user-panel {
@@ -1356,33 +1387,6 @@ sm-panel {
 @media only screen and (max-width: 320px) {
   body {
     font-size: 14px;
-  }
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-color: 238, 238, 238;
-    --text-color-light: 170, 170, 170;
-    --foreground-color: 26, 26, 26;
-    --background-color: #111;
-    --dark-shade: #1a1a1a;
-  }
-}
-@media (prefers-color-scheme: light) {
-  :root {
-    --text-color: 17, 17, 17;
-    --text-color-light: 85, 85, 85;
-    --foreground-color: 255, 255, 255;
-    --background-color: #e8e8e8;
-    --dark-shade: #dadada;
-  }
-}
-@media (prefers-color-scheme: no-preference) {
-  :root {
-    --text-color: 17, 17, 17;
-    --text-color-light: 85, 85, 85;
-    --foreground-color: 255, 255, 255;
-    --background-color: #e8e8e8;
-    --dark-shade: #dadada;
   }
 }
 @media (any-hover: hover) {
