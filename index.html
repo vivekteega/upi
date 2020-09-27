@@ -84,13 +84,13 @@
             <h5>Step 3</h5>
             <p>Press <strong>Send</strong> button.</p>
         </details>
-        <sm-input floId id="token_receiver" placeholder="Reciever's FLO ID" required animate></sm-input>
         <sm-input id="token_amount" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
             </svg>
         </sm-input>
+        <sm-input floId id="token_receiver" placeholder="Reciever's FLO ID" required animate></sm-input>
     </sm-popup>
     <sm-popup id="deposit_rupee">
         <header class="popup-header" slot="header">
@@ -144,7 +144,7 @@
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
             </svg>
         </sm-input>
-        <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" pattern="^[a-zA-z0-9]+"
+        <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" pattern="^[a-zA-z0-9]+" minlength="12" maxlength="12"
         required animate></sm-input>
     </sm-popup>
     <sm-popup id="withdraw_rupee">
@@ -210,13 +210,24 @@
         <p>
             Request Rupee from other's using FLO address.
         </p>
-        <sm-input floId id="requested_address" placeholder="Request from" required animate></sm-input>
+        <details>
+            <summary>
+                How to request rupee?
+            </summary>
+            <h5>Step 1</h5>
+            <p>Enter amount you want to request</p>
+            <h5>Step 2</h5>
+            <p>Enter the FLO ID of person you want to request rupee from.</p>
+            <h5>Step 3</h5>
+            <p>Press <strong>Request</strong> button</p>
+        </details>
         <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
             </svg>
         </sm-input>
+        <sm-input floId id="requested_address" placeholder="Request from" required animate></sm-input>
     </sm-popup>
     <sm-popup id="pay_anyone">
         <header class="popup-header" slot="header">
@@ -245,16 +256,15 @@
             </p>
         </details>
         <p id="pay_cashier_info"></p>
-        <sm-input floId id="recvr_id" placeholder="Reciever's FLO ID" required animate></sm-input>
         <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
             </svg>
         </sm-input>
+        <sm-input floId id="recvr_id" placeholder="Reciever's FLO ID" required animate></sm-input>
         <h5>Send from</h5>
-        <div class="upi-container"></div>
-        <div class="empty-state">Add an UPI address for completing the transaction.</div>
+        <div class="upi-container"></div>   
         <sm-button class="add-upi empty-state" variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
     </sm-popup>
     <sm-popup id="transaction_result">
@@ -796,11 +806,11 @@
             </section>
             <h4>My UPIs</h4>
             <div class="upi-container"></div>
-            <div class="empty-state">Add UPI address for easier access during various transactions.</div>
+            <p class="empty-state">Add UPI address for easier access during various transactions.</p>
             <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
             <h4>Sign Out</h4>
             <p>Signing out will erase all the data stored in local storage and Indexed DB. This will remove saved private key, UPI addresses.</p>
-            <button class="primary-btn top-margin" onclick="signOut()">Sign out</button>    
+            <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>    
         </section>
         <section id="transaction_page" class="page">
 
@@ -1330,7 +1340,9 @@
         }
         
         document.addEventListener('popupopened', e => {
-            let thisPopup = e.detail.popup
+            let thisPopup = e.detail.popup,
+                firstInput = thisPopup.querySelector('sm-input')
+            firstInput.focusIn()
             switch(e.detail.popup.id){
                 case 'deposit_rupee' :
                     request_rupee_token()
@@ -1359,8 +1371,8 @@
                 break;
                 case 'cash_transfer' : 
                     payingRequested = false;
-                    tokenReceiver.disabled = false
-                    tokenAmount.disabled = false
+                    tokenReceiver.readOnly = false
+                    tokenAmount.readOnly = false
                 break;
                 case 'transaction_result' : 
                 setTimeout(() => {
@@ -1439,16 +1451,20 @@
         }
 
         // displays a popup for asking permission. Use this instead of JS confirm
-        let confirmation = function (message) {
+        let confirmation = (message, cancelText = 'Cancel', confirmText = 'OK') => {
             return new Promise(resolve => {
                 let popup = document.getElementById('confirmation');
                 showPopup('confirmation')
                 popup.querySelector('#confirm_message').textContent = message;
-                popup.querySelector('.submit-btn').onclick = () => {
+                let submitButton = popup.querySelector('.submit-btn')
+                submitButton.textContent = confirmText
+                submitButton.onclick = () => {
                     popup.hide()
                     resolve(true);
                 }
-                popup.querySelector('.cancel-btn').onclick = () => {
+                let cancelButton = popup.querySelector('.cancel-btn')
+                cancelButton.textContent = cancelText
+                cancelButton.onclick = () => {
                     popup.hide()
                     resolve(false);
                 }
@@ -1634,7 +1650,8 @@
             document.getElementById('report_btn').addEventListener('click', async (e) => {
                 let customMsg = document.getElementById('complaint_field').value
                 if (await confirmation(
-                    'It may take upto 12hrs to complete your request, are you sure to report this issue?'
+                    'It may take upto 12hrs to complete your request, are you sure to report this issue?',
+                    'Cancel', 'Report'
                 )) {
                     file_complaint(currentRequest.dataset.type, currentRequest.dataset.vectorClock,
                         customMsg)
@@ -1663,14 +1680,13 @@
                     }
                     tokenReceiver.value = senderAddress;
                     tokenAmount.value = amount;
-                    tokenReceiver.disabled = true
-                    tokenAmount.disabled = true
+                    tokenReceiver.readOnly = true
+                    tokenAmount.readOnly = true
                 }
                 if (e.target.closest('.decline-request')) {
                     let parent = e.target.closest('.request'),
                         paymentRequestId = parent.dataset.paymentRequestId;
-                    if (await confirmation(
-                        `Do want to decline this request?`)) {
+                    if (await confirmation(`Do want to decline this request?`, 'No', 'Decline')) {
                         const all_reqs = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
                             .TYPE_REQUEST_PAYMENT, "0").reverse());
 
@@ -1692,7 +1708,7 @@
                     let complaint = e.target.closest('.complaint'),
                         udc = complaint.dataset.udc,
                         type = complaint.dataset.type;
-                    if (await confirmation('Mark this complaint as resolved?')) {
+                    if (await confirmation('Mark this complaint as resolved?', 'Cancel', 'Mark Resolved')) {
                         mark_complaint_resolved(type, JSON.parse(udc))
                         complaint.remove()
                     }
@@ -1701,6 +1717,13 @@
 
             document.getElementById('settings_page').addEventListener('change', e => {
                 setPrimaryUPI(e.target.value)
+            })
+            document.getElementById('settings_page').addEventListener('click', async e => {
+                if(e.target.closest('.remove') && await confirmation('Do you want to remove this UPI address?', 'No', 'Remove UPI')){
+                    let upi = e.target.closest('.select').querySelector('input').value
+                    removeUPI(upi)
+                    notify('Removed UPI address')
+                }
             })
 
         })
@@ -1769,6 +1792,12 @@
             renderUserUPI()
             defaultUPI = upiAddress
         }
+
+        function removeUPI(upi){
+            compactIDB.removeData('userUPIs', upi)
+            renderUserUPI()
+        }
+
         const UPIContainers =  document.querySelectorAll('.upi-container')
         async function renderUserUPI(){
             let upis = await compactIDB.readAllData('userUPIs')
@@ -1778,19 +1807,26 @@
                 for(upi in upis){
                     let checked = upi === defaultUPI ? 'checked': ''
                     radios += `
-                    <label class="select">
-                        <input type="radio" name="${randomGroup}" value="${upi}" ${checked}>
-                        <svg class="radio" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                            <circle class="outer-ring" cx="32" cy="32" r="30"/>
-                            <circle class="inner-disc" cx="32" cy="32" r="16"/>
-                        </svg>
-                        <span>${upi}</span>
-                        <div class="outer"></div>
+                    <div class="select">
+                        <label>
+                            <input type="radio" name="${randomGroup}" value="${upi}" ${checked}>
+                            <svg class="radio" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                                <circle class="outer-ring" cx="32" cy="32" r="30"/>
+                                <circle class="inner-disc" cx="32" cy="32" r="16"/>
+                            </svg>
+                            <span>${upi}</span>
+                        </label>
                     `
                     if(upi === defaultUPI)
                         radios += `
                         <h5 class="tag">Primary</h5>`
-                    radios += '</label>'
+                    radios += `
+                            <svg class="icon remove" viewBox="0 0 64 64">
+                                <title>Remove this UPI</title>
+                                <line x1="64" y1="0" x2="0" y2="64"/>
+                                <line x1="64" y1="64" x2="0" y2="0"/>
+                            </svg>
+                        </div>`
                 }
                 container.innerHTML = radios
             })
@@ -1810,7 +1846,7 @@
         }
 
         async function signOut() {
-            if (await confirmation('Do you want to sign out?')) {
+            if (await confirmation('Do you want to sign out?', 'Stay', 'Sign Out')) {
                 document.querySelector('main').classList.add('hide-completely')
                 document.getElementById('navbar').classList.add('hide-completely')
                 document.getElementById('main_header').classList.add('hide-completely')

@@ -45,7 +45,7 @@ smButton.innerHTML = `
         justify-content: center;
         transition: box-shadow 0.3s;
         text-transform: capitalize;
-        font-size: 0.9em;
+        font-size: 0.9rem;
         font-weight: 500;
         background: rgba(var(--text-color), 0.1); 
         -webkit-tap-highlight-color: transparent;
@@ -209,20 +209,28 @@ border: none;
     border-radius: 0.3em;
     transition: opacity 0.3s;
     background: rgba(var(--text-color), 0.06);
-    box-shadow: 0 0 0 0.1em rgba(var(--text-color), 0.2) inset;
+    box-shadow: 0 0 0.2rem rgba(var(--text-color), 0.2) inset;
     font-family: var(--font-family);
     width: 100%
     outline: none;
     min-width: 0;
 }
+.input.readonly .clear{
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+.readonly{
+    pointer-events: none;
+}
 input:focus{
     caret-color: var(--accent-color);
 }
-.input:focus-within{
+.input:focus-within:not(.readonly){
     box-shadow: 0 0 0 0.1em var(--accent-color) inset;
 }
 .disabled{
     pointer-events: none;
+    opacity: 0.6;
 }
 .label {
     user-select: none;
@@ -349,13 +357,23 @@ customElements.define('sm-input',
             else
                 this.shadowRoot.querySelector('.input').classList.remove('disabled')
         }
+        set readOnly(value) {
+            if (value) {
+                this.shadowRoot.querySelector('input').setAttribute('readonly', '')
+                this.shadowRoot.querySelector('.input').classList.add('readonly')       
+            }
+            else {
+                this.shadowRoot.querySelector('input').removeAttribute('readonly')
+                this.shadowRoot.querySelector('.input').classList.remove('readonly')       
+            }
+        }
 
         focusIn = () => {
-            this.shadowRoot.querySelector('input').focus()
+            this.input.focus()
         }
 
         focusOut = () => {
-            this.shadowRoot.querySelector('input').blur()
+            this.input.blur()
         }
 
         preventNonNumericalInput = (e) => {
@@ -425,6 +443,14 @@ customElements.define('sm-input',
                 this.input.setAttribute('max', maxValue)
                 this.max = parseInt(maxValue)
             }
+            if (this.hasAttribute('minlength')) {
+                let minValue = this.getAttribute('minlength')
+                this.input.setAttribute('minlength', minValue)
+            }
+            if (this.hasAttribute('maxlength')) {
+                let maxValue = this.getAttribute('maxlength')
+                this.input.setAttribute('maxlength', maxValue)
+            }
             if (this.hasAttribute('pattern')) {
                 this.input.setAttribute('pattern', this.getAttribute('pattern'))
             }
@@ -432,7 +458,7 @@ customElements.define('sm-input',
                 this.input.setAttribute('readonly', '')
                 this.readonly = true        
             }
-            if (this.hasAttribute('readonly')) {
+            if (this.hasAttribute('disabled')) {
                 this.inputParent.classList.add('disabled')
             }
             if (this.hasAttribute('helper-text')) {
@@ -462,9 +488,10 @@ customElements.define('sm-input',
 
         attributeChangedCallback(name, oldValue, newValue) {
             if (oldValue !== newValue) {
-                if (name === 'placeholder')
+                if (name === 'placeholder') {
                     this.shadowRoot.querySelector('.label').textContent = newValue;
                     this.setAttribute('aria-label', newValue);
+                }
             }
         }
     })
@@ -629,16 +656,12 @@ customElements.define('sm-textarea',
                     this.inputParent.classList.add('animate-label')
                 else
                     this.label.classList.add('hide')
-                if (!this.readonly)
-                    this.clearBtn.classList.remove('hide')
             }
             else {
                 if (this.animate)
                     this.inputParent.classList.remove('animate-label')
                 else
                     this.label.classList.remove('hide')
-                if (!this.readonly)
-                    this.clearBtn.classList.add('hide')
             }
 
             this.input.style.height = 'auto'
@@ -652,7 +675,6 @@ customElements.define('sm-textarea',
             this.label = this.shadowRoot.querySelector('.label')
             this.helperText = this.shadowRoot.querySelector('.helper-text')
             this.valueChanged = false;
-            this.readonly = false
             this.animate = this.hasAttribute('animate')
             this.input = this.shadowRoot.querySelector('textarea')
             this.shadowRoot.querySelector('.label').textContent = this.getAttribute('placeholder')
@@ -668,7 +690,6 @@ customElements.define('sm-textarea',
             }
             if (this.hasAttribute('readonly')) {
                 this.input.setAttribute('readonly', '')
-                this.readonly = true
             }
             if (this.hasAttribute('helper-text')) {
                 this.helperText.textContent = this.getAttribute('helper-text')
@@ -1844,12 +1865,12 @@ customElements.define('sm-popup', class extends HTMLElement {
         return this.popupStack
     }
     hide = () => {
-        this.removeAttribute('open')
         if(window.innerWidth < 640)
             this.popup.style.transform = 'translateY(100%)';
         else
             this.popup.style.transform = 'translateY(1rem)';
         this.popupContainer.classList.add('hide')
+        this.removeAttribute('open')
         if (typeof this.popupStack !== 'undefined') {
             this.popupStack.pop()
             if (this.popupStack.items.length){
