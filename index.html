@@ -828,6 +828,11 @@
                     </svg>
                 </div>
             </section>
+            <h4>Theme</h4>
+            <div class="flex">
+                <p>Toggle dark theme</p>
+                <sm-switch id="theme_switcher" class="justify-right"></sm-switch>
+            </div>
             <h4>My UPIs</h4>
             <div class="upi-container"></div>
             <p class="empty-state">Add UPI address for easier access during various transactions.</p>
@@ -1337,6 +1342,35 @@
             notifications.clearAll()
             notify('We are back online.', '', '', true)
         })
+
+        let themeSwitcher = document.getElementById('theme_switcher')
+
+        if (localStorage.theme === "dark") {
+            nightlight()
+            themeSwitcher.checked = true;
+        } else {
+            daylight()
+            themeSwitcher.checked = false;
+        }
+        
+        function daylight() {
+            document.body.setAttribute("data-theme", "light");
+        }
+        
+        function nightlight() {
+            document.body.setAttribute("data-theme", "dark");
+        }
+        themeSwitcher.addEventListener('change', function(e){
+            if(this.checked){
+                nightlight();
+                localStorage.setItem("theme", "dark");
+            }
+            else{
+                daylight();
+                localStorage.setItem("theme", "light");
+            }
+        })
+
         // function required for popups or modals to appear
         class Stack {
             constructor() {
@@ -1746,7 +1780,8 @@
             })
 
             document.getElementById('settings_page').addEventListener('change', e => {
-                setPrimaryUPI(e.target.value)
+                if(e.target.closest('.upi-container'))
+                    setPrimaryUPI(e.target.value)
             })
             document.getElementById('settings_page').addEventListener('click', async e => {
                 if(e.target.closest('.remove') && await confirmation('Do you want to remove this UPI address?', 'No', 'Remove UPI')){
@@ -1788,7 +1823,7 @@
         function showTransactionDetails(obj){
             let {type, timeStamp, } = obj;
             if(type === 'payCashier')
-                type = 'Pay through cashier'
+                type = 'Paid through cashier'
             transactionType.textContent = type
             transactionTime.textContent = formatedTime(timeStamp)
             showPage('transaction_page')

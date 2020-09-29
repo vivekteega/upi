@@ -30,6 +30,10 @@ body[data-theme=dark] {
   --text-color-light: 170, 170, 170;
   --foreground-color: 26, 26, 26;
   --background-color: #111;
+  --dark-shade: #222;
+  --hue: 255;
+  --saturation: 39%;
+  --lightness: 70%;
   background-color: var(--background-color);
 }
 body[data-theme=dark] .balance:nth-of-type(3) {
@@ -152,6 +156,10 @@ button:disabled ~ .loader {
 
 .direction-column {
   flex-direction: column;
+}
+
+.justify-right {
+  margin-left: auto;
 }
 
 .space-between {
@@ -1236,13 +1244,16 @@ sm-panel {
 
 #settings_page > h4 {
   margin-top: 2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 #settings_page p {
   color: rgba(var(--text-color), 0.7);
 }
 #settings_page sm-button {
   margin-top: 0.8rem;
+}
+#settings_page .flex {
+  max-width: 60ch;
 }
 
 @media only screen and (max-width: 640px) {
