@@ -1718,6 +1718,7 @@ smPopup.innerHTML = `
 :host{
     position: fixed;
     display: grid;
+    z-index: 10;
 }
 .popup-container{
     display: grid;
@@ -1847,21 +1848,21 @@ customElements.define('sm-popup', class extends HTMLElement {
             if (this.popupStack.items.length > 1){
                 this.popupStack.items[this.popupStack.items.length - 2].popup.classList.add('stacked')
             }
+            this.dispatchEvent(
+                new CustomEvent("popupopened", {
+                    bubbles: true,
+                    detail: {
+                        popup: this,
+                        popupStack: this.popupStack
+                    }
+                })
+            ) 
+            this.setAttribute('open', '')
+            this.pinned = pinned
+            this.popupContainer.classList.remove('hide')
         }
-        this.setAttribute('open', '')
-        this.pinned = pinned
-        this.popupContainer.classList.remove('hide')
         this.popup.style.transform = 'translateY(0)';
         document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
-        this.dispatchEvent(
-            new CustomEvent("popupopened", {
-                bubbles: true,
-                detail: {
-                    popup: this,
-                    popupStack: this.popupStack
-                }
-            })
-        ) 
         return this.popupStack
     }
     hide = () => {
@@ -1930,7 +1931,12 @@ customElements.define('sm-popup', class extends HTMLElement {
         this.popup.style.transition = 'transform 0.3s'
         if (this.touchEndTime - this.touchStartTime > 200) {
             if (this.touchEndY - this.touchStartY > this.threshold) {
-                this.hide()
+                if (this.pinned) {
+                    this.show()
+                    return
+                }
+                else
+                    this.hide()
             }
             else {
                 this.show()
@@ -1938,6 +1944,11 @@ customElements.define('sm-popup', class extends HTMLElement {
         }
         else {
             if (this.touchEndY > this.touchStartY)
+            if (this.pinned) {
+                this.show()
+                return
+            }
+            else
                 this.hide()
         }
     }
@@ -1965,7 +1976,12 @@ customElements.define('sm-popup', class extends HTMLElement {
             this.show()
         this.popupContainer.addEventListener('mousedown', e => {
             if (e.target === this.popupContainer && !this.pinned) {
-                this.hide()
+                if (this.pinned) {
+                    this.show()
+                    return
+                }
+                else
+                    this.hide()
             }
         })
 

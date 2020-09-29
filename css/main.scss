@@ -15,7 +15,7 @@ body {
     --text-color-light: 85, 85, 85;
     --foreground-color: 255, 255, 255;
     --background-color: rgba(var(--foreground-color), 1);
-    --dark-shade: #dadada;
+    --dark-shade: #f4f4f4;
     --hue: 255;
     --saturation: 61%;
     --lightness: 39%;
@@ -474,6 +474,9 @@ details{
 }
 
 #sign_in_popup {
+    &::part(background){
+        background: rgba(var(--foreground-color), 1);
+    }
     h3 {
         margin-top: 2rem;
     }
@@ -550,7 +553,6 @@ details{
             stroke: rgba(var(--text-color), 1);
         }
     }
-
     .active{
         opacity: 1;
     }
@@ -764,10 +766,12 @@ details{
 sm-tab-header {
     position: sticky;
     top: 0;
-    background: var(--background-color);
+    display: inline-flex;
+    background-color: var(--dark-shade);
     z-index: 2;
-    padding: 1rem 0;
-    margin-bottom: 1rem;
+    padding: 0.3rem;
+    margin: 1rem 0;
+    border-radius: 3rem;
 }
 sm-tab{
     text-transform: capitalize;
@@ -1076,6 +1080,9 @@ sm-panel{
         background-position-y: -3rem;
         background-repeat: no-repeat;
     }
+    #transaction_heading{
+        margin-bottom: 2rem;
+    }
     .copy-row{
         grid-template-areas: 'label label' '. .';
         margin-top: 1rem;
@@ -1095,6 +1102,10 @@ sm-panel{
         font-size: 1.2rem;
         margin-top: 6rem;
         margin-bottom: 0.5rem;
+    }
+    sm-button{
+        align-self: center;
+        width: auto;
     }
 }
 #success_svg, #failure_svg{
@@ -1180,6 +1191,11 @@ sm-panel{
         font-weight: 500;
     }
 }
+.back-arrow{
+        stroke-width: 10;
+        margin-right: 0.5rem;
+        padding: 0.2rem;
+}
 .select{
     max-width: 50ch;
     position: relative;
@@ -1254,6 +1270,25 @@ sm-panel{
     justify-self: flex-start;
     width: max-content;
 }
+
+#transaction_page{
+    .grid:first-of-type{
+        padding: 0.5rem 0;
+        grid-template-columns: auto 1fr;
+        grid-template-areas: 'back .' 'back .';
+        .back-arrow{
+            grid-area: back;
+        }
+        h4{
+            text-transform: capitalize;
+        }
+        h5{
+            font-weight: 400;
+            font-family: 'Roboto', sans-serif;
+        }
+    }
+}
+
 #activity_page,
 #request_page,
 #settings_page{
@@ -1288,6 +1323,9 @@ sm-panel{
     }
     .hide-on-mobile{
         display: none !important;
+    }
+    #transaction_page{
+        padding-top: 0;
     }
 }
 
