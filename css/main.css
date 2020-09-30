@@ -39,6 +39,9 @@ body[data-theme=dark] {
 body[data-theme=dark] .balance:nth-of-type(3) {
   color: rgba(var(--text-color), 1);
 }
+body[data-theme=dark] .person .person-initials {
+  color: rgba(var(--text-color), 0.9) !important;
+}
 
 a {
   font-weight: 600;
@@ -193,6 +196,10 @@ button:disabled ~ .loader {
 
 .no-transformations {
   transform: none !important;
+}
+
+sm-button[variant=outlined] {
+  --accent-color: rgba(var(--text-color), 1);
 }
 
 .loader {
@@ -622,7 +629,7 @@ details p {
   box-shadow: 0 0 0 0.4rem rgba(var(--text-color), 0.1) inset;
 }
 .balance:nth-of-type(2) {
-  background: url(bg-art1.svg), linear-gradient(135deg, #fd946a, #ff4857);
+  background: url(bg-art1.svg) left bottom, linear-gradient(135deg, #fd946a, #ff4857);
   background-size: cover;
 }
 .balance:nth-of-type(2) .tooltip {
@@ -631,7 +638,7 @@ details p {
 .balance:nth-of-type(3) {
   grid-area: flo;
   color: rgba(var(--foreground-color), 1);
-  background: url(bg-art3.svg) bottom no-repeat, linear-gradient(270deg, #2f69e6, #1b0980);
+  background: url(bg-art3.svg) center no-repeat, linear-gradient(270deg, #2f69e6, #1b0980);
   background-size: cover;
 }
 .balance:nth-of-type(3) .tooltip {
@@ -689,7 +696,8 @@ details p {
   padding: 1.5rem;
   gap: 2rem 0.2rem;
 }
-.options-tab .option {
+
+.option {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -702,7 +710,7 @@ details p {
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 }
-.options-tab .option .icon {
+.option .icon {
   height: 3rem;
   width: 3rem;
   background: rgba(var(--text-color), 0.06);
@@ -710,12 +718,12 @@ details p {
   padding: 0.8rem;
   margin-bottom: 0.6rem;
 }
-.options-tab .option h4 {
+.option h4 {
   font-size: 0.85rem;
   opacity: 0.8;
   font-weight: 500;
 }
-.options-tab .option:active {
+.option:active {
   transform: scale(0.95);
 }
 
@@ -1102,6 +1110,10 @@ sm-panel {
   grid-template-areas: "icon type amount" "icon receiver time";
   align-items: center;
   cursor: pointer;
+  transition: transform 0.3s;
+}
+.activity:active {
+  transform: scale(0.95);
 }
 .activity .icon {
   grid-area: icon;
@@ -1220,20 +1232,124 @@ sm-panel {
   width: max-content;
 }
 
-#transaction_page .grid:first-of-type {
+#transaction_page header {
   padding: 0.5rem 0;
-  grid-template-columns: auto 1fr;
-  grid-template-areas: "back ." "back .";
 }
-#transaction_page .grid:first-of-type .back-arrow {
+#transaction_page header .back-arrow {
   grid-area: back;
 }
-#transaction_page .grid:first-of-type h4 {
+#transaction_page header h4 {
   text-transform: capitalize;
 }
-#transaction_page .grid:first-of-type h5 {
+#transaction_page h5 {
   font-weight: 400;
   font-family: "Roboto", sans-serif;
+  opacity: 0.8;
+  margin-bottom: 0.2rem;
+  text-transform: capitalize;
+}
+#transaction_page #transaction_details {
+  position: relative;
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background-color: rgba(var(--text-color), 0.06);
+  max-width: 50ch;
+  border-radius: 0.5rem;
+}
+#transaction_page #transaction_details .icon {
+  height: 4rem;
+  width: 4rem;
+  padding: 1.2rem;
+  border-radius: 4rem;
+  background: rgba(var(--text-color), 0.06);
+  margin-bottom: 2rem;
+}
+#transaction_page #transaction_details .flex {
+  margin-bottom: 1rem;
+  align-items: baseline;
+}
+#transaction_page #transaction_details strong {
+  font-weight: 500;
+}
+#transaction_page #transaction_details strong:not(:last-of-type) {
+  margin-bottom: 1rem;
+}
+#transaction_page .transaction-amount {
+  font-size: 2rem;
+  font-weight: 400;
+}
+#transaction_page #transaction_time {
+  right: 0;
+  position: absolute;
+  margin: 1.5rem;
+}
+
+#people_container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 1.5rem;
+  gap: 2rem 0.2rem;
+}
+
+#add_person_btn {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  transition: transform 0.3s;
+  font-size: 0.85rem;
+  opacity: 0.8;
+  font-weight: 500;
+}
+#add_person_btn:active {
+  transform: scale(0.95);
+}
+#add_person_btn .icon {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 2rem;
+  padding: 1rem;
+  background: rgba(var(--text-color), 0.06);
+  align-self: center;
+  margin-bottom: 0.4rem;
+}
+
+.person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s;
+  width: 5rem;
+}
+.person:active {
+  transform: scale(0.95);
+}
+.person .person-initials {
+  display: flex;
+  justify-content: center;
+  height: 3rem;
+  width: 3rem;
+  font-size: 1.2rem !important;
+  font-weight: 500;
+  align-items: center;
+  border-radius: 2rem;
+  margin-bottom: 0.4rem !important;
+  text-transform: uppercase;
+}
+.person .person-name {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  font-weight: 500;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+#person_popup h3 {
+  text-transform: capitalize;
+}
+#person_popup .copy-row {
+  margin-bottom: 1.5rem;
 }
 
 #activity_page .empty-state,
@@ -1277,6 +1393,9 @@ sm-panel {
 
   #transaction_page {
     padding-top: 0;
+  }
+  #transaction_page header {
+    padding: 1.5rem 0;
   }
 }
 @media only screen and (min-width: 640px) {
@@ -1358,7 +1477,7 @@ sm-panel {
     margin-top: 1rem;
   }
 
-  .options-tab {
+  .options-tab, #people_container {
     grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
     gap: 2rem 0.8rem;
   }

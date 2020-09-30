@@ -328,6 +328,7 @@
         </div>
         <sm-button class="round" variant="outlined" onclick="this.closest('sm-popup').hide()">Done</sm-button>
     </sm-popup>
+    <!-- Add upi popup-->
     <sm-popup id="add_upi_popup">
         <header class="popup-header" slot="header">
             <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
@@ -348,6 +349,67 @@
         <sm-input id="add_upi_input" placeholder="UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+"
         required animate></sm-input>
     </sm-popup>
+
+    <!-- Add contact popup -->
+    <sm-popup id="add_person_popup">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <h4>Add a person</h4>
+            <button class="expand action" type="submit" onclick="addPerson()" disabled>
+                <h4 class="primary-btn expand">
+                    Add person
+                </h4>
+                <svg viewBox="0 0 73 73" class="loader">
+                    <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                </svg>
+            </button>
+        </header>
+        <sm-input id="person_flo_id" placeholder="FLO address" floId animate required></sm-input>
+        <sm-input id="person_name" placeholder="Name" required animate></sm-input>
+    </sm-popup>
+
+    <!-- Contact popup -->
+    <sm-popup id="person_popup">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+        </header>
+        <h3 id="show_person_name"></h3>
+        <h5>FLO ID</h5>
+        <div class="copy-row grid">
+            <h4 id="show_person_flo_id" class="copy"></h4>
+            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                <title>Copy</title>
+                <rect x="16" y="16" width="48" height="48" rx="6" />
+                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+            </svg>
+        </div>
+        <h5>Rupee actions</h5>
+        <div class="flex">
+            <div class="option" onclick="showPopup('cash_transfer')">
+                <svg class="icon" viewBox="0 0 64 64">
+                    <path
+                        d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                </svg>
+                <h4>Send</h4>
+            </div>
+            <div class="option" onclick="showPopup('request_rupee')">
+                <svg class="icon request-icon" viewBox="0 0 64 64">
+                    <path
+                        d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                </svg>
+                <h4>Request</h4>
+            </div>
+        </div>
+    </sm-popup>
+
     <!-- Report popup-->
     <sm-popup id="report_popup">
         <header class="popup-header" slot="header">
@@ -490,6 +552,15 @@
                         </svg>
                         <h4>pay through cashier</h4>
                         </a>
+                    </div>
+                </section>
+                <header>
+                    <h4>People</h4>
+                </header>
+                <section id="people_container">
+                    <div class="person">
+                        <h3 class="person-initials">S</h3>
+                        <h4 class="person-name">Sairaj Mote</h4>
                     </div>
                 </section>
             </div>
@@ -763,7 +834,7 @@
                 <sm-tab>Sent</sm-tab>
                 <sm-tab>Deposits</sm-tab>
                 <sm-tab>Withdrawals</sm-tab>
-                <sm-tab>Pay through cashier</sm-tab>
+                <sm-tab>Paid through cashier</sm-tab>
                 <sm-tab>System Notifications</sm-tab>
             </sm-tab-header>
             <sm-tab-panels id="user_activities">
@@ -842,15 +913,15 @@
             <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>    
         </section>
         <section id="transaction_page" class="page">
-            <div class="grid align-center">
-                <svg class="icon back-arrow" onclick="showPage('activity_page', 'activity_page_btn')" viewBox="0 0 64 64">
+            <header class="flex align-center" onclick="showPage('activity_page', 'activity_page_btn')">
+                <svg class="icon back-arrow" viewBox="0 0 64 64">
                     <title>Go to activity page</title>
                     <polyline points="48.01 0.35 16.35 32 48.01 63.65"/>
                 </svg>
-                <h4 id="transaction_type">Transaction</h4>
-                <h5 id="transaction_time">1pm sep 29 2020</h5>
-            </div>
-            <sm-button id="report_btn" variant="outlined">Report</div>
+                <h4 id="transaction_type"></h4>
+            </header>
+            <div id="transaction_details" class="grid direction-column"></div>
+            <sm-button onclick="showPopup('report_popup')" variant="outlined">Report</div>
         </section>
     </main>
     <script src="components.js"></script>
@@ -896,6 +967,7 @@
                 userFloIdContainers.forEach(container => container.textContent = myFloID)
                 defaultUPI = localStorage.getItem(`defaultUPI${myFloID}`)
                 renderUserUPI()
+                renderAllContacts()
                 hideLoader()
                 await token_app.actions.doShreeGanesh();
             }).catch(error => console.error(error))
@@ -963,7 +1035,7 @@
                 return card;
             },
             activityCard(obj){
-                let {type, amount, timeStamp, receiver} = obj;
+                let {type, amount, timeStamp, receiver, upi_txid, receiverUPI} = obj;
                 let card = document.createElement('div'),
                     composition = ``,
                     icon,
@@ -971,7 +1043,14 @@
                     transaction,
                     className
                 card.classList.add('activity')
-                setAttributes(card, {'data-type': type, 'data-vector-clock': timeStamp})
+                setAttributes(card, {
+                    'data-type': type,
+                    'data-vector-clock': timeStamp,
+                    'data-receiver': receiver,
+                    'data-amount': amount,
+                    'data-upi-txid': upi_txid,
+                    'data-receiver-upi': receiverUPI
+                })
                 switch(type){
                     case 'sent':
                         icon = `
@@ -1329,6 +1408,18 @@
                         <h4 class="demo-btn"></h4>
                     </div>`
                 return card;
+            },
+            contact(floId, name){
+                console.log(floId, name)
+                let card = document.createElement('div')
+                card.classList.add('person')
+                setAttributes(card, {'data-flo-id': floId, 'data-name': name})
+                let color = randomHsl()
+                card.innerHTML = `
+                    <h3 class="person-initials" style="background-color: ${color.light}; color: ${color.primary}">${name.charAt(0)}</h3>
+                    <h4 class="person-name">${name}</h4>
+                `
+                return card
             }
         }
 
@@ -1492,6 +1583,15 @@
             for (var key in attrs) {
                 el.setAttribute(key, attrs[key]);
             }
+        }
+
+        function randomHsl(saturation = 90, lightness = 50) {
+            let hue = Math.random() * 360
+            let color = {
+                primary: `hsla( ${hue}, ${saturation}%, ${lightness}%, 1)`,
+                light : `hsla( ${hue}, ${saturation}%, 90%, 0.6)` 
+            }
+            return color;
         }
 
         function clearAllInputs(parent) {
@@ -1661,6 +1761,23 @@
                 }
             })
 
+            //Function for handling contact click event
+
+            const showPersonName = document.getElementById('show_person_name'),
+                    showPersonFloId = document.getElementById('show_person_flo_id')
+            peopleContainer.addEventListener('click', e => {
+                if(e.target.closest('.person')){
+                    let person = e.target.closest('.person')
+                    showPersonName.textContent = person.dataset.name
+                    showPersonFloId.textContent = person.dataset.floId
+                    showPopup('person_popup')
+                }
+                if(e.target.closest('#add_person_btn')){
+                    showPopup('add_person_popup')
+                    
+                }
+            })
+
             // Function for confirming deposit requests 
             document.getElementById('pending_deposits_container').addEventListener('click', async (e) => {
                 if (e.target.closest('.confirm-deposit-btn'))
@@ -1707,7 +1824,14 @@
             document.getElementById('activity_page').addEventListener('click', (e) => {
                 if (e.target.closest('.activity')) {
                     currentRequest = e.target.closest('.activity')
-                    showTransactionDetails({type: currentRequest.dataset.type, timeStamp: currentRequest.dataset.vectorClock})
+                    showTransactionDetails({
+                        type: currentRequest.dataset.type,
+                        timeStamp: currentRequest.dataset.vectorClock,
+                        amount: currentRequest.dataset.amount,
+                        receiver: currentRequest.dataset.receiver,
+                        upiTxId: currentRequest.dataset.upiTxid,
+                        receiverUPI: currentRequest.dataset.receiverUpi
+                    })
                 }
             })
             // Function for reporting complain 
@@ -1818,14 +1942,95 @@
 
         const   transactionPage = document.getElementById('transaction_page'),
                 transactionType = document.getElementById('transaction_type'),
-                transactionTime = document.getElementById('transaction_time')
+                transactionDetails = document.getElementById('transaction_details')
 
         function showTransactionDetails(obj){
-            let {type, timeStamp, } = obj;
-            if(type === 'payCashier')
-                type = 'Paid through cashier'
+            let {type, timeStamp, amount, receiver, upiTxId, receiverUPI} = obj;
+            let composition = ``,
+                icon,
+                transaction,
+                className
+                
+            switch(type){
+                case 'sent':
+                    icon = `
+                        <svg class="icon" viewBox="0 0 64 64">
+                            <path
+                                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                        </svg>
+                    `
+                    transaction = 'Sent to'
+                break;
+                case 'deposit':
+                    icon = `
+                        <svg class="icon" viewBox="0 0 64 64">
+                            <title>deposit</title>
+                            <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
+                            <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
+                            <path
+                                d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+                            <path
+                                d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+                            <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
+                        </svg>
+                    `
+                    type = 'deposited'
+                    transaction = 'Deposited to'
+                break;
+                case 'withdraw':
+                    icon = `
+                        <svg class="icon" viewBox="0 0 64 64">
+                            <title>withdraw</title>
+                            <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
+                            <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
+                            <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
+                            <path
+                                d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+                            <path
+                                d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+                            <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
+                        </svg>
+                    `
+                    type = 'withdrawn'
+                    transaction = 'withdrawn to'
+                break;
+                case 'payCashier':
+                    icon = `
+                        <svg class="icon" viewBox="0 0 64 64">
+                            <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
+                            <rect height="64" width="64" rx="8"></rect>
+                        </svg>
+                    `
+                    className = 'withdrawn'
+                    transaction = 'Paid to'
+                    type = 'Paid through cashier'
+                break;
+            }
+
+            composition =  `${icon}
+                            <h5>${type}</h5>
+                            <div class="flex">
+                                ₹ <span class="transaction-amount"> ${amount}</span>
+                            </div>`
+
+            if(receiver !== 'undefined')
+                composition +=`
+                    <h5>${transaction}</h5> <strong>${receiver}</strong>`
+
+            if(upiTxId !== 'undefined')
+                composition += `
+                <h5>UPI transaction ID</h5>
+                <strong>${upiTxId}</strong> 
+                `
+
+            if(receiverUPI !== 'undefined')
+                composition += `
+                <h5>Sent to UPI ID</h5>
+                <strong>${receiverUPI}</strong> 
+                `
+            composition += `<h5 id="transaction_time">${formatedTime(timeStamp)}</h5>`
+            transactionDetails.innerHTML = composition
             transactionType.textContent = type
-            transactionTime.textContent = formatedTime(timeStamp)
             showPage('transaction_page')
         }
 
@@ -1926,6 +2131,41 @@
 
         }
 
+        const contactFlo = document.getElementById('person_flo_id'),
+                contactName = document.getElementById('person_name')
+        async function addPerson(){
+            compactIDB.addData('contacts', {name: contactName.value}, contactFlo.value)
+            .then(success => {
+                notify('Contact added', 'success')
+                renderAllContacts()
+                hidePopup()
+            })
+            .catch(error => {
+                notify('Contact already added', 'error')
+            })
+        }
+
+        const peopleContainer = document.getElementById('people_container')
+        async function renderAllContacts(){
+            const allContacts = await compactIDB.readAllData('contacts')
+            peopleContainer.innerHTML = ``
+            for(contact in allContacts){
+                frag.append(render.contact(contact, allContacts[contact].name))
+            }
+            peopleContainer.append(frag)
+            let addPersonButton = document.createElement('div')
+            addPersonButton.id="add_person_btn"   
+            addPersonButton.innerHTML = `
+            <svg class="icon" viewBox="0 0 64 64">
+                <title>add Contact</title>
+                <line x1="32" x2="32" y2="64"/>
+                <line x1="64" y1="32" y2="32"/>
+            </svg>
+            Add
+            `
+            peopleContainer.prepend(addPersonButton)
+        }
+
         function signIn() {
             return new Promise((resolve, reject) => {
                 hideLoader()
@@ -1943,10 +2183,10 @@
                 document.querySelector('main').classList.add('hide-completely')
                 document.getElementById('navbar').classList.add('hide-completely')
                 document.getElementById('main_header').classList.add('hide-completely')
-                localStorage.removeItem(`defaultUPI${myFloID}`)
                 floDapps.clearCredentials()
                 compactIDB.deleteDB().then((message) => {
                     delete token_app.master_configurations;
+                    localStorage.removeItem(`defaultUPI${myFloID}`)
                     onLoadStartUp()
                     notifications.clearAll()
                     notify('Logged out')
@@ -9821,7 +10061,7 @@
                         }
                     });
                 },
-                addContact: function (id, floID, KB = this.supernodeKBucket) {
+                addPerson: function (id, floID, KB = this.supernodeKBucket) {
                     const contact = {
                         id: id,
                         floID: floID
@@ -9835,7 +10075,7 @@
                     } catch (e) {
                         decodedId = address;
                     }
-                    this.addContact(decodedId, address, KB);
+                    this.addPerson(decodedId, address, KB);
                 },
                 isNodePresent: function (flo_id, KB = this.supernodeKBucket) {
                     let kArray = KB.toArray();
@@ -10847,7 +11087,9 @@
                             cash_sent_details: {},
                             pay_thru_cashier: {},
                             //user UPIs
-                            userUPIs: {}
+                            userUPIs: {},
+                            //contacts
+                            contacts: {}
                         }
                         //add other given objectStores
                         for (o in this.appObs)
@@ -12337,7 +12579,8 @@
                     let request_object = {
                         user_flo_id: myFloID,
                         upi_txid: upi_txid,
-                        deposit_amount: token_amount_to_buy.value
+                        deposit_amount: token_amount_to_buy.value,
+                        cashier_upi
                     }
                     if (typeof upi_txid === "string" && upi_txid.length > 1) {
                         floCloudAPI.sendGeneralData(request_object, token_app.master_configurations
@@ -12347,7 +12590,7 @@
                             hidePopup()
                             showTransactionStatus('success', 'Deposit request sent.', 'It may take upto 48 hours for deposited amount to be reflected in your account.')
                             btnLoading('request_tokens_btn', 'stop')
-                            depositActivityContainer.prepend(render.activityCard({type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid})) 
+                            depositActivityContainer.prepend(render.activityCard({type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: cashier_upi})) 
                         })
                         return true;
                     }
@@ -12469,7 +12712,7 @@
                     showTransactionStatus('success', 'Pay through cashier Request sent.', `Sent to: <b class="breakable">${recvr_id}</b><br>
                         through cashier UPI: <b>${cashier_upi}</b>.<br><br>
                         Once the cashier receives your payment, they will transfer it to intended receiver.`);
-                    payCashierActivityContainer.prepend(render.activityCard({type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, upi_txid: req_object.upi_txid}))   
+                    payCashierActivityContainer.prepend(render.activityCard({type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, receiverUPI: req_object.upi_txid}))   
                 }
 
             } catch (error) {
@@ -12500,9 +12743,10 @@
                 for (usr_deposits of deposit_msg) {
                     let {
                         upi_txid,
-                        deposit_amount
+                        deposit_amount,
+                        cashier_upi
                     } = usr_deposits.message;
-                    frag.append(render.activityCard({type: 'deposit', amount: deposit_amount, timeStamp: usr_deposits.vectorClock, upi_txid}))
+                    frag.append(render.activityCard({type: 'deposit', amount: deposit_amount, timeStamp: usr_deposits.vectorClock, upi_txid, receiver: cashier_upi}))
                 }
 
                 depositActivityContainer.innerHTML = ``;
@@ -12525,7 +12769,7 @@
                         upi_txid,
                         amount
                     } = cashier_message.message;
-                    frag.append(render.activityCard({type: 'payCashier', amount, timeStamp: cashier_message.vectorClock, receiver: receiver_flo_id, upi_txid}))
+                    frag.append(render.activityCard({type: 'payCashier', amount, timeStamp: cashier_message.vectorClock, receiver: receiver_flo_id, receiverUPI: upi_txid}))
                 }
 
                 payCashierActivityContainer.innerHTML = ``;

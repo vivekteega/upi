@@ -37,6 +37,11 @@ body[data-theme="dark"]{
     .balance:nth-of-type(3){
         color: rgba(var(--text-color), 1);
     }
+    .person{
+        .person-initials{
+            color: rgba(var(--text-color), 0.9) !important;
+        }
+    }
 }
 
 a {
@@ -192,6 +197,10 @@ button {
 
 .no-transformations {
     transform: none !important;
+}
+
+sm-button[variant="outlined"]{
+    --accent-color: rgba(var(--text-color), 1);
 }
 
 .loader {
@@ -643,7 +652,7 @@ details{
         }
     }
     &:nth-of-type(2){
-        background: url(bg-art1.svg), linear-gradient(135deg, #fd946a, #ff4857);
+        background: url(bg-art1.svg) left bottom, linear-gradient(135deg, #fd946a, #ff4857);
         background-size: cover;
         .tooltip{
             box-shadow: 0 0 0 0.4rem #ff4857 inset;
@@ -652,7 +661,7 @@ details{
     &:nth-of-type(3){
         grid-area: flo;
         color: rgba(var(--foreground-color), 1);
-        background: url(bg-art3.svg) bottom no-repeat, linear-gradient(270deg, #2f69e6, #1b0980);
+        background: url(bg-art3.svg) center no-repeat, linear-gradient(270deg, #2f69e6, #1b0980);
         background-size: cover;
         .tooltip{
             box-shadow: 0 0 0 0.4rem#1b0980 inset; 
@@ -710,36 +719,36 @@ details{
     grid-template-columns: repeat(4, 1fr);  
     padding: 1.5rem;
     gap: 2rem 0.2rem;
-    .option {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        border-radius: 0.4rem;
-        width: 5rem;
-        text-transform: capitalize;
-        transition: transform 0.3s;
-        -webkit-tap-highlight-color: transparent;
-        cursor: pointer;
-        .icon {
-            height: 3rem;
-            width: 3rem;
-            background: rgba(var(--text-color), 0.06);
-            border-radius: 2rem;
-            padding: 0.8rem;
-            margin-bottom: 0.6rem;
-        }
+}
+.option {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 0.4rem;
+    width: 5rem;
+    text-transform: capitalize;
+    transition: transform 0.3s;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+    .icon {
+        height: 3rem;
+        width: 3rem;
+        background: rgba(var(--text-color), 0.06);
+        border-radius: 2rem;
+        padding: 0.8rem;
+        margin-bottom: 0.6rem;
+    }
 
-        h4 {
-            font-size: 0.85rem;
-            opacity: 0.8;
-            font-weight: 500;
-        }
+    h4 {
+        font-size: 0.85rem;
+        opacity: 0.8;
+        font-weight: 500;
+    }
 
-        &:active {
-            transform: scale(0.95);
-        }
+    &:active {
+        transform: scale(0.95);
     }
 }
 
@@ -1164,6 +1173,10 @@ sm-panel{
     grid-template-areas: 'icon type amount' 'icon receiver time';
     align-items: center;
     cursor: pointer;
+    transition: transform 0.3s;
+    &:active{
+        transform: scale(0.95);
+    }
     .icon{
         grid-area: icon;
         height: 3rem;
@@ -1280,20 +1293,123 @@ sm-panel{
 }
 
 #transaction_page{
-    .grid:first-of-type{
+    header{
         padding: 0.5rem 0;
-        grid-template-columns: auto 1fr;
-        grid-template-areas: 'back .' 'back .';
         .back-arrow{
             grid-area: back;
         }
         h4{
             text-transform: capitalize;
         }
-        h5{
-            font-weight: 400;
-            font-family: 'Roboto', sans-serif;
+    }
+    h5{
+        font-weight: 400;
+        font-family: 'Roboto', sans-serif;
+        opacity: 0.8;
+        margin-bottom: 0.2rem;
+        text-transform: capitalize;
+    }
+    #transaction_details{
+        position: relative;
+        margin: 1.5rem 0;
+        padding: 1.5rem;
+        background-color: rgba(var(--text-color), 0.06);
+        max-width: 50ch;
+        border-radius: 0.5rem;
+        .icon{
+            height: 4rem;
+            width: 4rem;
+            padding: 1.2rem;
+            border-radius: 4rem;
+            background: rgba(var(--text-color), 0.06);
+            margin-bottom: 2rem;
         }
+        .flex{
+            margin-bottom: 1rem;
+            align-items: baseline;
+        }
+        strong{
+            font-weight: 500;
+        }
+        strong:not(:last-of-type){
+            margin-bottom: 1rem;
+        }
+    }
+    .transaction-amount{
+        font-size: 2rem;
+        font-weight: 400;
+    }
+    #transaction_time{
+        right: 0;
+        position: absolute;
+        margin: 1.5rem;
+    }
+}
+#people_container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);  
+    padding: 1.5rem;
+    gap: 2rem 0.2rem;
+}
+#add_person_btn{
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    transition: transform 0.3s;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    font-weight: 500;
+    &:active{
+        transform: scale(0.95);
+    }
+    .icon{
+        height: 3rem;
+        width: 3rem;
+        border-radius: 2rem;
+        padding: 1rem;
+        background: rgba(var(--text-color), 0.06);
+        align-self: center;
+        margin-bottom: 0.4rem;
+    }
+}
+.person{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s;
+    width: 5rem;
+    &:active{
+        transform: scale(0.95);
+    }
+    .person-initials{
+        display: flex;
+        justify-content: center;
+        height: 3rem;
+        width: 3rem;
+        font-size: 1.2rem !important;
+        font-weight: 500;
+        align-items: center;
+        border-radius: 2rem;
+        margin-bottom: 0.4rem !important;
+        text-transform: uppercase;
+    }
+    .person-name{
+        font-size: 0.85rem;
+        opacity: 0.8;
+        font-weight: 500;
+        text-transform: capitalize;
+        text-align: center;
+    }
+}
+
+#person_popup{
+    h3{
+        text-transform: capitalize;
+    }
+    .copy-row{
+        margin-bottom: 1.5rem;
     }
 }
 
@@ -1337,6 +1453,9 @@ sm-panel{
     }
     #transaction_page{
         padding-top: 0;
+        header{
+            padding: 1.5rem 0;
+        }
     }
 }
 
@@ -1414,7 +1533,7 @@ sm-panel{
             margin-top: 1rem;
         }
     }
-    .options-tab{
+    .options-tab, #people_container{
         grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
         gap: 2rem 0.8rem;
     }
