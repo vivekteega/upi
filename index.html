@@ -53,7 +53,7 @@
             Sign In
         </button>
     </sm-popup>
-    <sm-popup id="cash_transfer">
+    <sm-popup id="send_rupee_popup">
         <header class="popup-header" slot="header">
             <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
                 <title>close</title>
@@ -381,7 +381,16 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
         </header>
-        <h3 id="show_person_name"></h3>
+        <div class="flex direction-column align-center">
+            <h3 id="person_initials"></h3>
+            <div class="flex space-between align-center">
+                <h4 class="capitalize" id="show_person_name"></h4>
+                <svg id="edit_person_name" class="icon" onclick="setNameEditable()" viewBox="0 0 64 64">
+                    <title>edit</title>
+                    <path d="M46.73,14.81l7,7,7.65-7.6A7.15,7.15,0,0,0,61.39,4L60.11,2.77a7.23,7.23,0,0,0-10.19,0L3.87,48.57a5,5,0,0,0-1.39,2.6L.53,61.27a1.74,1.74,0,0,0,2,2l10.15-1.94A5.06,5.06,0,0,0,15.34,60L49.6,25.9"/>
+                </svg>
+            </div>
+        </div>
         <h5>FLO ID</h5>
         <div class="copy-row grid">
             <h4 id="show_person_flo_id" class="copy"></h4>
@@ -391,21 +400,20 @@
                 <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
             </svg>
         </div>
-        <h5>Rupee actions</h5>
         <div class="flex">
-            <div class="option" onclick="showPopup('cash_transfer')">
+            <div class="option" onclick="showPopup('send_rupee_popup')">
                 <svg class="icon" viewBox="0 0 64 64">
                     <path
                         d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
                 </svg>
-                <h4>Send</h4>
+                <h4>Send rupee</h4>
             </div>
             <div class="option" onclick="showPopup('request_rupee')">
                 <svg class="icon request-icon" viewBox="0 0 64 64">
                     <path
                         d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
                 </svg>
-                <h4>Request</h4>
+                <h4>Request rupee</h4>
             </div>
         </div>
     </sm-popup>
@@ -504,7 +512,7 @@
             <div class="left">
                 <h4>Rupee actions</h4>
                 <section class="options-tab">
-                    <div class="option" onclick="showPopup('cash_transfer')">
+                    <div class="option" onclick="showPopup('send_rupee_popup')">
                         <svg class="icon" viewBox="0 0 64 64">
                             <path
                                 d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
@@ -565,12 +573,19 @@
                 </section>
             </div>
             <div class="user-panel">
-                <div class="flex align-items space-between">
+                <div class="flex align-center space-between">
                     <h4>My Balances</h4>
-                    <sm-button class="small round" onclick="refresh_balance(this)">Check Balance</sm-button>
+                    <button id="refresh_balance_btn" onclick="refresh_balance(this)" class="action expand" type="submit">
+                        <h4 class="primary-btn expand">
+                            Refresh Balance
+                        </h4>
+                        <svg viewBox="0 0 73 73" class="loader">
+                            <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                        </svg>
+                    </button>
                 </div>
                 <div class="display-balance grid">
-                    <div class="balance">
+                    <div class="balance rupee-balance-card">
                         <div class="tooltip help">
                             <div class="tt-icon">?</div>
                             <p class="tooltip-text">Your wallet balance</p>
@@ -578,7 +593,7 @@
                         <h5>Rupee</h5>
                         <h4 class="token-balance">0</h4>
                     </div>
-                    <div class="balance">
+                    <div class="balance in-process-balance">
                         <div class="tooltip help">
                             <div class="tt-icon">?</div>
                             <p class="tooltip-text">Money that is in-process after deposit.</p>
@@ -586,7 +601,7 @@
                         <h5>In-process</h5>
                         <h4 class="uncnf-token-balance">0</h4>
                     </div>
-                    <div class="balance">
+                    <div class="balance flo-balance-card">
                         <div class="tooltip help"> 
                             <div class="tt-icon">?</div>
                             <p class="tooltip-text">FLO balance required for each transaction.</p>
@@ -607,11 +622,9 @@
                 </sm-tab-header>
                 <sm-tab-panels id="requests_to_cashier">
                     <sm-panel>
-                        <div class="container-header">
-                            <sm-button id="fetch_deposits" onclick="show_deposit_request()">
-                                Load pending
-                            </sm-button>
-                        </div>
+                        <sm-button id="fetch_deposits" onclick="show_deposit_request()" class="bottom-margin">
+                            Load pending
+                        </sm-button>
                         <div id="pending_deposits_container" class="container"></div>
                         <div id="deposit_illustration" class="empty-state">
                             <svg viewBox="0 0 529.94 446.5">
@@ -668,9 +681,7 @@
                         </div>
                     </sm-panel>
                     <sm-panel>
-                        <div class="container-header">
-                            <sm-button id="fetch_withdraws" onclick="show_withdraw_request()">Load pending</sm-button>
-                        </div>
+                        <sm-button id="fetch_withdraws" onclick="show_withdraw_request()" class="bottom-margin">Load pending</sm-button>
                         <div id="pending_withdrawals_container" class="container"></div>
                         <div id="withdraw_illustration" class="empty-state">
                             <svg viewBox="0 0 529.94 446.5">
@@ -727,11 +738,9 @@
                         </div>
                     </sm-panel>
                     <sm-panel>
-                        <div class="container-header">
-                            <sm-button id="fetch_pay_requests" onclick="showPayRequests()">
-                                Load pending
-                            </sm-button>
-                        </div>
+                        <sm-button id="fetch_pay_requests" onclick="showPayRequests()" class="bottom-margin">
+                            Load pending
+                        </sm-button>
                         <div id="pay_requests_container" class="container"></div>
                         <div id="pay_illustration" class="empty-state">
                             <svg viewBox="0 0 529.94 446.5">
@@ -795,11 +804,11 @@
                     <sm-button class="small round" onclick="refresh_balance(this)">Check Balance</sm-button>
                 </div>
                 <div class="display-balance grid">
-                    <div class="balance">
+                    <div class="balance rupee-balance-card">
                         <h5>Rupee</h5>
                         <h4 class="token-balance">0</h3>
                     </div>
-                    <div class="balance">
+                    <div class="balance flo-balance-card">
                         <h5>FLO</h5>
                         <h4 class="flo-balance">0</h4>
                     </div>
@@ -904,10 +913,12 @@
                 <p>Toggle dark theme</p>
                 <sm-switch id="theme_switcher" class="justify-right"></sm-switch>
             </div>
-            <h4>My UPIs</h4>
-            <div class="upi-container"></div>
-            <p class="empty-state">Add UPI address for easier access during various transactions.</p>
-            <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
+            <div class="user-option">
+                <h4 class="top-margin">My UPIs</h4>
+                <div class="upi-container"></div>
+                <p class="empty-state">Add UPI address for easier access during various transactions.</p>
+                <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
+            </div>
             <h4>Sign Out</h4>
             <p>Signing out will erase all the data stored in local storage and Indexed DB. This will remove saved private key, UPI addresses.</p>
             <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>    
@@ -921,6 +932,7 @@
                 <h4 id="transaction_type"></h4>
             </header>
             <div id="transaction_details" class="grid direction-column"></div>
+            <p>It may take upto 48 working hours for a transaction to complete. If even after 48 hours transction wasn't completed and your money was deducted, use <Strong>Report</Strong> button to report your issue.</p>
             <sm-button onclick="showPopup('report_popup')" variant="outlined">Report</div>
         </section>
     </main>
@@ -965,9 +977,6 @@
                 console.log(`Welcome ${myFloID}`)
                 refresh_balance()
                 userFloIdContainers.forEach(container => container.textContent = myFloID)
-                defaultUPI = localStorage.getItem(`defaultUPI${myFloID}`)
-                renderUserUPI()
-                renderAllContacts()
                 hideLoader()
                 await token_app.actions.doShreeGanesh();
             }).catch(error => console.error(error))
@@ -979,7 +988,7 @@
             notificationSound = document.getElementById('notification_sound');
             let defaultUPI
             const render = {
-            depositRequest(txid, floId) {
+            depositRequest(txid, floId, amount) {
                 let card = document.createElement('div');
                 card.classList.add('request')
                 setAttributes(card, {
@@ -990,12 +999,14 @@
                                     <h4 class="breakable">${floId}</h4>
                                     <h5>UPI TXID</h5>
                                     <h4 class="breakable">${txid}</h4>
+                                    <h5>Amount</h5>
+                                    <h4 class="breakable">₹${amount}</h4>
                                     <button id="" class="confirm-deposit-btn">
                                         Confirm
                                     </button>`;
                 return card;
             },
-            withdrawRequest(txid, upiId, floId) {
+            withdrawRequest(txid, upiId, floId, amount) {
                 let card = document.createElement('div');
                 card.classList.add('request')
                 setAttributes(card, {
@@ -1006,9 +1017,9 @@
                 card.innerHTML = `  <h5>FLO address</h5>
                                     <h4 class="breakable">${floId}</h4>
                                     <h5>UPI ID</h5>
-                                    <h3 class="breakable">${upiId}</h3>
-                                    <h5>Transaction ID</h5>
-                                    <h4 class="breakable">${txid}</h4>
+                                    <h4 class="breakable">${upiId}</h4>
+                                    <h5>TAmount</h5>
+                                    <h4 class="breakable">₹${amount}</h4>
                                     <button id="" class="confirm-withdraw-btn"">
                                         Confirm
                                     </button>`;
@@ -1115,7 +1126,7 @@
                     <h4 class="activity-type">${transaction}</h4>`
                 if(receiver)
                     composition += `
-                        <h4 class="activity-receiver ">${receiver}</h4>
+                        <h4 class="activity-receiver breakable">${allContacts[receiver]  ? allContacts[receiver].name : receiver}</h4>
                     `
                 composition += `
                     <h4 class="activity-amount ${className}">${sign} ₹${amount}</h4>
@@ -1136,16 +1147,9 @@
                 })
                 markup = `   <h5 class="time">${formatedTime(time)}</h5>
                                     <h5>Request by</h5>
-                                    <div class="copy-row">
-                                        <h4 class="copy">${senderAddress}</h4>
-                                        <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                            <title>Copy</title>
-                                            <rect x="16" y="16" width="48" height="48" rx="6" />
-                                            <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                                        </svg>
-                                    </div>
+                                    <h4 class="breakable">${allContacts[senderAddress]  ? allContacts[senderAddress].name : senderAddress}</h4>
                                     <h5 class="label">amount</h5>
-                                    <h4>₹ ${amount}</h4>
+                                    <h4 class="amount">₹ ${amount}</h4>
                                     `;
                 if (enableActions)
                     markup += `
@@ -1409,14 +1413,12 @@
                     </div>`
                 return card;
             },
-            contact(floId, name){
-                console.log(floId, name)
+            contact(floId, name, color){
                 let card = document.createElement('div')
                 card.classList.add('person')
                 setAttributes(card, {'data-flo-id': floId, 'data-name': name})
-                let color = randomHsl()
                 card.innerHTML = `
-                    <h3 class="person-initials" style="background-color: ${color.light}; color: ${color.primary}">${name.charAt(0)}</h3>
+                    <h3 class="person-initials" style="background-color: ${color.light};">${name.charAt(0)}</h3>
                     <h4 class="person-name">${name}</h4>
                 `
                 return card
@@ -1505,9 +1507,22 @@
             switch(e.detail.popup.id){
                 case 'deposit_rupee' :
                     request_rupee_token()
-                    break;
-                }
-            })
+                break;
+                case 'person_popup':
+                    personPopupOpen = true
+                break;
+                case 'send_rupee_popup':
+                    if(personPopupOpen){
+                        tokenReceiver.value = person.dataset.floId
+                    }
+                break;
+                case 'request_rupee':
+                    if(personPopupOpen){
+                        requestedAddress.value = person.dataset.floId
+                    }
+                break;
+            }   
+        })
         document.addEventListener('popupclosed', e => {
             popupStack = e.detail.popupStack    
             let thisPopup = e.detail.popup,
@@ -1528,7 +1543,7 @@
                     document.querySelector('#navbar').classList.remove('hide-completely')
                     document.querySelector('#main_header').classList.remove('hide-completely')
                 break;
-                case 'cash_transfer' : 
+                case 'send_rupee_popup' : 
                     payingRequested = false;
                     tokenReceiver.readOnly = false
                     tokenAmount.readOnly = false
@@ -1542,6 +1557,9 @@
                     transactionSuccessSection.classList.add('hide-completely')
                     transactionFailedSection.classList.add('hide-completely')
                 }, 300);
+                break;
+                case 'person_popup':
+                    personPopupOpen = false
                 break;
                 case 'prompt':
                 if (thisPopup.querySelector('sm-input').value == '')
@@ -1740,11 +1758,20 @@
         }
 
         let payingRequested = false,
-            currentPaymentRequest;
+            currentPaymentRequest,
+            person,
+            personName;
         const   tokenReceiver = document.getElementById('token_receiver'),
                 tokenAmount = document.getElementById('token_amount'),
                 depositRupeeAmount = document.getElementById('token_amount_to_buy')
 
+        const   requestedAddress = document.getElementById('requested_address'),
+                requestedAmount = document.getElementById('requested_amount')      
+        
+        const   showPersonName = document.getElementById('show_person_name'),
+                showPersonFloId = document.getElementById('show_person_flo_id'),
+                personInitials = document.getElementById('person_initials')
+        
         window.addEventListener('load', () => {
             document.addEventListener('input', e => {
                 if (e.target.closest('sm-input')) {
@@ -1763,18 +1790,27 @@
 
             //Function for handling contact click event
 
-            const showPersonName = document.getElementById('show_person_name'),
-                    showPersonFloId = document.getElementById('show_person_flo_id')
             peopleContainer.addEventListener('click', e => {
                 if(e.target.closest('.person')){
-                    let person = e.target.closest('.person')
+                    person = e.target.closest('.person')
                     showPersonName.textContent = person.dataset.name
+                    personInitials.textContent = person.dataset.name.charAt(0)
+                    personInitials.style.background = allContacts[person.dataset.floId].color.light
                     showPersonFloId.textContent = person.dataset.floId
                     showPopup('person_popup')
                 }
                 if(e.target.closest('#add_person_btn')){
                     showPopup('add_person_popup')
                     
+                }
+            })
+
+            document.getElementById('person_popup').addEventListener('click', e => {
+                if(!e.target.closest('#show_person_name') && !e.target.closest('#edit_person_name')){
+                    if(showPersonName.isContentEditable && personName !== showPersonName.textContent){
+                        changePersonName()
+                        showPersonName.contentEditable = 'false'
+                    }
                 }
             })
 
@@ -1845,12 +1881,10 @@
                         customMsg)
                 }
             })
-            // Function for requesting rupee
+            // Function for requesting rupee     
             document.getElementById('request_rupee_btn').addEventListener('click', (e) => {
-                let requestedAddress = document.getElementById('requested_address').value,
-                    requestedAmount = document.getElementById('requested_amount').value
                 btnLoading('request_rupee_btn', 'start')
-                request_payment(requestedAddress, requestedAmount)
+                request_payment(requestedAddress.value, requestedAmount.value)
             })
 
             // Function for accepting payment request
@@ -1860,7 +1894,7 @@
                         senderAddress = parent.dataset.senderAddress,
                         amount = parent.dataset.amount,
                         paymentRequestId = parent.dataset.paymentRequestId;;
-                    showPopup('cash_transfer');
+                    showPopup('send_rupee_popup');
                     payingRequested = true;
                     currentPaymentRequest = {
                         paymentRequest: parent,
@@ -2015,7 +2049,7 @@
 
             if(receiver !== 'undefined')
                 composition +=`
-                    <h5>${transaction}</h5> <strong>${receiver}</strong>`
+                    <h5>${transaction}</h5> <strong>${allContacts[receiver] ? allContacts[receiver].name : receiver}</strong>`
 
             if(upiTxId !== 'undefined')
                 composition += `
@@ -2035,22 +2069,22 @@
         }
 
 
-        let allPages = document.querySelectorAll('.page'),
-            allTabs = document.querySelectorAll('.navbar-item');
+        const allPages = document.querySelectorAll('.page'),
+            allTabs = document.querySelectorAll('.navbar-item')
 
         function showPage(page, btn) {
             allPages.forEach((page) => {
                 page.classList.add('hide-completely')
             })
+            document.getElementById(page).classList.remove('hide-completely')
             allTabs.forEach((tab) => {
                 tab.classList.remove('active')
             })
             if(btn){
                 if(typeof btn === 'string')
-                    btn = document.getElementById(btn)
+                btn = document.getElementById(btn)
                 btn.classList.add('active', 'shrink')
             }
-            document.getElementById(page).classList.remove('hide-completely')
             if (page === 'request_page') {
                 show_payment_requests()
             }
@@ -2134,7 +2168,7 @@
         const contactFlo = document.getElementById('person_flo_id'),
                 contactName = document.getElementById('person_name')
         async function addPerson(){
-            compactIDB.addData('contacts', {name: contactName.value}, contactFlo.value)
+            compactIDB.addData('contacts', {name: contactName.value, color: randomHsl()}, contactFlo.value)
             .then(success => {
                 notify('Contact added', 'success')
                 renderAllContacts()
@@ -2146,11 +2180,12 @@
         }
 
         const peopleContainer = document.getElementById('people_container')
+        let allContacts
         async function renderAllContacts(){
-            const allContacts = await compactIDB.readAllData('contacts')
+            allContacts = await compactIDB.readAllData('contacts')
             peopleContainer.innerHTML = ``
             for(contact in allContacts){
-                frag.append(render.contact(contact, allContacts[contact].name))
+                frag.append(render.contact(contact, allContacts[contact].name, allContacts[contact].color))
             }
             peopleContainer.append(frag)
             let addPersonButton = document.createElement('div')
@@ -2164,6 +2199,30 @@
             Add
             `
             peopleContainer.prepend(addPersonButton)
+        }
+
+        function setNameEditable(){
+            showPersonName.contentEditable = 'true'
+            showPersonName.focus()
+            document.execCommand('selectAll', false, null);
+            document.getSelection().collapseToEnd();
+            personName = showPersonName.textContent
+        }
+
+        async function changePersonName(){
+            let contact = await compactIDB.readData('contacts', person.dataset.floId)
+            contact.name = showPersonName.textContent
+            if(showPersonName.textContent === '')
+                contact.name = 'Unknown'
+            compactIDB.writeData('contacts', contact, person.dataset.floId)
+            .then(success => {
+                notify('Changes saved', 'success')
+                renderAllContacts()
+                personInitials.textContent = contact.name.charAt(0)
+            })
+            .catch(error => {
+                notify(error, 'error')
+            })
         }
 
         function signIn() {
@@ -11663,15 +11722,14 @@
                 #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                 #!#cashiers=
                 {
-                    "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
-                        "upi_id": "8507742774@ybl"
-                    },
                     "FPFeL5PXzW9bGosUjQYCxTHSMHidnygvvd": {
                         "upi_id": "7744023898@paytm"        
                     }
                 }`
             /*
-            ,
+                    "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
+                        "upi_id": "8507742774@ybl"
+                    },
                     "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
                         "upi_id": "8340617958@ybl"
                     },
@@ -11805,7 +11863,7 @@
                 })
                 let cashierList = ``,
                     cashierSelect = document.getElementById('select_cashier')
-                cashierList += `<sm-strip-option value = "">Select Cashier...</sm-strip-option>`;
+                cashierList += `<sm-strip-option value = "">Select Cashier</sm-strip-option>`;
                 for (cashier in token_app.master_configurations.cashiers)
                     cashierList += `<sm-strip-option value = "${cashier}">${cashier}</sm-strip-option>`
                 cashierSelect.innerHTML = cashierList;
@@ -11827,6 +11885,10 @@
                     option.classList.remove('hide-completely')
                 })
                 userType.forEach(user => user.textContent = 'User')
+                defaultUPI = localStorage.getItem(`defaultUPI${myFloID}`)
+                renderUserUPI()
+                renderAllContacts()
+                
                 show_all_user_activities()
                 show_payment_requests()
                 showPage('home_page', 'home_page_btn')
@@ -12035,11 +12097,13 @@
                 for (const m of general_msg) {
                     if (cash_deposits_upi_txid_list.includes(m.message.upi_txid)) continue;
                     if (processed_deposits.includes(m.message.upi_txid)) continue;
+                    console.log(m)
                     let {
                         user_flo_id,
-                        upi_txid
+                        upi_txid,
+                        deposit_amount
                     } = m.message;
-                    frag.append(render.depositRequest(upi_txid, user_flo_id))
+                    frag.append(render.depositRequest(upi_txid, user_flo_id, deposit_amount))
                 }
 
                 depositsContainer.append(frag)
@@ -12083,12 +12147,14 @@
                 for (const m of general_msg) {
                     if (cash_withdraws_token_txid_list.includes(m.message.token_txid)) continue;
                     if (processed_withdraws.includes(m.message.token_txid)) continue;
+                    console.log(m)
                     let {
                         token_txid,
                         user_flo_id,
-                        withdrawer_upi
+                        withdrawer_upi,
+                        withdraw_amount
                     } = m.message
-                    frag.append(render.withdrawRequest(token_txid, withdrawer_upi, user_flo_id))
+                    frag.append(render.withdrawRequest(token_txid, withdrawer_upi, user_flo_id, withdraw_amount))
                 }
 
                 withdrawsContainer.append(frag)
@@ -12299,7 +12365,7 @@
         async function refresh_balance(refreshButton) {
             try {
                 if (refreshButton)
-                    refreshButton.textContent = 'Checking...'
+                    btnLoading(refreshButton, 'start')
                 const current_token_balance = document.querySelector('.token-balance').textContent;
                 if (typeof current_token_balance == "string") {
                     const [get_user_rupee_balance, get_user_flo_balance] = await Promise.all([ ajaxGet(
@@ -12327,12 +12393,14 @@
                     
                 }
                 if (refreshButton) {
-                    notify('Balance Updated')
-                    refreshButton.textContent = 'Check Balance'
+                    btnLoading(refreshButton, 'stop')
                 }
                 return true;
             } catch (error) {
                 notify("Unable to load balance", 'error')
+                if (refreshButton) {
+                    btnLoading(refreshButton, 'stop')
+                }
                 throw new Error(error);
             }
         }
