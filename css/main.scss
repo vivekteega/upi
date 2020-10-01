@@ -114,7 +114,6 @@ button {
 ::-moz-focus-inner {
     border: none;
 }
-
 .bottom-padding {
     padding-bottom: 1.5rem;
 }
@@ -241,12 +240,14 @@ sm-button[variant="outlined"]{
     justify-content: center;
     padding: 0;
     background: none;
-    &[disabled] {
+    &:disabled{
         .primary-btn {
             background: none;
         }
     }
-
+    &:focus{
+        outline: none;
+    }
     h4 {
         padding: 0.5rem 1.2rem;
         font-size: 0.9rem;
@@ -660,7 +661,7 @@ details{
     padding: 1rem;
     justify-content: flex-end;
     h4{
-        font-size: 2.5rem;
+        font-size: 2rem;
         font-family: 'Roboto', sans-serif;
         font-weight: 500;
         text-shadow: 1px 0.1rem 0.2rem #00000040;

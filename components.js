@@ -165,6 +165,10 @@ input[type=number]::-webkit-outer-spin-button {
     appearance: none;
     margin: 0; 
 }
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
 input:invalid{
     outline: none;
     box-shadow: none;
