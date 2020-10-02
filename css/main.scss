@@ -1242,6 +1242,14 @@ sm-panel{
         color: rgba(var(--text-color), 0.7);
         font-weight: 500;
     }
+    .pending{
+        display: inline-flex;
+        padding: 0.3rem 0.6rem;
+        background: rgba(var(--text-color), 0.06);
+        border-radius: 1rem;
+        width: max-content;
+        margin-left: 0.4rem;
+    }
 }
 .back-arrow{
         stroke-width: 10;
