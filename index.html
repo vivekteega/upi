@@ -853,6 +853,7 @@
             <h3>Activity</h3>
             <sm-tab-header variant="tab" class="round" target="user_activities">
                 <sm-tab>Sent</sm-tab>
+                <sm-tab>Received</sm-tab>
                 <sm-tab>Deposits</sm-tab>
                 <sm-tab>Withdrawals</sm-tab>
                 <sm-tab>Paid through cashier</sm-tab>
@@ -861,6 +862,10 @@
             <sm-tab-panels id="user_activities">
                 <sm-panel>
                     <div id="sent_activity_container" class="activity-container"></div>
+                    <h4 class="empty-state">You haven't sent any rupee yet.</h4>
+                </sm-panel>
+                <sm-panel>
+                    <div id="received_activity_container" class="activity-container"></div>
                     <h4 class="empty-state">You haven't sent any rupee yet.</h4>
                 </sm-panel>
                 <sm-panel>
@@ -1085,6 +1090,17 @@
                         sign = '-'
                         className = 'withdrawn'
                         transaction = 'Sent to'
+                    break;
+                    case 'received':
+                        icon = `
+                        <svg class="icon request-icon" viewBox="0 0 64 64">
+                            <path
+                                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                        </svg>
+                        `
+                        sign = '+'
+                        className = 'deposited'
+                        transaction = 'Recieved from'
                     break;
                     case 'deposit':
                         icon = `
@@ -2012,6 +2028,15 @@
                         </svg>
                     `
                     transaction = 'Sent to'
+                break;
+                case 'received':
+                    icon = `
+                        <svg class="icon request-icon" viewBox="0 0 64 64">
+                            <path
+                                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                        </svg>
+                    `
+                    transaction = 'Received from'
                 break;
                 case 'deposit':
                     icon = `
@@ -11930,6 +11955,10 @@
                 transferTokensManually();
                 
                 pay_through_cashier();
+                
+                getSentRupeeList()
+
+                getReceivedRupeeList()
             }
             this.retrieveLatestContent();
         },
@@ -12821,6 +12850,7 @@
         }
 
         const   sentActivityContainer = document.getElementById('sent_activity_container'),
+                receivedActivityContainer = document.getElementById('received_activity_container'),
                 depositActivityContainer = document.getElementById('deposit_activity_container'),
                 withdrawActivityContainer = document.getElementById('withdraw_activity_container'),
                 payCashierActivityContainer = document.getElementById('pay_cashier_activity_container'),
@@ -13191,22 +13221,41 @@
             }
         }
 
-        async function get_sent_rupee_list() {
+        async function getSentRupeeList() {
             try {
-                let senderIDs = [myFloID];
-                floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
-                    token_sender, token_receiver, token_amount, token_name_radio,
-                    flo_txid, "datetime": + new Date()
-                };
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_SENT_TOKENS,
-                    options = { myFloID, senderIDs });
+                let data = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&senderFloAddress=${myFloID}`)
+                let transactions = data.transactions
+                let sortedTransactions = Object.values(transactions).sort((a,b) => b.transactionDetails.time - a.transactionDetails.time)
+                for(transaction of sortedTransactions){
+                    let {tokenAmount, flodata} = transaction.parsedFloData,
+                        receiver = flodata.match(/\b\w{34,34}\b/),
+                        timeStamp = transaction.transactionDetails.time * 1000
 
-                const sent_tokens_list = Object.keys(floGlobals.appObjects
-                [token_app.master_configurations.TYPE_SENT_TOKENS]);
+                    if(receiver === '' || typeof receiver === undefined || receiver === null) continue;
+                    frag.append(render.activityCard({type: 'sent', amount: tokenAmount, receiver, timeStamp}))
+                }
+                sentActivityContainer.innerHTML = ''
+                sentActivityContainer.append(frag)
+            } catch (error) {
+                throw new Error(error);
+            }
+        }
 
-                console.log(sent_tokens_list);
-                // #todo: while displying validate senderIDs===myFloID
+        async function getReceivedRupeeList() {
+            try {
+                let data = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&destFloAddress=${myFloID}`)
+                let transactions = data.transactions
+                let sortedTransactions = Object.values(transactions).sort((a,b) => b.transactionDetails.time - a.transactionDetails.time)
+                for(transaction of sortedTransactions){
+                    let {tokenAmount, flodata} = transaction.parsedFloData,
+                        receiver = flodata.match(/\b\w{34,34}\b/),
+                        timeStamp = transaction.transactionDetails.time * 1000
 
+                    if(receiver === '' || typeof receiver === undefined || receiver === null) continue;
+                    frag.append(render.activityCard({type: 'received', amount: tokenAmount, receiver, timeStamp}))
+                }
+                receivedActivityContainer.innerHTML = ''
+                receivedActivityContainer.append(frag)
             } catch (error) {
                 throw new Error(error);
             }
