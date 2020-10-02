@@ -742,7 +742,7 @@
                         </div>
                     </sm-panel>
                     <sm-panel>
-                        <sm-button id="fetch_pay_requests" onclick="showPayRequests()" class="bottom-margin">
+                        <sm-button id="fetch_pay_requests" onclick="showPayThruCashierRequests()" class="bottom-margin">
                             Load pending
                         </sm-button>
                         <div id="pay_requests_container" class="container"></div>
@@ -11754,8 +11754,8 @@
                 #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                 #!#cashiers=
                 {
-                    "FPFeL5PXzW9bGosUjQYCxTHSMHidnygvvd": {
-                        "upi_id": "7744023898@paytm"        
+                    "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
+                        "upi_id": "8507742774@ybl"
                     }
                 }`
             /*
@@ -11877,7 +11877,7 @@
                 })
                 show_deposit_request()
                 show_withdraw_request()
-                showPayRequests()
+                showPayThruCashierRequests()
                 userType.forEach(user => user.textContent = 'Cashier')
                 showPage('deposit', 'deposit_page_btn')
             }
@@ -12044,7 +12044,25 @@
                             arg2: {receiverID: cashier, senderIDs: [myFloID]}
                         }
 
-                        promises.push(p1, p2, p3);
+                        let p4 = {
+                            func: floCloudAPI.requestGeneralData,
+                            arg1: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
+                            arg2: {receiverID: cashier, senderIDs: [cashier]}
+                        }
+
+                        let p5 = {
+                            func: floCloudAPI.requestGeneralData,
+                            arg1: token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
+                            arg2: {receiverID: cashier, senderIDs: [cashier]}
+                        }
+
+                        let p6 = {
+                            func: floCloudAPI.requestGeneralData,
+                            arg1: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
+                            arg2: {receiverID: cashier, senderIDs: [cashier]}
+                        }
+
+                        promises.push(p1, p2, p3, p4, p5, p6);
                     }
                 }
 
@@ -12088,6 +12106,7 @@
             let promises = [];
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_MY_PERSONAL_DATA));
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
+            promises.push(reset_cloud_object(token_app.master_configurations.TYPE_SENT_TOKENS));
             if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                 promises.push(reset_cloud_object(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS));
             }
@@ -12099,10 +12118,10 @@
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
-                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
-                    receiverID: myFloID,
-                    senderIDs: [myFloID]
-                });
+                // await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
+                //     receiverID: myFloID,
+                //     senderIDs: [myFloID]
+                // });
 
                 let finished_tasks = await floCloudAPI.requestApplicationData({
                     type: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
@@ -12111,6 +12130,16 @@
                 });
 
                 if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
+
+                console.log(finished_tasks);
+
+                // await floCloudAPI.requestGeneralData(token_app.master_configurations
+                //     .TYPE_PROCESSED_DEPOSITS, {
+                //     receiverID: myFloID
+                // });
+
+                // let finished_tasks = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                //     .TYPE_PROCESSED_DEPOSITS, "0"));
 
                 const processed_deposits = Object.values(finished_tasks).map(m => m.message.user_upi_txid);
 
@@ -12157,7 +12186,7 @@
 
                 if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
 
-                const processed_withdraws = Object.values(finished_tasks).map(m => m.message.user_upi_txid);
+                const processed_withdraws = Object.values(finished_tasks).map(m => m.message.token_txid);
 
                 await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
                     receiverID: myFloID
@@ -12278,7 +12307,9 @@
 
                 let token_tx = await ajaxGet('https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/' +
                     input_data["token_txid"])
-                if (typeof token_tx !== "object") {
+                if (typeof token_tx !== "object" || typeof token_tx.parsedFloData !== "object"
+                || typeof token_tx.parsedFloData.flodata !== "string" 
+                || token_tx.parsedFloData.flodata.length<1) {
                     notify("Transaction not found");
                     return false;
                 }
@@ -12315,7 +12346,8 @@
                 })
 
             } catch (error) {
-                notify(error, 'error')
+                notify('Cash withdrawal failed.')
+                throw new Error(error, 'error')
             }
         }
 
@@ -12376,7 +12408,7 @@
                                 .map(m => m.message)[0];
 
                             payment_request_status(original_req, 'APPROVED')
-                            showPayRequests();
+                            showPayThruCashierRequests();
                         } else if (payingRequested === false) {
                             let receiverID = myFloID;
                             floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
@@ -12437,10 +12469,8 @@
             }
         }
 
-        async function showPayRequests() {
+        async function showPayThruCashierRequests() {
             try {
-                //if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
-
                 let finished_tasks = await floCloudAPI.requestApplicationData({
                     type: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
                     receiverID: myFloID,
@@ -12701,7 +12731,6 @@
             }
         }
 
-
         const withdrawRupeePopup = document.getElementById('withdraw_rupee')
         function withdraw_token_to_get_cash() {
             try {
@@ -12826,7 +12855,7 @@
                 payCashierActivityContainer = document.getElementById('pay_cashier_activity_container'),
                 cashierMessageContainer = document.getElementById('cashier_message_container')
 
-        async function show_all_user_activities() {
+        async function show_all_user_activities() { 
             try {
                 await token_app.actions.retrieveLatestContent();
 
@@ -12839,6 +12868,12 @@
                 const pay_thru_cashier_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
                     .TYPE_PAY_THROUGH_CASHIER, "0").reverse());
 
+                const processed_deposits = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_PROCESSED_DEPOSITS, "0"));
+
+                const processed_deposits_upis = Object.values(processed_deposits).map(m => m.message.user_upi_txid);
+                console.log(processed_deposits_upis)
+
                 console.log(deposit_msg, withdraw_msg, user_msg)
                 for (usr_deposits of deposit_msg) {
                     let {
@@ -12846,13 +12881,29 @@
                         deposit_amount,
                         cashier_upi
                     } = usr_deposits.message;
-                    frag.append(render.activityCard({type: 'deposit', amount: deposit_amount, timeStamp: usr_deposits.vectorClock, upi_txid, receiver: cashier_upi}))
+                    let deposit_request_processed = false;
+                    if(processed_deposits_upis.includes(upi_txid)) deposit_request_processed = true; 
+                    console.info(upi_txid, deposit_request_processed)
+                    // SaiRajM: Use deposit_request_processed to display status of deposit 
+                    frag.append(render.activityCard({type: 'deposit', amount: deposit_amount, timeStamp: usr_deposits.vectorClock, 
+                    upi_txid, receiver: cashier_upi, deposit_request_processed}))
                 }
 
                 depositActivityContainer.innerHTML = ``;
                 depositActivityContainer.append(frag)
 
+                const processed_withdraws = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_PROCESSED_WITHDRAWS, "0"));
+
+                const processed_withdraws_token_txid = Object.values(processed_withdraws).map(m => m.message.token_txid);
+                
                 for (usr_withdraws of withdraw_msg) {
+                    let withdraw_request_processed = false;
+                    if (processed_withdraws_token_txid.includes(usr_withdraws.message.token_txid)) 
+                        withdraw_request_processed = true;
+                    // SaiRajM: status for withdraw 
+                    console.log(usr_withdraws.message.token_txid, withdraw_request_processed);
+
                     let {
                         token_txid,
                         withdrawer_upi,
@@ -12863,12 +12914,22 @@
                 withdrawActivityContainer.innerHTML = ``;
                 withdrawActivityContainer.append(frag)
 
+
+                const processed_pay_thru_cashiers = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_PROCESSED_PAY_THROUGH_CASHIER, "0"));
+                const processed_cashier_payments = Object.values(processed_pay_thru_cashiers)
+                .map(m => m.message.upi_txid).filter(f => f !== undefined);
+
                 for (cashier_message of pay_thru_cashier_msg) {
+                    let ptc_request_processed = false;
                     let {
                         receiver_flo_id,
                         upi_txid,
                         amount
                     } = cashier_message.message;
+                    if (processed_cashier_payments.includes(upi_txid)) ptc_request_processed = true;
+                    console.log(upi_txid, ptc_request_processed);
+                    // SaiRajM status for pay through cashier
                     frag.append(render.activityCard({type: 'payCashier', amount, timeStamp: cashier_message.vectorClock, receiver: receiver_flo_id, receiverUPI: upi_txid}))
                 }
 
@@ -12905,6 +12966,26 @@
                     case token_app.master_configurations.TYPE_DEPOSITS:
                         const deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0")
                         .reverse());
+
+                        let finished_tasks = await floCloudAPI.requestApplicationData({
+                            type: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
+                            receiverID: myFloID,
+                            senderIDs: [myFloID]
+                        });
+
+                        if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
+
+                        console.log(finished_tasks);
+                        
+                        // await floCloudAPI.requestGeneralData(token_app.master_configurations
+                        //     .TYPE_PROCESSED_DEPOSITS, {
+                        //     receiverID: myFloID
+                        // });
+
+                        // let finished_tasks = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                        //     .TYPE_PROCESSED_DEPOSITS, "0"));
+
+                        const processed_deposits = Object.values(finished_tasks).map(m => m.message.user_upi_txid);
 
                         for (usr_deposits of deposit_msg) {
                             let {
@@ -13194,10 +13275,10 @@
         async function get_sent_rupee_list() {
             try {
                 let senderIDs = [myFloID];
-                floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
-                    token_sender, token_receiver, token_amount, token_name_radio,
-                    flo_txid, "datetime": + new Date()
-                };
+                // floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
+                //     token_sender, token_receiver, token_amount, token_name_radio,
+                //     flo_txid, "datetime": + new Date()
+                // };
                 await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_SENT_TOKENS,
                     options = { myFloID, senderIDs });
 
