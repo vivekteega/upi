@@ -2092,7 +2092,7 @@
 
             if(receiver !== 'undefined')
                 composition +=`
-                    <h5>${transaction}</h5> <strong>${allContacts[receiver] ? allContacts[receiver].name : receiver}</strong>`
+                    <h5>${transaction}</h5> <strong class="breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</strong>`
 
             if(upiTxId !== 'undefined')
                 composition += `
@@ -13248,9 +13248,9 @@
                 let sortedTransactions = Object.values(transactions).sort((a,b) => b.transactionDetails.time - a.transactionDetails.time)
                 for(transaction of sortedTransactions){
                     let {tokenAmount, flodata} = transaction.parsedFloData,
-                        receiver = flodata.match(/\b\w{34,34}\b/),
+                        receiver = transaction.transactionDetails.vin[0].addr,
                         timeStamp = transaction.transactionDetails.time * 1000
-
+                    console.log(transaction)
                     if(receiver === '' || typeof receiver === undefined || receiver === null) continue;
                     frag.append(render.activityCard({type: 'received', amount: tokenAmount, receiver, timeStamp}))
                 }
