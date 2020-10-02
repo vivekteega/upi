@@ -45,10 +45,8 @@ smButton.innerHTML = `
         justify-content: center;
         transition: box-shadow 0.3s;
         text-transform: capitalize;
-        font-size: 0.9em;
+        font-size: 0.9rem;
         font-weight: 500;
-        color: rgba(var(--text-color), 0.9);
-        font-family: var(--font-family);
         background: rgba(var(--text-color), 0.1); 
         -webkit-tap-highlight-color: transparent;
         outline: none;
@@ -167,6 +165,10 @@ input[type=number]::-webkit-outer-spin-button {
     appearance: none;
     margin: 0; 
 }
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
 input:invalid{
     outline: none;
     box-shadow: none;
@@ -210,21 +212,30 @@ border: none;
     padding: 0.7em 1em;
     border-radius: 0.3em;
     transition: opacity 0.3s;
-    background: rgba(var(--text-color), 0.1);
-    box-shadow: 0 0 0 0.1em rgba(var(--text-color), 0.2) inset;
+    background: rgba(var(--text-color), 0.06);
+    box-shadow: 0 0 0.2rem rgba(var(--text-color), 0.2) inset;
     font-family: var(--font-family);
     width: 100%
     outline: none;
     min-width: 0;
 }
-
+.input.readonly .clear{
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+.readonly{
+    pointer-events: none;
+}
 input:focus{
     caret-color: var(--accent-color);
 }
-.input:focus-within{
+.input:focus-within:not(.readonly){
     box-shadow: 0 0 0 0.1em var(--accent-color) inset;
 }
-
+.disabled{
+    pointer-events: none;
+    opacity: 0.6;
+}
 .label {
     user-select: none;
     opacity: .7;
@@ -344,12 +355,29 @@ customElements.define('sm-input',
             return this.shadowRoot.querySelector('input').checkValidity()
         }
 
+        set disabled(value) {
+            if (value)
+                this.shadowRoot.querySelector('.input').classList.add('disabled')
+            else
+                this.shadowRoot.querySelector('.input').classList.remove('disabled')
+        }
+        set readOnly(value) {
+            if (value) {
+                this.shadowRoot.querySelector('input').setAttribute('readonly', '')
+                this.shadowRoot.querySelector('.input').classList.add('readonly')       
+            }
+            else {
+                this.shadowRoot.querySelector('input').removeAttribute('readonly')
+                this.shadowRoot.querySelector('.input').classList.remove('readonly')       
+            }
+        }
+
         focusIn = () => {
-            this.shadowRoot.querySelector('input').focus()
+            this.input.focus()
         }
 
         focusOut = () => {
-            this.shadowRoot.querySelector('input').blur()
+            this.input.blur()
         }
 
         preventNonNumericalInput = (e) => {
@@ -368,7 +396,7 @@ customElements.define('sm-input',
             this.dispatchEvent(event);
         }
 
-        checkInput = () => {
+        checkInput = (e) => {
             if (!this.hasAttribute('placeholder') || this.getAttribute('placeholder') === '')
                 return;
             if (this.input.value !== '') {
@@ -397,6 +425,8 @@ customElements.define('sm-input',
             this.helperText = this.shadowRoot.querySelector('.helper-text')
             this.valueChanged = false;
             this.readonly = false
+            this.min
+            this.max
             this.animate = this.hasAttribute('animate')
             this.input = this.shadowRoot.querySelector('input')
             this.shadowRoot.querySelector('.label').textContent = this.getAttribute('placeholder')
@@ -410,13 +440,30 @@ customElements.define('sm-input',
             if (this.hasAttribute('min')) {
                 let minValue = this.getAttribute('min')
                 this.input.setAttribute('min', minValue)
+                this.min = parseInt(minValue)
+            }
+            if (this.hasAttribute('max')) {
+                let maxValue = this.getAttribute('max')
+                this.input.setAttribute('max', maxValue)
+                this.max = parseInt(maxValue)
+            }
+            if (this.hasAttribute('minlength')) {
+                let minValue = this.getAttribute('minlength')
+                this.input.setAttribute('minlength', minValue)
+            }
+            if (this.hasAttribute('maxlength')) {
+                let maxValue = this.getAttribute('maxlength')
+                this.input.setAttribute('maxlength', maxValue)
             }
             if (this.hasAttribute('pattern')) {
                 this.input.setAttribute('pattern', this.getAttribute('pattern'))
             }
             if (this.hasAttribute('readonly')) {
                 this.input.setAttribute('readonly', '')
-                this.readonly = true
+                this.readonly = true        
+            }
+            if (this.hasAttribute('disabled')) {
+                this.inputParent.classList.add('disabled')
             }
             if (this.hasAttribute('helper-text')) {
                 this.helperText.textContent = this.getAttribute('helper-text')
@@ -445,9 +492,10 @@ customElements.define('sm-input',
 
         attributeChangedCallback(name, oldValue, newValue) {
             if (oldValue !== newValue) {
-                if (name === 'placeholder')
+                if (name === 'placeholder') {
                     this.shadowRoot.querySelector('.label').textContent = newValue;
                     this.setAttribute('aria-label', newValue);
+                }
             }
         }
     })
@@ -612,16 +660,12 @@ customElements.define('sm-textarea',
                     this.inputParent.classList.add('animate-label')
                 else
                     this.label.classList.add('hide')
-                if (!this.readonly)
-                    this.clearBtn.classList.remove('hide')
             }
             else {
                 if (this.animate)
                     this.inputParent.classList.remove('animate-label')
                 else
                     this.label.classList.remove('hide')
-                if (!this.readonly)
-                    this.clearBtn.classList.add('hide')
             }
 
             this.input.style.height = 'auto'
@@ -635,7 +679,6 @@ customElements.define('sm-textarea',
             this.label = this.shadowRoot.querySelector('.label')
             this.helperText = this.shadowRoot.querySelector('.helper-text')
             this.valueChanged = false;
-            this.readonly = false
             this.animate = this.hasAttribute('animate')
             this.input = this.shadowRoot.querySelector('textarea')
             this.shadowRoot.querySelector('.label').textContent = this.getAttribute('placeholder')
@@ -651,7 +694,6 @@ customElements.define('sm-textarea',
             }
             if (this.hasAttribute('readonly')) {
                 this.input.setAttribute('readonly', '')
-                this.readonly = true
             }
             if (this.hasAttribute('helper-text')) {
                 this.helperText.textContent = this.getAttribute('helper-text')
@@ -703,7 +745,6 @@ word-spacing: 0.1em;
 text-align: center;
 transition: color 0.3s;
 text-transform: capitalize;
-font-family: var(--font-family);
 height: 100%;
 }
 @media (hover: hover){
@@ -1681,6 +1722,7 @@ smPopup.innerHTML = `
 :host{
     position: fixed;
     display: grid;
+    z-index: 10;
 }
 .popup-container{
     display: grid;
@@ -1698,19 +1740,18 @@ smPopup.innerHTML = `
     transform: scale(0.9) translateY(-2rem) !important;
 }
 .popup{
-    margin-bottom: 0.5rem;
     display: flex;
     flex-direction: column;
     position: relative;
     align-self: flex-end;
     align-items: flex-start;
-    width: calc(100% - 1rem);
-    border-radius: 0.8rem;
+    width: 100%;
+    border-radius: 0.8rem 0.8rem 0 0;
     transform: translateY(100%);
     transition: transform 0.3s;
     background: rgba(var(--foreground-color), 1);
     box-shadow: 0 -1rem 2rem #00000020;
-    max-height: 100vh;
+    max-height: 90vh;
 }
 .container-header{
     display: flex;
@@ -1811,21 +1852,30 @@ customElements.define('sm-popup', class extends HTMLElement {
             if (this.popupStack.items.length > 1){
                 this.popupStack.items[this.popupStack.items.length - 2].popup.classList.add('stacked')
             }
+            this.dispatchEvent(
+                new CustomEvent("popupopened", {
+                    bubbles: true,
+                    detail: {
+                        popup: this,
+                        popupStack: this.popupStack
+                    }
+                })
+            ) 
+            this.setAttribute('open', '')
+            this.pinned = pinned
+            this.popupContainer.classList.remove('hide')
         }
-        this.setAttribute('open', '')
-        this.pinned = pinned
-        this.popupContainer.classList.remove('hide')
         this.popup.style.transform = 'translateY(0)';
         document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
         return this.popupStack
     }
     hide = () => {
-        this.removeAttribute('open')
         if(window.innerWidth < 640)
             this.popup.style.transform = 'translateY(100%)';
         else
             this.popup.style.transform = 'translateY(1rem)';
         this.popupContainer.classList.add('hide')
+        this.removeAttribute('open')
         if (typeof this.popupStack !== 'undefined') {
             this.popupStack.pop()
             if (this.popupStack.items.length){
@@ -1862,7 +1912,7 @@ customElements.define('sm-popup', class extends HTMLElement {
 
     handleTouchStart = (e) => {
         this.touchStartY = e.changedTouches[0].clientY
-        this.popup.style.transition = 'initial'
+        this.popup.style.transition = 'transform 0.1s'
         this.touchStartTime = e.timeStamp
     }
 
@@ -1885,7 +1935,12 @@ customElements.define('sm-popup', class extends HTMLElement {
         this.popup.style.transition = 'transform 0.3s'
         if (this.touchEndTime - this.touchStartTime > 200) {
             if (this.touchEndY - this.touchStartY > this.threshold) {
-                this.hide()
+                if (this.pinned) {
+                    this.show()
+                    return
+                }
+                else
+                    this.hide()
             }
             else {
                 this.show()
@@ -1893,6 +1948,11 @@ customElements.define('sm-popup', class extends HTMLElement {
         }
         else {
             if (this.touchEndY > this.touchStartY)
+            if (this.pinned) {
+                this.show()
+                return
+            }
+            else
                 this.hide()
         }
     }
@@ -1920,7 +1980,12 @@ customElements.define('sm-popup', class extends HTMLElement {
             this.show()
         this.popupContainer.addEventListener('mousedown', e => {
             if (e.target === this.popupContainer && !this.pinned) {
-                this.hide()
+                if (this.pinned) {
+                    this.show()
+                    return
+                }
+                else
+                    this.hide()
             }
         })
 
@@ -2007,11 +2072,12 @@ smCarousel.innerHTML = `
     scroll-snap-type: x mandatory;
 }
 .indicators{
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
     justify-content: center;
     position: absolute;
     bottom: -1rem;
-    gap: 1rem;
+    gap: 0.5rem;
     width: 100%;
 }
 .dot{
@@ -2844,6 +2910,9 @@ pointer-events: none;
 height: 100%;
 border-radius: 0.3rem;
 }
+:host(.round) .indicator{
+    border-radius: 3rem;
+}
 :host([variant="tab"]) .tab-header{
 border-bottom: none; 
 }
@@ -2851,11 +2920,10 @@ border-bottom: none;
 display: none;
 }
 :host([variant="tab"]) .tab-header{
-gap: 0;
-display: inline-grid;
-justify-self: flex-start;
-background: rgba(var(--text-color), 0.1);
-border-radius: 0.3rem;
+    gap: 0.2rem;
+    display: inline-grid;
+    justify-self: flex-start;
+    border-radius: 0.3rem;
 }
 :host([variant="tab"]) slot::slotted(.active){
 color: rgba(var(--foreground-color), 1);
