@@ -254,7 +254,9 @@ border: none;
     min-width: 0;
 }
 .input.readonly .clear{
-    display: none;
+    opacity: 0 !important;
+    margin-right: -2em;
+    pointer-events: none !important;
 }
 .readonly{
     pointer-events: none;

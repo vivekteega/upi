@@ -933,33 +933,34 @@
         </section>
         <section id="settings_page" class="page hide-completely">
             <h3 class="bottom-margin">Settings<h3>
-                    <section>
-                        <h4>My FLO address</h4>
-                        <div class="copy-row">
-                            <h4 class="user-flo-id copy"></h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>
-                    </section>
-                    <h4>Theme</h4>
-                    <div class="flex">
-                        <p>Toggle dark theme</p>
-                        <sm-switch id="theme_switcher" class="justify-right"></sm-switch>
-                    </div>
-                    <div class="user-option">
-                        <h4 class="top-margin">My UPIs</h4>
-                        <div class="upi-container"></div>
-                        <p class="empty-state">Add UPI address for easier access during various transactions.</p>
-                        <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address
-                        </sm-button>
-                    </div>
-                    <h4>Sign Out</h4>
-                    <p>Signing out will erase all the data stored in local storage and Indexed DB. This will remove
-                        saved private key, UPI addresses and contacts.</p>
-                    <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>
+            <div id="my_qr_code"></div>
+            <section>
+                <h4>My FLO address</h4>
+                <div class="copy-row">
+                    <h4 class="user-flo-id copy"></h4>
+                    <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                        <title>Copy</title>
+                        <rect x="16" y="16" width="48" height="48" rx="6" />
+                        <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                    </svg>
+                </div>
+            </section>
+            <h4>Theme</h4>
+            <div class="flex">
+                <p>Toggle dark theme</p>
+                <sm-switch id="theme_switcher" class="justify-right"></sm-switch>
+            </div>
+            <div class="user-option">
+                <h4 class="top-margin">My UPIs</h4>
+                <div class="upi-container"></div>
+                <p class="empty-state">Add UPI address for easier access during various transactions.</p>
+                <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address
+                </sm-button>
+            </div>
+            <h4>Sign Out</h4>
+            <p>Signing out will erase all the data stored in local storage and Indexed DB. This will remove
+                saved private key, UPI addresses and contacts.</p>
+            <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>
         </section>
         <section id="transaction_page" class="page">
             <header class="flex align-center" onclick="showPage('activity_page', 'activity_page_btn')">
@@ -1977,24 +1978,19 @@
             // Function for accepting payment request
             document.getElementById('payment_request_tab').addEventListener('click', async (e) => {
                 if (e.target.closest('.send-rupee')) {
-                    let parent = e.target.closest('.request'),
-                        senderAddress = parent.dataset.senderAddress,
-                        amount = parent.dataset.amount,
-                        paymentRequestId = parent.dataset.paymentRequestId;;
-                    showPopup('send_rupee_popup');
+                    currentPaymentRequest = e.target.closest('.request')
+                    let senderAddress = currentPaymentRequest.dataset.senderAddress,
+                        amount = currentPaymentRequest.dataset.amount
                     payingRequested = true;
-                    currentPaymentRequest = {
-                        paymentRequest: parent,
-                        requestId: paymentRequestId
-                    }
                     tokenReceiver.value = senderAddress;
                     tokenAmount.value = amount;
                     tokenReceiver.readOnly = true
                     tokenAmount.readOnly = true
+                    showPopup('send_rupee_popup');
                 }
                 if (e.target.closest('.decline-request')) {
-                    let parent = e.target.closest('.request'),
-                        paymentRequestId = parent.dataset.paymentRequestId;
+                    currentPaymentRequest = e.target.closest('.request')
+                    let paymentRequestId = currentPaymentRequest.dataset.paymentRequestId;
                     if (await confirmation(`Do want to decline this request?`, 'No', 'Decline')) {
                         const all_reqs = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
                             .TYPE_REQUEST_PAYMENT, "0").reverse());
@@ -2003,6 +1999,7 @@
                             .map(m => m.message)[0];
 
                         payment_request_status(original_req, 'DECLINED')
+                        declinedPaymentRequestContainer.prepend(e.target.closest('.request'))
                         e.target.closest('.request').remove()
                     }
                 }
@@ -2387,6 +2384,8 @@
             }
         }
     </script>
+    <script src="qrcode.min.js"></script>
+    <script src="qrcode-scanner.min.js"></script>
     <script id="init_lib">
         //All util libraries required for Standard operations (DO NOT EDIT ANY)
 
@@ -12014,6 +12013,7 @@
                     defaultUPI = localStorage.getItem(`defaultUPI${myFloID}`)
                     renderUserUPI()
                     renderAllContacts()
+                    new QRCode(document.getElementById("my_qr_code"), myFloID);
 
                     showPage('home_page', 'home_page_btn')
                     show_payment_requests()
@@ -12483,21 +12483,23 @@
                         hidePopup()
                         return false;
                     } else {
-                        hidePopup()
-                        showTransactionStatus('success', 'Rupee Sent', 'It may take upto 48 working hours for transaction to be completed.', flo_txid);
-                        sentActivityContainer.prepend(render.activityCard({ type: 'sent', amount: token_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: token_receiver }))
-                        refresh_balance()
-                        if (payingRequested === true) {
+                        if (payingRequested) {
                             const all_reqs = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
                                 .TYPE_REQUEST_PAYMENT, "0").reverse());
-
+                                
                             const original_req = all_reqs
-                                .filter(f => f.message.pay_req_id === currentPaymentRequest.requestId)
+                                .filter(f => f.message.pay_req_id === currentPaymentRequest.dataset.paymentRequestId)
                                 .map(m => m.message)[0];
-
+                                
                             payment_request_status(original_req, 'APPROVED')
-                            showPayThruCashierRequests();
-                        } else if (payingRequested === false) {
+                            paidPaymentRequestContainer.prepend(currentPaymentRequest)
+                            for(child of pendingPaymentRequestContainer.children){
+                                if(child.dataset.paymentRequestId === currentPaymentRequest.dataset.paymentRequestId){
+                                    child.remove()
+                                }
+                            }
+                            show_payment_requests();
+                        } else{
                             let receiverID = myFloID;
                             floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
                                 token_sender, token_receiver, token_amount, token_name_radio,
@@ -12505,6 +12507,10 @@
                             };
                             floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_SENT_TOKENS, options = { receiverID });
                         }
+                        hidePopup()
+                        showTransactionStatus('success', 'Rupee Sent', 'It may take upto 48 working hours for transaction to be completed.', flo_txid);
+                        sentActivityContainer.prepend(render.activityCard({ type: 'sent', amount: token_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: token_receiver }))
+                        refresh_balance()
                         return true;
                     }
                 }
@@ -13225,6 +13231,10 @@
                 return false;
             }
         }
+ 
+        const   pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
+                paidPaymentRequestContainer = document.getElementById("paid_payment_request_container"),
+                declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container");
 
         async function show_payment_requests(requests_received = true, recvr_id = '') {
             try {
@@ -13253,12 +13263,8 @@
                 let processed_payments_requests = approved_reqs_list.map(m => m.message.pay_req_id).concat(declined_reqs_list
                     .map(m => m.message.pay_req_id));
 
-                let pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
-                    approvedPaymentRequestContainer = document.getElementById("paid_payment_request_container"),
-                    declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container");
-
                 pendingPaymentRequestContainer.innerHTML = ``;
-                approvedPaymentRequestContainer.innerHTML = ``;
+                paidPaymentRequestContainer.innerHTML = ``;
                 declinedPaymentRequestContainer.innerHTML = ``;
 
                 for (const m of general_msg) {
@@ -13286,7 +13292,7 @@
                     } = m.message;
                     frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
                 }
-                approvedPaymentRequestContainer.append(frag)
+                paidPaymentRequestContainer.append(frag)
 
                 for (const m of declined_reqs_list) {
                     let {
