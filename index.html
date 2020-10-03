@@ -358,7 +358,7 @@
                 </svg>
             </button>
         </header>
-        <sm-input id="add_upi_input" placeholder="UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+" required animate>
+        <sm-input id="add_upi_input" placeholder="UPI address" pattern="^[a-zA-z0-9\-]+@[a-zA-z0-9]+" required animate>
         </sm-input>
     </sm-popup>
 
@@ -1085,7 +1085,7 @@
                 return card;
             },
             activityCard(obj) {
-                let { type, amount, timeStamp, receiver, upi_txid, receiverUPI, pending } = obj;
+                let { type, amount, timeStamp, receiver, upi_txid, receiverUPI, processed } = obj;
                 let card = document.createElement('div'),
                     composition = ``,
                     icon,
@@ -1100,7 +1100,7 @@
                     'data-amount': amount,
                     'data-upi-txid': upi_txid,
                     'data-receiver-upi': receiverUPI,
-                    'data-pending': pending
+                    'data-pending': processed
                 })
                 switch (type) {
                     case 'sent':
@@ -1141,7 +1141,7 @@
                         sign = '+'
                         className = 'deposited'
                         transaction = 'Deposited'
-                        if (pending)
+                        if (processed === false)
                             transaction = 'deposit'
                         break;
                     case 'withdraw':
@@ -1161,7 +1161,7 @@
                         sign = '-'
                         className = 'withdrawn'
                         transaction = 'withdrawn to'
-                        if (pending)
+                        if (processed === false)
                             transaction = 'withdraw'
                         break;
                     case 'payCashier':
@@ -1174,12 +1174,12 @@
                         sign = '-'
                         className = 'withdrawn'
                         transaction = 'Paid to'
-                        if (pending)
+                        if (processed === false)
                             transaction = 'payment'
                         break;
                 }
                 let status = ''
-                if (pending) {
+                if (processed === false) {
                     status = '<div class="pending">pending</div>'
                     icon = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                                     <title>pending</title>
@@ -1198,6 +1198,18 @@
                         <h4 class="activity-amount ${className}">${sign} ₹${amount}</h4>
                         <h5 class="activity-time">${formatedTime(timeStamp, true)}</h5>
                     `
+                card.innerHTML = composition;
+                return card;
+            },
+            activityPlaceholder(){
+                let card = document.createElement('div'),
+                    composition = ``
+                card.classList.add('activity', 'placeholder')
+                composition += `
+                    <div class="icon"></div>
+                    <h4 class="activity-type"></h4>
+                    <h4 class="activity-receiver"></h4>
+                        `
                 card.innerHTML = composition;
                 return card;
             },
@@ -1941,7 +1953,7 @@
                         receiver: currentRequest.dataset.receiver,
                         upiTxId: currentRequest.dataset.upiTxid,
                         receiverUPI: currentRequest.dataset.receiverUpi,
-                        pending: currentRequest.dataset.pending
+                        processed: currentRequest.dataset.pending
                     })
                 }
             })
@@ -2056,7 +2068,7 @@
             showReportButton = document.getElementById('show_report_btn')
 
         function showTransactionDetails(obj) {
-            let { type, timeStamp, amount, receiver, upiTxId, receiverUPI, pending } = obj;
+            let { type, timeStamp, amount, receiver, upiTxId, receiverUPI, processed } = obj;
             let composition = ``,
                 icon,
                 transaction,
@@ -2095,7 +2107,7 @@
                             </svg>
                         `
                     type = 'deposited'
-                    if (pending === 'true')
+                    if (processed === 'false')
                         type = 'deposit'
                     transaction = 'Deposited to'
                     break;
@@ -2114,7 +2126,7 @@
                             </svg>
                         `
                     type = 'withdrawn'
-                    if (pending === 'true')
+                    if (processed === 'false')
                         type = 'Withdraw'
                     transaction = 'withdrawn to'
                     break;
@@ -2128,12 +2140,12 @@
                     className = 'withdrawn'
                     transaction = 'Paid to'
                     type = 'Paid through cashier'
-                    if (pending === 'true')
+                    if (processed === 'false')
                         type = 'Paying through cashier'
                     break;
             }
 
-            if (pending === 'true') {
+            if (processed === 'false') {
                 icon = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                                 <title>pending</title>
                                 <circle cx="32" cy="32" r="31.5"/>
@@ -11856,13 +11868,11 @@
                         },
                         "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
                             "upi_id": "aakriti1705sinha@okicici"
-                        }
-                    }`
-                /*
+                        },
                         "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
                             "upi_id": "krishraj1012-2@okicici"
                         }
-                */
+                    }`
                 text = removeWhiteSpaces(text);
                 return text;
                 const master_data = await ajaxGet(
@@ -12005,19 +12015,19 @@
                     renderUserUPI()
                     renderAllContacts()
 
-                    show_all_user_activities()
-                    show_payment_requests()
                     showPage('home_page', 'home_page_btn')
-
+                    show_payment_requests()
+                    
                     withdraw_token_to_get_cash();
-
+                    
                     transferTokensManually();
-
+                    
                     pay_through_cashier();
-
+                    
                     getSentRupeeList()
-
+                    
                     getReceivedRupeeList()
+                    show_all_user_activities()
                 }
                 this.retrieveLatestContent();
             },
@@ -12801,7 +12811,7 @@
                             hidePopup()
                             showTransactionStatus('success', 'Deposit request sent.', 'It may take upto 48 hours for deposited amount to be reflected in your account.')
                             btnLoading('request_tokens_btn', 'stop')
-                            depositActivityContainer.prepend(render.activityCard({ type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: cashier_upi, pending: true }))
+                            depositActivityContainer.prepend(render.activityCard({ type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: cashier_upi, processed: true }))
                         })
                         return true;
                     }
@@ -12869,7 +12879,7 @@
                         });
                         hidePopup()
                         showTransactionStatus('success', 'Withdraw request sent.', 'It may take upto 48 working hours to process your withdrawal request.')
-                        withdrawActivityContainer.prepend(render.activityCard({ type: 'withdraw', amount: withdraw_cash_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: user_withdraw_upi, pending: true }))
+                        withdrawActivityContainer.prepend(render.activityCard({ type: 'withdraw', amount: withdraw_cash_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: user_withdraw_upi, processed: true }))
                         return true;
                     }
                     showTransactionStatus('failure', 'Failed to send withdraw request.');
@@ -12923,7 +12933,7 @@
                     showTransactionStatus('success', 'Pay through cashier Request sent.', `Sent to: <b class="breakable">${recvr_id}</b><br>
                             through cashier UPI: <b>${cashier_upi}</b>.<br><br>
                             Once the cashier receives your payment, they will transfer it to intended receiver.`);
-                    payCashierActivityContainer.prepend(render.activityCard({ type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, receiverUPI: req_object.upi_txid, pending: true }))
+                    payCashierActivityContainer.prepend(render.activityCard({ type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, receiverUPI: req_object.upi_txid, processed: true }))
                 }
 
             } catch (error) {
@@ -12940,6 +12950,22 @@
 
         async function show_all_user_activities() {
             try {
+
+                depositActivityContainer.innerHTML = ''
+                withdrawActivityContainer.innerHTML = ''
+                payCashierActivityContainer.innerHTML = ''
+
+                for(let i = 0; i < 8; i++){
+                    frag.append(render.activityPlaceholder())
+                }
+                let frag1 = frag.cloneNode(true)
+                let frag2 = frag.cloneNode(true)
+                depositActivityContainer.append(frag)
+
+                withdrawActivityContainer.append(frag1)
+
+                payCashierActivityContainer.append(frag2)
+
                 await token_app.actions.retrieveLatestContent();
 
                 const deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0")
@@ -12970,7 +12996,7 @@
                     // SaiRajM: Use deposit_request_processed to display status of deposit 
                     frag.append(render.activityCard({
                         type: 'deposit', amount: deposit_amount, timeStamp: usr_deposits.vectorClock,
-                        upi_txid, receiver: cashier_upi, deposit_request_processed, pending: deposit_request_processed
+                        upi_txid, receiver: cashier_upi, deposit_request_processed, processed: deposit_request_processed
                     }))
                 }
 
@@ -12999,7 +13025,7 @@
                         timeStamp: usr_withdraws.vectorClock,
                         token_txid,
                         receiver: withdrawer_upi,
-                        pending: withdraw_request_processed
+                        processed: withdraw_request_processed
                     }))
                 }
                 withdrawActivityContainer.innerHTML = ``;
@@ -13027,7 +13053,7 @@
                         timeStamp: cashier_message.vectorClock,
                         receiver: receiver_flo_id,
                         receiverUPI: upi_txid,
-                        pending: ptc_request_processed
+                        processed: ptc_request_processed
                     }))
                 }
 

@@ -254,8 +254,7 @@ border: none;
     min-width: 0;
 }
 .input.readonly .clear{
-    opacity: 0 !important;
-    pointer-events: none !important;
+    display: none;
 }
 .readonly{
     pointer-events: none;
