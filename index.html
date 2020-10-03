@@ -958,7 +958,7 @@
                     </div>
                     <h4>Sign Out</h4>
                     <p>Signing out will erase all the data stored in local storage and Indexed DB. This will remove
-                        saved private key, UPI addresses.</p>
+                        saved private key, UPI addresses and contacts.</p>
                     <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>
         </section>
         <section id="transaction_page" class="page">
@@ -1640,9 +1640,11 @@
             if (typeof btn === 'string')
                 btn = document.getElementById(btn);
             if (option === 'start') {
+                btn.style.pointerEvents = 'none'
                 btn.children[0].classList.add('clip')
                 btn.children[1].classList.add('animate-loader')
             } else {
+                btn.style.pointerEvents = 'all'
                 btn.children[0].classList.remove('clip')
                 btn.children[1].classList.remove('animate-loader')
             }
@@ -12775,6 +12777,7 @@
                             .TYPE_DEPOSITS, {
                             receiverID: cashier
                         }).then(result => {
+                            console.log(result)
                             hidePopup()
                             showTransactionStatus('success', 'Deposit request sent.', 'It may take upto 48 hours for deposited amount to be reflected in your account.')
                             btnLoading('request_tokens_btn', 'stop')
@@ -13337,7 +13340,7 @@
                         receiver = flodata.match(/\b\w{34,34}\b/),
                         timeStamp = transaction.transactionDetails.time * 1000
 
-                    if (receiver === '' || typeof receiver === undefined || receiver === null || token_app.master_configurations.cashiers[receiver]) continue;
+                    if (receiver === '' || typeof receiver === 'undefined' || receiver === null || token_app.master_configurations.cashiers[receiver]) continue;
                     frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, receiver, timeStamp}))
                 }
                 sentActivityContainer.innerHTML = ''
@@ -13357,7 +13360,7 @@
                             sender = transaction.transactionDetails.vin[0].addr,
                             timeStamp = transaction.transactionDetails.time * 1000
 
-                        if (sender === '' || typeof sender === undefined || sender === null || token_app.master_configurations.cashiers[sender]) continue;
+                        if (sender === '' || typeof sender === 'undefined' || sender === null || token_app.master_configurations.cashiers[sender]) continue;
                         frag.append(render.activityCard({ type: 'received', amount: tokenAmount, receiver: sender, timeStamp }))
                     }
                     receivedActivityContainer.innerHTML = ''

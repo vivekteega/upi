@@ -104,7 +104,7 @@ button {
 
     &:disabled {
         cursor: default;
-        background: rgba(var(--text-color), 0.5);
+        background: rgba(var(--text-color), 0.4);
     }
 
     &:disabled~.loader {

@@ -44,7 +44,7 @@ smButton.innerHTML = `
     display: -ms-flexbox;
     display: flex;
     width: 100%;
-    padding: 0.6rem 1rem;
+    padding: 0.6rem 1.2rem;
     cursor: pointer;
     -webkit-user-select: none;
        -moz-user-select: none;
