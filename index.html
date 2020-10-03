@@ -522,7 +522,7 @@
             <svg viewBox="0 0 64 64" class="icon">
                 <path d="M31.6,0.5c8.3,0,14.2,5.6,14.2,15S41.1,32.9,32,32.9s-13.8-8-13.8-17.3s5.9-15,14.2-15" />
                 <path d="M25.4,33.4c-2.5,4.7-10.5,7.1-16.4,9.7c-2.4,1-4.4,14-1.6,14c7.7,4.4,16.4,6.6,25.2,6.4
-                    c8.5,0.3,16.9-2,24.2-6.4c2.8,0,0.8-12.9-1.6-14c-5.9-2.6-13.9-5-16.4-9.7" />
+                        c8.5,0.3,16.9-2,24.2-6.4c2.8,0,0.8-12.9-1.6-14c-5.9-2.6-13.9-5-16.4-9.7" />
             </svg>
             <h5 class="user-type">Me</h5>
         </div>
@@ -761,7 +761,7 @@
                         </div>
                     </sm-panel>
                     <sm-panel>
-                        <sm-button id="fetch_pay_requests" onclick="showPayRequests()" class="bottom-margin">
+                        <sm-button id="fetch_pay_requests" onclick="showPayThruCashierRequests()" class="bottom-margin">
                             Load pending
                         </sm-button>
                         <div id="pay_requests_container" class="container"></div>
@@ -971,7 +971,8 @@
             </header>
             <div id="transaction_details" class="grid direction-column"></div>
             <p id="caution_message"></p>
-            <sm-button id="show_report_btn" class="hide" onclick="showPopup('report_popup')" variant="outlined">Report</div>
+            <sm-button id="show_report_btn" class="hide" onclick="showPopup('report_popup')" variant="outlined">Report
+                </div>
         </section>
     </main>
     <script src="components.js"></script>
@@ -1034,14 +1035,14 @@
                     'data-txid': txid
                 })
                 card.innerHTML = `  <h5>FLO address</h5>
-                                    <h4 class="breakable">${floId}</h4>
-                                    <h5>UPI TXID</h5>
-                                    <h4 class="breakable">${txid}</h4>
-                                    <h5>Amount</h5>
-                                    <h4 class="breakable">₹${amount}</h4>
-                                    <button id="" class="confirm-deposit-btn">
-                                        Confirm
-                                    </button>`;
+                                        <h4 class="breakable">${floId}</h4>
+                                        <h5>UPI TXID</h5>
+                                        <h4 class="breakable">${txid}</h4>
+                                        <h5>Amount</h5>
+                                        <h4 class="breakable">₹${amount}</h4>
+                                        <button id="" class="confirm-deposit-btn">
+                                            Confirm
+                                        </button>`;
                 return card;
             },
             withdrawRequest(txid, upiId, floId, amount) {
@@ -1053,14 +1054,14 @@
                     'data-upi': upiId
                 })
                 card.innerHTML = `  <h5>FLO address</h5>
-                                    <h4 class="breakable">${floId}</h4>
-                                    <h5>UPI ID</h5>
-                                    <h4 class="breakable">${upiId}</h4>
-                                    <h5>TAmount</h5>
-                                    <h4 class="breakable">₹${amount}</h4>
-                                    <button id="" class="confirm-withdraw-btn"">
-                                        Confirm
-                                    </button>`;
+                                        <h4 class="breakable">${floId}</h4>
+                                        <h5>UPI ID</h5>
+                                        <h4 class="breakable">${upiId}</h4>
+                                        <h5>TAmount</h5>
+                                        <h4 class="breakable">₹${amount}</h4>
+                                        <button id="" class="confirm-withdraw-btn"">
+                                            Confirm
+                                        </button>`;
                 return card;
             },
             payRequest(sender, txid, floId, amount) {
@@ -1073,14 +1074,14 @@
                     'data-amount': amount
                 })
                 card.innerHTML = `  <h5>Transaction ID</h5>
-                                    <h4 class="breakable">${txid}</h4>
-                                    <h5>Receiver's FLO address</h5>
-                                    <h4 class="breakable">${floId}</h4>
-                                    <h5>Amount</h5>
-                                    <h4 class="breakable">₹${amount}</h4>
-                                    <button id="" class="confirm-pay-btn">
-                                        Transfer
-                                    </button>`;
+                                        <h4 class="breakable">${txid}</h4>
+                                        <h5>Receiver's FLO address</h5>
+                                        <h4 class="breakable">${floId}</h4>
+                                        <h5>Amount</h5>
+                                        <h4 class="breakable">₹${amount}</h4>
+                                        <button id="" class="confirm-pay-btn">
+                                            Transfer
+                                        </button>`;
                 return card;
             },
             activityCard(obj) {
@@ -1104,99 +1105,99 @@
                 switch (type) {
                     case 'sent':
                         icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <path
-                                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
-                            </svg>
-                        `
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <path
+                                        d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                                </svg>
+                            `
                         sign = '-'
                         className = 'withdrawn'
                         transaction = 'Sent to'
                         break;
                     case 'received':
                         icon = `
-                        <svg class="icon request-icon" viewBox="0 0 64 64">
-                            <path
-                                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
-                        </svg>
-                        `
+                            <svg class="icon request-icon" viewBox="0 0 64 64">
+                                <path
+                                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                            </svg>
+                            `
                         sign = '+'
                         className = 'deposited'
                         transaction = 'Recieved from'
                         break;
                     case 'deposit':
                         icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <title>deposit</title>
-                                <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
-                                <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
-                                <path
-                                    d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-                                <path
-                                    d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-                                <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
-                            </svg>
-                        `
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <title>deposit</title>
+                                    <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
+                                    <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
+                                    <path
+                                        d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+                                    <path
+                                        d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+                                    <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
+                                </svg>
+                            `
                         sign = '+'
                         className = 'deposited'
                         transaction = 'Deposited'
-                        if(pending)
+                        if (pending)
                             transaction = 'deposit'
                         break;
                     case 'withdraw':
                         icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <title>withdraw</title>
-                                <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
-                                <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
-                                <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
-                                <path
-                                    d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-                                <path
-                                    d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-                                <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
-                            </svg>
-                        `
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <title>withdraw</title>
+                                    <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
+                                    <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
+                                    <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
+                                    <path
+                                        d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+                                    <path
+                                        d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+                                    <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
+                                </svg>
+                            `
                         sign = '-'
                         className = 'withdrawn'
                         transaction = 'withdrawn to'
-                        if(pending)
+                        if (pending)
                             transaction = 'withdraw'
                         break;
                     case 'payCashier':
                         icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
-                                <rect height="64" width="64" rx="8"></rect>
-                            </svg>
-                        `
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
+                                    <rect height="64" width="64" rx="8"></rect>
+                                </svg>
+                            `
                         sign = '-'
                         className = 'withdrawn'
                         transaction = 'Paid to'
-                        if(pending)
+                        if (pending)
                             transaction = 'payment'
                         break;
                 }
                 let status = ''
-                if(pending){
+                if (pending) {
                     status = '<div class="pending">pending</div>'
                     icon = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-                                <title>pending</title>
-                                <circle cx="32" cy="32" r="31.5"/>
-                                <polyline points="47 32.26 32 32.26 32 12.26"/>
-                            </svg>`
+                                    <title>pending</title>
+                                    <circle cx="32" cy="32" r="31.5"/>
+                                    <polyline points="47 32.26 32 32.26 32 12.26"/>
+                                </svg>`
                 }
                 composition += `
-                    ${icon}
-                    <h4 class="activity-type">${transaction} ${status}</h4>`
+                        ${icon}
+                        <h4 class="activity-type">${transaction} ${status}</h4>`
                 if (receiver)
                     composition += `
-                        <h4 class="activity-receiver breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</h4>
-                    `
+                            <h4 class="activity-receiver breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</h4>
+                        `
                 composition += `
-                    <h4 class="activity-amount ${className}">${sign} ₹${amount}</h4>
-                    <h5 class="activity-time">${formatedTime(timeStamp, true)}</h5>
-                `
+                        <h4 class="activity-amount ${className}">${sign} ₹${amount}</h4>
+                        <h5 class="activity-time">${formatedTime(timeStamp, true)}</h5>
+                    `
                 card.innerHTML = composition;
                 return card;
             },
@@ -1211,21 +1212,21 @@
                     'data-payment-request-id': id
                 })
                 markup = `   <h5 class="time">${formatedTime(time)}</h5>
-                                    <h5>Request by</h5>
-                                    <h4 class="breakable">${allContacts[senderAddress] ? allContacts[senderAddress].name : senderAddress}</h4>
-                                    <h5 class="label">amount</h5>
-                                    <h4 class="amount">₹ ${amount}</h4>
-                                    `;
+                                        <h5>Request by</h5>
+                                        <h4 class="breakable">${allContacts[senderAddress] ? allContacts[senderAddress].name : senderAddress}</h4>
+                                        <h5 class="label">amount</h5>
+                                        <h4 class="amount">₹ ${amount}</h4>
+                                        `;
                 if (enableActions)
                     markup += `
-                                    <div class="flex">
-                                    <button class="decline-request secondary-btn">
-                                        decline
-                                    </button>
-                                    <button class="send-rupee">
-                                        pay
-                                    </button>
-                            </div>`
+                                        <div class="flex">
+                                        <button class="decline-request secondary-btn">
+                                            decline
+                                        </button>
+                                        <button class="send-rupee">
+                                            pay
+                                        </button>
+                                </div>`
                 card.innerHTML = markup
                 return card;
             },
@@ -1250,59 +1251,59 @@
                     'data-udc': JSON.stringify(udc)
                 })
                 composition = `
-                    
-                    <div class="left">
-                        <h5>Sender</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${sender}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>`
+                        
+                        <div class="left">
+                            <h5>Sender</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${sender}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>`
                 if (customMsg && customMsg !== '')
                     composition += `  <h5>Issue description</h5>
-                                <h4>${customMsg}</h4>`
+                                    <h4>${customMsg}</h4>`
                 composition += ` <h5>Deposited</h5>
-                                <h4>₹${depositedAmount}</h4>
-                                <h5>Deposited on</h5>
-                                <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
+                                    <h4>₹${depositedAmount}</h4>
+                                    <h5>Deposited on</h5>
+                                    <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
 
-                            </div>`
+                                </div>`
                 if (cashierData.processed) {
                     let {
                         time,
                         floTxId
                     } = cashierData
                     composition += `
-                    <div class="right">
-                        <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
-                        <h5 class="top-margin">Rupee Transaction ID</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${floTxId}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
+                            <h5 class="top-margin">Rupee Transaction ID</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${floTxId}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>
+                        </div>`;
                 } else {
                     composition += `
-                    <div class="right">
-                        <h4 class="unprocessed">Cashier hasn't processed the request</h4>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="unprocessed">Cashier hasn't processed the request</h4>
+                        </div>`;
                 }
                 composition += `
-                    <div class="complaint-actions flex">
-                        <button class="mark-resolved">
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
-                            </svg>
-                            Mark as Resolved
-                        </button>
-                    </div>`
+                        <div class="complaint-actions flex">
+                            <button class="mark-resolved">
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
+                                </svg>
+                                Mark as Resolved
+                            </button>
+                        </div>`
                 card.innerHTML = composition;
                 return card;
             },
@@ -1321,58 +1322,58 @@
                     'data-udc': JSON.stringify(udc)
                 })
                 composition = `
-                    <div class="left">
-                        <h5>Sender</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${sender}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>`
+                        <div class="left">
+                            <h5>Sender</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${sender}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>`
                 if (customMsg && customMsg !== '')
                     composition += `  <h5>Issue description</h5>
-                                <h4>${customMsg}</h4>`
+                                    <h4>${customMsg}</h4>`
                 composition += ` <h5>withdrawn</h5>
-                                <h4>₹${withdrawnAmount}</h4>
-                                <h5>Withdrawn on</h5>
-                                <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
+                                    <h4>₹${withdrawnAmount}</h4>
+                                    <h5>Withdrawn on</h5>
+                                    <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
 
-                            </div>`
+                                </div>`
                 if (cashierData.processed) {
                     let {
                         time,
                         floTxId
                     } = cashierData
                     composition += `
-                    <div class="right">
-                        <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
-                        <h5 class="top-margin">Rupee Transaction ID</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${floTxId}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
+                            <h5 class="top-margin">Rupee Transaction ID</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${floTxId}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>
+                        </div>`;
                 } else {
                     composition += `
-                    <div class="right">
-                        <h4 class="unprocessed">Cashier hasn't processed the request</h4>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="unprocessed">Cashier hasn't processed the request</h4>
+                        </div>`;
                 }
                 composition += `
-                    <div class="complaint-actions flex">
-                        <button class="mark-resolved">
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
-                            </svg>
-                            Mark as Resolved
-                        </button>
-                    </div>`
+                        <div class="complaint-actions flex">
+                            <button class="mark-resolved">
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
+                                </svg>
+                                Mark as Resolved
+                            </button>
+                        </div>`
                 card.innerHTML = composition;
                 return card;
             },
@@ -1392,67 +1393,67 @@
                     'data-udc': JSON.stringify(udc)
                 })
                 composition = `
-                    <div class="left">
-                        <h5>Sender</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${sender}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>
-                        <h5>Receiver</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${receiver}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>`
+                        <div class="left">
+                            <h5>Sender</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${sender}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>
+                            <h5>Receiver</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${receiver}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>`
                 if (customMsg && customMsg !== '')
                     composition += `  <h5>Issue description</h5>
-                                <h4>${customMsg}</h4>`
+                                    <h4>${customMsg}</h4>`
                 composition += ` <h5>Paid</h5>
-                                <h4>₹${amount}</h4>
-                                <h5>Paid on</h5>
-                                <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
+                                    <h4>₹${amount}</h4>
+                                    <h5>Paid on</h5>
+                                    <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
 
-                            </div>`
+                                </div>`
                 if (cashierData.processed) {
                     let {
                         time,
                         floTxId
                     } = cashierData
                     composition += `
-                    <div class="right">
-                        <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
-                        <h5 class="top-margin">Rupee Transaction ID</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${floTxId}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
+                            <h5 class="top-margin">Rupee Transaction ID</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${floTxId}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>
+                        </div>`;
                 } else {
                     composition += `
-                    <div class="right">
-                        <h4 class="unprocessed">Cashier hasn't processed the request</h4>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="unprocessed">Cashier hasn't processed the request</h4>
+                        </div>`;
                 }
                 composition += `
-                    <div class="complaint-actions flex">
-                        <button class="mark-resolved">
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
-                            </svg>
-                            Mark as Resolved
-                        </button>
-                    </div>`
+                        <div class="complaint-actions flex">
+                            <button class="mark-resolved">
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
+                                </svg>
+                                Mark as Resolved
+                            </button>
+                        </div>`
                 card.innerHTML = composition;
                 return card;
             },
@@ -1460,22 +1461,22 @@
                 let card = document.createElement('div');
                 card.classList.add('request', 'complaint', 'complaint-placeholder')
                 card.innerHTML = `
-                    <div class="left">
-                        <h5></h5>
-                        <h4></h4>
-                        <h5></h5>
-                        <h4></h4>
-                        <h5></h5>
-                        <h4></h4>
-                        <h5></h5>
-                        <h4></h4>
-                    </div>
-                    <div class="right">
-                        <h4></h4>
-                    </div>
-                    <div class="complaint-actions flex">
-                        <h4 class="demo-btn"></h4>
-                    </div>`
+                        <div class="left">
+                            <h5></h5>
+                            <h4></h4>
+                            <h5></h5>
+                            <h4></h4>
+                            <h5></h5>
+                            <h4></h4>
+                            <h5></h5>
+                            <h4></h4>
+                        </div>
+                        <div class="right">
+                            <h4></h4>
+                        </div>
+                        <div class="complaint-actions flex">
+                            <h4 class="demo-btn"></h4>
+                        </div>`
                 return card;
             },
             contact(floId, name, color) {
@@ -1483,9 +1484,9 @@
                 card.classList.add('person')
                 setAttributes(card, { 'data-flo-id': floId, 'data-name': name })
                 card.innerHTML = `
-                    <h3 class="person-initials" style="background-color: ${color.light};">${name.charAt(0)}</h3>
-                    <h4 class="person-name">${name}</h4>
-                `
+                        <h3 class="person-initials" style="background-color: ${color.light};">${name.charAt(0)}</h3>
+                        <h4 class="person-name">${name}</h4>
+                    `
                 return card
             }
         }
@@ -2064,109 +2065,109 @@
             switch (type) {
                 case 'sent':
                     icon = `
-                        <svg class="icon" viewBox="0 0 64 64">
-                            <path
-                                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
-                        </svg>
-                    `
+                            <svg class="icon" viewBox="0 0 64 64">
+                                <path
+                                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                            </svg>
+                        `
                     transaction = 'Sent to'
                     break;
                 case 'received':
                     icon = `
-                        <svg class="icon request-icon" viewBox="0 0 64 64">
-                            <path
-                                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
-                        </svg>
-                    `
+                            <svg class="icon request-icon" viewBox="0 0 64 64">
+                                <path
+                                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                            </svg>
+                        `
                     transaction = 'Received from'
                     break;
                 case 'deposit':
                     icon = `
-                        <svg class="icon" viewBox="0 0 64 64">
-                            <title>deposit</title>
-                            <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
-                            <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
-                            <path
-                                d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-                            <path
-                                d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-                            <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
-                        </svg>
-                    `
+                            <svg class="icon" viewBox="0 0 64 64">
+                                <title>deposit</title>
+                                <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
+                                <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
+                                <path
+                                    d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+                                <path
+                                    d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+                                <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
+                            </svg>
+                        `
                     type = 'deposited'
-                    if(pending === 'true')
+                    if (pending === 'true')
                         type = 'deposit'
                     transaction = 'Deposited to'
                     break;
                 case 'withdraw':
                     icon = `
-                        <svg class="icon" viewBox="0 0 64 64">
-                            <title>withdraw</title>
-                            <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
-                            <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
-                            <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
-                            <path
-                                d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-                            <path
-                                d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-                            <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
-                        </svg>
-                    `
+                            <svg class="icon" viewBox="0 0 64 64">
+                                <title>withdraw</title>
+                                <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
+                                <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
+                                <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
+                                <path
+                                    d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+                                <path
+                                    d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+                                <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
+                            </svg>
+                        `
                     type = 'withdrawn'
-                    if(pending === 'true')
+                    if (pending === 'true')
                         type = 'Withdraw'
                     transaction = 'withdrawn to'
                     break;
                 case 'payCashier':
                     icon = `
-                        <svg class="icon" viewBox="0 0 64 64">
-                            <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
-                            <rect height="64" width="64" rx="8"></rect>
-                        </svg>
-                    `
+                            <svg class="icon" viewBox="0 0 64 64">
+                                <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
+                                <rect height="64" width="64" rx="8"></rect>
+                            </svg>
+                        `
                     className = 'withdrawn'
                     transaction = 'Paid to'
                     type = 'Paid through cashier'
-                    if(pending === 'true')
+                    if (pending === 'true')
                         type = 'Paying through cashier'
                     break;
             }
 
-            if(pending === 'true'){
+            if (pending === 'true') {
                 icon = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-                            <title>pending</title>
-                            <circle cx="32" cy="32" r="31.5"/>
-                            <polyline points="47 32.26 32 32.26 32 12.26"/>
-                        </svg>`
+                                <title>pending</title>
+                                <circle cx="32" cy="32" r="31.5"/>
+                                <polyline points="47 32.26 32 32.26 32 12.26"/>
+                            </svg>`
                 cautionMessage.innerHTML = `
-                    It may take upto 48 working hours for a transaction to complete. If even after 48 hours transction wasn't
-                    completed and your money was deducted, use <Strong>Report</Strong> button to report your issue.`
-                showReportButton.classList.remove('hide')            
+                        It may take upto 48 working hours for a transaction to complete. If even after 48 hours transction wasn't
+                        completed and your money was deducted, use <Strong>Report</Strong> button to report your issue.`
+                showReportButton.classList.remove('hide')
             }
             else
-                showReportButton.classList.add('hide')            
+                showReportButton.classList.add('hide')
 
             composition = `${icon}
-                            <h5>${type}</h5>
-                            <div class="flex">
-                                ₹ <span class="transaction-amount"> ${amount}</span>
-                            </div>`
+                                <h5>${type}</h5>
+                                <div class="flex">
+                                    ₹ <span class="transaction-amount"> ${amount}</span>
+                                </div>`
 
             if (receiver !== 'undefined')
                 composition += `
-                    <h5>${transaction}</h5> <strong class="breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</strong>`
+                        <h5>${transaction}</h5> <strong class="breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</strong>`
 
             if (upiTxId !== 'undefined')
                 composition += `
-                <h5>UPI transaction ID</h5>
-                <strong>${upiTxId}</strong> 
-                `
+                    <h5>UPI transaction ID</h5>
+                    <strong>${upiTxId}</strong> 
+                    `
 
             if (receiverUPI !== 'undefined')
                 composition += `
-                <h5>Sent to UPI ID</h5>
-                <strong>${receiverUPI}</strong> 
-                `
+                    <h5>Sent to UPI ID</h5>
+                    <strong>${receiverUPI}</strong> 
+                    `
             composition += `<h5 id="transaction_time">${formatedTime(timeStamp)}</h5>`
             transactionDetails.innerHTML = composition
             transactionType.textContent = type
@@ -2242,28 +2243,28 @@
                 for (upi in upis) {
                     let checked = upi === defaultUPI ? 'checked' : ''
                     radios += `
-                    <div class="select">
-                        <label>
-                            <input type="radio" name="${randomGroup}" value="${upi}" ${checked}>
-                            <svg class="radio" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                                <circle class="outer-ring" cx="32" cy="32" r="30"/>
-                                <circle class="inner-disc" cx="32" cy="32" r="16"/>
-                            </svg>
-                            <span>${upi}</span>
-                        </label>
-                    `
+                        <div class="select">
+                            <label>
+                                <input type="radio" name="${randomGroup}" value="${upi}" ${checked}>
+                                <svg class="radio" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="outer-ring" cx="32" cy="32" r="30"/>
+                                    <circle class="inner-disc" cx="32" cy="32" r="16"/>
+                                </svg>
+                                <span>${upi}</span>
+                            </label>
+                        `
                     if (upi === defaultUPI)
                         radios += `
-                        <h5 class="tag">Primary</h5>`
+                            <h5 class="tag">Primary</h5>`
                     if (container.closest('#settings_page'))
                         radios += `
-                                <svg class="icon remove" viewBox="0 0 64 64">
-                                    <title>Remove this UPI</title>
-                                    <line x1="64" y1="0" x2="0" y2="64"/>
-                                    <line x1="64" y1="64" x2="0" y2="0"/>
-                                </svg>`
+                                    <svg class="icon remove" viewBox="0 0 64 64">
+                                        <title>Remove this UPI</title>
+                                        <line x1="64" y1="0" x2="0" y2="64"/>
+                                        <line x1="64" y1="64" x2="0" y2="0"/>
+                                    </svg>`
                     radios += `
-                    </div>`
+                        </div>`
                 }
                 container.innerHTML = radios
             })
@@ -2296,13 +2297,13 @@
             let addPersonButton = document.createElement('div')
             addPersonButton.id = "add_person_btn"
             addPersonButton.innerHTML = `
-            <svg class="icon" viewBox="0 0 64 64">
-                <title>add Contact</title>
-                <line x1="32" x2="32" y2="64"/>
-                <line x1="64" y1="32" y2="32"/>
-            </svg>
-            Add
-            `
+                <svg class="icon" viewBox="0 0 64 64">
+                    <title>add Contact</title>
+                    <line x1="32" x2="32" y2="64"/>
+                    <line x1="64" y1="32" y2="32"/>
+                </svg>
+                Add
+                `
             peopleContainer.prepend(addPersonButton)
         }
 
@@ -2413,22 +2414,22 @@
         }
 
         /* Sample Usage
-          --Creating and defining the event--
-          reactor.registerEvent('<eventName>');
-          reactor.addEventListener('<eventName>', function(someObject){
+        --Creating and defining the event--
+        reactor.registerEvent('<eventName>');
+        reactor.addEventListener('<eventName>', function(someObject){
             do something...
-          });
-          --Firing the event--
-          reactor.dispatchEvent('<eventName>',<someObject>);
+        });
+        --Firing the event--
+        reactor.dispatchEvent('<eventName>',<someObject>);
         */
 
 
         /*!
-         * Crypto-JS v2.5.4  Crypto.js
-         * http://code.google.com/p/crypto-js/
-         * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
-         * http://code.google.com/p/crypto-js/wiki/License
-         */
+        * Crypto-JS v2.5.4  Crypto.js
+        * http://code.google.com/p/crypto-js/
+        * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
+        * http://code.google.com/p/crypto-js/wiki/License
+        */
         if (typeof Crypto == "undefined" || !Crypto.util) {
             (function () {
 
@@ -2578,11 +2579,11 @@
 
         //Adding SHA1 to fix basic PKBDF2
         /*
-         * Crypto-JS v2.5.4
-         * http://code.google.com/p/crypto-js/
-         * (c) 2009-2012 by Jeff Mott. All rights reserved.
-         * http://code.google.com/p/crypto-js/wiki/License
-         */
+        * Crypto-JS v2.5.4
+        * http://code.google.com/p/crypto-js/
+        * (c) 2009-2012 by Jeff Mott. All rights reserved.
+        * http://code.google.com/p/crypto-js/wiki/License
+        */
         (function () {
 
             // Shortcuts
@@ -2671,11 +2672,11 @@
 
         //Added to make PKBDF2 work
         /*
-         * Crypto-JS v2.5.4
-         * http://code.google.com/p/crypto-js/
-         * (c) 2009-2012 by Jeff Mott. All rights reserved.
-         * http://code.google.com/p/crypto-js/wiki/License
-         */
+        * Crypto-JS v2.5.4
+        * http://code.google.com/p/crypto-js/
+        * (c) 2009-2012 by Jeff Mott. All rights reserved.
+        * http://code.google.com/p/crypto-js/wiki/License
+        */
         (function () {
 
             // Shortcuts
@@ -2723,11 +2724,11 @@
 
         //crypto-sha256-hmac.js
         /*
-         * Crypto-JS v2.5.4
-         * http://code.google.com/p/crypto-js/
-         * (c) 2009-2012 by Jeff Mott. All rights reserved.
-         * http://code.google.com/p/crypto-js/wiki/License
-         */
+        * Crypto-JS v2.5.4
+        * http://code.google.com/p/crypto-js/
+        * (c) 2009-2012 by Jeff Mott. All rights reserved.
+        * http://code.google.com/p/crypto-js/wiki/License
+        */
 
         function ascii_to_hexa(str) {
             var arr1 = [];
@@ -2909,15 +2910,15 @@
 
 
         /*!
-         * Random number generator with ArcFour PRNG
-         *
-         * NOTE: For best results, put code like
-         * <body onclick='SecureRandom.seedTime();' onkeypress='SecureRandom.seedTime();'>
-         * in your main HTML document.
-         *
-         * Copyright Tom Wu, bitaddress.org  BSD License.
-         * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
-         */
+        * Random number generator with ArcFour PRNG
+        *
+        * NOTE: For best results, put code like
+        * <body onclick='SecureRandom.seedTime();' onkeypress='SecureRandom.seedTime();'>
+        * in your main HTML document.
+        *
+        * Copyright Tom Wu, bitaddress.org  BSD License.
+        * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
+        */
         (function () {
 
             // Constructor function of Global SecureRandom object
@@ -3310,16 +3311,16 @@
         // Follows 'jsbn' on Github: https://github.com/jasondavies/jsbn
         // Review and Testing: https://github.com/cryptocoinjs/bigi/
         /*!
-         * Basic JavaScript BN library - subset useful for RSA encryption. v1.4
-         *
-         * Copyright (c) 2005  Tom Wu
-         * All Rights Reserved.
-         * BSD License
-         * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
-         *
-         * Copyright Stephan Thomas
-         * Copyright pointbiz
-         */
+        * Basic JavaScript BN library - subset useful for RSA encryption. v1.4
+        *
+        * Copyright (c) 2005  Tom Wu
+        * All Rights Reserved.
+        * BSD License
+        * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
+        *
+        * Copyright Stephan Thomas
+        * Copyright pointbiz
+        */
 
         (function () {
 
@@ -4879,13 +4880,13 @@
 
         //ellipticcurve.js
         /*!
-         * Basic Javascript Elliptic Curve implementation
-         * Ported loosely from BouncyCastle's Java EC code
-         * Only Fp curves implemented for now
-         *
-         * Copyright Tom Wu, bitaddress.org  BSD License.
-         * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
-         */
+        * Basic Javascript Elliptic Curve implementation
+        * Ported loosely from BouncyCastle's Java EC code
+        * Only Fp curves implemented for now
+        *
+        * Copyright Tom Wu, bitaddress.org  BSD License.
+        * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
+        */
         (function () {
 
             // Constructor function of Global EllipticCurve object
@@ -4996,9 +4997,9 @@
                 return null;
             };
             /*!
-             * Crypto-JS 2.5.4 BlockModes.js
-             * contribution from Simon Greatrix
-             */
+            * Crypto-JS 2.5.4 BlockModes.js
+            * contribution from Simon Greatrix
+            */
 
             (function (C) {
 
@@ -5411,11 +5412,11 @@
             })(Crypto);
 
             /*!
-             * Crypto-JS v2.5.4  PBKDF2.js
-             * http://code.google.com/p/crypto-js/
-             * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
-             * http://code.google.com/p/crypto-js/wiki/License
-             */
+            * Crypto-JS v2.5.4  PBKDF2.js
+            * http://code.google.com/p/crypto-js/
+            * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
+            * http://code.google.com/p/crypto-js/wiki/License
+            */
             (function () {
 
                 // Shortcuts
@@ -5468,26 +5469,26 @@
             })();
 
             /*
-             * Copyright (c) 2010-2011 Intalio Pte, All Rights Reserved
-             * 
-             * Permission is hereby granted, free of charge, to any person obtaining a copy
-             * of this software and associated documentation files (the "Software"), to deal
-             * in the Software without restriction, including without limitation the rights
-             * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-             * copies of the Software, and to permit persons to whom the Software is
-             * furnished to do so, subject to the following conditions:
-             * 
-             * The above copyright notice and this permission notice shall be included in
-             * all copies or substantial portions of the Software.
-             * 
-             * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-             * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-             * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-             * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-             * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-             * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-             * THE SOFTWARE.
-             */
+            * Copyright (c) 2010-2011 Intalio Pte, All Rights Reserved
+            * 
+            * Permission is hereby granted, free of charge, to any person obtaining a copy
+            * of this software and associated documentation files (the "Software"), to deal
+            * in the Software without restriction, including without limitation the rights
+            * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            * copies of the Software, and to permit persons to whom the Software is
+            * furnished to do so, subject to the following conditions:
+            * 
+            * The above copyright notice and this permission notice shall be included in
+            * all copies or substantial portions of the Software.
+            * 
+            * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+            * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+            * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+            * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+            * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+            * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+            * THE SOFTWARE.
+            */
             // https://github.com/cheongwy/node-scrypt-js
             (function () {
 
@@ -5496,11 +5497,11 @@
 
                 //function scrypt(byte[] passwd, byte[] salt, int N, int r, int p, int dkLen)
                 /*
-                 * N = Cpu cost
-                 * r = Memory cost
-                 * p = parallelization cost
-                 * 
-                 */
+                * N = Cpu cost
+                * r = Memory cost
+                * p = parallelization cost
+                * 
+                */
                 window.Crypto_scrypt = function (passwd, salt, N, r, p, dkLen, callback) {
                     if (N == 0 || (N & (N - 1)) != 0) throw Error("N must be > 0 and a power of 2");
 
@@ -5845,11 +5846,11 @@
             })();
 
             /*!
-             * Crypto-JS v2.5.4  AES.js
-             * http://code.google.com/p/crypto-js/
-             * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
-             * http://code.google.com/p/crypto-js/wiki/License
-             */
+            * Crypto-JS v2.5.4  AES.js
+            * http://code.google.com/p/crypto-js/
+            * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
+            * http://code.google.com/p/crypto-js/wiki/License
+            */
             (function () {
 
                 // Shortcuts
@@ -6263,9 +6264,9 @@
             })();
 
             /*
-             * Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
-             * Ported to JavaScript by bitaddress.org
-             */
+            * Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
+            * Ported to JavaScript by bitaddress.org
+            */
             ec.FieldElementFp.fastLucasSequence = function (p, P, Q, k) {
                 // TODO Research and apply "common-multiplicand multiplication here"
 
@@ -6753,12 +6754,12 @@
             };
 
             /*
-             * Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
-             * Ported to JavaScript by bitaddress.org
-             *
-             * Number yTilde
-             * BigInteger X1
-             */
+            * Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
+            * Ported to JavaScript by bitaddress.org
+            *
+            * Number yTilde
+            * BigInteger X1
+            */
             ec.CurveFp.prototype.decompressPoint = function (yTilde, X1) {
                 var x = this.fromBigInteger(X1);
                 var alpha = x.multiply(x.square().add(this.getA())).add(this.getB());
@@ -8062,8 +8063,8 @@
             };
 
             /*
-             * Return public key as a byte array in DER encoding
-             */
+            * Return public key as a byte array in DER encoding
+            */
             ECKey.prototype.getPub = function () {
                 if (this.compressed) {
                     if (this.pubComp) return this.pubComp;
@@ -8120,8 +8121,8 @@
             };
 
             /*
-             * Takes a public point as a hex string or byte array
-             */
+            * Takes a public point as a hex string or byte array
+            */
             ECKey.prototype.setPub = function (pub) {
                 // byte array
                 if (Bitcoin.Util.isArray(pub)) {
@@ -9422,12 +9423,12 @@
 
             /*
             var test = {
-              foo : {
+            foo : {
                 bar : {
-                  baz : null
+                baz : null
                 }
-              },
-              bar : 1
+            },
+            bar : 1
             };
             cleanse(test);
             
@@ -11814,52 +11815,49 @@
             parse_flo_comments: async function () {
                 const num = 4;
                 text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
-                #!#CURRENCY=INR
-                #!#TYPE_UPI_APP=UPI_APP_TEST${num}
-                #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST${num}
-                #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST${num}
-                #!#TYPE_MSGES=USER_MESSAGES_TEST${num}
-                #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST${num}
-                #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST${num}
-                #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST${num}
-                #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST${num}
-                #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST${num}
-                #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST${num}
-                #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST${num}
-                #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST${num}
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST${num}
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST${num}
-                #!#TYPE_REQUEST_PAYMENT=REQUEST_PAYMENT_TEST${num}
-                #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST${num}
-                #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST${num}
-                #!#TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}
-                #!#TYPE_SENT_TOKENS=TYPE_SENT_TOKENS_TEST${num}
-                #!#TYPE_MY_PERSONAL_DATA=TYPE_MY_PERSONAL_DATA_TEST${num}
-                #!#TYPE_UNCONFIRMED_RUPEE_DEPOSITS=TYPE_UNCONFIRMED_RUPEE_DEPOSITS_TEST${num} 
-                #!#TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}  
-                #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
-                #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
-                #!#cashiers=
-                {
-                    "FPFeL5PXzW9bGosUjQYCxTHSMHidnygvvd": {
-                        "upi_id": "7744023898@paytm"        
-                    },
-                    "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
-                        "upi_id": "8507742774@ybl"
-                    },
-                    "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
-                        "upi_id": "8340617958@ybl"
-                    },
-                    "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
-                        "upi_id": "8902496422@ybl"
-                    },
-                    "FBun3694ZdxmD66os9oL5DxMrif3vyVjT3": {
-                        "upi_id": "7004801428@ybl"
-                    },
-                    "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
-                        "upi_id": "aakriti1705sinha@okicici"
-                    }
-                }`
+                    #!#CURRENCY=INR
+                    #!#TYPE_UPI_APP=UPI_APP_TEST${num}
+                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST${num}
+                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST${num}
+                    #!#TYPE_MSGES=USER_MESSAGES_TEST${num}
+                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST${num}
+                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST${num}
+                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST${num}
+                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST${num}
+                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST${num}
+                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST${num}
+                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST${num}
+                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST${num}
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST${num}
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST${num}
+                    #!#TYPE_REQUEST_PAYMENT=REQUEST_PAYMENT_TEST${num}
+                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST${num}
+                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST${num}
+                    #!#TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}
+                    #!#TYPE_SENT_TOKENS=TYPE_SENT_TOKENS_TEST${num}
+                    #!#TYPE_MY_PERSONAL_DATA=TYPE_MY_PERSONAL_DATA_TEST${num}
+                    #!#TYPE_UNCONFIRMED_RUPEE_DEPOSITS=TYPE_UNCONFIRMED_RUPEE_DEPOSITS_TEST${num} 
+                    #!#TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}  
+                    #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
+                    #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
+                    #!#cashiers=
+                    {
+                        "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
+                            "upi_id": "8507742774@ybl"
+                        },
+                        "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
+                            "upi_id": "8340617958@ybl"
+                        },
+                        "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
+                            "upi_id": "8902496422@ybl"
+                        },
+                        "FBun3694ZdxmD66os9oL5DxMrif3vyVjT3": {
+                            "upi_id": "7004801428@ybl"
+                        },
+                        "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
+                            "upi_id": "aakriti1705sinha@okicici"
+                        }
+                    }`
                 /*
                         "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
                             "upi_id": "krishraj1012-2@okicici"
@@ -11964,7 +11962,7 @@
                     })
                     show_deposit_request()
                     show_withdraw_request()
-                    showPayRequests()
+                    showPayThruCashierRequests()
                     userType.forEach(user => user.textContent = 'Cashier')
                     showPage('deposit', 'deposit_page_btn')
                 }
@@ -12134,7 +12132,25 @@
                                 arg2: { receiverID: cashier, senderIDs: [myFloID] }
                             }
 
-                            promises.push(p1, p2, p3);
+                            let p4 = {
+                                func: floCloudAPI.requestGeneralData,
+                                arg1: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
+                                arg2: { receiverID: cashier, senderIDs: [cashier] }
+                            }
+
+                            let p5 = {
+                                func: floCloudAPI.requestGeneralData,
+                                arg1: token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
+                                arg2: { receiverID: cashier, senderIDs: [cashier] }
+                            }
+
+                            let p6 = {
+                                func: floCloudAPI.requestGeneralData,
+                                arg1: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
+                                arg2: { receiverID: cashier, senderIDs: [cashier] }
+                            }
+
+                            promises.push(p1, p2, p3, p4, p5, p6);
                         }
                     }
 
@@ -12178,6 +12194,7 @@
             let promises = [];
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_MY_PERSONAL_DATA));
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
+            promises.push(reset_cloud_object(token_app.master_configurations.TYPE_SENT_TOKENS));
             if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                 promises.push(reset_cloud_object(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS));
             }
@@ -12189,10 +12206,10 @@
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
-                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
+                /*await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
                     receiverID: myFloID,
                     senderIDs: [myFloID]
-                });
+                });*/
 
                 let finished_tasks = await floCloudAPI.requestApplicationData({
                     type: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
@@ -12247,7 +12264,7 @@
 
                 if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
 
-                const processed_withdraws = Object.values(finished_tasks).map(m => m.message.user_upi_txid);
+                const processed_withdraws = Object.values(finished_tasks).map(m => m.message.token_txid)
 
                 await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
                     receiverID: myFloID
@@ -12368,7 +12385,9 @@
 
                 let token_tx = await ajaxGet('https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/' +
                     input_data["token_txid"])
-                if (typeof token_tx !== "object") {
+                if (typeof token_tx !== "object" || typeof token_tx.parsedFloData !== "object"
+                || typeof token_tx.parsedFloData.flodata !== "string" 
+                || token_tx.parsedFloData.flodata.length<1) {
                     notify("Transaction not found");
                     return false;
                 }
@@ -12399,13 +12418,14 @@
                 });
 
                 floCloudAPI.sendGeneralData(`Your withdrawal request of INR ${amount_to_transfer} is approved. 
-                        Please check reference number ${transfer_upi_txid} in your UPI ${withdraw_upi}`,
+                            Please check reference number ${transfer_upi_txid} in your UPI ${withdraw_upi}`,
                     token_app.master_configurations.TYPE_MSGES, {
                     receiverID: input_data['withdrawer_flo_id']
                 })
 
             } catch (error) {
-                notify(error, 'error')
+                notify('Cash withdrawal failed.', 'error')
+                throw new Error(error, 'error')
             }
         }
 
@@ -12466,7 +12486,7 @@
                                 .map(m => m.message)[0];
 
                             payment_request_status(original_req, 'APPROVED')
-                            showPayRequests();
+                            showPayThruCashierRequests();
                         } else if (payingRequested === false) {
                             let receiverID = myFloID;
                             floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
@@ -12527,7 +12547,7 @@
             }
         }
 
-        async function showPayRequests() {
+        async function showPayThruCashierRequests() {
             try {
                 //if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
@@ -12628,7 +12648,7 @@
                         });
 
                         notify(`Transaction successful: ${flo_txid}. 
-                            INR ${amount_to_pay} sent to ${vendor_flo_id}`, 'success', '', true);
+                                INR ${amount_to_pay} sent to ${vendor_flo_id}`, 'success', '', true);
                         return true;
                     }
                 }
@@ -12901,8 +12921,8 @@
 
                     hidePopup()
                     showTransactionStatus('success', 'Pay through cashier Request sent.', `Sent to: <b class="breakable">${recvr_id}</b><br>
-                        through cashier UPI: <b>${cashier_upi}</b>.<br><br>
-                        Once the cashier receives your payment, they will transfer it to intended receiver.`);
+                            through cashier UPI: <b>${cashier_upi}</b>.<br><br>
+                            Once the cashier receives your payment, they will transfer it to intended receiver.`);
                     payCashierActivityContainer.prepend(render.activityCard({ type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, receiverUPI: req_object.upi_txid, pending: true }))
                 }
 
@@ -12979,7 +12999,7 @@
                         timeStamp: usr_withdraws.vectorClock,
                         token_txid,
                         receiver: withdrawer_upi,
-                        pending: withdraw_request_processed 
+                        pending: withdraw_request_processed
                     }))
                 }
                 withdrawActivityContainer.innerHTML = ``;
@@ -13341,7 +13361,7 @@
                         timeStamp = transaction.transactionDetails.time * 1000
 
                     if (receiver === '' || typeof receiver === 'undefined' || receiver === null || token_app.master_configurations.cashiers[receiver]) continue;
-                    frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, receiver, timeStamp}))
+                    frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, receiver, timeStamp }))
                 }
                 sentActivityContainer.innerHTML = ''
                 sentActivityContainer.append(frag)
