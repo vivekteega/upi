@@ -474,7 +474,7 @@ sm-popup{
 }
 #qr_code_popup{
     &::part(popup){
-        height: 80vh;
+        height: 90vh;
     }
     &::part(popup-body){
         padding: 0;
@@ -486,14 +486,18 @@ sm-popup{
     }
     sm-panel{
         display: flex;
-        height: max-content;
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
+    video{
+        width: 100% !important;
+        object-fit: cover;
+    }
     p{
-        margin-top: 1rem;
+        margin-top: 1.5rem;
         opacity: 0.8;
+        text-align: center;
     }
 }
 

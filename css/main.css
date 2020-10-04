@@ -458,7 +458,7 @@ sm-popup h5:not(.tag) {
 }
 
 #qr_code_popup::part(popup) {
-  height: 80vh;
+  height: 90vh;
 }
 #qr_code_popup::part(popup-body) {
   padding: 0;
@@ -470,14 +470,18 @@ sm-popup h5:not(.tag) {
 }
 #qr_code_popup sm-panel {
   display: flex;
-  height: max-content;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
+#qr_code_popup video {
+  width: 100% !important;
+  object-fit: cover;
+}
 #qr_code_popup p {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   opacity: 0.8;
+  text-align: center;
 }
 
 .popup-header {
