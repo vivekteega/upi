@@ -2060,7 +2060,7 @@ smPopup.innerHTML = `
             <div class="handle"></div>
             <slot name="header"></slot>
         </div>
-        <div class="popup-body">
+        <div part="popup-body" class="popup-body">
             <slot></slot>
         </div>
     </div>

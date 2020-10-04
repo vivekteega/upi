@@ -476,6 +476,9 @@ sm-popup{
     &::part(popup){
         height: 80vh;
     }
+    &::part(popup-body){
+        padding: 0;
+    }
     sm-tab-header{
         width: max-content;
         align-self: center;
@@ -485,7 +488,12 @@ sm-popup{
         display: flex;
         height: max-content;
         flex-direction: column;
-        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    p{
+        margin-top: 1rem;
+        opacity: 0.8;
     }
 }
 

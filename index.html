@@ -69,7 +69,7 @@
         <sm-tab-panels id="qr_selector">
             <sm-panel>
                 <div id="reader"></div>
-                <sm-select id="select_camera"></sm-select>
+                <p>Point your camera towards QR Code</p>
             </sm-panel>
             <sm-panel>
                 <div id="my_qr_code"></div>
@@ -1644,11 +1644,6 @@
                 case 'qr_code_popup':
                     Html5Qrcode.getCameras().then(devices => {
                     if (devices && devices.length) {
-                        let cameras = ``
-                        for(device of devices){
-                            cameras += `<sm-option value="${device.id}">${device.label}</sm-option>`
-                        }
-                        selectCamera.innerHTML = cameras
                         startScanning(devices[devices.length-1].id)
                     }
                     }).catch(err => {
@@ -1656,10 +1651,6 @@
                     });
                     break;
             }
-        })
-
-        selectCamera.addEventListener('change', e => {
-            startScanning(selectCamera.value)
         })
 
         function startScanning(cameraId){

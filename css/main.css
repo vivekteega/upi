@@ -460,6 +460,9 @@ sm-popup h5:not(.tag) {
 #qr_code_popup::part(popup) {
   height: 80vh;
 }
+#qr_code_popup::part(popup-body) {
+  padding: 0;
+}
 #qr_code_popup sm-tab-header {
   width: max-content;
   align-self: center;
@@ -469,7 +472,12 @@ sm-popup h5:not(.tag) {
   display: flex;
   height: max-content;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+#qr_code_popup p {
+  margin-top: 1rem;
+  opacity: 0.8;
 }
 
 .popup-header {
