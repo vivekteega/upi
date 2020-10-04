@@ -483,6 +483,8 @@ sm-popup{
     }
     sm-panel{
         display: flex;
+        height: max-content;
+        flex-direction: column;
         justify-content: center;
     }
 }

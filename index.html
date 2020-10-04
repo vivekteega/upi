@@ -69,6 +69,7 @@
         <sm-tab-panels id="qr_selector">
             <sm-panel>
                 <div id="reader"></div>
+                <sm-select id="select_camera"></sm-select>
             </sm-panel>
             <sm-panel>
                 <div id="my_qr_code"></div>
@@ -424,9 +425,9 @@
                 </svg>
                 <svg id="delete_person" onclick="deletePerson()" class="icon" viewBox="0 0 64 64" title="Remove">
                     <title>remove</title>
-                    <line x1="10.5" y1="2.5" x2="53.5" y2="2.5"/>
-                    <line x1="34" y1="0.5" x2="30" y2="0.5"/>
-                    <path d="M53.5,16.5V59.42a4.08,4.08,0,0,1-4.08,4.08H14.58a4.08,4.08,0,0,1-4.08-4.08V16.5"/>
+                    <line x1="8" y1="2.5" x2="56" y2="2.5"/>
+                    <line x1="33.92" y1="0.5" x2="30.08" y2="0.5"/>
+                    <path d="M53.5,17.5V59.42a4.08,4.08,0,0,1-4.08,4.08H14.58a4.08,4.08,0,0,1-4.08-4.08V17.5"/>
                 </svg>
             </div>
         </div>
@@ -1612,7 +1613,8 @@
         let personPopupOpen = false,
             scannedFloId,
             scannerOn = false
-        const qrScannerInstance = new Html5Qrcode("reader");;
+        const   qrScannerInstance = new Html5Qrcode("reader"),
+                selectCamera = document.getElementById('select_camera');
 
         document.addEventListener('popupopened', e => {
             let thisPopup = e.detail.popup,
@@ -1630,7 +1632,7 @@
                     if (personPopupOpen) {
                         tokenReceiver.value = person.dataset.floId
                     }
-                    if (scannerOn) {
+                    if (scannerOn && scannedFloId) {
                         tokenReceiver.value = scannedFloId
                     }
                     break;
@@ -1642,34 +1644,12 @@
                 case 'qr_code_popup':
                     Html5Qrcode.getCameras().then(devices => {
                     if (devices && devices.length) {
-                        let cameraId = devices[0].id;
-                        qrScannerInstance.start(
-                        cameraId,
-                        {
-                            fps: 10,    
-                            qrbox: 200 
-                        },
-                        qrCodeMessage => {
-                            scannedFloId = qrCodeMessage
-                            qrScannerInstance.stop().then(ignore => {
-                                // QR Code scanning is stopped.
-                                hidePopup()
-                                showPopup('send_rupee_popup')
-                            }).catch(err => {
-                                console.log("Unable to stop scanning.");
-                            });
-                        },
-                        errorMessage => {
-                            
-                        })
-                        .then(success => {
-                            scannerOn = true
-                        })
-                        .catch(err => {
-                            // Start failed, handle it. For example,
-                            scannerOn = false
-                            console.log(`Unable to start scanning, error: ${err}`);
-                        });
+                        let cameras = ``
+                        for(device of devices){
+                            cameras += `<sm-option value="${device.id}">${device.label}</sm-option>`
+                        }
+                        selectCamera.innerHTML = cameras
+                        startScanning(devices[devices.length-1].id)
                     }
                     }).catch(err => {
                         // handle err
@@ -1677,6 +1657,40 @@
                     break;
             }
         })
+
+        selectCamera.addEventListener('change', e => {
+            startScanning(selectCamera.value)
+        })
+
+        function startScanning(cameraId){
+            qrScannerInstance.start(
+                cameraId,
+                {
+                    fps: 10,    
+                    qrbox: 250 
+                },
+                qrCodeMessage => {
+                    scannedFloId = qrCodeMessage
+                    qrScannerInstance.stop().then(ignore => {
+                        // QR Code scanning is stopped.
+                        hidePopup()
+                        showPopup('send_rupee_popup')
+                    }).catch(err => {
+                        console.log("Unable to stop scanning.");
+                    });
+                },
+                errorMessage => {
+                    
+                })
+            .then(success => {
+                scannerOn = true
+            })
+            .catch(err => {
+                // Start failed, handle it. For example,
+                scannerOn = false
+                console.log(`Unable to start scanning, error: ${err}`);
+            });
+        }
 
         document.addEventListener('popupclosed', e => {
             popupStack = e.detail.popupStack

@@ -467,6 +467,8 @@ sm-popup h5:not(.tag) {
 }
 #qr_code_popup sm-panel {
   display: flex;
+  height: max-content;
+  flex-direction: column;
   justify-content: center;
 }
 
