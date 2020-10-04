@@ -35,11 +35,6 @@ body[data-theme=dark] {
 body[data-theme=dark] .flo-balance-card {
   color: rgba(var(--text-color), 1);
 }
-body[data-theme=dark] #my_qr_code {
-  background: #fff;
-  border-radius: 1rem;
-  padding: 1rem;
-}
 
 a {
   font-weight: 600;
@@ -453,6 +448,13 @@ sm-popup h5:not(.tag) {
 
 #reader {
   overflow: hidden;
+}
+
+.my-qr-code {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1rem;
+  max-width: max-content;
 }
 
 #qr_code_popup::part(popup) {
@@ -1395,8 +1397,16 @@ sm-panel {
 #transaction_page #transaction_details strong {
   font-weight: 500;
 }
+#transaction_page #transaction_details strong:not(:last-of-type) + sm-button {
+  margin-bottom: 1.5rem;
+  margin-top: -0.4rem;
+}
 #transaction_page #transaction_details strong:not(:last-of-type) {
   margin-bottom: 1rem;
+}
+#transaction_page #transaction_details sm-button {
+  width: max-content;
+  margin-top: 0.6rem;
 }
 #transaction_page .transaction-amount {
   font-size: 2rem;
@@ -1516,9 +1526,12 @@ sm-panel {
   justify-content: left;
 }
 
-#settings_page > h4 {
+#settings_page h4 {
   margin-top: 2rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+#settings_page .copy-row h4 {
+  margin: 0;
 }
 #settings_page p {
   color: rgba(var(--text-color), 0.7);
@@ -1528,6 +1541,13 @@ sm-panel {
 }
 #settings_page .flex {
   max-width: 60ch;
+}
+#settings_page .my-qr-code {
+  margin-bottom: 1.5rem;
+  height: 14rem;
+}
+#settings_page .my-qr-code img {
+  height: 100%;
 }
 
 @media only screen and (max-width: 640px) {
@@ -1562,6 +1582,13 @@ sm-panel {
 
   video {
     height: 100vw;
+  }
+
+  #settings_page > h4:first-of-type {
+    text-align: center;
+  }
+  #settings_page .my-qr-code {
+    margin: 0 auto 3rem auto;
   }
 }
 @media only screen and (min-width: 640px) {

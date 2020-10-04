@@ -74,7 +74,7 @@
                 </p>
             </sm-panel>
             <sm-panel>
-                <div id="my_qr_code"></div>
+                <div class="my-qr-code"></div>
                 <p>Show this QR Code to receive money using RanchiMall Pay</p>
             </sm-panel>
         </sm-tab-panels>
@@ -968,6 +968,8 @@
         </section>
         <section id="settings_page" class="page hide-completely">
             <h3 class="bottom-margin">Settings<h3>
+                <h4>My QR Code</h4>
+                <div class="my-qr-code"></div>
             <section>
                 <h4>My FLO address</h4>
                 <div class="copy-row">
@@ -1006,8 +1008,7 @@
             </header>
             <div id="transaction_details" class="grid direction-column"></div>
             <p id="caution_message"></p>
-            <sm-button id="show_report_btn" class="hide" onclick="showPopup('report_popup')" variant="outlined">Report
-                </div>
+            <sm-button id="show_report_btn" class="hide" onclick="showPopup('report_popup')">Report</sm-button>
         </section>
     </main>
     <script src="components.js"></script>
@@ -1630,6 +1631,7 @@
                     break;
                 case 'person_popup':
                     personPopupOpen = true
+                    personName = showPersonName.textContent
                     break;
                 case 'send_rupee_popup':
                     if (personPopupOpen) {
@@ -2249,9 +2251,13 @@
                                     ₹ <span class="transaction-amount"> ${amount}</span>
                                 </div>`
 
-            if (receiver !== 'undefined')
+            if (receiver !== 'undefined'){
+                transactionFloId = receiver
                 composition += `
-                        <h5>${transaction}</h5> <strong class="breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</strong>`
+                    <h5>${transaction}</h5> <strong class="breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</strong>`
+                if(floCrypto.validateAddr(receiver) && !allContacts[receiver])
+                    composition += `<sm-button onclick="addPersonFromTransaction()">Save this FLO address</sm-button>`
+            }
 
             if (upiTxId !== 'undefined')
                 composition += `
@@ -2261,7 +2267,7 @@
 
             if (receiverUPI !== 'undefined')
                 composition += `
-                    <h5>Sent to UPI ID</h5>
+                    <h5>Sent to cashier UPI ID</h5>
                     <strong>${receiverUPI}</strong> 
                     `
             composition += `<h5 id="transaction_time">${formatedTime(timeStamp)}</h5>`
@@ -2381,8 +2387,13 @@
                 })
         }
 
+        function addPersonFromTransaction(){
+            contactFlo.value = transactionFloId
+            showPopup('add_person_popup')
+        }
+
         const peopleContainer = document.getElementById('people_container')
-        let allContacts
+        let allContacts, transactionFloId
         async function renderAllContacts() {
             allContacts = await compactIDB.readAllData('contacts')
             peopleContainer.innerHTML = ``
@@ -11942,14 +11953,8 @@
                         "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
                             "upi_id": "8507742774@ybl"
                         },
-                        "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
-                            "upi_id": "8340617958@ybl"
-                        },
                         "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
                             "upi_id": "8902496422@ybl"
-                        },
-                        "FBun3694ZdxmD66os9oL5DxMrif3vyVjT3": {
-                            "upi_id": "7004801428@ybl"
                         },
                         "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
                             "upi_id": "aakriti1705sinha@okicici"
@@ -12099,7 +12104,10 @@
                     defaultUPI = localStorage.getItem(`defaultUPI${myFloID}`)
                     renderUserUPI()
                     renderAllContacts()
-                    new QRCode(document.getElementById("my_qr_code"), myFloID);
+
+                    document.querySelectorAll('.my-qr-code').forEach(code => {
+                        new QRCode(code, myFloID);
+                    })
 
                     showPage('home_page', 'home_page_btn')
                     show_payment_requests()
