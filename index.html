@@ -1981,10 +1981,10 @@
 
             document.getElementById('person_popup').addEventListener('click', e => {
                 if (!e.target.closest('#show_person_name') && !e.target.closest('#edit_person_name')) {
-                    if (showPersonName.isContentEditable && personName !== showPersonName.textContent) {
-                        changePersonName()
+                    if (showPersonName.isContentEditable)
                         showPersonName.contentEditable = 'false'
-                    }
+                    if(personName !== showPersonName.textContent)
+                        changePersonName()
                 }
             })
 

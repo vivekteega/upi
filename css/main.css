@@ -454,9 +454,6 @@ sm-popup h5:not(.tag) {
 #reader {
   overflow: hidden;
 }
-#reader video {
-  object-fit: cover;
-}
 
 #qr_code_popup::part(popup) {
   height: 90vh;
@@ -1441,7 +1438,6 @@ sm-panel {
   background: rgba(var(--text-color), 0.06);
   align-self: center;
   margin-bottom: 0.6rem;
-  box-shadow: 0 0.1rem 0.1rem #00000016, 0 0.1rem 0.3rem #00000040;
 }
 
 .person {
@@ -1468,7 +1464,6 @@ sm-panel {
   border-radius: 2rem;
   margin-bottom: 0.6rem !important;
   text-transform: uppercase;
-  box-shadow: 0 0.1rem 0.1rem #00000016, 0 0.1rem 0.3rem #00000040;
 }
 
 .person-name {
@@ -1490,6 +1485,10 @@ sm-panel {
   width: 2.6rem;
   padding: 0.8rem;
   cursor: pointer;
+  stroke-width: 8;
+}
+#person_popup > .flex:first-of-type .flex .icon:hover {
+  background: rgba(var(--text-color), 0.06);
 }
 #person_popup h3 {
   text-transform: capitalize;
@@ -1559,6 +1558,10 @@ sm-panel {
 
   #deposit .user-panel {
     padding: 0;
+  }
+
+  video {
+    height: 100vw;
   }
 }
 @media only screen and (min-width: 640px) {

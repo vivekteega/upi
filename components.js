@@ -1999,7 +1999,6 @@ smPopup.innerHTML = `
     padding: 1.5rem;
     overflow-y: auto;
 }
-
 .hide{
     opacity: 0;
     pointer-events: none;
