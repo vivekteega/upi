@@ -35,6 +35,11 @@ body[data-theme=dark] {
 body[data-theme=dark] .flo-balance-card {
   color: rgba(var(--text-color), 1);
 }
+body[data-theme=dark] #my_qr_code {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1rem;
+}
 
 a {
   font-weight: 600;
@@ -397,10 +402,6 @@ textarea {
 #prompt {
   flex-direction: column;
 }
-#confirmation p,
-#prompt p {
-  margin: 1rem;
-}
 #confirmation h4,
 #prompt h4 {
   font-weight: 500;
@@ -463,10 +464,12 @@ sm-popup h5:not(.tag) {
 #qr_code_popup::part(popup-body) {
   padding: 0;
 }
+#qr_code_popup .popup-header {
+  padding-bottom: 1.5rem;
+}
 #qr_code_popup sm-tab-header {
-  width: max-content;
-  align-self: center;
-  margin-bottom: 2rem;
+  margin: 0 auto;
+  transform: translateX(-1rem);
 }
 #qr_code_popup sm-panel {
   display: flex;
@@ -482,6 +485,11 @@ sm-popup h5:not(.tag) {
   margin-top: 1.5rem;
   opacity: 0.8;
   text-align: center;
+  max-width: 30ch;
+}
+
+sm-input[type=number] {
+  font-size: 1.2rem;
 }
 
 .popup-header {

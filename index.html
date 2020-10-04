@@ -61,11 +61,11 @@
                 <line x1="64" y1="0" x2="0" y2="64" />
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
+            <sm-tab-header variant="tab" class="round" target="qr_selector">
+                <sm-tab>Scan</sm-tab>
+                <sm-tab>My QR Code</sm-tab>
+            </sm-tab-header>
         </header>
-        <sm-tab-header variant="tab" class="round" target="qr_selector">
-            <sm-tab>Scan</sm-tab>
-            <sm-tab>My QR Code</sm-tab>
-        </sm-tab-header>
         <sm-tab-panels id="qr_selector">
             <sm-panel>
                 <div id="reader"></div>
@@ -428,7 +428,7 @@
                 </svg>
                 <svg id="delete_person" onclick="deletePerson()" class="icon" viewBox="0 0 64 64" title="Remove">
                     <title>remove</title>
-                    <line x1="8" y1="2.5" x2="56" y2="2.5"/>
+                    <line x1="4" y1="2.5" x2="60" y2="2.5"/>
                     <line x1="33.92" y1="0.5" x2="30.08" y2="0.5"/>
                     <path d="M53.5,17.5V59.42a4.08,4.08,0,0,1-4.08,4.08H14.58a4.08,4.08,0,0,1-4.08-4.08V17.5"/>
                 </svg>
@@ -1665,6 +1665,7 @@
                 },
                 qrCodeMessage => {
                     scannedFloId = qrCodeMessage
+                    if(floCrypto.validateAddr(scannedFloId))
                     qrScannerInstance.stop().then(ignore => {
                         // QR Code scanning is stopped.
                         hidePopup()

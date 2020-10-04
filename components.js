@@ -1999,12 +1999,7 @@ smPopup.innerHTML = `
     padding: 1.5rem;
     overflow-y: auto;
 }
-.heading{
-    font-weight: 400;
-}
-.heading:first-letter{
-    text-transform: uppercase;
-}
+
 .hide{
     opacity: 0;
     pointer-events: none;
@@ -2042,15 +2037,6 @@ smPopup.innerHTML = `
     background: rgba(var(--text-color), .2);
     border-radius: 1rem;
     margin: 0.5rem 0;
-}
-.heading{
-    padding: 1rem 1.5rem
-}
-.close{
-    height: 2rem;
-    width: 2rem;
-    padding: 0.55rem;
-    margin-right: 1rem;
 }
 }
 </style>
