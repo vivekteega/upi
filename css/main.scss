@@ -467,7 +467,7 @@ sm-popup{
 }
 .my-qr-code{
     background: #fff;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     padding: 1rem;
     max-width: max-content;
 }
@@ -672,6 +672,12 @@ details{
     }
 }
 #deposit{
+    padding-top: 1.5rem;
+    .flex{
+        sm-button{
+            margin-bottom: 1.5rem;
+        }
+    }
     .user-panel{
         padding: 0 1rem;
     }
@@ -872,62 +878,67 @@ sm-panel{
 }
 
 .request {
-    display: inline-flex;
-    flex-direction: column;
+    display: grid;
+    gap: 1rem;
     padding: 1.5em;
-    border-radius: 0.4em;
-    border: solid 1px rgba(var(--text-color), 0.2);
-
+    border-radius: 0.6rem;
+    background: rgba(var(--text-color), 0.06);
     h4{
-        font-weight: 500;
+        font-weight: 400;
+        font-size: 0.9rem;
     }
     h5 {
-        margin-bottom: 0.2rem;
         text-transform: capitalize;
-        font-weight: 500;
+        font-weight: 400;
         opacity: 0.8;
+        margin-bottom: 0.2rem;
     }
-
-    h3,
-    h4 {
-        margin-bottom: 1rem;
-    }
-
-    h4:last-of-type {
-        margin-bottom: 0;
-    }
-
     .action {
         align-self: flex-end;
     }
-
     .amount {
         font-family: 'Roboto', sans-serif;
     }
-
     button {
         width: auto;
-        align-self: flex-end;
-        margin-top: 1.5rem;
-        margin-bottom: 0;
     }
-
-    .copy-row {
-        margin-bottom: 1.5rem;
-    }
-
     .flex {
         align-items: center;
         justify-content: flex-end;
-        margin-top: auto;
-        padding-top: 1.5rem;
         justify-self: flex-end;
-        h5 {
-            margin: 0;
-        }
-
         button {
             margin: 0;
+        }
+    }
+    &.placeholder{
+        h4, h5{
+            padding: 0.5rem 0;
+            background: rgba(var(--text-color), 0.06);
+        }
+        .btns{
+            display: grid;
+            gap: 0.5rem;
+            grid-auto-flow: column;
+            justify-content: flex-end;
+            h4{
+                width: 6rem;
+            }
+        }
+        h5{
+            width: 50%;
+        }
+        .time{
+            width: 3rem;
+        }
+        animation: pulse infinite 0.6s alternate;
+        &:nth-of-type(2){
+            animation-delay: 0.1s;
+        }
+        &:nth-of-type(3){
+            animation-delay: 0.2s;
+        }
+        &:nth-of-type(4){
+            animation-delay: 0.3s;
         }
     }
 }
@@ -948,7 +959,6 @@ sm-panel{
     display: grid;
     gap: 1em;
     width: 100%;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
 }
 
 .page {
@@ -1013,7 +1023,6 @@ sm-panel{
 }
 
 .time {
-    margin-bottom: 1.5rem !important;
     font-weight: 500;
 }
 
@@ -1632,14 +1641,6 @@ sm-panel{
     video{
         height: 100vw;
     }
-    #settings_page{
-        & > h4:first-of-type{
-            text-align: center;
-        }
-        .my-qr-code{
-            margin: 0 auto 3rem auto;
-        }
-    }
 }
 
 @media only screen and (min-width: 640px) {
@@ -1725,6 +1726,28 @@ sm-panel{
             height: 9rem;
         }
     }
+    .request{
+        grid-template-columns:  minmax(0, auto)  auto;
+        grid-template-areas: 'time time' ' . .' ' . .';
+        .time{
+            grid-area: time;
+            margin-bottom: 0 !important;
+        }
+        button{
+            width: max-content;
+            margin-left: auto;
+        }
+        .breakable{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    #deposit{
+        .user-panel{
+            padding-right: 0;
+        }
+    }
     #settings_page{
         .copy-row{
             display: inline-grid;
@@ -1784,20 +1807,30 @@ sm-panel{
         gap: 1.5rem;
         grid-template-columns: minmax(0, 1fr) 22rem;
     }
+    #deposit{
+        grid-template-columns: minmax(0, 1fr) 18rem;
+        .user-panel{
+            padding-right: 0;
+        }
+    }
     .activity{
         width: 60ch;
     }
-}
-
-@media only screen and (min-width: 1920px) {
-    body {
-        font-size: 24px;
+    .request{
+        grid-template-columns:  minmax(0, auto)  auto;
+        grid-template-areas: 'time time' ' . .' ' . .';
     }
 }
 
-@media only screen and (min-width: 2048px) {
-    body {
-        font-size: 24px;
+@media only screen and (min-width: 1280px) {
+    .request{
+        grid-template-areas: 'time time time' '. . .';
+    }
+    #deposit{
+        grid-template-columns: minmax(0, 1fr) 20rem;
+        .request{
+            grid-template-areas: 'time time time time' '. . . .';
+        }
     }
 }
 
