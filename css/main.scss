@@ -466,6 +466,27 @@ sm-popup{
     }
 }
 
+#reader{
+    overflow: hidden;
+    video{
+        object-fit: cover;
+    }
+}
+#qr_code_popup{
+    &::part(popup){
+        height: 80vh;
+    }
+    sm-tab-header{
+        width: max-content;
+        align-self: center;
+        margin-bottom: 2rem;
+    }
+    sm-panel{
+        display: flex;
+        justify-content: center;
+    }
+}
+
 .popup-header{
     padding: 1.5rem;
     padding-bottom: 0;

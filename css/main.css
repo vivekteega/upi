@@ -450,6 +450,26 @@ sm-popup h5:not(.tag) {
   font-weight: 500;
 }
 
+#reader {
+  overflow: hidden;
+}
+#reader video {
+  object-fit: cover;
+}
+
+#qr_code_popup::part(popup) {
+  height: 80vh;
+}
+#qr_code_popup sm-tab-header {
+  width: max-content;
+  align-self: center;
+  margin-bottom: 2rem;
+}
+#qr_code_popup sm-panel {
+  display: flex;
+  justify-content: center;
+}
+
 .popup-header {
   padding: 1.5rem;
   padding-bottom: 0;
