@@ -420,7 +420,7 @@
         </header>
         <div class="flex direction-column align-center">
             <h3 id="person_initials"></h3>
-            <h4 class="capitalize" id="show_person_name"></h4>
+            <h4 class="capitalize" id="show_person_name" ondblclick="setNameEditable()"></h4>
             <div class="flex space-between align-center">
                 <svg tooltip="Edit" id="edit_person_name" class="icon" onclick="setNameEditable()" viewBox="0 0 64 64">
                     <path
@@ -428,8 +428,8 @@
                 </svg>
                 <svg id="delete_person" onclick="deletePerson()" class="icon" viewBox="0 0 64 64" title="Remove">
                     <title>remove</title>
-                    <line x1="4" y1="2.5" x2="60" y2="2.5"/>
-                    <line x1="33.92" y1="0.5" x2="30.08" y2="0.5"/>
+                    <line x1="28" y1="0" x2="36" y2="0"/>
+                    <line x1="4" y1="4" x2="60" y2="4"/>
                     <path d="M53.5,17.5V59.42a4.08,4.08,0,0,1-4.08,4.08H14.58a4.08,4.08,0,0,1-4.08-4.08V17.5"/>
                 </svg>
             </div>
@@ -2464,11 +2464,13 @@
         }
 
         function setNameEditable() {
-            showPersonName.contentEditable = 'true'
-            showPersonName.focus()
-            document.execCommand('selectAll', false, null);
-            document.getSelection().collapseToEnd();
-            personName = showPersonName.textContent
+            if(!showPersonName.isContentEditable){
+                showPersonName.contentEditable = 'true'
+                showPersonName.focus()
+                document.execCommand('selectAll', false, null);
+                document.getSelection().collapseToEnd();
+                personName = showPersonName.textContent
+            }
         }
 
         async function changePersonName() {
