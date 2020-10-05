@@ -434,13 +434,6 @@ customElements.define('sm-input',
             this.input.blur()
         }
 
-        preventNonNumericalInput = (e) => {
-            let keyCode = e.keyCode;
-            if (!((keyCode > 47 && keyCode < 56) || (keyCode > 36 && keyCode < 39) || (keyCode > 95 && keyCode < 106) || keyCode === 110 || (keyCode > 7 && keyCode < 19))) {
-                e.preventDefault();
-            }
-        }
-
         fireEvent = () => {
             let event = new Event('input', {
                 bubbles: true,
@@ -529,10 +522,6 @@ customElements.define('sm-input',
                     this.input.setAttribute('type', this.getAttribute('type'))
             } else
                 this.input.setAttribute('type', 'text')
-            this.input.addEventListener('keydown', e => {
-                if (this.getAttribute('type') === 'number')
-                    this.preventNonNumericalInput(e);
-            })
             this.input.addEventListener('input', e => {
                 this.checkInput()
             })
@@ -774,10 +763,6 @@ customElements.define('sm-textarea',
             if (this.hasAttribute('helper-text')) {
                 this.helperText.textContent = this.getAttribute('helper-text')
             }
-            this.input.addEventListener('keydown', e => {
-                if (this.getAttribute('type') === 'number')
-                    this.preventNonNumericalInput(e);
-            })
             this.input.addEventListener('input', e => {
                 this.checkInput()
             })

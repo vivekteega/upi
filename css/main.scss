@@ -911,6 +911,7 @@ sm-panel{
         }
     }
     &.placeholder{
+        pointer-events: none;
         h4, h5{
             padding: 0.5rem 0;
             background: rgba(var(--text-color), 0.06);
@@ -1301,6 +1302,7 @@ sm-panel{
         margin-left: 0.4rem;
     }
     &.placeholder{
+        pointer-events: none;
         animation: pulse infinite 0.6s alternate;
         .activity-type,
         .activity-receiver{

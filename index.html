@@ -1165,7 +1165,7 @@
                 return card;
             },
             activityCard(obj) {
-                let { type, amount, timeStamp, receiver, upi_txid, receiverUPI, processed } = obj;
+                let { type, amount, timeStamp, receiver, upi_txid, receiverUPI, processed, fromCashier, toCashier } = obj;
                 let card = document.createElement('div'),
                     composition = ``,
                     icon,
@@ -1180,7 +1180,9 @@
                     'data-amount': amount,
                     'data-upi-txid': upi_txid,
                     'data-receiver-upi': receiverUPI,
-                    'data-pending': processed
+                    'data-pending': processed,
+                    'data-from-cashier': fromCashier,
+                    'data-to-cashier': toCashier
                 })
                 switch (type) {
                     case 'sent':
@@ -1267,6 +1269,10 @@
                                     <polyline points="47 32.26 32 32.26 32 12.26"/>
                                 </svg>`
                 }
+                if(fromCashier)
+                    transaction = 'Received from cashier'
+                if(toCashier)
+                    transaction = 'Sent to cashier'
                 composition += `
                         ${icon}
                         <h4 class="activity-type">${transaction} ${status}</h4>`
@@ -2101,7 +2107,7 @@
 
             let currentRequest = null;
             document.getElementById('activity_page').addEventListener('click', (e) => {
-                if (e.target.closest('.activity:not(.placeholder)')) {
+                if (e.target.closest('.activity')) {
                     currentRequest = e.target.closest('.activity')
                     showTransactionDetails({
                         type: currentRequest.dataset.type,
@@ -2110,7 +2116,9 @@
                         receiver: currentRequest.dataset.receiver,
                         upiTxId: currentRequest.dataset.upiTxid,
                         receiverUPI: currentRequest.dataset.receiverUpi,
-                        processed: currentRequest.dataset.pending
+                        processed: currentRequest.dataset.pending,
+                        toCashier: currentRequest.dataset.toCashier,
+                        fromCashier: currentRequest.dataset.fromCashier
                     })
                 }
             })
@@ -2149,7 +2157,7 @@
                     let paymentRequestId = currentPaymentRequest.dataset.paymentRequestId;
                     if (await confirmation(`Do want to decline this request?`, 'No', 'Decline')) {
                         const all_reqs = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                            .TYPE_REQUEST_PAYMENT, "0").reverse());
+                            .TYPE_REQUEST_PAYMENT, "0"));
 
                         const original_req = all_reqs.filter(f => f.message.pay_req_id === paymentRequestId)
                             .map(m => m.message)[0];
@@ -2221,7 +2229,7 @@
             showReportButton = document.getElementById('show_report_btn')
 
         function showTransactionDetails(obj) {
-            let { type, timeStamp, amount, receiver, upiTxId, receiverUPI, processed } = obj;
+            let { type, timeStamp, amount, receiver, upiTxId, receiverUPI, processed, fromCashier, toCashier } = obj;
             let composition = ``,
                 icon,
                 transaction,
@@ -2337,6 +2345,16 @@
                     <h5>Sent to cashier UPI ID</h5>
                     <strong>${receiverUPI}</strong> 
                     `
+            if(fromCashier !== 'undefined'){
+                composition += `
+                    <p>You have received ₹${amount} from our cashier. Your deposit request was completed successfully.</p> 
+                    ` 
+            }
+            if(toCashier !== 'undefined'){
+                composition += `
+                    <p>You sent ₹${amount} to our cashier.</p> 
+                    ` 
+            }
             composition += `<h5 id="transaction_time">${formatedTime(timeStamp)}</h5>`
             transactionDetails.innerHTML = composition
             transactionType.textContent = type
@@ -12711,7 +12729,7 @@
                     } else {
                         if (payingRequested) {
                             const all_reqs = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                                .TYPE_REQUEST_PAYMENT, "0").reverse());
+                                .TYPE_REQUEST_PAYMENT, "0"));
                                 
                             const original_req = all_reqs
                                 .filter(f => f.message.pay_req_id === currentPaymentRequest.dataset.paymentRequestId)
@@ -12735,7 +12753,7 @@
                         }
                         hidePopup()
                         showTransactionStatus('success', 'Rupee Sent', 'It may take upto 48 working hours for transaction to be completed.', flo_txid);
-                        sentActivityContainer.prepend(render.activityCard({ type: 'sent', amount: token_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: token_receiver }))
+                        //sentActivityContainer.prepend(render.activityCard({ type: 'sent', amount: token_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: token_receiver }))
                         refresh_balance()
                         return true;
                     }
@@ -13153,12 +13171,9 @@
 
                 await token_app.actions.retrieveLatestContent();
 
-                const deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0")
-                    .reverse());
-                const withdraw_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
-                    "0").reverse());
-                const user_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0")
-                    .reverse());
+                let deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0"));
+                const withdraw_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,"0").reverse());
+                const user_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0").reverse());
                 const pay_thru_cashier_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
                     .TYPE_PAY_THROUGH_CASHIER, "0").reverse());
 
@@ -13167,6 +13182,8 @@
 
                 const processed_deposits_upis = Object.values(processed_deposits).map(m => m.message.user_upi_txid);
                 console.log(processed_deposits_upis)
+
+                deposit_msg = deposit_msg.sort((a, b) => parseInt(b.vectorClock.split('_')[0]) - parseInt(a.vectorClock.split('_')[0]))
 
                 console.log(deposit_msg, withdraw_msg, user_msg)
                 for (usr_deposits of deposit_msg) {
@@ -13582,8 +13599,8 @@
                     let { tokenAmount, flodata } = transaction.parsedFloData,
                         receiver = flodata.match(/\b\w{34,34}\b/),
                         timeStamp = transaction.transactionDetails.time * 1000
-                    if (receiver === '' || typeof receiver === 'undefined' || receiver === null || token_app.master_configurations.cashiers[receiver]) continue;
-                    frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, receiver, timeStamp }))
+                    if (receiver === '' || typeof receiver === 'undefined' || receiver === null) continue;
+                    frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, receiver, timeStamp, toCashier: token_app.master_configurations.cashiers[receiver] }))
                 }
                 sentActivityContainer.innerHTML = ''
                 sentActivityContainer.append(frag)
@@ -13602,8 +13619,8 @@
                             sender = transaction.transactionDetails.vin[0].addr,
                             timeStamp = transaction.transactionDetails.time * 1000
 
-                        if (sender === '' || typeof sender === 'undefined' || sender === null || token_app.master_configurations.cashiers[sender]) continue;
-                        frag.append(render.activityCard({ type: 'received', amount: tokenAmount, receiver: sender, timeStamp }))
+                        if (sender === '' || typeof sender === 'undefined' || sender === null) continue;
+                        frag.append(render.activityCard({ type: 'received', amount: tokenAmount, receiver: sender, timeStamp, fromCashier: token_app.master_configurations.cashiers[sender] }))
                     }
                     receivedActivityContainer.innerHTML = ''
                     receivedActivityContainer.append(frag)
