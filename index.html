@@ -563,7 +563,7 @@
                             <path d="M63.5,39.5V58.43a5.08,5.08,0,0,1-5.08,5.07H39.5"/>
                             <path d="M39.5.5H58.42A5.08,5.08,0,0,1,63.5,5.57V24.5"/>
                             <path d="M.5,24.5V5.57A5.08,5.08,0,0,1,5.58.5H24.5"/>
-                            <line x1="10" y1="32.57" x2="54" y2="32.57"/>
+                            <line x1="12" y1="32" x2="52" y2="32"/>
                         </svg>
                         <h4>Scan QR</h4>
                     </div>
@@ -12010,9 +12010,6 @@
                         "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
                             "upi_id": "aakriti1705sinha@okicici"
                         },
-                        "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
-                            "upi_id": "krishraj1012-2@okicici"
-                        },
                         "FPFeL5PXzW9bGosUjQYCxTHSMHidnygvvd": {
                             "upi_id": "7744023898@paytm"
                         }
@@ -13391,92 +13388,94 @@
  
         const   pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
                 paidPaymentRequestContainer = document.getElementById("paid_payment_request_container"),
-                declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container");
+                declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container")
+
+        let paymentRequestAnimated = false;
 
         async function show_payment_requests(requests_received = true, recvr_id = '') {
             try {
-
-                pendingPaymentRequestContainer.innerHTML = ``;
-                paidPaymentRequestContainer.innerHTML = ``;
-                declinedPaymentRequestContainer.innerHTML = ``;
-
-                for(let i= 0; i < 6; i++){
-                    frag.append(render.paymentRequestPlaceholder())
+                if(!paymentRequestAnimated){
+                    pendingPaymentRequestContainer.innerHTML = ``;
+                    paidPaymentRequestContainer.innerHTML = ``;
+                    declinedPaymentRequestContainer.innerHTML = ``;
+    
+                    for(let i= 0; i < 6; i++){
+                        frag.append(render.paymentRequestPlaceholder())
+                    }
+                    let frag1 = frag.cloneNode(true)
+                    let frag2 = frag.cloneNode(true)
+    
+                    pendingPaymentRequestContainer.append(frag)
+                    paidPaymentRequestContainer.append(frag1)
+                    declinedPaymentRequestContainer.append(frag2)
+                    paymentRequestAnimated = true
                 }
-                let frag1 = frag.cloneNode(true)
-                let frag2 = frag.cloneNode(true)
-
-                pendingPaymentRequestContainer.append(frag)
-                paidPaymentRequestContainer.append(frag1)
-                declinedPaymentRequestContainer.append(frag2)
 
                 let options = { receiverID: myFloID };
                 if (requests_received !== true) {
                     options = { receiverID: recvr_id, senderIDs: [myFloID] }
                 }
 
-                await Promise.all([
+                Promise.all([
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT, options),
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED, options),
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED, options)
-                ]);
-                const general_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_REQUEST_PAYMENT, "0").reverse()),
-                    declined_reqs_list = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_REQUEST_PAYMENT_DECLINED, "0").reverse()),
-                    approved_reqs_list = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_REQUEST_PAYMENT_APPROVED, "0").reverse());
+                ]).then(success => {
 
-                console.log(general_msg);
-                console.log(approved_reqs_list);
-                console.log(declined_reqs_list);
+                    const general_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                        .TYPE_REQUEST_PAYMENT, "0").reverse()),
+                        declined_reqs_list = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                            .TYPE_REQUEST_PAYMENT_DECLINED, "0").reverse()),
+                        approved_reqs_list = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                            .TYPE_REQUEST_PAYMENT_APPROVED, "0").reverse());
 
-                let processed_payments_requests = approved_reqs_list.map(m => m.message.pay_req_id).concat(declined_reqs_list
-                    .map(m => m.message.pay_req_id));
+                    let processed_payments_requests = approved_reqs_list.map(m => m.message.pay_req_id).concat(declined_reqs_list
+                        .map(m => m.message.pay_req_id));
 
-                pendingPaymentRequestContainer.innerHTML = ``;
-                paidPaymentRequestContainer.innerHTML = ``;
-                declinedPaymentRequestContainer.innerHTML = ``;
+                    pendingPaymentRequestContainer.innerHTML = ``;
+                    paidPaymentRequestContainer.innerHTML = ``;
+                    declinedPaymentRequestContainer.innerHTML = ``;
 
-                for (const m of general_msg) {
-                    let {
-                        sender_flo_id,
-                        receiver_flo_id,
-                        amount,
-                        datetime,
-                        pay_req_id
-                    } = m.message;
-                    if (processed_payments_requests.includes(pay_req_id || m.message)) continue;
-                    console.log(sender_flo_id, amount, datetime, pay_req_id);
-                    if (typeof sender_flo_id !== "string") continue;
-                    frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id, true))
-                }
-                pendingPaymentRequestContainer.append(frag)
+                    for (const m of general_msg) {
+                        let {
+                            sender_flo_id,
+                            receiver_flo_id,
+                            amount,
+                            datetime,
+                            pay_req_id
+                        } = m.message;
+                        if (processed_payments_requests.includes(pay_req_id || m.message)) continue;
 
-                for (const m of approved_reqs_list) {
-                    let {
-                        sender_flo_id,
-                        receiver_flo_id,
-                        amount,
-                        datetime,
-                        pay_req_id
-                    } = m.message;
-                    frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
-                }
-                paidPaymentRequestContainer.append(frag)
+                        if (typeof sender_flo_id !== "string") continue;
+                        frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id, true))
+                    }
+                    pendingPaymentRequestContainer.append(frag)
 
-                for (const m of declined_reqs_list) {
-                    let {
-                        sender_flo_id,
-                        receiver_flo_id,
-                        amount,
-                        datetime,
-                        pay_req_id
-                    } = m.message;
-                    console.log(m)
-                    frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
-                }
-                declinedPaymentRequestContainer.append(frag)
+                    for (const m of approved_reqs_list) {
+                        let {
+                            sender_flo_id,
+                            receiver_flo_id,
+                            amount,
+                            datetime,
+                            pay_req_id
+                        } = m.message;
+                        frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
+                    }
+                    paidPaymentRequestContainer.append(frag)
+
+                    for (const m of declined_reqs_list) {
+                        let {
+                            sender_flo_id,
+                            receiver_flo_id,
+                            amount,
+                            datetime,
+                            pay_req_id
+                        } = m.message;
+                        console.log(m)
+                        frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
+                    }
+                    declinedPaymentRequestContainer.append(frag)
+                })
             } catch (e) {
                 console.error(e);
                 return false
@@ -13517,9 +13516,6 @@
                 await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS,
                     { receiverID, senderIDs });
                 let unconfirmed_tx_list = Object.keys(floGlobals.appObjects[token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS]);
-                //console.log(unconfirmed_tx_list);    
-                //console.log(tokens_transfers_tx_list);
-                //console.log(token_balance);
 
                 let unconfirmed_balance = 0;
                 for (ut of unconfirmed_tx_list) {
