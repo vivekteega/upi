@@ -926,9 +926,15 @@ sm-panel {
 .request.placeholder:nth-of-type(4) {
   animation-delay: 0.3s;
 }
+.request.placeholder:nth-of-type(5) {
+  animation-delay: 0.4s;
+}
+.request.placeholder:nth-of-type(6) {
+  animation-delay: 0.5s;
+}
 
 .deposited {
-  color: #007732;
+  color: #00C853;
 }
 
 .decline-request {
@@ -1407,8 +1413,13 @@ sm-panel {
   width: 4rem;
   padding: 1.2rem;
   border-radius: 4rem;
-  background: rgba(var(--text-color), 0.06);
   margin-bottom: 2rem;
+  background: rgba(var(--text-color), 0.06);
+}
+#transaction_page #transaction_details .success {
+  background: #00C853;
+  stroke-width: 8;
+  stroke: var(--background-color);
 }
 #transaction_page #transaction_details .flex {
   margin-bottom: 1.5rem;

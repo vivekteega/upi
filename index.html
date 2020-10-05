@@ -1140,7 +1140,7 @@
                     </div>                 
                     <h5 class="time">${formatedTime(vectorClock, true)}</h5>
                     <button id="" class="confirm-pay-btn">
-                        Transfer
+                        Confirm
                     </button>`;
                 return card;
             },
@@ -1270,9 +1270,9 @@
                                 </svg>`
                 }
                 if(fromCashier)
-                    transaction = 'Received from cashier'
+                    transaction = 'Received from RanchiMall Pay'
                 if(toCashier)
-                    transaction = 'Sent to cashier'
+                    transaction = 'Sent to RanchiMall Pay'
                 composition += `
                         ${icon}
                         <h4 class="activity-type">${transaction} ${status}</h4>`
@@ -1956,7 +1956,7 @@
                 if (relative) {
                     if (year == currentYear) {
                         if (currentTime[1] === month && date === currentTime[2])
-                            return `${finalHours}`;
+                            return `Today at ${finalHours}`;
                         else
                             return ` ${date} ${month}`;
 
@@ -2237,67 +2237,24 @@
 
             switch (type) {
                 case 'sent':
-                    icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <path
-                                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
-                            </svg>
-                        `
                     transaction = 'Sent to'
                     break;
                 case 'received':
-                    icon = `
-                            <svg class="icon request-icon" viewBox="0 0 64 64">
-                                <path
-                                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
-                            </svg>
-                        `
                     transaction = 'Received from'
                     break;
                 case 'deposit':
-                    icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <title>deposit</title>
-                                <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
-                                <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
-                                <path
-                                    d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-                                <path
-                                    d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-                                <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
-                            </svg>
-                        `
                     type = 'deposited'
                     if (processed === 'false')
                         type = 'deposit'
                     transaction = 'Deposited to'
                     break;
                 case 'withdraw':
-                    icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <title>withdraw</title>
-                                <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
-                                <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
-                                <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
-                                <path
-                                    d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-                                <path
-                                    d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-                                <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
-                            </svg>
-                        `
                     type = 'withdrawn'
                     if (processed === 'false')
                         type = 'Withdraw'
                     transaction = 'withdrawn to'
                     break;
                 case 'payCashier':
-                    icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
-                                <rect height="64" width="64" rx="8"></rect>
-                            </svg>
-                        `
                     className = 'withdrawn'
                     transaction = 'Paid to'
                     type = 'Paid through cashier'
@@ -2307,7 +2264,7 @@
             }
 
             if (processed === 'false') {
-                icon = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                icon = `<svg class="icon pending" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                                 <title>pending</title>
                                 <circle cx="32" cy="32" r="31.5"/>
                                 <polyline points="47 32.26 32 32.26 32 12.26"/>
@@ -2317,8 +2274,15 @@
                         completed and your money was deducted, use <Strong>Report</Strong> button to report your issue.`
                 showReportButton.classList.remove('hide')
             }
-            else
+            else{
                 showReportButton.classList.add('hide')
+                icon = `
+                <svg class="icon success" viewBox="0 0 64 64">
+                    <title>tick</title>
+                    <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
+                </svg>
+                `
+            }
 
             composition = `${icon}
                                 <h5>${type}</h5>
@@ -2347,7 +2311,7 @@
                     `
             if(fromCashier !== 'undefined'){
                 composition += `
-                    <p>You have received ₹${amount} from our cashier. Your deposit request was completed successfully.</p> 
+                    <p>You have received ₹${amount} from RanchiMall Pay. Your deposit request was completed successfully.</p> 
                     ` 
             }
             if(toCashier !== 'undefined'){
@@ -12209,7 +12173,7 @@
                     getSentRupeeList()
                     
                     getReceivedRupeeList()
-                    show_all_user_activities()
+                    showAllUserActivities()
                 }
                 this.retrieveLatestContent();
             },
@@ -13151,7 +13115,7 @@
             payCashierActivityContainer = document.getElementById('pay_cashier_activity_container'),
             cashierMessageContainer = document.getElementById('cashier_message_container')
 
-        async function show_all_user_activities() {
+        async function showAllUserActivities() {
             try {
 
                 depositActivityContainer.innerHTML = ''
@@ -13164,9 +13128,7 @@
                 let frag1 = frag.cloneNode(true)
                 let frag2 = frag.cloneNode(true)
                 depositActivityContainer.append(frag)
-
                 withdrawActivityContainer.append(frag1)
-
                 payCashierActivityContainer.append(frag2)
 
                 await token_app.actions.retrieveLatestContent();
@@ -13195,7 +13157,6 @@
                     let deposit_request_processed = false;
                     if (processed_deposits_upis.includes(upi_txid)) deposit_request_processed = true;
                     console.info(upi_txid, deposit_request_processed)
-                    // SaiRajM: Use deposit_request_processed to display status of deposit 
                     frag.append(render.activityCard({
                         type: 'deposit', amount: deposit_amount, timeStamp: usr_deposits.vectorClock,
                         upi_txid, receiver: cashier_upi, deposit_request_processed, processed: deposit_request_processed
@@ -13246,7 +13207,7 @@
                     } = cashier_message.message;
                     if (processed_cashier_payments.includes(upi_txid)) ptc_request_processed = true;
                     console.log(upi_txid, ptc_request_processed);
-                    // SaiRajM status for pay through cashier
+
                     frag.append(render.activityCard({
                         type: 'payCashier',
                         amount,
