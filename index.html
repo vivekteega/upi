@@ -12676,7 +12676,7 @@
 
                     if (typeof sender_token_balance.balance !== "number" ||
                         sender_token_balance.balance < token_amount) {
-                        err_msg = `Sender has insufficient ${token_name_radio} balance.`;
+                        err_msg = `Insufficient ${token_name_radio} balance.`;
                         notify(err_msg, 'error');
                         hidePopup()
                         return false;
