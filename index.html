@@ -48,10 +48,36 @@
         </div>
         <h4 class="expand light-text">Welcome to RanchiMall Pay.<br>Please enter your FLO private key to
             continue.</h4>
-        <sm-input id="get_priv_key_field" privateKey placeholder="Private Key" type="password" required animate></sm-input>
+        <sm-input id="get_priv_key_field" privateKey placeholder="Private Key" type="password" required animate>
+        </sm-input>
         <button id="sign_in_btn" class="primary-btn expand" type="submit" disabled>
             Sign In
         </button>
+    </sm-popup>
+    <sm-popup id="qr_code_popup">
+        <header class="popup-header" slot="header">
+            <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
+                <title>close</title>
+                <line x1="64" y1="0" x2="0" y2="64" />
+                <line x1="64" y1="64" x2="0" y2="0" />
+            </svg>
+            <sm-tab-header variant="tab" class="round" target="qr_selector">
+                <sm-tab>Scan</sm-tab>
+                <sm-tab>My QR Code</sm-tab>
+            </sm-tab-header>
+        </header>
+        <sm-tab-panels id="qr_selector">
+            <sm-panel>
+                <div id="reader"></div>
+                <p>Point your camera towards QR Code.<br>
+                    <strong>*Only works with RanchiMall Pay.</strong>
+                </p>
+            </sm-panel>
+            <sm-panel>
+                <div class="my-qr-code"></div>
+                <p>Show this QR Code to receive money using RanchiMall Pay</p>
+            </sm-panel>
+        </sm-tab-panels>
     </sm-popup>
     <sm-popup id="send_rupee_popup">
         <header class="popup-header" slot="header">
@@ -87,7 +113,8 @@
         <sm-input id="token_amount" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
-                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+                <path
+                    d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z" />
             </svg>
         </sm-input>
         <sm-input floId id="token_receiver" placeholder="Reciever's FLO address" required animate></sm-input>
@@ -119,7 +146,8 @@
             <h5>Step 1</h5>
             <p>Copy UPI address shown below.</p>
             <h5>Step 2</h5>
-            <p>Open any UPI app of your preference and send money to copied UPI address. <strong>(Do not close this browser)</strong></p>
+            <p>Open any UPI app of your preference and send money to copied UPI address. <strong>(Do not close this
+                    browser)</strong></p>
             <h5>Step 3</h5>
             <p>Copy the UPI transaction ID shown after transaction was successful.</p>
             <h5>Step 4</h5>
@@ -141,11 +169,12 @@
         <sm-input id="token_amount_to_buy" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
-                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+                <path
+                    d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z" />
             </svg>
         </sm-input>
-        <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" pattern="^[a-zA-z0-9]+" minlength="12" maxlength="12"
-        required animate></sm-input>
+        <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" pattern="^[a-zA-z0-9]+" minlength="12"
+            maxlength="12" required animate></sm-input>
     </sm-popup>
     <sm-popup id="withdraw_rupee">
         <header class="popup-header" slot="header">
@@ -174,20 +203,23 @@
             <h5>Step 1</h5>
             <p>Enter amount you want to withdraw</p>
             <h5>Step 2</h5>
-            <p>Select UPI address you want to withdraw rupee to. <strong>If you haven't added UPI address, add one using 'Add UPI address' button.</strong></p>
+            <p>Select UPI address you want to withdraw rupee to. <strong>If you haven't added UPI address, add one using
+                    'Add UPI address' button.</strong></p>
             <h5>Step 3</h5>
             <p>Press <strong>Withdraw</strong> button</p>
         </details>
         <sm-input id="withdraw_cash_amount" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
-                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+                <path
+                    d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z" />
             </svg>
         </sm-input>
 
         <h5 class="">Withdraw To</h5>
         <div class="upi-container"></div>
-        <sm-button class="add-upi empty-state" variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
+        <sm-button class="add-upi empty-state" variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI
+            address</sm-button>
     </sm-popup>
     <sm-popup id="request_rupee">
         <header class="popup-header" slot="header">
@@ -197,15 +229,15 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
             <h4>Request rupee</h3>
-            <button id="request_rupee_btn" class="action expand" type="submit" disabled>
-                <h4 class="primary-btn expand">
-                    request
-                </h4>
-                <svg viewBox="0 0 73 73" class="loader">
-                    <path
-                        d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
-                </svg>
-            </button>
+                <button id="request_rupee_btn" class="action expand" type="submit" disabled>
+                    <h4 class="primary-btn expand">
+                        request
+                    </h4>
+                    <svg viewBox="0 0 73 73" class="loader">
+                        <path
+                            d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                    </svg>
+                </button>
         </header>
         <p>
             Request rupee from other's using FLO address.
@@ -224,7 +256,8 @@
         <sm-input id="requested_amount" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
-                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+                <path
+                    d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z" />
             </svg>
         </sm-input>
         <sm-input floId id="requested_address" placeholder="Request from" required animate></sm-input>
@@ -262,13 +295,15 @@
             <h5>Step 1</h5>
             <p>Copy UPI address shown below.</p>
             <h5>Step 2</h5>
-            <p>Open any UPI app of your preference and send money to copied UPI address. <strong>(Do not close this browser)</strong></p>
+            <p>Open any UPI app of your preference and send money to copied UPI address. <strong>(Do not close this
+                    browser)</strong></p>
             <h5>Step 3</h5>
             <p>Enter the amount you sent to copied address</p>
             <h5>Step 4</h5>
             <p>Then enter the FLO address of person you want send rupee to.</p>
             <h5>Step 5</h5>
-            <p>Select UPI address that you used when sending money copied UPI address. <strong>If you haven't added UPI address, add one using 'Add UPI address' button.</strong></p>
+            <p>Select UPI address that you used when sending money copied UPI address. <strong>If you haven't added UPI
+                    address, add one using 'Add UPI address' button.</strong></p>
             <h5>Step 6</h5>
             <p>Press <strong>Pay</strong> button</p>
         </details>
@@ -284,13 +319,15 @@
         <sm-input id="recvr_amount_to_pay" placeholder="Amount" type="number" min="1" max="100000" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
-                <path d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z"/>
+                <path
+                    d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z" />
             </svg>
         </sm-input>
         <sm-input floId id="recvr_id" placeholder="Reciever's FLO address" required animate></sm-input>
         <h5>Send from</h5>
-        <div class="upi-container"></div>   
-        <sm-button class="add-upi empty-state" variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
+        <div class="upi-container"></div>
+        <sm-button class="add-upi empty-state" variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI
+            address</sm-button>
     </sm-popup>
     <sm-popup id="transaction_result">
         <header class="popup-header" slot="header">
@@ -300,19 +337,19 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
         </header>
-        <section id="success_section" class="flex direction-column hide-completely">            
+        <section id="success_section" class="flex direction-column hide-completely">
             <svg id="success_svg" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <title>success</title>
-                <ellipse cx="32" cy="32" rx="31.5" ry="31.49"/>
-                <polyline points="17.04 30.48 27.92 41.36 46.96 22.32"/>
+                <ellipse cx="32" cy="32" rx="31.5" ry="31.49" />
+                <polyline points="17.04 30.48 27.92 41.36 46.96 22.32" />
             </svg>
         </section>
         <section id="failure_section" class="hide-completely flex direction-column">
             <svg id="failure_svg" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <title>failure</title>
-                <ellipse cx="32" cy="32" rx="31.5" ry="31.49"/>
-                <line x1="22.5" y1="22.5" x2="41.5" y2="41.5"/>
-                <line x1="41.5" y1="22.5" x2="22.5" y2="41.5"/>
+                <ellipse cx="32" cy="32" rx="31.5" ry="31.49" />
+                <line x1="22.5" y1="22.5" x2="41.5" y2="41.5" />
+                <line x1="41.5" y1="22.5" x2="22.5" y2="41.5" />
             </svg>
         </section>
         <h4 id="transaction_heading"></h4>
@@ -346,8 +383,8 @@
                 </svg>
             </button>
         </header>
-        <sm-input id="add_upi_input" placeholder="UPI address" pattern="^[a-zA-z0-9]+@[a-zA-z0-9]+"
-        required animate></sm-input>
+        <sm-input id="add_upi_input" placeholder="UPI address" pattern="^[a-zA-z0-9\-]+@[a-zA-z0-9]+" required animate>
+        </sm-input>
     </sm-popup>
 
     <!-- Add contact popup -->
@@ -383,15 +420,17 @@
         </header>
         <div class="flex direction-column align-center">
             <h3 id="person_initials"></h3>
-            <h4 class="capitalize" id="show_person_name"></h4>
+            <h4 class="capitalize" id="show_person_name" ondblclick="setNameEditable()"></h4>
             <div class="flex space-between align-center">
                 <svg tooltip="Edit" id="edit_person_name" class="icon" onclick="setNameEditable()" viewBox="0 0 64 64">
-                    <path d="M46.73,14.81l7,7,7.65-7.6A7.15,7.15,0,0,0,61.39,4L60.11,2.77a7.23,7.23,0,0,0-10.19,0L3.87,48.57a5,5,0,0,0-1.39,2.6L.53,61.27a1.74,1.74,0,0,0,2,2l10.15-1.94A5.06,5.06,0,0,0,15.34,60L49.6,25.9"/>
+                    <path
+                        d="M46.73,14.81l7,7,7.65-7.6A7.15,7.15,0,0,0,61.39,4L60.11,2.77a7.23,7.23,0,0,0-10.19,0L3.87,48.57a5,5,0,0,0-1.39,2.6L.53,61.27a1.74,1.74,0,0,0,2,2l10.15-1.94A5.06,5.06,0,0,0,15.34,60L49.6,25.9" />
                 </svg>
                 <svg id="delete_person" onclick="deletePerson()" class="icon" viewBox="0 0 64 64" title="Remove">
-                    <path d="M47.15,63.5H16.85a3.56,3.56,0,0,1-3.3-3.58L11.27,20a2.06,2.06,0,0,1,2.05-2.18H50.68a2.06,2.06,0,0,1,2,2.18l-2.28,40A3.56,3.56,0,0,1,47.15,63.5Z"/>
-                    <path d="M54.67,6.08a1.25,1.25,0,0,1,1.25,1.25v3.51a1.24,1.24,0,0,1-1.25,1.24H9.33a1.24,1.24,0,0,1-1.25-1.24V7.33A1.25,1.25,0,0,1,9.33,6.08H54.67m0-1H9.33A2.25,2.25,0,0,0,7.08,7.33v3.51a2.24,2.24,0,0,0,2.25,2.24H54.67a2.24,2.24,0,0,0,2.25-2.24V7.33a2.25,2.25,0,0,0-2.25-2.25Z"/>
-                    <path d="M30.48.5h3a3,3,0,0,1,3,3v2a0,0,0,0,1,0,0h-9a0,0,0,0,1,0,0v-2A3,3,0,0,1,30.48.5Z"/>
+                    <title>remove</title>
+                    <line x1="28" y1="0" x2="36" y2="0"/>
+                    <line x1="4" y1="4" x2="60" y2="4"/>
+                    <path d="M53.5,17.5V59.42a4.08,4.08,0,0,1-4.08,4.08H14.58a4.08,4.08,0,0,1-4.08-4.08V17.5"/>
                 </svg>
             </div>
         </div>
@@ -479,7 +518,8 @@
             </svg>
             <h5>requests</h5>
         </div>
-        <div title="activity page" id="activity_page_btn" class="navbar-item user-option" onclick="showPage('activity_page', this)">
+        <div title="activity page" id="activity_page_btn" class="navbar-item user-option"
+            onclick="showPage('activity_page', this)">
             <svg class="icon" viewBox="0 0 64 64">
                 <path
                     d="M60.38,1,32.8,33.23a1.77,1.77,0,0,0,1.34,2.92h9.63a.79.79,0,0,1,.71,1.13L33,61.36A1.49,1.49,0,0,0,35.49,63l27.58-32.2a1.77,1.77,0,0,0-1.34-2.92H52.1a.79.79,0,0,1-.71-1.13L62.85,2.64A1.49,1.49,0,0,0,60.38,1Z" />
@@ -504,11 +544,11 @@
         </div>
         <div title="profile page" class="navbar-item" onclick="showPage('settings_page', this)">
             <svg viewBox="0 0 64 64" class="icon">
-                <path d="M31.6,0.5c8.3,0,14.2,5.6,14.2,15S41.1,32.9,32,32.9s-13.8-8-13.8-17.3s5.9-15,14.2-15"/>
+                <path d="M31.6,0.5c8.3,0,14.2,5.6,14.2,15S41.1,32.9,32,32.9s-13.8-8-13.8-17.3s5.9-15,14.2-15" />
                 <path d="M25.4,33.4c-2.5,4.7-10.5,7.1-16.4,9.7c-2.4,1-4.4,14-1.6,14c7.7,4.4,16.4,6.6,25.2,6.4
-                    c8.5,0.3,16.9-2,24.2-6.4c2.8,0,0.8-12.9-1.6-14c-5.9-2.6-13.9-5-16.4-9.7"/>
+                        c8.5,0.3,16.9-2,24.2-6.4c2.8,0,0.8-12.9-1.6-14c-5.9-2.6-13.9-5-16.4-9.7" />
             </svg>
-            <h5>Me</h5>
+            <h5 class="user-type">Me</h5>
         </div>
     </nav>
     <main class="hide-completely">
@@ -516,6 +556,17 @@
             <div class="left">
                 <h4>Rupee actions</h4>
                 <section class="options-tab">
+                    <div class="option" onclick="showPopup('qr_code_popup')">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                            <title>scanner</title>
+                            <path d="M24.5,63.5H5.58A5.08,5.08,0,0,1,.5,58.43V39.5"/>
+                            <path d="M63.5,39.5V58.43a5.08,5.08,0,0,1-5.08,5.07H39.5"/>
+                            <path d="M39.5.5H58.42A5.08,5.08,0,0,1,63.5,5.57V24.5"/>
+                            <path d="M.5,24.5V5.57A5.08,5.08,0,0,1,5.58.5H24.5"/>
+                            <line x1="12" y1="32" x2="52" y2="32"/>
+                        </svg>
+                        <h4>Scan QR</h4>
+                    </div>
                     <div class="option" onclick="showPopup('send_rupee_popup')">
                         <svg class="icon" viewBox="0 0 64 64">
                             <path
@@ -579,12 +630,14 @@
             <div class="user-panel">
                 <div class="flex align-center space-between">
                     <h4>My Balances</h4>
-                    <button id="refresh_balance_btn" onclick="refresh_balance(this)" class="action expand" type="submit">
+                    <button id="refresh_balance_btn" onclick="refresh_balance(this)" class="action expand"
+                        type="submit">
                         <h4 class="primary-btn expand">
                             Refresh Balance
                         </h4>
                         <svg viewBox="0 0 73 73" class="loader">
-                            <path d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                            <path
+                                d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
                         </svg>
                     </button>
                 </div>
@@ -606,7 +659,7 @@
                         <h4 class="uncnf-token-balance">0</h4>
                     </div>
                     <div class="balance flo-balance-card">
-                        <div class="tooltip help"> 
+                        <div class="tooltip help">
                             <div class="tt-icon">?</div>
                             <p class="tooltip-text">Your FLO balance. This is required for every transaction.</p>
                         </div>
@@ -618,17 +671,17 @@
         </section>
         <section id="deposit" class="page hide-completely">
             <div class="left">
-                <h3>Transaction Requests</h3>
+                <h3>Requests</h3>
                 <sm-tab-header variant="tab" class="round" target="requests_to_cashier">
                     <sm-tab>Deposits</sm-tab>
                     <sm-tab>Withdrawals</sm-tab>
                     <sm-tab>Pay Through Cashier</sm-tab>
                 </sm-tab-header>
                 <sm-tab-panels id="requests_to_cashier">
-                    <sm-panel>
-                        <sm-button id="fetch_deposits" onclick="show_deposit_request()" class="bottom-margin">
-                            Load pending
-                        </sm-button>
+                    <sm-panel>  
+                        <div class="flex">
+                            <sm-button class="justify-right" onclick="showDepositRequests()">Load pending</sm-button>
+                        </div>
                         <div id="pending_deposits_container" class="container"></div>
                         <div id="deposit_illustration" class="empty-state">
                             <svg viewBox="0 0 529.94 446.5">
@@ -685,7 +738,9 @@
                         </div>
                     </sm-panel>
                     <sm-panel>
-                        <sm-button id="fetch_withdraws" onclick="show_withdraw_request()" class="bottom-margin">Load pending</sm-button>
+                        <div class="flex">
+                            <sm-button class="justify-right" onclick="showWithdrawRequests()">Load pending</sm-button>
+                        </div>
                         <div id="pending_withdrawals_container" class="container"></div>
                         <div id="withdraw_illustration" class="empty-state">
                             <svg viewBox="0 0 529.94 446.5">
@@ -742,9 +797,9 @@
                         </div>
                     </sm-panel>
                     <sm-panel>
-                        <sm-button id="fetch_pay_requests" onclick="showPayThruCashierRequests()" class="bottom-margin">
-                            Load pending
-                        </sm-button>
+                        <div class="flex">
+                            <sm-button class="justify-right" onclick="showPayThruCashierRequests()">Load pending</sm-button>
+                        </div>
                         <div id="pay_requests_container" class="container"></div>
                         <div id="pay_illustration" class="empty-state">
                             <svg viewBox="0 0 529.94 446.5">
@@ -817,7 +872,7 @@
                         <h4 class="token-balance">0</h4>
                     </div>
                     <div class="balance flo-balance-card">
-                        <div class="tooltip help"> 
+                        <div class="tooltip help">
                             <div class="tt-icon">?</div>
                             <p class="tooltip-text">Your FLO balance. This is required for every transaction.</p>
                         </div>
@@ -853,6 +908,7 @@
             <h3>Activity</h3>
             <sm-tab-header variant="tab" class="round" target="user_activities">
                 <sm-tab>Sent</sm-tab>
+                <sm-tab>Received</sm-tab>
                 <sm-tab>Deposits</sm-tab>
                 <sm-tab>Withdrawals</sm-tab>
                 <sm-tab>Paid through cashier</sm-tab>
@@ -861,6 +917,10 @@
             <sm-tab-panels id="user_activities">
                 <sm-panel>
                     <div id="sent_activity_container" class="activity-container"></div>
+                    <h4 class="empty-state">You haven't sent any rupee yet.</h4>
+                </sm-panel>
+                <sm-panel>
+                    <div id="received_activity_container" class="activity-container"></div>
                     <h4 class="empty-state">You haven't sent any rupee yet.</h4>
                 </sm-panel>
                 <sm-panel>
@@ -929,23 +989,25 @@
                 <h4 class="top-margin">My UPIs</h4>
                 <div class="upi-container"></div>
                 <p class="empty-state">Add UPI address for easier access during various transactions.</p>
-                <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address</sm-button>
+                <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address
+                </sm-button>
             </div>
             <h4>Sign Out</h4>
-            <p>Signing out will erase all the data stored in local storage and Indexed DB. This will remove saved private key, UPI addresses.</p>
-            <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>    
+            <p>Signing out will erase all the data stored in local storage and Indexed DB. This will remove
+                saved private key, UPI addresses and contacts.</p>
+            <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>
         </section>
         <section id="transaction_page" class="page">
             <header class="flex align-center" onclick="showPage('activity_page', 'activity_page_btn')">
                 <svg class="icon back-arrow" viewBox="0 0 64 64">
                     <title>Go to activity page</title>
-                    <polyline points="48.01 0.35 16.35 32 48.01 63.65"/>
+                    <polyline points="48.01 0.35 16.35 32 48.01 63.65" />
                 </svg>
                 <h4 id="transaction_type"></h4>
             </header>
             <div id="transaction_details" class="grid direction-column"></div>
-            <p>It may take upto 48 working hours for a transaction to complete. If even after 48 hours transction wasn't completed and your money was deducted, use <Strong>Report</Strong> button to report your issue.</p>
-            <sm-button onclick="showPopup('report_popup')" variant="outlined">Report</div>
+            <p id="caution_message"></p>
+            <sm-button id="show_report_btn" class="hide" onclick="showPopup('report_popup')">Report</sm-button>
         </section>
     </main>
     <script src="components.js"></script>
@@ -980,6 +1042,7 @@
             generalVC: {}
         }
     </script>
+    <script src="qrcode-scanner.min.js"></script>
     <script id="onLoadStartUp">
         const userFloIdContainers = document.querySelectorAll('.user-flo-id')
         function onLoadStartUp() {
@@ -998,27 +1061,35 @@
         let frag = document.createDocumentFragment(),
             currentTimeout,
             notificationSound = document.getElementById('notification_sound');
-            let defaultUPI
-            const render = {
-            depositRequest(txid, floId, amount) {
+        let defaultUPI
+        const render = {
+            depositRequest(txid, floId, amount, vectorClock) {
                 let card = document.createElement('div');
                 card.classList.add('request')
                 setAttributes(card, {
                     'data-user-flo-id': floId,
                     'data-txid': txid
                 })
-                card.innerHTML = `  <h5>FLO address</h5>
-                                    <h4 class="breakable">${floId}</h4>
-                                    <h5>UPI TXID</h5>
-                                    <h4 class="breakable">${txid}</h4>
-                                    <h5>Amount</h5>
-                                    <h4 class="breakable">₹${amount}</h4>
-                                    <button id="" class="confirm-deposit-btn">
-                                        Confirm
-                                    </button>`;
+                card.innerHTML = `      
+                <div>
+                    <h5>FLO address</h5>
+                    <h4 class="breakable">${floId}</h4>
+                    </div>                        
+                    <div>                
+                        <h5>UPI TXID</h5>
+                        <h4 class="breakable">${txid}</h4>
+                    </div>                        
+                    <div>                
+                        <h5>Amount</h5>
+                        <h4 class="breakable amount">₹${amount}</h4>
+                    </div>                        
+                    <h5 class="time">${formatedTime(vectorClock, true)}</h5>
+                    <button id="" class="confirm-deposit-btn">
+                        Confirm
+                    </button>`;
                 return card;
             },
-            withdrawRequest(txid, upiId, floId, amount) {
+            withdrawRequest(txid, upiId, floId, amount, vectorClock) {
                 let card = document.createElement('div');
                 card.classList.add('request')
                 setAttributes(card, {
@@ -1026,18 +1097,26 @@
                     'data-user-flo-id': floId,
                     'data-upi': upiId
                 })
-                card.innerHTML = `  <h5>FLO address</h5>
-                                    <h4 class="breakable">${floId}</h4>
-                                    <h5>UPI ID</h5>
-                                    <h4 class="breakable">${upiId}</h4>
-                                    <h5>TAmount</h5>
-                                    <h4 class="breakable">₹${amount}</h4>
-                                    <button id="" class="confirm-withdraw-btn"">
-                                        Confirm
-                                    </button>`;
+                card.innerHTML = `      
+                    <div>
+                        <h5>FLO address</h5>
+                        <h4 class="breakable">${floId}</h4>
+                    </div>
+                    <div>
+                        <h5>UPI ID</h5>
+                        <h4 class="breakable">${upiId}</h4>
+                    </div>
+                    <div>
+                        <h5>Amount</h5>
+                        <h4 class="breakable amount">₹${amount}</h4>
+                    </div>
+                    <h5 class="time">${formatedTime(vectorClock, true)}</h5>
+                    <button id="" class="confirm-withdraw-btn"">
+                        Confirm
+                    </button>`;
                 return card;
             },
-            payRequest(sender, txid, floId, amount) {
+            payRequest(sender, txid, floId, amount, vectorClock) {
                 let card = document.createElement('div');
                 card.classList.add('request')
                 setAttributes(card, {
@@ -1046,19 +1125,47 @@
                     'data-txid': txid,
                     'data-amount': amount
                 })
-                card.innerHTML = `  <h5>Transaction ID</h5>
-                                    <h4 class="breakable">${txid}</h4>
-                                    <h5>Receiver's FLO address</h5>
-                                    <h4 class="breakable">${floId}</h4>
-                                    <h5>Amount</h5>
-                                    <h4 class="breakable">₹${amount}</h4>
-                                    <button id="" class="confirm-pay-btn">
-                                        Transfer
-                                    </button>`;
+                card.innerHTML = `   
+                    <div>
+                        <h5>Receiver's FLO address</h5>
+                        <h4 class="breakable">${floId}</h4>
+                    </div>                 
+                    <div>
+                        <h5>Transaction ID</h5>
+                        <h4 class="breakable">${txid}</h4>
+                    </div>                 
+                    <div>
+                        <h5>Amount</h5>
+                        <h4 class="breakable amount">₹${amount}</h4>
+                    </div>                 
+                    <h5 class="time">${formatedTime(vectorClock, true)}</h5>
+                    <button id="" class="confirm-pay-btn">
+                        Confirm
+                    </button>`;
                 return card;
             },
-            activityCard(obj){
-                let {type, amount, timeStamp, receiver, upi_txid, receiverUPI} = obj;
+            requestPlaceholder(){
+                let card = document.createElement('div');
+                card.classList.add('request', 'placeholder')
+                card.innerHTML = `
+                    <div>
+                        <h5></h5>
+                        <h4></h4>
+                    </div>                 
+                    <div>
+                        <h5></h5>
+                        <h4></h4>
+                    </div>                 
+                    <div>
+                        <h5></h5>
+                        <h4></h4>
+                    </div>
+                    <h5 class="time"></h5>
+                    <h4></h4>`
+                return card;
+            },
+            activityCard(obj) {
+                let { type, amount, timeStamp, receiver, upi_txid, receiverUPI, processed, fromCashier, toCashier } = obj;
                 let card = document.createElement('div'),
                     composition = ``,
                     icon,
@@ -1072,78 +1179,123 @@
                     'data-receiver': receiver,
                     'data-amount': amount,
                     'data-upi-txid': upi_txid,
-                    'data-receiver-upi': receiverUPI
+                    'data-receiver-upi': receiverUPI,
+                    'data-pending': processed,
+                    'data-from-cashier': fromCashier,
+                    'data-to-cashier': toCashier
                 })
-                switch(type){
+                switch (type) {
                     case 'sent':
                         icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <path
-                                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
-                            </svg>
-                        `
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <path
+                                        d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                                </svg>
+                            `
                         sign = '-'
                         className = 'withdrawn'
                         transaction = 'Sent to'
-                    break;
+                        break;
+                    case 'received':
+                        icon = `
+                            <svg class="icon request-icon" viewBox="0 0 64 64">
+                                <path
+                                    d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
+                            </svg>
+                            `
+                        sign = '+'
+                        className = 'deposited'
+                        transaction = 'Recieved from'
+                        break;
                     case 'deposit':
                         icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <title>deposit</title>
-                                <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
-                                <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
-                                <path
-                                    d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-                                <path
-                                    d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-                                <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
-                            </svg>
-                        `
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <title>deposit</title>
+                                    <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
+                                    <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
+                                    <path
+                                        d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+                                    <path
+                                        d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+                                    <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
+                                </svg>
+                            `
                         sign = '+'
                         className = 'deposited'
                         transaction = 'Deposited'
-                    break;
+                        if (processed === false)
+                            transaction = 'deposit'
+                        break;
                     case 'withdraw':
                         icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <title>withdraw</title>
-                                <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
-                                <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
-                                <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
-                                <path
-                                    d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-                                <path
-                                    d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-                                <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
-                            </svg>
-                        `
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <title>withdraw</title>
+                                    <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
+                                    <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
+                                    <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
+                                    <path
+                                        d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
+                                    <path
+                                        d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
+                                    <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
+                                </svg>
+                            `
                         sign = '-'
                         className = 'withdrawn'
                         transaction = 'withdrawn to'
-                    break;
+                        if (processed === false)
+                            transaction = 'withdraw'
+                        break;
                     case 'payCashier':
                         icon = `
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
-                                <rect height="64" width="64" rx="8"></rect>
-                            </svg>
-                        `
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
+                                    <rect height="64" width="64" rx="8"></rect>
+                                </svg>
+                            `
                         sign = '-'
                         className = 'withdrawn'
                         transaction = 'Paid to'
-                    break;
+                        if (processed === false)
+                            transaction = 'payment'
+                        break;
                 }
+                let status = ''
+                if (processed === false) {
+                    status = '<div class="pending">pending</div>'
+                    icon = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                                    <title>pending</title>
+                                    <circle cx="32" cy="32" r="31.5"/>
+                                    <polyline points="47 32.26 32 32.26 32 12.26"/>
+                                </svg>`
+                }
+                if(fromCashier)
+                    transaction = 'Received from RanchiMall Pay'
+                if(toCashier)
+                    transaction = 'Sent to RanchiMall Pay'
                 composition += `
-                    ${icon}
-                    <h4 class="activity-type">${transaction}</h4>`
-                if(receiver)
+                        ${icon}
+                        <h4 class="activity-type">${transaction} ${status}</h4>`
+                if (receiver)
                     composition += `
-                        <h4 class="activity-receiver breakable">${allContacts[receiver]  ? allContacts[receiver].name : receiver}</h4>
-                    `
+                            <h4 class="activity-receiver breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</h4>
+                        `
                 composition += `
-                    <h4 class="activity-amount ${className}">${sign} ₹${amount}</h4>
-                    <h5 class="activity-time">${formatedTime(timeStamp, true)}</h5>
-                `
+                        <h4 class="activity-amount ${className}">${sign} ₹${amount}</h4>
+                        <h5 class="activity-time">${formatedTime(timeStamp, true)}</h5>
+                    `
+                card.innerHTML = composition;
+                return card;
+            },
+            activityPlaceholder(){
+                let card = document.createElement('div'),
+                    composition = ``
+                card.classList.add('activity', 'placeholder')
+                composition += `
+                    <div class="icon"></div>
+                    <h4 class="activity-type"></h4>
+                    <h4 class="activity-receiver"></h4>
+                        `
                 card.innerHTML = composition;
                 return card;
             },
@@ -1157,23 +1309,47 @@
                     'data-amount': amount,
                     'data-payment-request-id': id
                 })
-                markup = `   <h5 class="time">${formatedTime(time)}</h5>
-                                    <h5>Request by</h5>
-                                    <h4 class="breakable">${allContacts[senderAddress]  ? allContacts[senderAddress].name : senderAddress}</h4>
-                                    <h5 class="label">amount</h5>
-                                    <h4 class="amount">₹ ${amount}</h4>
-                                    `;
+                markup = `   
+                    <h5 class="time">${formatedTime(time)}</h5>
+                    <div>
+                        <h5>Request by</h5>
+                        <h4 class="breakable">${allContacts[senderAddress] ? allContacts[senderAddress].name : senderAddress}</h4>
+                    </div>
+                    <div>
+                        <h5 class="label">amount</h5>
+                        <h4 class="amount">₹ ${amount}</h4>
+                    </div>
+                    `;
                 if (enableActions)
                     markup += `
-                                    <div class="flex">
-                                    <button class="decline-request secondary-btn">
-                                        decline
-                                    </button>
-                                    <button class="send-rupee">
-                                        pay
-                                    </button>
-                            </div>`
+                                        <div class="flex">
+                                        <button class="decline-request secondary-btn">
+                                            decline
+                                        </button>
+                                        <button class="send-rupee">
+                                            pay
+                                        </button>
+                                </div>`
                 card.innerHTML = markup
+                return card;
+            },
+            paymentRequestPlaceholder(){
+                let card = document.createElement('div');
+                card.classList.add('request', 'placeholder')
+                card.innerHTML = `
+                    <h5 class="time"></h5>
+                    <div>
+                        <h5></h5>
+                        <h4></h4>
+                    </div>                 
+                    <div>
+                        <h5></h5>
+                        <h4></h4>
+                    </div>                 
+                    <div class="btns">
+                        <h4></h4>
+                        <h4></h4>
+                    </div>`
                 return card;
             },
             cashierMessage(message) {
@@ -1197,59 +1373,59 @@
                     'data-udc': JSON.stringify(udc)
                 })
                 composition = `
-                    
-                    <div class="left">
-                        <h5>Sender</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${sender}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>`
+                        
+                        <div class="left">
+                            <h5>Sender</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${sender}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>`
                 if (customMsg && customMsg !== '')
                     composition += `  <h5>Issue description</h5>
-                                <h4>${customMsg}</h4>`
+                                    <h4>${customMsg}</h4>`
                 composition += ` <h5>Deposited</h5>
-                                <h4>₹${depositedAmount}</h4>
-                                <h5>Deposited on</h5>
-                                <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
+                                    <h4>₹${depositedAmount}</h4>
+                                    <h5>Deposited on</h5>
+                                    <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
 
-                            </div>`
+                                </div>`
                 if (cashierData.processed) {
                     let {
                         time,
                         floTxId
                     } = cashierData
                     composition += `
-                    <div class="right">
-                        <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
-                        <h5 class="top-margin">Rupee Transaction ID</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${floTxId}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
+                            <h5 class="top-margin">Rupee Transaction ID</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${floTxId}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>
+                        </div>`;
                 } else {
                     composition += `
-                    <div class="right">
-                        <h4 class="unprocessed">Cashier hasn't processed the request</h4>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="unprocessed">Cashier hasn't processed the request</h4>
+                        </div>`;
                 }
                 composition += `
-                    <div class="complaint-actions flex">
-                        <button class="mark-resolved">
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
-                            </svg>
-                            Mark as Resolved
-                        </button>
-                    </div>`
+                        <div class="complaint-actions flex">
+                            <button class="mark-resolved">
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
+                                </svg>
+                                Mark as Resolved
+                            </button>
+                        </div>`
                 card.innerHTML = composition;
                 return card;
             },
@@ -1268,58 +1444,58 @@
                     'data-udc': JSON.stringify(udc)
                 })
                 composition = `
-                    <div class="left">
-                        <h5>Sender</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${sender}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>`
+                        <div class="left">
+                            <h5>Sender</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${sender}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>`
                 if (customMsg && customMsg !== '')
                     composition += `  <h5>Issue description</h5>
-                                <h4>${customMsg}</h4>`
+                                    <h4>${customMsg}</h4>`
                 composition += ` <h5>withdrawn</h5>
-                                <h4>₹${withdrawnAmount}</h4>
-                                <h5>Withdrawn on</h5>
-                                <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
+                                    <h4>₹${withdrawnAmount}</h4>
+                                    <h5>Withdrawn on</h5>
+                                    <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
 
-                            </div>`
+                                </div>`
                 if (cashierData.processed) {
                     let {
                         time,
                         floTxId
                     } = cashierData
                     composition += `
-                    <div class="right">
-                        <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
-                        <h5 class="top-margin">Rupee Transaction ID</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${floTxId}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
+                            <h5 class="top-margin">Rupee Transaction ID</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${floTxId}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>
+                        </div>`;
                 } else {
                     composition += `
-                    <div class="right">
-                        <h4 class="unprocessed">Cashier hasn't processed the request</h4>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="unprocessed">Cashier hasn't processed the request</h4>
+                        </div>`;
                 }
                 composition += `
-                    <div class="complaint-actions flex">
-                        <button class="mark-resolved">
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
-                            </svg>
-                            Mark as Resolved
-                        </button>
-                    </div>`
+                        <div class="complaint-actions flex">
+                            <button class="mark-resolved">
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
+                                </svg>
+                                Mark as Resolved
+                            </button>
+                        </div>`
                 card.innerHTML = composition;
                 return card;
             },
@@ -1339,67 +1515,67 @@
                     'data-udc': JSON.stringify(udc)
                 })
                 composition = `
-                    <div class="left">
-                        <h5>Sender</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${sender}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>
-                        <h5>Receiver</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${receiver}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>`
+                        <div class="left">
+                            <h5>Sender</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${sender}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>
+                            <h5>Receiver</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${receiver}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>`
                 if (customMsg && customMsg !== '')
                     composition += `  <h5>Issue description</h5>
-                                <h4>${customMsg}</h4>`
+                                    <h4>${customMsg}</h4>`
                 composition += ` <h5>Paid</h5>
-                                <h4>₹${amount}</h4>
-                                <h5>Paid on</h5>
-                                <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
+                                    <h4>₹${amount}</h4>
+                                    <h5>Paid on</h5>
+                                    <h4>${formatedTime(vectorClock.split('_')[0])}</h4>
 
-                            </div>`
+                                </div>`
                 if (cashierData.processed) {
                     let {
                         time,
                         floTxId
                     } = cashierData
                     composition += `
-                    <div class="right">
-                        <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
-                        <h5 class="top-margin">Rupee Transaction ID</h5>
-                        <div class="copy-row">
-                            <h4 class="copy">${floTxId}</h4>
-                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                                <title>Copy</title>
-                                <rect x="16" y="16" width="48" height="48" rx="6" />
-                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                            </svg>
-                        </div>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="processed">Cashier processed the request on ${formatedTime(time)}</h4>
+                            <h5 class="top-margin">Rupee Transaction ID</h5>
+                            <div class="copy-row">
+                                <h4 class="copy">${floTxId}</h4>
+                                <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                    <title>Copy</title>
+                                    <rect x="16" y="16" width="48" height="48" rx="6" />
+                                    <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                                </svg>
+                            </div>
+                        </div>`;
                 } else {
                     composition += `
-                    <div class="right">
-                        <h4 class="unprocessed">Cashier hasn't processed the request</h4>
-                    </div>`;
+                        <div class="right">
+                            <h4 class="unprocessed">Cashier hasn't processed the request</h4>
+                        </div>`;
                 }
                 composition += `
-                    <div class="complaint-actions flex">
-                        <button class="mark-resolved">
-                            <svg class="icon" viewBox="0 0 64 64">
-                                <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
-                            </svg>
-                            Mark as Resolved
-                        </button>
-                    </div>`
+                        <div class="complaint-actions flex">
+                            <button class="mark-resolved">
+                                <svg class="icon" viewBox="0 0 64 64">
+                                    <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
+                                </svg>
+                                Mark as Resolved
+                            </button>
+                        </div>`
                 card.innerHTML = composition;
                 return card;
             },
@@ -1407,32 +1583,32 @@
                 let card = document.createElement('div');
                 card.classList.add('request', 'complaint', 'complaint-placeholder')
                 card.innerHTML = `
-                    <div class="left">
-                        <h5></h5>
-                        <h4></h4>
-                        <h5></h5>
-                        <h4></h4>
-                        <h5></h5>
-                        <h4></h4>
-                        <h5></h5>
-                        <h4></h4>
-                    </div>
-                    <div class="right">
-                        <h4></h4>
-                    </div>
-                    <div class="complaint-actions flex">
-                        <h4 class="demo-btn"></h4>
-                    </div>`
+                        <div class="left">
+                            <h5></h5>
+                            <h4></h4>
+                            <h5></h5>
+                            <h4></h4>
+                            <h5></h5>
+                            <h4></h4>
+                            <h5></h5>
+                            <h4></h4>
+                        </div>
+                        <div class="right">
+                            <h4></h4>
+                        </div>
+                        <div class="complaint-actions flex">
+                            <h4 class="demo-btn"></h4>
+                        </div>`
                 return card;
             },
-            contact(floId, name, color){
+            contact(floId, name, color) {
                 let card = document.createElement('div')
                 card.classList.add('person')
-                setAttributes(card, {'data-flo-id': floId, 'data-name': name})
+                setAttributes(card, { 'data-flo-id': floId, 'data-name': name })
                 card.innerHTML = `
-                    <h3 class="person-initials" style="background-color: ${color.light};">${name.charAt(0)}</h3>
-                    <h4 class="person-name">${name}</h4>
-                `
+                        <h3 class="person-initials" style="background-color: ${color.light};">${name.charAt(0)}</h3>
+                        <h4 class="person-name">${name}</h4>
+                    `
                 return card
             }
         }
@@ -1457,20 +1633,20 @@
             daylight()
             themeSwitcher.checked = false;
         }
-        
+
         function daylight() {
             document.body.setAttribute("data-theme", "light");
         }
-        
+
         function nightlight() {
             document.body.setAttribute("data-theme", "dark");
         }
-        themeSwitcher.addEventListener('change', function(e){
-            if(this.checked){
+        themeSwitcher.addEventListener('change', function (e) {
+            if (this.checked) {
                 nightlight();
                 localStorage.setItem("theme", "dark");
             }
-            else{
+            else {
                 daylight();
                 localStorage.setItem("theme", "light");
             }
@@ -1507,39 +1683,87 @@
         // hides the popup or modal 
         function hidePopup() {
             if (popupStack.peek() === undefined)
-            return;
+                return;
             popupStack.peek().popup.hide()
         }
-        
+
+        let personPopupOpen = false,
+            scannedFloId,
+            scannerOn = false
+        const   qrScannerInstance = new Html5Qrcode("reader"),
+                selectCamera = document.getElementById('select_camera');
+
         document.addEventListener('popupopened', e => {
             let thisPopup = e.detail.popup,
                 firstInput = thisPopup.querySelector('sm-input')
-            if(firstInput)
+            if (firstInput)
                 firstInput.focusIn()
-            switch(e.detail.popup.id){
-                case 'deposit_rupee' :
+            switch (e.detail.popup.id) {
+                case 'deposit_rupee':
                     request_rupee_token()
-                break;
+                    break;
                 case 'person_popup':
                     personPopupOpen = true
-                break;
+                    personName = showPersonName.textContent
+                    break;
                 case 'send_rupee_popup':
-                    if(personPopupOpen){
+                    if (personPopupOpen) {
                         tokenReceiver.value = person.dataset.floId
                     }
-                break;
+                    if (scannerOn && scannedFloId) {
+                        tokenReceiver.value = scannedFloId
+                    }
+                    break;
                 case 'request_rupee':
-                    if(personPopupOpen){
+                    if (personPopupOpen) {
                         requestedAddress.value = person.dataset.floId
                     }
-                break;
-            }   
+                    break;
+                case 'qr_code_popup':
+                    Html5Qrcode.getCameras().then(devices => {
+                    if (devices && devices.length) {
+                        startScanning(devices[devices.length-1].id)
+                    }
+                    }).catch(err => {
+                        // handle err
+                    });
+                    break;
+            }
         })
 
-        let personPopupOpen = false;
+        function startScanning(cameraId){
+            qrScannerInstance.start(
+                cameraId,
+                {
+                    fps: 10,    
+                    qrbox: 250 
+                },
+                qrCodeMessage => {
+                    scannedFloId = qrCodeMessage
+                    if(floCrypto.validateAddr(scannedFloId))
+                    qrScannerInstance.stop().then(ignore => {
+                        // QR Code scanning is stopped.
+                        hidePopup()
+                        showPopup('send_rupee_popup')
+                    }).catch(err => {
+                        console.log("Unable to stop scanning.");
+                    });
+                },
+                errorMessage => {
+                    
+                })
+            .then(success => {
+                scannerOn = true
+            })
+            .catch(err => {
+                // Start failed, handle it. For example,
+                scannerOn = false
+                console.log(`Unable to start scanning, error: ${err}`);
+            });
+        }
 
         document.addEventListener('popupclosed', e => {
-            popupStack = e.detail.popupStack    
+            popupStack = e.detail.popupStack
             let thisPopup = e.detail.popup,
                 submitButton = thisPopup.querySelector('button[type="submit"]')
             if (submitButton)
@@ -1551,35 +1775,40 @@
                 }
             }, 400)
             zIndex--
-            switch(e.detail.popup.id){
-                case 'sign_in_popup' :
+            switch (e.detail.popup.id) {
+                case 'sign_in_popup':
                     loader.classList.remove('animate-loader')
                     document.querySelector('main').classList.remove('hide-completely')
                     document.querySelector('#navbar').classList.remove('hide-completely')
                     document.querySelector('#main_header').classList.remove('hide-completely')
-                break;
-                case 'send_rupee_popup' : 
+                    break;
+                case 'send_rupee_popup':
                     payingRequested = false;
                     tokenReceiver.readOnly = false
                     tokenAmount.readOnly = false
-                break;
-                case 'transaction_result' : 
-                setTimeout(() => {
-                    transactionHeading.textContent = ''
-                    transactionMessage.innerHTML = ''
-                    transactionSuccessId.textContent = ''
-                    transactionSuccessId.parentNode.classList.add('hide-completely')
-                    transactionSuccessSection.classList.add('hide-completely')
-                    transactionFailedSection.classList.add('hide-completely')
-                }, 300);
-                break;
+                    scannerOn = false
+                    break;
+                case 'transaction_result':
+                    setTimeout(() => {
+                        transactionHeading.textContent = ''
+                        transactionMessage.innerHTML = ''
+                        transactionSuccessId.textContent = ''
+                        transactionSuccessId.parentNode.classList.add('hide-completely')
+                        transactionSuccessSection.classList.add('hide-completely')
+                        transactionFailedSection.classList.add('hide-completely')
+                    }, 300);
+                    break;
                 case 'person_popup':
                     personPopupOpen = false
-                break;
+                    break;
                 case 'prompt':
-                if (thisPopup.querySelector('sm-input').value == '')
-                    thisPopup.querySelector('.cancel-btn').click()
-                break
+                    if (thisPopup.querySelector('sm-input').value == '')
+                        thisPopup.querySelector('.cancel-btn').click()
+                    break
+                case 'qr_code_popup':
+                    if(scannerOn)
+                        qrScannerInstance.stop()
+                    break
             }
         })
 
@@ -1587,9 +1816,11 @@
             if (typeof btn === 'string')
                 btn = document.getElementById(btn);
             if (option === 'start') {
+                btn.style.pointerEvents = 'none'
                 btn.children[0].classList.add('clip')
                 btn.children[1].classList.add('animate-loader')
             } else {
+                btn.style.pointerEvents = 'all'
                 btn.children[0].classList.remove('clip')
                 btn.children[1].classList.remove('animate-loader')
             }
@@ -1622,7 +1853,7 @@
             let hue = Math.random() * 360
             let color = {
                 primary: `hsla( ${hue}, ${saturation}%, ${lightness}%, 1)`,
-                light : `hsla( ${hue}, ${saturation}%, 90%, 0.6)` 
+                light: `hsla( ${hue}, ${saturation}%, 90%, 0.6)`
             }
             return color;
         }
@@ -1702,7 +1933,7 @@
         const currentYear = new Date().getFullYear()
         function formatedTime(time, relative) {
             try {
-                if(String(time).indexOf('_'))
+                if (String(time).indexOf('_'))
                     time = String(time).split('_')[0]
                 let timeFrag = new Date(parseInt(time)).toString().split(' '),
                     day = timeFrag[0],
@@ -1722,13 +1953,13 @@
                     finalHours = `${hours}:${minutes}`
 
                 finalHours = hours >= 12 ? `${finalHours} PM` : `${finalHours} AM`
-                if(relative){
-                    if(year == currentYear){
-                        if(currentTime[1] === month && date === currentTime[2])
-                            return `${finalHours}`;
+                if (relative) {
+                    if (year == currentYear) {
+                        if (currentTime[1] === month && date === currentTime[2])
+                            return `Today at ${finalHours}`;
                         else
                             return ` ${date} ${month}`;
-                    
+
                     }
                 }
                 else
@@ -1749,17 +1980,17 @@
         function areInputsValid(parent) {
             let allInputs = parent.querySelectorAll("sm-input:not([disabled])"),
                 inputsFilled = [...allInputs].every(input => {
-                    if(input.hasAttribute('floId')){
-                        if(floCrypto.validateAddr(input.value.trim())) return true
+                    if (input.hasAttribute('floId')) {
+                        if (floCrypto.validateAddr(input.value.trim())) return true
                     }
-                    else if(input.hasAttribute('privateKey')){
-                        if(floCrypto.getPubKeyHex(input.value.trim())) return true
+                    else if (input.hasAttribute('privateKey')) {
+                        if (floCrypto.getPubKeyHex(input.value.trim())) return true
                     }
                     else
                         return input.isValid
                 })
             let allRadios = parent.querySelectorAll("input[type='radio']")
-            if(allRadios.length)
+            if (allRadios.length)
                 return inputsFilled && parent.querySelector('[checked]')
             else
                 return inputsFilled
@@ -1779,17 +2010,17 @@
             currentPaymentRequest,
             person,
             personName;
-        const   tokenReceiver = document.getElementById('token_receiver'),
-                tokenAmount = document.getElementById('token_amount'),
-                depositRupeeAmount = document.getElementById('token_amount_to_buy')
+        const tokenReceiver = document.getElementById('token_receiver'),
+            tokenAmount = document.getElementById('token_amount'),
+            depositRupeeAmount = document.getElementById('token_amount_to_buy')
 
-        const   requestedAddress = document.getElementById('requested_address'),
-                requestedAmount = document.getElementById('requested_amount')      
-        
-        const   showPersonName = document.getElementById('show_person_name'),
-                showPersonFloId = document.getElementById('show_person_flo_id'),
-                personInitials = document.getElementById('person_initials')
-        
+        const requestedAddress = document.getElementById('requested_address'),
+            requestedAmount = document.getElementById('requested_amount')
+
+        const showPersonName = document.getElementById('show_person_name'),
+            showPersonFloId = document.getElementById('show_person_flo_id'),
+            personInitials = document.getElementById('person_initials')
+
         window.addEventListener('load', () => {
             document.addEventListener('input', e => {
                 if (e.target.closest('sm-input')) {
@@ -1809,7 +2040,7 @@
             //Function for handling contact click event
 
             peopleContainer.addEventListener('click', e => {
-                if(e.target.closest('.person')){
+                if (e.target.closest('.person')) {
                     person = e.target.closest('.person')
                     showPersonName.textContent = person.dataset.name
                     personInitials.textContent = person.dataset.name.charAt(0)
@@ -1817,18 +2048,18 @@
                     showPersonFloId.textContent = person.dataset.floId
                     showPopup('person_popup')
                 }
-                if(e.target.closest('#add_person_btn')){
+                if (e.target.closest('#add_person_btn')) {
                     showPopup('add_person_popup')
-                    
+
                 }
             })
 
             document.getElementById('person_popup').addEventListener('click', e => {
-                if(!e.target.closest('#show_person_name') && !e.target.closest('#edit_person_name')){
-                    if(showPersonName.isContentEditable && personName !== showPersonName.textContent){
-                        changePersonName()
+                if (!e.target.closest('#show_person_name') && !e.target.closest('#edit_person_name')) {
+                    if (showPersonName.isContentEditable)
                         showPersonName.contentEditable = 'false'
-                    }
+                    if(personName !== showPersonName.textContent)
+                        changePersonName()
                 }
             })
 
@@ -1884,7 +2115,10 @@
                         amount: currentRequest.dataset.amount,
                         receiver: currentRequest.dataset.receiver,
                         upiTxId: currentRequest.dataset.upiTxid,
-                        receiverUPI: currentRequest.dataset.receiverUpi
+                        receiverUPI: currentRequest.dataset.receiverUpi,
+                        processed: currentRequest.dataset.pending,
+                        toCashier: currentRequest.dataset.toCashier,
+                        fromCashier: currentRequest.dataset.fromCashier
                     })
                 }
             })
@@ -1908,32 +2142,28 @@
             // Function for accepting payment request
             document.getElementById('payment_request_tab').addEventListener('click', async (e) => {
                 if (e.target.closest('.send-rupee')) {
-                    let parent = e.target.closest('.request'),
-                        senderAddress = parent.dataset.senderAddress,
-                        amount = parent.dataset.amount,
-                        paymentRequestId = parent.dataset.paymentRequestId;;
-                    showPopup('send_rupee_popup');
+                    currentPaymentRequest = e.target.closest('.request')
+                    let senderAddress = currentPaymentRequest.dataset.senderAddress,
+                        amount = currentPaymentRequest.dataset.amount
                     payingRequested = true;
-                    currentPaymentRequest = {
-                        paymentRequest: parent,
-                        requestId: paymentRequestId
-                    }
                     tokenReceiver.value = senderAddress;
                     tokenAmount.value = amount;
                     tokenReceiver.readOnly = true
                     tokenAmount.readOnly = true
+                    showPopup('send_rupee_popup');
                 }
                 if (e.target.closest('.decline-request')) {
-                    let parent = e.target.closest('.request'),
-                        paymentRequestId = parent.dataset.paymentRequestId;
+                    currentPaymentRequest = e.target.closest('.request')
+                    let paymentRequestId = currentPaymentRequest.dataset.paymentRequestId;
                     if (await confirmation(`Do want to decline this request?`, 'No', 'Decline')) {
                         const all_reqs = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                            .TYPE_REQUEST_PAYMENT, "0").reverse());
+                            .TYPE_REQUEST_PAYMENT, "0"));
 
                         const original_req = all_reqs.filter(f => f.message.pay_req_id === paymentRequestId)
                             .map(m => m.message)[0];
 
                         payment_request_status(original_req, 'DECLINED')
+                        declinedPaymentRequestContainer.prepend(e.target.closest('.request'))
                         e.target.closest('.request').remove()
                     }
                 }
@@ -1956,11 +2186,11 @@
             })
 
             document.getElementById('settings_page').addEventListener('change', e => {
-                if(e.target.closest('.upi-container'))
+                if (e.target.closest('.upi-container'))
                     setPrimaryUPI(e.target.value)
             })
             document.getElementById('settings_page').addEventListener('click', async e => {
-                if(e.target.closest('.remove') && await confirmation('Do you want to remove this UPI address?', 'No', 'Remove UPI')){
+                if (e.target.closest('.remove') && await confirmation('Do you want to remove this UPI address?', 'No', 'Remove UPI')) {
                     let upi = e.target.closest('.select').querySelector('input').value
                     removeUPI(upi)
                     notify('Removed UPI address')
@@ -1969,117 +2199,126 @@
 
         })
 
-        const   transactionSuccessSection = document.getElementById('success_section'),
-                transactionFailedSection = document.getElementById('failure_section'),
-                transactionSuccessId = document.getElementById('successful_transaction_id'),
-                transactionHeading = document.getElementById('transaction_heading'),
-                transactionMessage = document.getElementById('transaction_message')
+        const transactionSuccessSection = document.getElementById('success_section'),
+            transactionFailedSection = document.getElementById('failure_section'),
+            transactionSuccessId = document.getElementById('successful_transaction_id'),
+            transactionHeading = document.getElementById('transaction_heading'),
+            transactionMessage = document.getElementById('transaction_message')
 
-        function showTransactionStatus(status, heading, message, transactionId){
+        function showTransactionStatus(status, heading, message, transactionId) {
             transactionHeading.textContent = heading
             transactionMessage.innerHTML = message
             transactionSuccessId.textContent = transactionId
-            if(transactionId)
+            if (transactionId)
                 transactionSuccessId.parentNode.classList.remove('hide-completely')
             else
                 transactionSuccessId.parentNode.classList.add('hide-completely')
-            if(status === 'success'){
+            if (status === 'success') {
                 transactionSuccessSection.classList.remove('hide-completely')
             }
-            else{
+            else {
                 transactionFailedSection.classList.remove('hide-completely')
             }
             showPopup('transaction_result')
         }
 
-        const   transactionPage = document.getElementById('transaction_page'),
-                transactionType = document.getElementById('transaction_type'),
-                transactionDetails = document.getElementById('transaction_details')
+        const transactionPage = document.getElementById('transaction_page'),
+            transactionType = document.getElementById('transaction_type'),
+            transactionDetails = document.getElementById('transaction_details'),
+            cautionMessage = document.getElementById('caution_message'),
+            showReportButton = document.getElementById('show_report_btn')
 
-        function showTransactionDetails(obj){
-            let {type, timeStamp, amount, receiver, upiTxId, receiverUPI} = obj;
+        function showTransactionDetails(obj) {
+            let { type, timeStamp, amount, receiver, upiTxId, receiverUPI, processed, fromCashier, toCashier } = obj;
             let composition = ``,
                 icon,
                 transaction,
                 className
-                
-            switch(type){
+
+            switch (type) {
                 case 'sent':
-                    icon = `
-                        <svg class="icon" viewBox="0 0 64 64">
-                            <path
-                                d="M47.28,16.8,29.6,34.64a3.3,3.3,0,0,1-3.59.71L2.5,25.42a3.28,3.28,0,0,1,.26-6.13L59.21.87A3.28,3.28,0,0,1,63.32,5l-18.93,56a3.26,3.26,0,0,1-6.12.18l-6.4-15.68" />
-                        </svg>
-                    `
                     transaction = 'Sent to'
-                break;
+                    break;
+                case 'received':
+                    transaction = 'Received from'
+                    break;
                 case 'deposit':
-                    icon = `
-                        <svg class="icon" viewBox="0 0 64 64">
-                            <title>deposit</title>
-                            <path d="M29.58,35.76V60.47H5.13A4.63,4.63,0,0,1,.5,55.83V9.63" />
-                            <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H42.16" />
-                            <path
-                                d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-                            <path
-                                d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-                            <polyline points="38.61 44.12 29.54 35.05 20.39 44.2" />
-                        </svg>
-                    `
                     type = 'deposited'
+                    if (processed === 'false')
+                        type = 'deposit'
                     transaction = 'Deposited to'
-                break;
+                    break;
                 case 'withdraw':
-                    icon = `
-                        <svg class="icon" viewBox="0 0 64 64">
-                            <title>withdraw</title>
-                            <path d="M15.18,60.47h-10A4.63,4.63,0,0,1,.5,55.83V9.63" />
-                            <line x1="29.42" y1="59.04" x2="29.42" y2="34.34" />
-                            <path d="M59.5,47v8.85a4.63,4.63,0,0,1-4.63,4.64H43.62" />
-                            <path
-                                d="M49.44,3.53H6.09A5.59,5.59,0,0,0,.5,9.12h0a5.59,5.59,0,0,0,5.59,5.59H38.91l14.38,0a6,6,0,0,1,6.21,6V32" />
-                            <path
-                                d="M54.39,32h6.08a3,3,0,0,1,3,3V44a3,3,0,0,1-3,3H54.39a7.49,7.49,0,0,1-7.49-7.49v0A7.49,7.49,0,0,1,54.39,32Z" />
-                            <polyline points="20.39 50.69 29.45 59.76 38.61 50.6" />
-                        </svg>
-                    `
                     type = 'withdrawn'
+                    if (processed === 'false')
+                        type = 'Withdraw'
                     transaction = 'withdrawn to'
-                break;
+                    break;
                 case 'payCashier':
-                    icon = `
-                        <svg class="icon" viewBox="0 0 64 64">
-                            <path d="M32,37.75A10.19,10.19,0,1,0,21.81,27.44V46.62" />
-                            <rect height="64" width="64" rx="8"></rect>
-                        </svg>
-                    `
                     className = 'withdrawn'
                     transaction = 'Paid to'
                     type = 'Paid through cashier'
-                break;
+                    if (processed === 'false')
+                        type = 'Paying through cashier'
+                    break;
+            }
+            if (processed === 'false') {
+                icon = `<svg class="icon pending" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                                <title>pending</title>
+                                <circle cx="32" cy="32" r="31.5"/>
+                                <polyline points="47 32.26 32 32.26 32 12.26"/>
+                            </svg>`
+                cautionMessage.innerHTML = `
+                        It may take upto 48 working hours for a transaction to complete. If even after 48 hours transction wasn't
+                        completed and your money was deducted, use <Strong>Report</Strong> button to report your issue.`
+                showReportButton.classList.remove('hide')
+            }
+            else{
+                cautionMessage.innerHTML = ``
+                showReportButton.classList.add('hide')
+                icon = `
+                <svg class="icon success" viewBox="0 0 64 64">
+                    <title>tick</title>
+                    <polyline points="0.35 31.82 21.45 52.98 63.65 10.66"/>
+                </svg>
+                `
             }
 
-            composition =  `${icon}
-                            <h5>${type}</h5>
-                            <div class="flex">
-                                ₹ <span class="transaction-amount"> ${amount}</span>
-                            </div>`
+            composition = `${icon}
+                                <h5>${type}</h5>
+                                <div class="flex">
+                                    ₹ <span class="transaction-amount"> ${amount}</span>
+                                </div>`
 
-            if(receiver !== 'undefined')
-                composition +=`
-                    <h5>${transaction}</h5> <strong>${allContacts[receiver] ? allContacts[receiver].name : receiver}</strong>`
-
-            if(upiTxId !== 'undefined')
+            if (receiver !== 'undefined'){
+                transactionFloId = receiver
                 composition += `
-                <h5>UPI transaction ID</h5>
-                <strong>${upiTxId}</strong> 
-                `
+                    <h5>${transaction}</h5> <strong class="breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</strong>`
+                if(floCrypto.validateAddr(receiver) && !allContacts[receiver])
+                    composition += `<sm-button onclick="addPersonFromTransaction()">Save this FLO address</sm-button>`
+            }
 
-            if(receiverUPI !== 'undefined')
+            if (upiTxId !== 'undefined')
                 composition += `
-                <h5>Sent to UPI ID</h5>
-                <strong>${receiverUPI}</strong> 
-                `
+                    <h5>UPI transaction ID</h5>
+                    <strong>${upiTxId}</strong> 
+                    `
+
+            if (receiverUPI !== 'undefined')
+                composition += `
+                    <h5>Sent to cashier UPI ID</h5>
+                    <strong>${receiverUPI}</strong> 
+                    `
+            if(fromCashier !== 'undefined'){
+                composition += `
+                    <p>You have received ₹${amount} from RanchiMall Pay. Your deposit request was completed successfully.</p> 
+                    ` 
+            }
+            if(toCashier !== 'undefined'){
+                composition += `
+                    <p>You sent ₹${amount} to our cashier.</p> 
+                    ` 
+            }
             composition += `<h5 id="transaction_time">${formatedTime(timeStamp)}</h5>`
             transactionDetails.innerHTML = composition
             transactionType.textContent = type
@@ -2098,19 +2337,19 @@
             allTabs.forEach((tab) => {
                 tab.classList.remove('active')
             })
-            if(btn){
-                if(typeof btn === 'string')
-                btn = document.getElementById(btn)
+            if (btn) {
+                if (typeof btn === 'string')
+                    btn = document.getElementById(btn)
                 btn.classList.add('active', 'shrink')
             }
             if (page === 'request_page') {
                 show_payment_requests()
             }
-            if(page === 'transaction_page'){
+            if (page === 'transaction_page') {
                 document.getElementById('navbar').classList.add('hide-on-mobile')
                 document.getElementById('main_header').classList.add('hide-on-mobile')
             }
-            else{
+            else {
                 document.getElementById('navbar').classList.remove('hide-on-mobile')
                 document.getElementById('main_header').classList.remove('hide-on-mobile')
             }
@@ -2120,63 +2359,63 @@
         async function addUserUPI() {
             userUPI = addUpiInput.value
             compactIDB.addData('userUPIs', userUPI, userUPI)
-            .then( success => {
-                if(!defaultUPI)
-                    setPrimaryUPI(userUPI)
-                notify('UPI address added', 'success')
-                hidePopup()
-                renderUserUPI()
-            })
-            .catch (error => {
-                notify('UPI address already added.', 'error')
-                throw new Error(error);
-            })
+                .then(success => {
+                    if (!defaultUPI)
+                        setPrimaryUPI(userUPI)
+                    notify('UPI address added', 'success')
+                    hidePopup()
+                    renderUserUPI()
+                })
+                .catch(error => {
+                    notify('UPI address already added.', 'error')
+                    throw new Error(error);
+                })
         }
 
-        function setPrimaryUPI(upiAddress){
+        function setPrimaryUPI(upiAddress) {
             localStorage.setItem(`defaultUPI${myFloID}`, upiAddress)
             renderUserUPI()
             defaultUPI = upiAddress
         }
 
-        function removeUPI(upi){
+        function removeUPI(upi) {
             compactIDB.removeData('userUPIs', upi)
-            if(upi === defaultUPI)
+            if (upi === defaultUPI)
                 localStorage.removeItem(`defaultUPI${myFloID}`)
             renderUserUPI()
         }
 
-        const UPIContainers =  document.querySelectorAll('.upi-container')
-        async function renderUserUPI(){
+        const UPIContainers = document.querySelectorAll('.upi-container')
+        async function renderUserUPI() {
             let upis = await compactIDB.readAllData('userUPIs')
             UPIContainers.forEach(container => {
                 let randomGroup = floCrypto.randString(6, true),
                     radios = ``
-                for(upi in upis){
-                    let checked = upi === defaultUPI ? 'checked': ''
+                for (upi in upis) {
+                    let checked = upi === defaultUPI ? 'checked' : ''
                     radios += `
-                    <div class="select">
-                        <label>
-                            <input type="radio" name="${randomGroup}" value="${upi}" ${checked}>
-                            <svg class="radio" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                                <circle class="outer-ring" cx="32" cy="32" r="30"/>
-                                <circle class="inner-disc" cx="32" cy="32" r="16"/>
-                            </svg>
-                            <span>${upi}</span>
-                        </label>
-                    `
-                    if(upi === defaultUPI)
+                        <div class="select">
+                            <label>
+                                <input type="radio" name="${randomGroup}" value="${upi}" ${checked}>
+                                <svg class="radio" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="outer-ring" cx="32" cy="32" r="30"/>
+                                    <circle class="inner-disc" cx="32" cy="32" r="16"/>
+                                </svg>
+                                <span>${upi}</span>
+                            </label>
+                        `
+                    if (upi === defaultUPI)
                         radios += `
-                        <h5 class="tag">Primary</h5>`
-                    if(container.closest('#settings_page'))
+                            <h5 class="tag">Primary</h5>`
+                    if (container.closest('#settings_page'))
                         radios += `
-                                <svg class="icon remove" viewBox="0 0 64 64">
-                                    <title>Remove this UPI</title>
-                                    <line x1="64" y1="0" x2="0" y2="64"/>
-                                    <line x1="64" y1="64" x2="0" y2="0"/>
-                                </svg>`
-                    radios +=`
-                    </div>`
+                                    <svg class="icon remove" viewBox="0 0 64 64">
+                                        <title>Remove this UPI</title>
+                                        <line x1="64" y1="0" x2="0" y2="64"/>
+                                        <line x1="64" y1="64" x2="0" y2="0"/>
+                                    </svg>`
+                    radios += `
+                        </div>`
                 }
                 container.innerHTML = radios
             })
@@ -2184,76 +2423,83 @@
         }
 
         const contactFlo = document.getElementById('person_flo_id'),
-                contactName = document.getElementById('person_name')
-        async function addPerson(){
-            compactIDB.addData('contacts', {name: contactName.value, color: randomHsl()}, contactFlo.value)
-            .then(success => {
-                notify('Contact added', 'success')
-                renderAllContacts()
-                hidePopup()
-            })
-            .catch(error => {
-                notify('Contact already added', 'error')
-            })
+            contactName = document.getElementById('person_name')
+        async function addPerson() {
+            compactIDB.addData('contacts', { name: contactName.value, color: randomHsl() }, contactFlo.value)
+                .then(success => {
+                    notify('Contact added', 'success')
+                    renderAllContacts()
+                    hidePopup()
+                })
+                .catch(error => {
+                    notify('Contact already added', 'error')
+                })
+        }
+
+        function addPersonFromTransaction(){
+            contactFlo.value = transactionFloId
+            showPopup('add_person_popup')
         }
 
         const peopleContainer = document.getElementById('people_container')
-        let allContacts
-        async function renderAllContacts(){
+        let allContacts, transactionFloId
+        async function renderAllContacts() {
             allContacts = await compactIDB.readAllData('contacts')
             peopleContainer.innerHTML = ``
-            for(contact in allContacts){
+            for (contact in allContacts) {
                 frag.append(render.contact(contact, allContacts[contact].name, allContacts[contact].color))
             }
             peopleContainer.append(frag)
             let addPersonButton = document.createElement('div')
-            addPersonButton.id="add_person_btn"   
+            addPersonButton.id = "add_person_btn"
             addPersonButton.innerHTML = `
-            <svg class="icon" viewBox="0 0 64 64">
-                <title>add Contact</title>
-                <line x1="32" x2="32" y2="64"/>
-                <line x1="64" y1="32" y2="32"/>
-            </svg>
-            Add
-            `
+                <svg class="icon" viewBox="0 0 64 64">
+                    <title>add Contact</title>
+                    <line x1="32" x2="32" y2="64"/>
+                    <line x1="64" y1="32" y2="32"/>
+                </svg>
+                Add
+                `
             peopleContainer.prepend(addPersonButton)
         }
 
-        function setNameEditable(){
-            showPersonName.contentEditable = 'true'
-            showPersonName.focus()
-            document.execCommand('selectAll', false, null);
-            document.getSelection().collapseToEnd();
-            personName = showPersonName.textContent
+        function setNameEditable() {
+            if(!showPersonName.isContentEditable){
+                showPersonName.contentEditable = 'true'
+                showPersonName.focus()
+                document.execCommand('selectAll', false, null);
+                document.getSelection().collapseToEnd();
+                personName = showPersonName.textContent
+            }
         }
 
-        async function changePersonName(){
+        async function changePersonName() {
             let contact = await compactIDB.readData('contacts', person.dataset.floId)
             contact.name = showPersonName.textContent.trim()
-            if(showPersonName.textContent === '')
+            if (showPersonName.textContent === '')
                 contact.name = 'Unknown'
             compactIDB.writeData('contacts', contact, person.dataset.floId)
-            .then(success => {
-                notify('Changes saved', 'success')
-                renderAllContacts()
-                personInitials.textContent = contact.name.charAt(0)
-            })
-            .catch(error => {
-                notify(error, 'error')
-            })
-        }
-
-        async function deletePerson(){
-            if(await confirmation('Do you want to remove this person ?', 'No', 'Remove')){
-                compactIDB.removeData('contacts', person.dataset.floId)
                 .then(success => {
-                    notify('Deleted person', 'success')
-                    hidePopup()
+                    notify('Changes saved', 'success')
                     renderAllContacts()
+                    personInitials.textContent = contact.name.charAt(0)
                 })
                 .catch(error => {
                     notify(error, 'error')
                 })
+        }
+
+        async function deletePerson() {
+            if (await confirmation('Do you want to remove this person ?', 'No', 'Remove')) {
+                compactIDB.removeData('contacts', person.dataset.floId)
+                    .then(success => {
+                        notify('Deleted person', 'success')
+                        hidePopup()
+                        renderAllContacts()
+                    })
+                    .catch(error => {
+                        notify(error, 'error')
+                    })
             }
         }
 
@@ -2287,6 +2533,7 @@
             }
         }
     </script>
+    <script src="qrcode.min.js"></script>
     <script id="init_lib">
         //All util libraries required for Standard operations (DO NOT EDIT ANY)
 
@@ -2326,22 +2573,22 @@
         }
 
         /* Sample Usage
-          --Creating and defining the event--
-          reactor.registerEvent('<eventName>');
-          reactor.addEventListener('<eventName>', function(someObject){
+        --Creating and defining the event--
+        reactor.registerEvent('<eventName>');
+        reactor.addEventListener('<eventName>', function(someObject){
             do something...
-          });
-          --Firing the event--
-          reactor.dispatchEvent('<eventName>',<someObject>);
+        });
+        --Firing the event--
+        reactor.dispatchEvent('<eventName>',<someObject>);
         */
 
 
         /*!
-         * Crypto-JS v2.5.4  Crypto.js
-         * http://code.google.com/p/crypto-js/
-         * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
-         * http://code.google.com/p/crypto-js/wiki/License
-         */
+        * Crypto-JS v2.5.4  Crypto.js
+        * http://code.google.com/p/crypto-js/
+        * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
+        * http://code.google.com/p/crypto-js/wiki/License
+        */
         if (typeof Crypto == "undefined" || !Crypto.util) {
             (function () {
 
@@ -2491,11 +2738,11 @@
 
         //Adding SHA1 to fix basic PKBDF2
         /*
-         * Crypto-JS v2.5.4
-         * http://code.google.com/p/crypto-js/
-         * (c) 2009-2012 by Jeff Mott. All rights reserved.
-         * http://code.google.com/p/crypto-js/wiki/License
-         */
+        * Crypto-JS v2.5.4
+        * http://code.google.com/p/crypto-js/
+        * (c) 2009-2012 by Jeff Mott. All rights reserved.
+        * http://code.google.com/p/crypto-js/wiki/License
+        */
         (function () {
 
             // Shortcuts
@@ -2584,11 +2831,11 @@
 
         //Added to make PKBDF2 work
         /*
-         * Crypto-JS v2.5.4
-         * http://code.google.com/p/crypto-js/
-         * (c) 2009-2012 by Jeff Mott. All rights reserved.
-         * http://code.google.com/p/crypto-js/wiki/License
-         */
+        * Crypto-JS v2.5.4
+        * http://code.google.com/p/crypto-js/
+        * (c) 2009-2012 by Jeff Mott. All rights reserved.
+        * http://code.google.com/p/crypto-js/wiki/License
+        */
         (function () {
 
             // Shortcuts
@@ -2636,11 +2883,11 @@
 
         //crypto-sha256-hmac.js
         /*
-         * Crypto-JS v2.5.4
-         * http://code.google.com/p/crypto-js/
-         * (c) 2009-2012 by Jeff Mott. All rights reserved.
-         * http://code.google.com/p/crypto-js/wiki/License
-         */
+        * Crypto-JS v2.5.4
+        * http://code.google.com/p/crypto-js/
+        * (c) 2009-2012 by Jeff Mott. All rights reserved.
+        * http://code.google.com/p/crypto-js/wiki/License
+        */
 
         function ascii_to_hexa(str) {
             var arr1 = [];
@@ -2822,15 +3069,15 @@
 
 
         /*!
-         * Random number generator with ArcFour PRNG
-         *
-         * NOTE: For best results, put code like
-         * <body onclick='SecureRandom.seedTime();' onkeypress='SecureRandom.seedTime();'>
-         * in your main HTML document.
-         *
-         * Copyright Tom Wu, bitaddress.org  BSD License.
-         * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
-         */
+        * Random number generator with ArcFour PRNG
+        *
+        * NOTE: For best results, put code like
+        * <body onclick='SecureRandom.seedTime();' onkeypress='SecureRandom.seedTime();'>
+        * in your main HTML document.
+        *
+        * Copyright Tom Wu, bitaddress.org  BSD License.
+        * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
+        */
         (function () {
 
             // Constructor function of Global SecureRandom object
@@ -3223,16 +3470,16 @@
         // Follows 'jsbn' on Github: https://github.com/jasondavies/jsbn
         // Review and Testing: https://github.com/cryptocoinjs/bigi/
         /*!
-         * Basic JavaScript BN library - subset useful for RSA encryption. v1.4
-         *
-         * Copyright (c) 2005  Tom Wu
-         * All Rights Reserved.
-         * BSD License
-         * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
-         *
-         * Copyright Stephan Thomas
-         * Copyright pointbiz
-         */
+        * Basic JavaScript BN library - subset useful for RSA encryption. v1.4
+        *
+        * Copyright (c) 2005  Tom Wu
+        * All Rights Reserved.
+        * BSD License
+        * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
+        *
+        * Copyright Stephan Thomas
+        * Copyright pointbiz
+        */
 
         (function () {
 
@@ -4792,13 +5039,13 @@
 
         //ellipticcurve.js
         /*!
-         * Basic Javascript Elliptic Curve implementation
-         * Ported loosely from BouncyCastle's Java EC code
-         * Only Fp curves implemented for now
-         *
-         * Copyright Tom Wu, bitaddress.org  BSD License.
-         * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
-         */
+        * Basic Javascript Elliptic Curve implementation
+        * Ported loosely from BouncyCastle's Java EC code
+        * Only Fp curves implemented for now
+        *
+        * Copyright Tom Wu, bitaddress.org  BSD License.
+        * http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
+        */
         (function () {
 
             // Constructor function of Global EllipticCurve object
@@ -4909,9 +5156,9 @@
                 return null;
             };
             /*!
-             * Crypto-JS 2.5.4 BlockModes.js
-             * contribution from Simon Greatrix
-             */
+            * Crypto-JS 2.5.4 BlockModes.js
+            * contribution from Simon Greatrix
+            */
 
             (function (C) {
 
@@ -5324,11 +5571,11 @@
             })(Crypto);
 
             /*!
-             * Crypto-JS v2.5.4  PBKDF2.js
-             * http://code.google.com/p/crypto-js/
-             * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
-             * http://code.google.com/p/crypto-js/wiki/License
-             */
+            * Crypto-JS v2.5.4  PBKDF2.js
+            * http://code.google.com/p/crypto-js/
+            * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
+            * http://code.google.com/p/crypto-js/wiki/License
+            */
             (function () {
 
                 // Shortcuts
@@ -5381,26 +5628,26 @@
             })();
 
             /*
-             * Copyright (c) 2010-2011 Intalio Pte, All Rights Reserved
-             * 
-             * Permission is hereby granted, free of charge, to any person obtaining a copy
-             * of this software and associated documentation files (the "Software"), to deal
-             * in the Software without restriction, including without limitation the rights
-             * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-             * copies of the Software, and to permit persons to whom the Software is
-             * furnished to do so, subject to the following conditions:
-             * 
-             * The above copyright notice and this permission notice shall be included in
-             * all copies or substantial portions of the Software.
-             * 
-             * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-             * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-             * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-             * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-             * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-             * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-             * THE SOFTWARE.
-             */
+            * Copyright (c) 2010-2011 Intalio Pte, All Rights Reserved
+            * 
+            * Permission is hereby granted, free of charge, to any person obtaining a copy
+            * of this software and associated documentation files (the "Software"), to deal
+            * in the Software without restriction, including without limitation the rights
+            * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            * copies of the Software, and to permit persons to whom the Software is
+            * furnished to do so, subject to the following conditions:
+            * 
+            * The above copyright notice and this permission notice shall be included in
+            * all copies or substantial portions of the Software.
+            * 
+            * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+            * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+            * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+            * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+            * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+            * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+            * THE SOFTWARE.
+            */
             // https://github.com/cheongwy/node-scrypt-js
             (function () {
 
@@ -5409,11 +5656,11 @@
 
                 //function scrypt(byte[] passwd, byte[] salt, int N, int r, int p, int dkLen)
                 /*
-                 * N = Cpu cost
-                 * r = Memory cost
-                 * p = parallelization cost
-                 * 
-                 */
+                * N = Cpu cost
+                * r = Memory cost
+                * p = parallelization cost
+                * 
+                */
                 window.Crypto_scrypt = function (passwd, salt, N, r, p, dkLen, callback) {
                     if (N == 0 || (N & (N - 1)) != 0) throw Error("N must be > 0 and a power of 2");
 
@@ -5758,11 +6005,11 @@
             })();
 
             /*!
-             * Crypto-JS v2.5.4  AES.js
-             * http://code.google.com/p/crypto-js/
-             * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
-             * http://code.google.com/p/crypto-js/wiki/License
-             */
+            * Crypto-JS v2.5.4  AES.js
+            * http://code.google.com/p/crypto-js/
+            * Copyright (c) 2009-2013, Jeff Mott. All rights reserved.
+            * http://code.google.com/p/crypto-js/wiki/License
+            */
             (function () {
 
                 // Shortcuts
@@ -6176,9 +6423,9 @@
             })();
 
             /*
-             * Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
-             * Ported to JavaScript by bitaddress.org
-             */
+            * Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
+            * Ported to JavaScript by bitaddress.org
+            */
             ec.FieldElementFp.fastLucasSequence = function (p, P, Q, k) {
                 // TODO Research and apply "common-multiplicand multiplication here"
 
@@ -6666,12 +6913,12 @@
             };
 
             /*
-             * Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
-             * Ported to JavaScript by bitaddress.org
-             *
-             * Number yTilde
-             * BigInteger X1
-             */
+            * Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
+            * Ported to JavaScript by bitaddress.org
+            *
+            * Number yTilde
+            * BigInteger X1
+            */
             ec.CurveFp.prototype.decompressPoint = function (yTilde, X1) {
                 var x = this.fromBigInteger(X1);
                 var alpha = x.multiply(x.square().add(this.getA())).add(this.getB());
@@ -7975,8 +8222,8 @@
             };
 
             /*
-             * Return public key as a byte array in DER encoding
-             */
+            * Return public key as a byte array in DER encoding
+            */
             ECKey.prototype.getPub = function () {
                 if (this.compressed) {
                     if (this.pubComp) return this.pubComp;
@@ -8033,8 +8280,8 @@
             };
 
             /*
-             * Takes a public point as a hex string or byte array
-             */
+            * Takes a public point as a hex string or byte array
+            */
             ECKey.prototype.setPub = function (pub) {
                 // byte array
                 if (Bitcoin.Util.isArray(pub)) {
@@ -9335,12 +9582,12 @@
 
             /*
             var test = {
-              foo : {
+            foo : {
                 bar : {
-                  baz : null
+                baz : null
                 }
-              },
-              bar : 1
+            },
+            bar : 1
             };
             cleanse(test);
             
@@ -11695,15 +11942,15 @@
         }
 
         function delay(t, v) {
-          return new Promise(function(resolve) {
-            setTimeout(resolve.bind(null, v), t);
-          });
+            return new Promise(function (resolve) {
+                setTimeout(resolve.bind(null, v), t);
+            });
         }
-    
+
         function diff_hours(dt2, dt1) {
-            var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+            var diff = (dt2.getTime() - dt1.getTime()) / 1000;
             diff /= (60 * 60);
-            return Math.abs(Math.round(diff));           
+            return Math.abs(Math.round(diff));
         }
 
         function removeDuplicates(sample_object) {
@@ -11714,104 +11961,93 @@
 
     </script>
 
-<script>
-    const token_app = {
-        master_configurations: {},
-        actions: {},
-        blocked_flo_ids: [],
-        personal_data: null,
-    };
+    <script>
+        const token_app = {
+            master_configurations: {},
+            actions: {},
+            blocked_flo_ids: [],
+            personal_data: null,
+        };
 
-    token_app.actions = {
+        token_app.actions = {
 
-        parse_flo_comments: async function () {
-            const num=4;
-            text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
-                #!#CURRENCY=INR
-                #!#TYPE_UPI_APP=UPI_APP_TEST${num}
-                #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST${num}
-                #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST${num}
-                #!#TYPE_MSGES=USER_MESSAGES_TEST${num}
-                #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST${num}
-                #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST${num}
-                #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST${num}
-                #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST${num}
-                #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST${num}
-                #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST${num}
-                #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST${num}
-                #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST${num}
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST${num}
-                #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST${num}
-                #!#TYPE_REQUEST_PAYMENT=REQUEST_PAYMENT_TEST${num}
-                #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST${num}
-                #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST${num}
-                #!#TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}
-                #!#TYPE_SENT_TOKENS=TYPE_SENT_TOKENS_TEST${num}
-                #!#TYPE_MY_PERSONAL_DATA=TYPE_MY_PERSONAL_DATA_TEST${num}
-                #!#TYPE_UNCONFIRMED_RUPEE_DEPOSITS=TYPE_UNCONFIRMED_RUPEE_DEPOSITS_TEST${num} 
-                #!#TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}  
-                #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
-                #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
-                #!#cashiers=
-                {
-                    "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
-                        "upi_id": "8507742774@ybl"
-                    }
-                }`
-            /*
-                    "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
-                        "upi_id": "8507742774@ybl"
-                    },
-                    "FHW2kgYEhDt85vjAiMMF7bQqdP74L7iwvQ": {
-                        "upi_id": "8340617958@ybl"
-                    },
-                    "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
-                        "upi_id": "8902496422@ybl"
-                    },
-                    "FBun3694ZdxmD66os9oL5DxMrif3vyVjT3": {
-                        "upi_id": "7004801428@ybl"
-                    },
-                    "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
-                        "upi_id": "aakriti1705sinha@okicici"
-                    },
-                    "FQ6udJuTbGDa2kWZAkmNpwgHaUEeYLPAtt": {
-                        "upi_id": "krishraj1012-2@okicici"
-                    }
-            */
-            text = removeWhiteSpaces(text);
-            return text;
-            const master_data = await ajaxGet(
-                `${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
-            if (typeof master_data === "object" && typeof master_data.txs === "object") {
-                let text = '';
-                let tx_cmnt_arr = [];
-
-                for (txt of master_data.txs) {
-                    if (txt.vin[0].addr === token_app.masterFLOAddress) {
-                        if (txt.floData.length === 0) break;
-                        tx_cmnt_arr.push(txt.floData);
-                    }
-                }
-
-                tx_cmnt_arr.reverse().map(m => text += m.replace('text:', ''));
+            parse_flo_comments: async function () {
+                const num = 4;
+                text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
+                    #!#CURRENCY=INR
+                    #!#TYPE_UPI_APP=UPI_APP_TEST${num}
+                    #!#TYPE_DEPOSITS=CASH_DEPOSITS_TEST${num}
+                    #!#TYPE_WITHDRAWS=CASH_WITHDRAWS_TEST${num}
+                    #!#TYPE_MSGES=USER_MESSAGES_TEST${num}
+                    #!#TYPE_PROCESSED_DEPOSITS=PROCESSED_DEPOSITS_TEST${num}
+                    #!#TYPE_PROCESSED_WITHDRAWS=PROCESSED_WITHDRAWS_TEST${num}
+                    #!#TYPE_FILE_DEPOSITS_COMPLAINT=DEPOSITS_COMPLAINT_TEST${num}
+                    #!#TYPE_PROCESSED_DEPOSITS_COMPLAINT=PROCESSED_DEPOSITS_COMPLAINT_TEST${num}
+                    #!#TYPE_FILE_WITHDRAWS_COMPLAINT=WITHDRAWS_COMPLAINT_TEST${num}
+                    #!#TYPE_PROCESSED_WITHDRAWS_COMPLAINT=PROCESSED_WITHDRAWS_COMPLAINT_TEST${num}
+                    #!#TYPE_PAY_THROUGH_CASHIER=PAY_THRU_CASHIER_TEST${num}
+                    #!#TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT=PAY_THRU_CASHIER_COMPLAINT_TEST${num}
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER=PROCESSED_PAY_THROUGH_CASHIER_TEST${num}
+                    #!#TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT=PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT_TEST${num}
+                    #!#TYPE_REQUEST_PAYMENT=REQUEST_PAYMENT_TEST${num}
+                    #!#TYPE_REQUEST_PAYMENT_DECLINED=REQUEST_PAYMENT_DECLINED_TEST${num}
+                    #!#TYPE_REQUEST_PAYMENT_APPROVED=REQUEST_PAYMENT_APPROVED_TEST${num}
+                    #!#TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}
+                    #!#TYPE_SENT_TOKENS=TYPE_SENT_TOKENS_TEST${num}
+                    #!#TYPE_MY_PERSONAL_DATA=TYPE_MY_PERSONAL_DATA_TEST${num}
+                    #!#TYPE_UNCONFIRMED_RUPEE_DEPOSITS=TYPE_UNCONFIRMED_RUPEE_DEPOSITS_TEST${num} 
+                    #!#TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}  
+                    #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
+                    #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
+                    #!#cashiers=
+                    {
+                        "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
+                            "upi_id": "8507742774@ybl"
+                        },
+                        "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
+                            "upi_id": "8902496422@ybl"
+                        },
+                        "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
+                            "upi_id": "aakriti1705sinha@okicici"
+                        },
+                        "FPFeL5PXzW9bGosUjQYCxTHSMHidnygvvd": {
+                            "upi_id": "7744023898@paytm"
+                        }
+                    }`
+                text = removeWhiteSpaces(text);
                 return text;
-            }
-        },
+                const master_data = await ajaxGet(
+                    `${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
+                if (typeof master_data === "object" && typeof master_data.txs === "object") {
+                    let text = '';
+                    let tx_cmnt_arr = [];
 
-        fetch_configs: async function () {
-            const floData = await this.parse_flo_comments();
-            let RMAssets = floData.trim();
-            let floAssetsArray = RMAssets.split("#!#");
+                    for (txt of master_data.txs) {
+                        if (txt.vin[0].addr === token_app.masterFLOAddress) {
+                            if (txt.floData.length === 0) break;
+                            tx_cmnt_arr.push(txt.floData);
+                        }
+                    }
 
-            if (
-                floAssetsArray.length > 0 &&
-                typeof floAssetsArray[0] !== undefined &&
-                floAssetsArray[0].trim() !== "" &&
-                typeof floAssetsArray[1] !== undefined &&
-                floAssetsArray[1].trim() !== ""
-            ) {
-                try {
-                    for (const assets_string of floAssetsArray) {
+                    tx_cmnt_arr.reverse().map(m => text += m.replace('text:', ''));
+                    return text;
+                }
+            },
+
+            fetch_configs: async function () {
+                const floData = await this.parse_flo_comments();
+                let RMAssets = floData.trim();
+                let floAssetsArray = RMAssets.split("#!#");
+
+                if (
+                    floAssetsArray.length > 0 &&
+                    typeof floAssetsArray[0] !== undefined &&
+                    floAssetsArray[0].trim() !== "" &&
+                    typeof floAssetsArray[1] !== undefined &&
+                    floAssetsArray[1].trim() !== ""
+                ) {
+                    try {
+                        for (const assets_string of floAssetsArray) {
 
                             let k = assets_string.split("=");
 
@@ -11854,233 +12090,239 @@
                 return false;
             },
 
-        doShreeGanesh: async function () {
+            doShreeGanesh: async function () {
 
-            // fetch configs from master comment
-            await this.fetch_configs();
+                // fetch configs from master comment
+                await this.fetch_configs();
 
-            const allCashierOptions = document.querySelectorAll('.cashier-option'),
-                allUserOptions = document.querySelectorAll('.user-option'),
-                allHelplineOptions = document.querySelectorAll('.helpline-option'),
-                userType = document.querySelectorAll('.user-type')
+                const allCashierOptions = document.querySelectorAll('.cashier-option'),
+                    allUserOptions = document.querySelectorAll('.user-option'),
+                    allHelplineOptions = document.querySelectorAll('.helpline-option'),
+                    userType = document.querySelectorAll('.user-type')
 
-            //Cashier startup sequence
-            if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-                allCashierOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                show_deposit_request()
-                show_withdraw_request()
-                showPayThruCashierRequests()
-                userType.forEach(user => user.textContent = 'Cashier')
-                showPage('deposit', 'deposit_page_btn')
-            }
-
-            //Helpline startup sequence
-            else if (token_app.master_configurations.helplineFloId === myFloID) {
-                allCashierOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                let cashierList = ``,
-                    cashierSelect = document.getElementById('select_cashier')
-                cashierList += `<sm-strip-option value = "">Select Cashier</sm-strip-option>`;
-                for (cashier in token_app.master_configurations.cashiers)
-                    cashierList += `<sm-strip-option value = "${cashier}">${cashier}</sm-strip-option>`
-                cashierSelect.innerHTML = cashierList;
-                await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(
-                    cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
-                userType.forEach(user => user.textContent = 'Cashier')
-                showPage('helpline_page', 'helpline_page_btn')
-            }
-
-            //user startup sequence
-            else {
-                allCashierOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allHelplineOptions.forEach(option => {
-                    option.classList.add('hide-completely')
-                })
-                allUserOptions.forEach(option => {
-                    option.classList.remove('hide-completely')
-                })
-                userType.forEach(user => user.textContent = 'User')
-                defaultUPI = localStorage.getItem(`defaultUPI${myFloID}`)
-                renderUserUPI()
-                renderAllContacts()
-                
-                show_all_user_activities()
-                show_payment_requests()
-                showPage('home_page', 'home_page_btn')
-                    
-                withdraw_token_to_get_cash();
-        
-                transferTokensManually();
-                
-                pay_through_cashier();
-            }
-            this.retrieveLatestContent();
-        },
-
-        retrieveLatestContent: async function (request_args='', receiverID = floGlobals.adminID, senderIDs = floGlobals
-        .subAdmins) {
-
-            floCloudAPI.requestObjectData(floGlobals.application, {
-                receiverID,
-                senderIDs
-            });
-
-            if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
-
-                if(typeof request_args=='object' && typeof request_args.datatype=='string') {
-                    return floCloudAPI.requestGeneralData(request_args.datatype, 
-                    request_args.options);
-                }
-
-                await Promise.all([
-                    
-                    create_root_structure(),
-                    
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
-                        receiverID: myFloID
-                    }),
-
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
-                        receiverID: myFloID
-                    }),
-
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
-                        receiverID: myFloID
-                    }),
-
-                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, {
-                        receiverID: myFloID
+                //Cashier startup sequence
+                if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+                    allCashierOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
                     })
-                ])
-
-                return true;
-            } else if (token_app.master_configurations.helplineFloId === myFloID) {
-                await clearCashierData();
-
-                if(typeof request_args=='object' && typeof request_args.datatype=='string') {
-                    return floCloudAPI.requestGeneralData(request_args.datatype);
+                    allUserOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    showDepositRequests()
+                    showWithdrawRequests()
+                    showPayThruCashierRequests()
+                    userType.forEach(user => user.textContent = 'Cashier')
+                    showPage('deposit', 'deposit_page_btn')
                 }
 
-                await Promise.all([
+                //Helpline startup sequence
+                else if (token_app.master_configurations.helplineFloId === myFloID) {
+                    allCashierOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    let cashierList = ``,
+                        cashierSelect = document.getElementById('select_cashier')
+                    cashierList += `<sm-strip-option value = "">Select Cashier</sm-strip-option>`;
+                    for (cashier in token_app.master_configurations.cashiers)
+                        cashierList += `<sm-strip-option value = "${cashier}">${cashier}</sm-strip-option>`
+                    cashierSelect.innerHTML = cashierList;
+                    await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(
+                        cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
+                    userType.forEach(user => user.textContent = 'Cashier')
+                    showPage('helpline_page', 'helpline_page_btn')
+                }
 
-                    create_root_structure(),
-    
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_DEPOSITS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_FILE_WITHDRAWS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_DEPOSITS_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT),
-                    floCloudAPI.requestGeneralData(token_app.master_configurations
-                        .TYPE_PROCESSED_WITHDRAWS_COMPLAINT)
-                ])
+                //user startup sequence
+                else {
+                    allCashierOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allHelplineOptions.forEach(option => {
+                        option.classList.add('hide-completely')
+                    })
+                    allUserOptions.forEach(option => {
+                        option.classList.remove('hide-completely')
+                    })
+                    defaultUPI = localStorage.getItem(`defaultUPI${myFloID}`)
+                    renderUserUPI()
+                    renderAllContacts()
 
-                return true;
-            } else {
+                    document.querySelectorAll('.my-qr-code').forEach(code => {
+                        new QRCode(code, myFloID);
+                    })
 
-                let promises = [];
+                    showPage('home_page', 'home_page_btn')
+                    show_payment_requests()
+                    
+                    withdraw_token_to_get_cash();
+                    
+                    transferTokensManually();
+                    
+                    pay_through_cashier();
+                    
+                    getSentRupeeList()
+                    
+                    getReceivedRupeeList()
+                    showAllUserActivities()
+                }
+                this.retrieveLatestContent();
+            },
 
-                if(typeof request_args=='object' && typeof request_args.datatype=='string'
-                && request_args.datatype===token_app.master_configurations.TYPE_MSGES) {
-                    await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES,
-                    {receiverID: myFloID});
-                    return true;
-                } else if(typeof request_args!=='object' || typeof request_args.datatype!=='string') {
-                    let p4 = {
-                        func: floCloudAPI.requestGeneralData,
-                        arg1: token_app.master_configurations.TYPE_MSGES,
-                        arg2: {receiverID: myFloID}
+            retrieveLatestContent: async function (request_args = '', receiverID = floGlobals.adminID, senderIDs = floGlobals
+                .subAdmins) {
+
+                floCloudAPI.requestObjectData(floGlobals.application, {
+                    receiverID,
+                    senderIDs
+                });
+
+                if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+
+                    if (typeof request_args == 'object' && typeof request_args.datatype == 'string') {
+                        return floCloudAPI.requestGeneralData(request_args.datatype,
+                            request_args.options);
                     }
 
-                    promises.push(p4);
-                }
+                    await Promise.all([
 
-                for (let cashier in token_app.master_configurations.cashiers) {
-                    if(typeof request_args=='object' && typeof request_args.datatype=='string') {
-                        
-                        promises.push({
-                            func: floCloudAPI.requestGeneralData, 
-                            arg1: request_args.datatype,
-                            arg2: {receiverID: cashier, senderIDs: [myFloID]}
+                        create_root_structure(),
+
+                        floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
+                            receiverID: myFloID
+                        }),
+
+                        floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
+                            receiverID: myFloID
+                        }),
+
+                        floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES, {
+                            receiverID: myFloID
+                        }),
+
+                        floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, {
+                            receiverID: myFloID
                         })
-                    
-                    } else {
-                        let p1 = {
-                            func: floCloudAPI.requestGeneralData, 
-                            arg1: token_app.master_configurations.TYPE_DEPOSITS,
-                            arg2: {receiverID: cashier, senderIDs: [myFloID]}
-                        }
+                    ])
 
-                        let p2 = { 
-                            func: floCloudAPI.requestGeneralData,
-                            arg1: token_app.master_configurations.TYPE_WITHDRAWS,
-                            arg2: {receiverID: cashier, senderIDs: [myFloID]}
-                        }
+                    return true;
+                } else if (token_app.master_configurations.helplineFloId === myFloID) {
+                    await clearCashierData();
 
-                        let p3 = {
-                            func: floCloudAPI.requestGeneralData,
-                            arg1: token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
-                            arg2: {receiverID: cashier, senderIDs: [myFloID]}
-                        }
+                    if (typeof request_args == 'object' && typeof request_args.datatype == 'string') {
+                        return floCloudAPI.requestGeneralData(request_args.datatype);
+                    }
 
+                    await Promise.all([
+
+                        create_root_structure(),
+
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_DEPOSITS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_PAY_THROUGH_CASHIER_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_FILE_WITHDRAWS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_DEPOSITS_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_PAY_THROUGH_CASHIER_COMPLAINT),
+                        floCloudAPI.requestGeneralData(token_app.master_configurations
+                            .TYPE_PROCESSED_WITHDRAWS_COMPLAINT)
+                    ])
+
+                    return true;
+                } else {
+
+                    let promises = [];
+
+                    if (typeof request_args == 'object' && typeof request_args.datatype == 'string'
+                        && request_args.datatype === token_app.master_configurations.TYPE_MSGES) {
+                        await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_MSGES,
+                            { receiverID: myFloID });
+                        return true;
+                    } else if (typeof request_args !== 'object' || typeof request_args.datatype !== 'string') {
                         let p4 = {
                             func: floCloudAPI.requestGeneralData,
-                            arg1: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
-                            arg2: {receiverID: cashier, senderIDs: [cashier]}
+                            arg1: token_app.master_configurations.TYPE_MSGES,
+                            arg2: { receiverID: myFloID }
                         }
 
-                        let p5 = {
-                            func: floCloudAPI.requestGeneralData,
-                            arg1: token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
-                            arg2: {receiverID: cashier, senderIDs: [cashier]}
-                        }
-
-                        let p6 = {
-                            func: floCloudAPI.requestGeneralData,
-                            arg1: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
-                            arg2: {receiverID: cashier, senderIDs: [cashier]}
-                        }
-
-                        promises.push(p1, p2, p3, p4, p5, p6);
+                        promises.push(p4);
                     }
+
+                    for (let cashier in token_app.master_configurations.cashiers) {
+                        if (typeof request_args == 'object' && typeof request_args.datatype == 'string') {
+
+                            promises.push({
+                                func: floCloudAPI.requestGeneralData,
+                                arg1: request_args.datatype,
+                                arg2: { receiverID: cashier, senderIDs: [myFloID] }
+                            })
+
+                        } else {
+                            let p1 = {
+                                func: floCloudAPI.requestGeneralData,
+                                arg1: token_app.master_configurations.TYPE_DEPOSITS,
+                                arg2: { receiverID: cashier, senderIDs: [myFloID] }
+                            }
+
+                            let p2 = {
+                                func: floCloudAPI.requestGeneralData,
+                                arg1: token_app.master_configurations.TYPE_WITHDRAWS,
+                                arg2: { receiverID: cashier, senderIDs: [myFloID] }
+                            }
+
+                            let p3 = {
+                                func: floCloudAPI.requestGeneralData,
+                                arg1: token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER,
+                                arg2: { receiverID: cashier, senderIDs: [myFloID] }
+                            }
+
+                            let p4 = {
+                                func: floCloudAPI.requestGeneralData,
+                                arg1: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
+                                arg2: { receiverID: cashier, senderIDs: [cashier] }
+                            }
+
+                            let p5 = {
+                                func: floCloudAPI.requestGeneralData,
+                                arg1: token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
+                                arg2: { receiverID: cashier, senderIDs: [cashier] }
+                            }
+
+                            let p6 = {
+                                func: floCloudAPI.requestGeneralData,
+                                arg1: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
+                                arg2: { receiverID: cashier, senderIDs: [cashier] }
+                            }
+
+                            promises.push(p1, p2, p3, p4, p5, p6);
+                        }
+                    }
+
+                    await Promise.all(promises.map(prom => prom.func.call(floCloudAPI, prom.arg1, prom.arg2)));
+
+                    create_root_structure();
+
+                    return promises;
+
                 }
 
-                await Promise.all(promises.map(prom => prom.func.call(floCloudAPI,prom.arg1, prom.arg2)));
-                
-                create_root_structure();
-                
-                return promises;
-
             }
-
         }
-    }
     </script>
 
     <!-- Cashier functions -->
     <script>
-
         async function reset_cloud_object(object_name, options) {
             try {
                 if (typeof floGlobals.appObjects[object_name] !== 'object'
@@ -12114,46 +12356,45 @@
             return Promise.all(promises);
         }
 
-        async function show_deposit_request() {
+        const   depositsContainer = document.getElementById("pending_deposits_container"),
+                withdrawsContainer = document.getElementById("pending_withdrawals_container"),
+                payRequestsContainer = document.getElementById("pay_requests_container");
+
+        async function showDepositRequests() {
             try {
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
-                // await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
-                //     receiverID: myFloID,
-                //     senderIDs: [myFloID]
-                // });
-
-                let finished_tasks = await floCloudAPI.requestApplicationData({
-                    type: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
+                /*await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
                     receiverID: myFloID,
                     senderIDs: [myFloID]
-                });
+                });*/
+                depositsContainer.innerHTML = ``
+                for(let i= 0; i < 4; i++){
+                    frag.append(render.requestPlaceholder())
+                }
+                depositsContainer.append(frag)
+
+                let [finished_tasks] = await Promise.all([
+                    floCloudAPI.requestApplicationData({
+                        type: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
+                        receiverID: myFloID,
+                        senderIDs: [myFloID]
+                    }),
+                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
+                        receiverID: myFloID
+                    })
+                ])
 
                 if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
 
-                console.log(finished_tasks);
-
-                // await floCloudAPI.requestGeneralData(token_app.master_configurations
-                //     .TYPE_PROCESSED_DEPOSITS, {
-                //     receiverID: myFloID
-                // });
-
-                // let finished_tasks = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                //     .TYPE_PROCESSED_DEPOSITS, "0"));
-
                 const processed_deposits = Object.values(finished_tasks).map(m => m.message.user_upi_txid);
-
-                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
-                    receiverID: myFloID
-                });
 
                 let cash_deposits = await compactIDB.readAllData('deposits_flo_txids');
 
                 let cash_deposits_upi_txid_list = Object.values(cash_deposits).map(m => m.user_upi_txid);
 
-                const general_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0"));
+                const general_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0").reverse());
 
-                let depositsContainer = document.getElementById("pending_deposits_container");
                 depositsContainer.innerHTML = ``;
                 for (const m of general_msg) {
                     if (cash_deposits_upi_txid_list.includes(m.message.upi_txid)) continue;
@@ -12164,7 +12405,7 @@
                         upi_txid,
                         deposit_amount
                     } = m.message;
-                    frag.append(render.depositRequest(upi_txid, user_flo_id, deposit_amount))
+                    frag.append(render.depositRequest(upi_txid, user_flo_id, deposit_amount, m.vectorClock))
                 }
 
                 depositsContainer.append(frag)
@@ -12174,26 +12415,33 @@
             }
         }
 
-        async function show_withdraw_request() {
+        async function showWithdrawRequests() {
             try {
+                withdrawsContainer.innerHTML = ``
+                for(let i= 0; i < 4; i++){
+                    frag.append(render.requestPlaceholder())
+                }
+                withdrawsContainer.append(frag)
+
                 if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
 
-                let finished_tasks = await floCloudAPI.requestApplicationData({
-                    type: token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
-                    receiverID: myFloID,
-                    senderIDs: [myFloID]
-                });
+                let [finished_tasks] = await Promise.all([
+                    floCloudAPI.requestApplicationData({
+                        type: token_app.master_configurations.TYPE_PROCESSED_WITHDRAWS,
+                        receiverID: myFloID,
+                        senderIDs: [myFloID]
+                    }),
+                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
+                    receiverID: myFloID
+                })
+                ])
 
                 if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
 
-                const processed_withdraws = Object.values(finished_tasks).map(m => m.message.token_txid);
-
-                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
-                    receiverID: myFloID
-                });
+                const processed_withdraws = Object.values(finished_tasks).map(m => m.message.token_txid)
 
                 const general_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
-                    "0"));
+                    "0").reverse());
 
                 if (typeof general_msg !== "object") {
                     notify(`No data available in withdraws.`);
@@ -12203,7 +12451,6 @@
                 let cash_withdraws = await compactIDB.readAllData('cash_sent_details');
                 let cash_withdraws_token_txid_list = Object.values(cash_withdraws).map(m => m.token_txid);
 
-                let withdrawsContainer = document.getElementById("pending_withdrawals_container");
                 withdrawsContainer.innerHTML = ``;
                 for (const m of general_msg) {
                     if (cash_withdraws_token_txid_list.includes(m.message.token_txid)) continue;
@@ -12215,10 +12462,58 @@
                         withdrawer_upi,
                         withdraw_amount
                     } = m.message
-                    frag.append(render.withdrawRequest(token_txid, withdrawer_upi, user_flo_id, withdraw_amount))
+                    frag.append(render.withdrawRequest(token_txid, withdrawer_upi, user_flo_id, withdraw_amount, m.vectorClock))
                 }
 
                 withdrawsContainer.append(frag)
+
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+
+        async function showPayThruCashierRequests() {
+            try {
+                payRequestsContainer.innerHTML = ``
+                for(let i= 0; i < 4; i++){
+                    frag.append(render.requestPlaceholder())
+                }
+                payRequestsContainer.append(frag)
+                //if (!Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) return;
+
+                let [finished_tasks] = await Promise.all([
+                    floCloudAPI.requestApplicationData({
+                        type: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
+                        receiverID: myFloID,
+                        senderIDs: [myFloID]
+                    }),
+                    floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, {
+                    receiverID: myFloID
+                })
+                ])
+
+                if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
+
+                const processed_cashier_payments = Object.values(finished_tasks).map(m => m.message.upi_txid)
+                    .filter(f => f !== undefined);
+
+                const user_requests = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_PAY_THROUGH_CASHIER, "0").reverse());
+
+                let pay_thru_cashier = await compactIDB.readAllData('pay_thru_cashier');
+                let pay_thru_cashier_list = Object.values(pay_thru_cashier).map(m => m.upi_txid);
+                payRequestsContainer.innerHTML = ``;
+                for (const m of user_requests) {
+                    if (processed_cashier_payments.includes(m.message.upi_txid)) continue;
+                    if (pay_thru_cashier_list.includes(m.message.upi_txid)) continue;
+                    let {
+                        upi_txid,
+                        receiver_flo_id,
+                        amount
+                    } = m.message;
+                    frag.append(render.payRequest(m.sender, upi_txid, receiver_flo_id, amount, m.vectorClock))
+                }
+                payRequestsContainer.append(frag)
 
             } catch (error) {
                 throw new Error(error)
@@ -12340,13 +12635,13 @@
                 });
 
                 floCloudAPI.sendGeneralData(`Your withdrawal request of INR ${amount_to_transfer} is approved. 
-                        Please check reference number ${transfer_upi_txid} in your UPI ${withdraw_upi}`,
+                            Please check reference number ${transfer_upi_txid} in your UPI ${withdraw_upi}`,
                     token_app.master_configurations.TYPE_MSGES, {
                     receiverID: input_data['withdrawer_flo_id']
                 })
 
             } catch (error) {
-                notify('Cash withdrawal failed.')
+                notify('Cash withdrawal failed.', 'error')
                 throw new Error(error, 'error')
             }
         }
@@ -12381,7 +12676,7 @@
 
                     if (typeof sender_token_balance.balance !== "number" ||
                         sender_token_balance.balance < token_amount) {
-                        err_msg = `Sender has insufficient ${token_name_radio} balance.`;
+                        err_msg = `Insufficient ${token_name_radio} balance.`;
                         notify(err_msg, 'error');
                         hidePopup()
                         return false;
@@ -12395,21 +12690,23 @@
                         hidePopup()
                         return false;
                     } else {
-                        hidePopup()
-                        showTransactionStatus('success', 'Rupee Sent', 'It may take upto 48 working hours for transaction to be completed.', flo_txid);
-                        sentActivityContainer.prepend(render.activityCard({type: 'sent', amount: token_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: token_receiver}))
-                        refresh_balance()
-                        if (payingRequested === true) {
+                        if (payingRequested) {
                             const all_reqs = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                                .TYPE_REQUEST_PAYMENT, "0").reverse());
-
+                                .TYPE_REQUEST_PAYMENT, "0"));
+                                
                             const original_req = all_reqs
-                                .filter(f => f.message.pay_req_id === currentPaymentRequest.requestId)
+                                .filter(f => f.message.pay_req_id === currentPaymentRequest.dataset.paymentRequestId)
                                 .map(m => m.message)[0];
-
+                                
                             payment_request_status(original_req, 'APPROVED')
-                            showPayThruCashierRequests();
-                        } else if (payingRequested === false) {
+                            paidPaymentRequestContainer.prepend(currentPaymentRequest)
+                            for(child of pendingPaymentRequestContainer.children){
+                                if(child.dataset.paymentRequestId === currentPaymentRequest.dataset.paymentRequestId){
+                                    child.remove()
+                                }
+                            }
+                            show_payment_requests();
+                        } else{
                             let receiverID = myFloID;
                             floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
                                 token_sender, token_receiver, token_amount, token_name_radio,
@@ -12417,6 +12714,10 @@
                             };
                             floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_SENT_TOKENS, options = { receiverID });
                         }
+                        hidePopup()
+                        showTransactionStatus('success', 'Rupee Sent', 'It may take upto 48 working hours for transaction to be completed.', flo_txid);
+                        //sentActivityContainer.prepend(render.activityCard({ type: 'sent', amount: token_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: token_receiver }))
+                        refresh_balance()
                         return true;
                     }
                 }
@@ -12432,10 +12733,10 @@
                     btnLoading(refreshButton, 'start')
                 const current_token_balance = document.querySelector('.token-balance').textContent;
                 if (typeof current_token_balance == "string") {
-                    const [get_user_rupee_balance, get_user_flo_balance] = await Promise.all([ ajaxGet(
+                    const [get_user_rupee_balance, get_user_flo_balance] = await Promise.all([ajaxGet(
                         'https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=' +
                         myFloID),
-                        floBlockchainAPI.getBalance(myFloID)
+                    floBlockchainAPI.getBalance(myFloID)
                     ])
 
                     if (typeof get_user_rupee_balance === "object" && get_user_rupee_balance.balance >= 0) {
@@ -12454,7 +12755,7 @@
                     if (typeof get_user_unconfirmed_rupee_balance == "number" && !isNaN(get_user_unconfirmed_rupee_balance)) {
                         document.querySelectorAll('.uncnf-token-balance').forEach(elem => elem.textContent = get_user_unconfirmed_rupee_balance);
                     }
-                    
+
                 }
                 if (refreshButton) {
                     btnLoading(refreshButton, 'stop')
@@ -12466,51 +12767,6 @@
                     btnLoading(refreshButton, 'stop')
                 }
                 throw new Error(error);
-            }
-        }
-
-        async function showPayThruCashierRequests() {
-            try {
-                let finished_tasks = await floCloudAPI.requestApplicationData({
-                    type: token_app.master_configurations.TYPE_PROCESSED_PAY_THROUGH_CASHIER,
-                    receiverID: myFloID,
-                    senderIDs: [myFloID]
-                });
-
-                if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
-
-                console.log(finished_tasks);
-
-                const processed_cashier_payments = Object.values(finished_tasks).map(m => m.message.upi_txid)
-                    .filter(f => f !== undefined);
-
-                console.log(processed_cashier_payments);
-
-                await floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, {
-                    receiverID: myFloID
-                });
-
-                const user_requests = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_PAY_THROUGH_CASHIER, "0"));
-
-                let pay_thru_cashier = await compactIDB.readAllData('pay_thru_cashier');
-                let pay_thru_cashier_list = Object.values(pay_thru_cashier).map(m => m.upi_txid);
-                let payRequestsContainer = document.getElementById("pay_requests_container");
-                payRequestsContainer.innerHTML = ``;
-                for (const m of user_requests) {
-                    if (processed_cashier_payments.includes(m.message.upi_txid)) continue;
-                    if (pay_thru_cashier_list.includes(m.message.upi_txid)) continue;
-                    let {
-                        upi_txid,
-                        receiver_flo_id,
-                        amount
-                    } = m.message;
-                    frag.append(render.payRequest(m.sender, upi_txid, receiver_flo_id, amount))
-                }
-                payRequestsContainer.append(frag)
-
-            } catch (error) {
-                throw new Error(error)
             }
         }
 
@@ -12568,7 +12824,7 @@
                         });
 
                         notify(`Transaction successful: ${flo_txid}. 
-                            INR ${amount_to_pay} sent to ${vendor_flo_id}`, 'success', '', true);
+                                INR ${amount_to_pay} sent to ${vendor_flo_id}`, 'success', '', true);
                         return true;
                     }
                 }
@@ -12717,10 +12973,11 @@
                             .TYPE_DEPOSITS, {
                             receiverID: cashier
                         }).then(result => {
+                            console.log(result)
                             hidePopup()
                             showTransactionStatus('success', 'Deposit request sent.', 'It may take upto 48 hours for deposited amount to be reflected in your account.')
                             btnLoading('request_tokens_btn', 'stop')
-                            depositActivityContainer.prepend(render.activityCard({type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: cashier_upi})) 
+                            depositActivityContainer.prepend(render.activityCard({ type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: cashier_upi, processed: true }))
                         })
                         return true;
                     }
@@ -12731,6 +12988,7 @@
             }
         }
 
+
         const withdrawRupeePopup = document.getElementById('withdraw_rupee')
         function withdraw_token_to_get_cash() {
             try {
@@ -12738,7 +12996,7 @@
                 const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
                 withdraw_cash_btn.onclick = async function () {
                     let selectedUPI = withdrawRupeePopup.querySelector('input[type="radio"]:checked');
-                    if(!selectedUPI){
+                    if (!selectedUPI) {
                         notify('Add an UPI address to withdraw money.', 'error')
                         return
                     }
@@ -12750,7 +13008,7 @@
                     const user_token_balance_object = await ajaxGet(token_balance_url);
                     if (typeof user_token_balance_object !== "object" || typeof user_token_balance_object
                         .balance !== "number") {
-                            showTransactionStatus('failure', 'Insufficient Balance', `You don't have any balance`)
+                        showTransactionStatus('failure', 'Insufficient Balance', `You don't have any balance`)
                         hidePopup()
                         return;
                     }
@@ -12787,7 +13045,7 @@
                         });
                         hidePopup()
                         showTransactionStatus('success', 'Withdraw request sent.', 'It may take upto 48 working hours to process your withdrawal request.')
-                        withdrawActivityContainer.prepend(render.activityCard({type: 'withdraw', amount: withdraw_cash_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: user_withdraw_upi}))
+                        withdrawActivityContainer.prepend(render.activityCard({ type: 'withdraw', amount: withdraw_cash_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: user_withdraw_upi, processed: true }))
                         return true;
                     }
                     showTransactionStatus('failure', 'Failed to send withdraw request.');
@@ -12810,7 +13068,7 @@
                 const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
                 cnf_cash_payment_btn.onclick = function () {
                     let selectedUPI = payCashierPopup.querySelector('input[type="radio"]:checked');
-                    if(!selectedUPI){
+                    if (!selectedUPI) {
                         notify('Add an UPI address to pay through cashier.', 'error')
                         return
                     }
@@ -12839,9 +13097,9 @@
 
                     hidePopup()
                     showTransactionStatus('success', 'Pay through cashier Request sent.', `Sent to: <b class="breakable">${recvr_id}</b><br>
-                        through cashier UPI: <b>${cashier_upi}</b>.<br><br>
-                        Once the cashier receives your payment, they will transfer it to intended receiver.`);
-                    payCashierActivityContainer.prepend(render.activityCard({type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, receiverUPI: req_object.upi_txid}))   
+                            through cashier UPI: <b>${cashier_upi}</b>.<br><br>
+                            Once the cashier receives your payment, they will transfer it to intended receiver.`);
+                    payCashierActivityContainer.prepend(render.activityCard({ type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, receiverUPI: req_object.upi_txid, processed: true }))
                 }
 
             } catch (error) {
@@ -12849,22 +13107,34 @@
             }
         }
 
-        const   sentActivityContainer = document.getElementById('sent_activity_container'),
-                depositActivityContainer = document.getElementById('deposit_activity_container'),
-                withdrawActivityContainer = document.getElementById('withdraw_activity_container'),
-                payCashierActivityContainer = document.getElementById('pay_cashier_activity_container'),
-                cashierMessageContainer = document.getElementById('cashier_message_container')
+        const sentActivityContainer = document.getElementById('sent_activity_container'),
+            receivedActivityContainer = document.getElementById('received_activity_container'),
+            depositActivityContainer = document.getElementById('deposit_activity_container'),
+            withdrawActivityContainer = document.getElementById('withdraw_activity_container'),
+            payCashierActivityContainer = document.getElementById('pay_cashier_activity_container'),
+            cashierMessageContainer = document.getElementById('cashier_message_container')
 
-        async function show_all_user_activities() { 
+        async function showAllUserActivities() {
             try {
+
+                depositActivityContainer.innerHTML = ''
+                withdrawActivityContainer.innerHTML = ''
+                payCashierActivityContainer.innerHTML = ''
+
+                for(let i = 0; i < 8; i++){
+                    frag.append(render.activityPlaceholder())
+                }
+                let frag1 = frag.cloneNode(true)
+                let frag2 = frag.cloneNode(true)
+                depositActivityContainer.append(frag)
+                withdrawActivityContainer.append(frag1)
+                payCashierActivityContainer.append(frag2)
+
                 await token_app.actions.retrieveLatestContent();
 
-                const deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0")
-                    .reverse());
-                const withdraw_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
-                    "0").reverse());
-                const user_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0")
-                    .reverse());
+                let deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0"));
+                const withdraw_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,"0").reverse());
+                const user_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0").reverse());
                 const pay_thru_cashier_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
                     .TYPE_PAY_THROUGH_CASHIER, "0").reverse());
 
@@ -12874,6 +13144,8 @@
                 const processed_deposits_upis = Object.values(processed_deposits).map(m => m.message.user_upi_txid);
                 console.log(processed_deposits_upis)
 
+                deposit_msg = deposit_msg.sort((a, b) => parseInt(b.vectorClock.split('_')[0]) - parseInt(a.vectorClock.split('_')[0]))
+
                 console.log(deposit_msg, withdraw_msg, user_msg)
                 for (usr_deposits of deposit_msg) {
                     let {
@@ -12882,11 +13154,12 @@
                         cashier_upi
                     } = usr_deposits.message;
                     let deposit_request_processed = false;
-                    if(processed_deposits_upis.includes(upi_txid)) deposit_request_processed = true; 
+                    if (processed_deposits_upis.includes(upi_txid)) deposit_request_processed = true;
                     console.info(upi_txid, deposit_request_processed)
-                    // SaiRajM: Use deposit_request_processed to display status of deposit 
-                    frag.append(render.activityCard({type: 'deposit', amount: deposit_amount, timeStamp: usr_deposits.vectorClock, 
-                    upi_txid, receiver: cashier_upi, deposit_request_processed}))
+                    frag.append(render.activityCard({
+                        type: 'deposit', amount: deposit_amount, timeStamp: usr_deposits.vectorClock,
+                        upi_txid, receiver: cashier_upi, deposit_request_processed, processed: deposit_request_processed
+                    }))
                 }
 
                 depositActivityContainer.innerHTML = ``;
@@ -12896,20 +13169,24 @@
                     .TYPE_PROCESSED_WITHDRAWS, "0"));
 
                 const processed_withdraws_token_txid = Object.values(processed_withdraws).map(m => m.message.token_txid);
-                
+
                 for (usr_withdraws of withdraw_msg) {
                     let withdraw_request_processed = false;
-                    if (processed_withdraws_token_txid.includes(usr_withdraws.message.token_txid)) 
+                    if (processed_withdraws_token_txid.includes(usr_withdraws.message.token_txid))
                         withdraw_request_processed = true;
-                    // SaiRajM: status for withdraw 
-                    console.log(usr_withdraws.message.token_txid, withdraw_request_processed);
 
                     let {
                         token_txid,
                         withdrawer_upi,
                         withdraw_amount
                     } = usr_withdraws.message;
-                    frag.append(render.activityCard({type: 'withdraw', amount: withdraw_amount, timeStamp: usr_withdraws.vectorClock, token_txid, receiver: withdrawer_upi}))
+                    frag.append(render.activityCard({
+                        type: 'withdraw', amount: withdraw_amount,
+                        timeStamp: usr_withdraws.vectorClock,
+                        token_txid,
+                        receiver: withdrawer_upi,
+                        processed: withdraw_request_processed
+                    }))
                 }
                 withdrawActivityContainer.innerHTML = ``;
                 withdrawActivityContainer.append(frag)
@@ -12918,7 +13195,7 @@
                 const processed_pay_thru_cashiers = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
                     .TYPE_PROCESSED_PAY_THROUGH_CASHIER, "0"));
                 const processed_cashier_payments = Object.values(processed_pay_thru_cashiers)
-                .map(m => m.message.upi_txid).filter(f => f !== undefined);
+                    .map(m => m.message.upi_txid).filter(f => f !== undefined);
 
                 for (cashier_message of pay_thru_cashier_msg) {
                     let ptc_request_processed = false;
@@ -12929,8 +13206,15 @@
                     } = cashier_message.message;
                     if (processed_cashier_payments.includes(upi_txid)) ptc_request_processed = true;
                     console.log(upi_txid, ptc_request_processed);
-                    // SaiRajM status for pay through cashier
-                    frag.append(render.activityCard({type: 'payCashier', amount, timeStamp: cashier_message.vectorClock, receiver: receiver_flo_id, receiverUPI: upi_txid}))
+
+                    frag.append(render.activityCard({
+                        type: 'payCashier',
+                        amount,
+                        timeStamp: cashier_message.vectorClock,
+                        receiver: receiver_flo_id,
+                        receiverUPI: upi_txid,
+                        processed: ptc_request_processed
+                    }))
                 }
 
                 payCashierActivityContainer.innerHTML = ``;
@@ -12947,16 +13231,16 @@
             }
         }
 
-        async function show_specific_user_activities(req_type='') {
+        async function show_specific_user_activities(req_type = '') {
             try {
-                if(req_type.length<1) return;
+                if (req_type.length < 1) return;
 
                 let request_args = {};
                 request_args.datatype = req_type;
-                request_args.options = {receiverID: cashier, senderIDs: [myFloID]};
+                request_args.options = { receiverID: cashier, senderIDs: [myFloID] };
 
-                if(req_type==token_app.master_configurations.TYPE_MSGES) 
-                    request_args.options = {receiverID: myFloID};
+                if (req_type == token_app.master_configurations.TYPE_MSGES)
+                    request_args.options = { receiverID: myFloID };
 
                 console.log(request_args);
 
@@ -12965,27 +13249,7 @@
                 switch (req_type) {
                     case token_app.master_configurations.TYPE_DEPOSITS:
                         const deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0")
-                        .reverse());
-
-                        let finished_tasks = await floCloudAPI.requestApplicationData({
-                            type: token_app.master_configurations.TYPE_PROCESSED_DEPOSITS,
-                            receiverID: myFloID,
-                            senderIDs: [myFloID]
-                        });
-
-                        if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
-
-                        console.log(finished_tasks);
-                        
-                        // await floCloudAPI.requestGeneralData(token_app.master_configurations
-                        //     .TYPE_PROCESSED_DEPOSITS, {
-                        //     receiverID: myFloID
-                        // });
-
-                        // let finished_tasks = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                        //     .TYPE_PROCESSED_DEPOSITS, "0"));
-
-                        const processed_deposits = Object.values(finished_tasks).map(m => m.message.user_upi_txid);
+                            .reverse());
 
                         for (usr_deposits of deposit_msg) {
                             let {
@@ -12994,14 +13258,14 @@
                             } = usr_deposits.message;
                             frag.append(render.depositActivity(usr_deposits.vectorClock, upi_txid, deposit_amount))
                         }
-                            
+
                         depositActivityContainer.innerHTML = ``;
                         depositActivityContainer.append(frag)
                         break;
-                    
+
                     case token_app.master_configurations.TYPE_WITHDRAWS:
                         const withdraw_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,
-                        "0").reverse());
+                            "0").reverse());
 
                         for (usr_withdraws of withdraw_msg) {
                             let {
@@ -13018,7 +13282,7 @@
 
                     case token_app.master_configurations.TYPE_MSGES:
                         const user_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0")
-                        .reverse());
+                            .reverse());
 
                         for (cashier_message of pay_thru_cashier_msg) {
                             console.log(cashier_message)
@@ -13034,10 +13298,10 @@
                         payCashierActivityContainer.innerHTML = ``;
                         payCashierActivityContainer.append(frag)
                         break;
-                
+
                     case token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER:
                         const pay_thru_cashier_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_PAY_THROUGH_CASHIER, "0").reverse());
+                            .TYPE_PAY_THROUGH_CASHIER, "0").reverse());
 
                         for (msg of user_msg) {
                             frag.append(render.cashierMessage(msg))
@@ -13121,81 +13385,97 @@
                 return false;
             }
         }
+ 
+        const   pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
+                paidPaymentRequestContainer = document.getElementById("paid_payment_request_container"),
+                declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container")
+
+        let paymentRequestAnimated = false;
 
         async function show_payment_requests(requests_received = true, recvr_id = '') {
             try {
+                if(!paymentRequestAnimated){
+                    pendingPaymentRequestContainer.innerHTML = ``;
+                    paidPaymentRequestContainer.innerHTML = ``;
+                    declinedPaymentRequestContainer.innerHTML = ``;
+    
+                    for(let i= 0; i < 6; i++){
+                        frag.append(render.paymentRequestPlaceholder())
+                    }
+                    let frag1 = frag.cloneNode(true)
+                    let frag2 = frag.cloneNode(true)
+    
+                    pendingPaymentRequestContainer.append(frag)
+                    paidPaymentRequestContainer.append(frag1)
+                    declinedPaymentRequestContainer.append(frag2)
+                    paymentRequestAnimated = true
+                }
 
                 let options = { receiverID: myFloID };
                 if (requests_received !== true) {
                     options = { receiverID: recvr_id, senderIDs: [myFloID] }
                 }
 
-                await Promise.all([
+                Promise.all([
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT, options),
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_DECLINED, options),
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_REQUEST_PAYMENT_APPROVED, options)
-                ]);
-                const general_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_REQUEST_PAYMENT, "0").reverse()),
-                    declined_reqs_list = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_REQUEST_PAYMENT_DECLINED, "0").reverse()),
-                    approved_reqs_list = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                        .TYPE_REQUEST_PAYMENT_APPROVED, "0").reverse());
+                ]).then(success => {
 
-                console.log(general_msg);
-                console.log(approved_reqs_list);
-                console.log(declined_reqs_list);
+                    const general_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                        .TYPE_REQUEST_PAYMENT, "0").reverse()),
+                        declined_reqs_list = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                            .TYPE_REQUEST_PAYMENT_DECLINED, "0").reverse()),
+                        approved_reqs_list = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                            .TYPE_REQUEST_PAYMENT_APPROVED, "0").reverse());
 
-                let processed_payments_requests = approved_reqs_list.map(m => m.message.pay_req_id).concat(declined_reqs_list
-                    .map(m => m.message.pay_req_id));
+                    let processed_payments_requests = approved_reqs_list.map(m => m.message.pay_req_id).concat(declined_reqs_list
+                        .map(m => m.message.pay_req_id));
 
-                let pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
-                    approvedPaymentRequestContainer = document.getElementById("paid_payment_request_container"),
-                    declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container");
+                    pendingPaymentRequestContainer.innerHTML = ``;
+                    paidPaymentRequestContainer.innerHTML = ``;
+                    declinedPaymentRequestContainer.innerHTML = ``;
 
-                pendingPaymentRequestContainer.innerHTML = ``;
-                approvedPaymentRequestContainer.innerHTML = ``;
-                declinedPaymentRequestContainer.innerHTML = ``;
+                    for (const m of general_msg) {
+                        let {
+                            sender_flo_id,
+                            receiver_flo_id,
+                            amount,
+                            datetime,
+                            pay_req_id
+                        } = m.message;
+                        if (processed_payments_requests.includes(pay_req_id || m.message)) continue;
 
-                for (const m of general_msg) {
-                    let {
-                        sender_flo_id,
-                        receiver_flo_id,
-                        amount,
-                        datetime,
-                        pay_req_id
-                    } = m.message;
-                    if (processed_payments_requests.includes(pay_req_id || m.message)) continue;
-                    console.log(sender_flo_id, amount, datetime, pay_req_id);
-                    if (typeof sender_flo_id !== "string") continue;
-                    frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id, true))
-                }
-                pendingPaymentRequestContainer.append(frag)
+                        if (typeof sender_flo_id !== "string") continue;
+                        frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id, true))
+                    }
+                    pendingPaymentRequestContainer.append(frag)
 
-                for (const m of approved_reqs_list) {
-                    let {
-                        sender_flo_id,
-                        receiver_flo_id,
-                        amount,
-                        datetime,
-                        pay_req_id
-                    } = m.message;
-                    frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
-                }
-                approvedPaymentRequestContainer.append(frag)
+                    for (const m of approved_reqs_list) {
+                        let {
+                            sender_flo_id,
+                            receiver_flo_id,
+                            amount,
+                            datetime,
+                            pay_req_id
+                        } = m.message;
+                        frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
+                    }
+                    paidPaymentRequestContainer.append(frag)
 
-                for (const m of declined_reqs_list) {
-                    let {
-                        sender_flo_id,
-                        receiver_flo_id,
-                        amount,
-                        datetime,
-                        pay_req_id
-                    } = m.message;
-                    console.log(m)
-                    frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
-                }
-                declinedPaymentRequestContainer.append(frag)
+                    for (const m of declined_reqs_list) {
+                        let {
+                            sender_flo_id,
+                            receiver_flo_id,
+                            amount,
+                            datetime,
+                            pay_req_id
+                        } = m.message;
+                        console.log(m)
+                        frag.append(render.paymentRequest(datetime, sender_flo_id, amount, pay_req_id))
+                    }
+                    declinedPaymentRequestContainer.append(frag)
+                })
             } catch (e) {
                 console.error(e);
                 return false
@@ -13226,7 +13506,7 @@
             }
         }
 
-        async function get_unconfirmed_balance(flo_id='', token_balance) {
+        async function get_unconfirmed_balance(flo_id = '', token_balance) {
             try {
                 let api = `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressTransactions?floAddress=${flo_id}`;
                 let tokens_transfers_tx_list = await ajaxGet(api);
@@ -13236,9 +13516,6 @@
                 await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS,
                     { receiverID, senderIDs });
                 let unconfirmed_tx_list = Object.keys(floGlobals.appObjects[token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS]);
-                //console.log(unconfirmed_tx_list);    
-                //console.log(tokens_transfers_tx_list);
-                //console.log(token_balance);
 
                 let unconfirmed_balance = 0;
                 for (ut of unconfirmed_tx_list) {
@@ -13272,22 +13549,41 @@
             }
         }
 
-        async function get_sent_rupee_list() {
+        async function getSentRupeeList() {
             try {
-                let senderIDs = [myFloID];
-                // floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
-                //     token_sender, token_receiver, token_amount, token_name_radio,
-                //     flo_txid, "datetime": + new Date()
-                // };
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_SENT_TOKENS,
-                    options = { myFloID, senderIDs });
+                let data = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&senderFloAddress=${myFloID}`)
+                let transactions = data.transactions
+                let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
+                for (transaction of sortedTransactions) {
+                    let { tokenAmount, flodata } = transaction.parsedFloData,
+                        receiver = flodata.match(/\b\w{34,34}\b/),
+                        timeStamp = transaction.transactionDetails.time * 1000
+                    if (receiver === '' || typeof receiver === 'undefined' || receiver === null) continue;
+                    frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, receiver, timeStamp, toCashier: token_app.master_configurations.cashiers[receiver] }))
+                }
+                sentActivityContainer.innerHTML = ''
+                sentActivityContainer.append(frag)
+            } catch (error) {
+                throw new Error(error);
+            }
+        }
 
-                const sent_tokens_list = Object.keys(floGlobals.appObjects
-                [token_app.master_configurations.TYPE_SENT_TOKENS]);
+        async function getReceivedRupeeList() {
+            try {
+                ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&destFloAddress=${myFloID}`).then(data => {
+                    let transactions = data.transactions
+                    let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
+                    for (transaction of sortedTransactions) {
+                        let { tokenAmount, flodata } = transaction.parsedFloData,
+                            sender = transaction.transactionDetails.vin[0].addr,
+                            timeStamp = transaction.transactionDetails.time * 1000
 
-                console.log(sent_tokens_list);
-                // #todo: while displying validate senderIDs===myFloID
-
+                        if (sender === '' || typeof sender === 'undefined' || sender === null) continue;
+                        frag.append(render.activityCard({ type: 'received', amount: tokenAmount, receiver: sender, timeStamp, fromCashier: token_app.master_configurations.cashiers[sender] }))
+                    }
+                    receivedActivityContainer.innerHTML = ''
+                    receivedActivityContainer.append(frag)
+                })
             } catch (error) {
                 throw new Error(error);
             }
