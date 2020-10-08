@@ -1165,7 +1165,7 @@
                 return card;
             },
             activityCard(obj) {
-                let { type, amount, timeStamp, receiver, upi_txid, receiverUPI, processed, fromCashier, toCashier } = obj;
+                let { type, amount, tokenTxId, timeStamp, receiver, upi_txid, receiverUPI, processed, fromCashier, toCashier } = obj;
                 let card = document.createElement('div'),
                     composition = ``,
                     icon,
@@ -1179,6 +1179,7 @@
                     'data-receiver': receiver,
                     'data-amount': amount,
                     'data-upi-txid': upi_txid,
+                    'data-token-txid': tokenTxId,
                     'data-receiver-upi': receiverUPI,
                     'data-pending': processed,
                     'data-from-cashier': fromCashier,
@@ -1606,7 +1607,7 @@
                 card.classList.add('person')
                 setAttributes(card, { 'data-flo-id': floId, 'data-name': name })
                 card.innerHTML = `
-                        <h3 class="person-initials" style="background-color: ${color.light};">${name.charAt(0)}</h3>
+                        <h3 class="person-initials" style="background-color: ${color.primary};">${name.charAt(0)}</h3>
                         <h4 class="person-name">${name}</h4>
                     `
                 return card
@@ -1849,7 +1850,7 @@
             }
         }
 
-        function randomHsl(saturation = 90, lightness = 50) {
+        function randomHsl(saturation = 80, lightness = 80) {
             let hue = Math.random() * 360
             let color = {
                 primary: `hsla( ${hue}, ${saturation}%, ${lightness}%, 1)`,
@@ -2044,7 +2045,7 @@
                     person = e.target.closest('.person')
                     showPersonName.textContent = person.dataset.name
                     personInitials.textContent = person.dataset.name.charAt(0)
-                    personInitials.style.background = allContacts[person.dataset.floId].color.light
+                    personInitials.style.background = allContacts[person.dataset.floId].color.primary
                     showPersonFloId.textContent = person.dataset.floId
                     showPopup('person_popup')
                 }
@@ -2115,6 +2116,7 @@
                         amount: currentRequest.dataset.amount,
                         receiver: currentRequest.dataset.receiver,
                         upiTxId: currentRequest.dataset.upiTxid,
+                        tokenTxId: currentRequest.dataset.tokenTxid,
                         receiverUPI: currentRequest.dataset.receiverUpi,
                         processed: currentRequest.dataset.pending,
                         toCashier: currentRequest.dataset.toCashier,
@@ -2229,7 +2231,7 @@
             showReportButton = document.getElementById('show_report_btn')
 
         function showTransactionDetails(obj) {
-            let { type, timeStamp, amount, receiver, upiTxId, receiverUPI, processed, fromCashier, toCashier } = obj;
+            let { type, timeStamp, amount, receiver, upiTxId, tokenTxId, receiverUPI, processed, fromCashier, toCashier } = obj;
             let composition = ``,
                 icon,
                 transaction,
@@ -2318,6 +2320,12 @@
                 composition += `
                     <p>You sent ₹${amount} to our cashier.</p> 
                     ` 
+            }
+            if(tokenTxId !== 'undefined'){
+                composition += `
+                    <h5>FLO transaction ID</h5>
+                    <strong><a class="breakable" target="_blank" href="https://ranchimall.github.io/floscout/#${tokenTxId}">${tokenTxId}</a></strong>  
+                `
             }
             composition += `<h5 id="transaction_time">${formatedTime(timeStamp)}</h5>`
             transactionDetails.innerHTML = composition
@@ -2425,7 +2433,7 @@
         const contactFlo = document.getElementById('person_flo_id'),
             contactName = document.getElementById('person_name')
         async function addPerson() {
-            compactIDB.addData('contacts', { name: contactName.value, color: randomHsl() }, contactFlo.value)
+            compactIDB.addData('contacts', { name: contactName.value, color: randomHsl(66, 48) }, contactFlo.value)
                 .then(success => {
                     notify('Contact added', 'success')
                     renderAllContacts()
@@ -12652,7 +12660,7 @@
                 send_tokens_btn.onclick = async function () {
                     btnLoading('send_tokens_btn', 'start')
                     const token_sender = myFloID;
-                    const token_receiver = document.getElementById('token_receiver').value;
+                    const token_receiver = document.getElementById('token_receiver').value.trim();
                     const token_amount = Number(document.getElementById('token_amount').value);
                     const token_name_radio = 'rupee';
                     const flo_comment =
@@ -12708,7 +12716,7 @@
                             show_payment_requests();
                         } else{
                             let receiverID = myFloID;
-                            floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS][flo_txid] = {
+                            floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS[flo_txid]] = {
                                 token_sender, token_receiver, token_amount, token_name_radio,
                                 flo_txid, "datetime": + new Date()
                             };
@@ -12716,12 +12724,13 @@
                         }
                         hidePopup()
                         showTransactionStatus('success', 'Rupee Sent', 'It may take upto 48 working hours for transaction to be completed.', flo_txid);
-                        //sentActivityContainer.prepend(render.activityCard({ type: 'sent', amount: token_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: token_receiver }))
+                        sentActivityContainer.prepend(render.activityCard({ type: 'sent', proceesed: false, amount: token_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: token_receiver }))
                         refresh_balance()
                         return true;
                     }
                 }
             } catch (error) {
+                btnLoading('send_tokens_btn', 'stop')
                 notify(error, 'error', true, true);
                 throw new Error(error);
             }
@@ -12984,6 +12993,7 @@
                     return false;
                 }
             } catch (error) {
+                btnLoading('request_tokens_btn', 'stop')
                 throw new Error(error)
             }
         }
@@ -13053,6 +13063,7 @@
                 }
 
             } catch (error) {
+                btnLoading('withdraw_cash_btn', 'stop')
                 throw new Error(error)
             }
         }
@@ -13103,6 +13114,7 @@
                 }
 
             } catch (error) {
+                btnLoading('withdraw_cash_btn', 'stop')
                 throw new Error(error)
             }
         }
@@ -13228,6 +13240,51 @@
                 cashierMessageContainer.append(frag)
             } catch (e) {
                 notify(e, 'error');
+            }
+        }
+
+        async function getSentRupeeList() {
+            try {
+                let data = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&senderFloAddress=${myFloID}`)
+                let transactions = data.transactions
+                let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
+                for (transaction of sortedTransactions) {
+                    let { tokenAmount, flodata } = transaction.parsedFloData,
+                        {time, txid} = transaction.transactionDetails,
+                        receiver = flodata.match(/\b\w{34,34}\b/),
+                        timeStamp = time * 1000,
+                        confirmations = await ajaxGet(`https://flosight.duckdns.org/api/tx/${txid}`),
+                        processed = confirmations.confirmations > 3 ? true : false
+                    if (receiver === '' || typeof receiver === 'undefined' || receiver === null) continue;
+                    frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, tokenTxId: txid, receiver, timeStamp, processed, toCashier: token_app.master_configurations.cashiers[receiver] }))
+                }
+                sentActivityContainer.innerHTML = ''
+                sentActivityContainer.append(frag)
+            } catch (error) {
+                throw new Error(error);
+            }
+        }
+
+        async function getReceivedRupeeList() {
+            try {
+                ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&destFloAddress=${myFloID}`).then(data => {
+                    let transactions = data.transactions
+                    let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
+                    for (transaction of sortedTransactions) {
+                        console.log(transaction)
+                        let { tokenAmount, flodata } = transaction.parsedFloData,
+                            {time, txid, vin} = transaction.transactionDetails,
+                            sender = vin[0].addr,
+                            timeStamp = time * 1000
+
+                        if (sender === '' || typeof sender === 'undefined' || sender === null) continue;
+                        frag.append(render.activityCard({ type: 'received', tokenTxId: txid, amount: tokenAmount, receiver: sender, timeStamp, fromCashier: token_app.master_configurations.cashiers[sender] }))
+                    }
+                    receivedActivityContainer.innerHTML = ''
+                    receivedActivityContainer.append(frag)
+                })
+            } catch (error) {
+                throw new Error(error);
             }
         }
 
@@ -13548,47 +13605,6 @@
                 throw new Error(error);
             }
         }
-
-        async function getSentRupeeList() {
-            try {
-                let data = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&senderFloAddress=${myFloID}`)
-                let transactions = data.transactions
-                let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
-                for (transaction of sortedTransactions) {
-                    let { tokenAmount, flodata } = transaction.parsedFloData,
-                        receiver = flodata.match(/\b\w{34,34}\b/),
-                        timeStamp = transaction.transactionDetails.time * 1000
-                    if (receiver === '' || typeof receiver === 'undefined' || receiver === null) continue;
-                    frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, receiver, timeStamp, toCashier: token_app.master_configurations.cashiers[receiver] }))
-                }
-                sentActivityContainer.innerHTML = ''
-                sentActivityContainer.append(frag)
-            } catch (error) {
-                throw new Error(error);
-            }
-        }
-
-        async function getReceivedRupeeList() {
-            try {
-                ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&destFloAddress=${myFloID}`).then(data => {
-                    let transactions = data.transactions
-                    let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
-                    for (transaction of sortedTransactions) {
-                        let { tokenAmount, flodata } = transaction.parsedFloData,
-                            sender = transaction.transactionDetails.vin[0].addr,
-                            timeStamp = transaction.transactionDetails.time * 1000
-
-                        if (sender === '' || typeof sender === 'undefined' || sender === null) continue;
-                        frag.append(render.activityCard({ type: 'received', amount: tokenAmount, receiver: sender, timeStamp, fromCashier: token_app.master_configurations.cashiers[sender] }))
-                    }
-                    receivedActivityContainer.innerHTML = ''
-                    receivedActivityContainer.append(frag)
-                })
-            } catch (error) {
-                throw new Error(error);
-            }
-        }
-
     </script>
 
     <!-- Helpline -->
@@ -13925,5 +13941,4 @@
         }
     </script>
 </body>
-
 </html>

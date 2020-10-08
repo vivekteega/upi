@@ -1545,6 +1545,7 @@ sm-panel{
     border-radius: 2rem;
     margin-bottom: 0.6rem !important;
     text-transform: uppercase;
+    color: rgba(var(--foreground-color), 1);
 }
 .person-name{
     font-size: 0.85rem;
