@@ -408,6 +408,10 @@ textarea {
   margin-left: auto;
 }
 
+#prompt .flex {
+  margin-top: 1rem;
+}
+
 .refresh {
   margin-top: 0.6em;
   margin-bottom: 1em;
@@ -663,6 +667,9 @@ details p {
 }
 #deposit .display-balance {
   grid-template-areas: "rupee rupee" "flo flo";
+}
+#deposit sm-tab-header {
+  display: flex;
 }
 
 .display-balance {

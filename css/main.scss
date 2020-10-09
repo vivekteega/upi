@@ -419,6 +419,11 @@ textarea {
         }
     }
 }
+#prompt{
+    .flex{
+        margin-top: 1rem;
+    }
+}
 
 .refresh {
     margin-top: 0.6em;
@@ -683,6 +688,9 @@ details{
     }
     .display-balance {
         grid-template-areas: 'rupee rupee' 'flo flo';
+    }
+    sm-tab-header{
+        display: flex;
     }
 }
 .display-balance {

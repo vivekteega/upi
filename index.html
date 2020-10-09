@@ -26,9 +26,9 @@
     <sm-popup id="prompt">
         <h4 id="prompt_message">Some input required</h4>
         <sm-input id="prompt_field"></sm-input>
-        <div class="btns">
-            <button class="hover cancel-btn">Cancel</button>
-            <button class="hover submit-btn">Ok</button>
+        <div class="flex align-center">
+            <sm-button variant="no-outline" class="cancel-btn">Cancel</sm-button>
+            <sm-button variant="no-outline" class="submit-btn">OK</button>
         </div>
     </sm-popup>
     <sm-notifications id="show_message"></sm-notifications>
@@ -905,7 +905,10 @@
             </sm-tab-panels>
         </section>
         <section id="activity_page" class="page">
-            <h3>Activity</h3>
+            <div class="flex align-center space-between">
+                <h3>Activity</h3>
+                <sm-button onclick="showActivities()">Refresh</sm-button>
+            </div>
             <sm-tab-header variant="tab" class="round" target="user_activities">
                 <sm-tab>Sent</sm-tab>
                 <sm-tab>Received</sm-tab>
@@ -1065,7 +1068,8 @@
                 card.classList.add('request')
                 setAttributes(card, {
                     'data-user-flo-id': floId,
-                    'data-txid': txid
+                    'data-txid': txid,
+                    'data-amount': amount
                 })
                 card.innerHTML = `      
                 <div>
@@ -1092,7 +1096,8 @@
                 setAttributes(card, {
                     'data-txid': txid,
                     'data-user-flo-id': floId,
-                    'data-upi': upiId
+                    'data-upi': upiId,
+                    'data-amount': amount
                 })
                 card.innerHTML = `      
                     <div>
@@ -2068,7 +2073,9 @@
                     if (await confirmation('Confirm this deposit request?')) {
                         let depositRequest = e.target.closest('.request'),
                             status = await transfer_token(depositRequest.dataset.userFloId,
-                                depositRequest.dataset.txid)
+                            depositRequest.dataset.txid, parseInt(depositRequest.dataset
+                            .amount))
+                        console.log(depositRequest)
                         if (status) {
                             refresh_balance()
                             depositRequest.remove()
@@ -2082,7 +2089,8 @@
                     if (await confirmation('Confirm this withdraw request?')) {
                         let withdrawRequest = e.target.closest('.request'),
                             status = await cash_sent(withdrawRequest.dataset.txid, withdrawRequest
-                                .dataset.userFloId, withdrawRequest.dataset.upi)
+                                .dataset.userFloId, withdrawRequest.dataset.upi, parseInt(withdrawRequest.dataset
+                                .amount))
                         if (status) {
                             refresh_balance()
                             withdrawRequest.remove()
@@ -2474,7 +2482,6 @@
                 showPersonName.contentEditable = 'true'
                 showPersonName.focus()
                 document.execCommand('selectAll', false, null);
-                document.getSelection().collapseToEnd();
                 personName = showPersonName.textContent
             }
         }
@@ -2527,9 +2534,9 @@
                 document.getElementById('navbar').classList.add('hide-completely')
                 document.getElementById('main_header').classList.add('hide-completely')
                 floDapps.clearCredentials()
+                delete token_app.master_configurations;
                 onLoadStartUp()
                 notifications.clearAll()
-                delete token_app.master_configurations;
             }
         }
     </script>
@@ -12114,9 +12121,7 @@
                     showDepositRequests()
                     showWithdrawRequests()
                     showPayThruCashierRequests()
-                    getSentRupeeList()
-                    
-                    getReceivedRupeeList()
+                    showActivities()
                     userType.forEach(user => user.textContent = 'Cashier')
                     showPage('deposit', 'deposit_page_btn')
                 }
@@ -12172,10 +12177,7 @@
                     
                     pay_through_cashier();
                     
-                    getSentRupeeList()
-                    
-                    getReceivedRupeeList()
-                    showAllUserActivities()
+                    showActivities()
                 }
                 this.retrieveLatestContent();
             },
@@ -12523,13 +12525,19 @@
             }
         }
 
-        async function transfer_token(receiver_flo_id = '', user_upi_txid = '') {
+        async function transfer_token(receiver_flo_id = '', user_upi_txid = '', amountToSend) {
             try {
                 if (user_upi_txid.length < 1 || receiver_flo_id.length < 1) {
                     notify("Receiver FLO id or UPI txid not found.");
                     return;
                 }
-                const amount_of_tokens_to_transfer = prompt('Enter the amount of rupee to transfer', 0);
+                const amount_of_tokens_to_transfer = parseInt(await askPrompt('Enter the amount of rupee to transfer', amountToSend));
+                if(!amount_of_tokens_to_transfer) return
+                if (amountToSend !== amount_of_tokens_to_transfer) {
+                    let amount_mismatch = await confirmation(
+                        "Amount mismatch: Your amount does not match what user entered. Continue?");
+                    if (!amount_mismatch) return;
+                }
                 if (amount_of_tokens_to_transfer > 0) {
                     let flo_comment = `transfer ${amount_of_tokens_to_transfer} rupee#`;
                     let flo_txid = await floBlockchainAPI.sendTx(myFloID, receiver_flo_id, 0.001, myPrivKey,
@@ -12589,7 +12597,7 @@
             }
         }
 
-        async function cash_sent(token_id, withdraw_flo_id, withdraw_upi) {
+        async function cash_sent(token_id, withdraw_flo_id, withdraw_upi, amountToWithdraw) {
             try {
                 let input_data = {
                     token_txid: token_id,
@@ -12613,7 +12621,7 @@
                 }
                 let tx_comment = token_tx.parsedFloData.flodata;
 
-                let amount_to_transfer = Number(tx_comment.match(/\d+/)[0]);
+                let amount_to_transfer = parseInt(tx_comment.match(/\d+/)[0]);
 
                 if (typeof amount_to_transfer !== "number" || amount_to_transfer < 1) {
                     notify("Invalid transfer amount");
@@ -12623,13 +12631,17 @@
                 notify("Please transfer INR " + amount_to_transfer + " to " + input_data["withdrawer_upi"], '',
                     true, true);
 
-                let transfer_upi_txid = prompt("Enter the UPI txid for transferred amount.", "");
-                if (transfer_upi_txid.length < 1) {
-                    notify("UPI Txid length cannot be less than 1 charecter.");
+                let transfer_upi_txid = await askPrompt("Enter the UPI txid for transferred amount.", '');
+                if(!transfer_upi_txid){
+                    notifications.clearAll()    
+                    return
+                } 
+                if (transfer_upi_txid.length !== 12) {
+                    notify("UPI Txid can't be less than 12 character long.");
                     return;
                 }
                 input_data["withdrawn_upi_txid"] = transfer_upi_txid;
-
+                notifications.clearAll()
                 compactIDB.addData("cash_sent_details", input_data, input_data["token_txid"])
 
                 // Add data into personal ledger as well
@@ -12656,7 +12668,7 @@
                     btnLoading('send_tokens_btn', 'start')
                     const token_sender = myFloID;
                     const token_receiver = document.getElementById('token_receiver').value.trim();
-                    const token_amount = Number(document.getElementById('token_amount').value);
+                    const token_amount = parseInt(document.getElementById('token_amount').value);
                     const token_name_radio = 'rupee';
                     const flo_comment =
                         `transfer ${token_amount} ${token_name_radio}# to ${token_receiver}`;
@@ -12780,16 +12792,17 @@
                 if (vendor_flo_id.length < 1) throw new Error("Invalid Receiver Id");
                 if (sender_flo_id.length < 1) throw new Error("Invalid Sender Id");
                 if (upi_txid.length < 1) throw new Error("Invalid UPI Txid");
-                const amount_to_pay = Number(prompt('Enter amount to pay', 0));
+                const amount_to_pay = parseInt(await askPrompt('Enter amount to pay', usr_amount_to_pay));
+                if(!amount_to_pay) return
                 if (typeof amount_to_pay !== "number" || amount_to_pay <= 0)
                     return notify("Invalid amount.", 'error', '', true);
-                if (Number(usr_amount_to_pay) !== amount_to_pay) {
-                    let amount_mismatch = confirm(
+                if (parseInt(usr_amount_to_pay) !== amount_to_pay) {
+                    let amount_mismatch = await confirmation(
                         "Amount mismatch: Your amount does not match what user entered. Continue?");
                     if (!amount_mismatch) return;
                 }
                 let flo_statement = `transfer ${amount_to_pay} rupee# on behalf of ${sender_flo_id}`;
-                let send_token_cnf = confirm(`Send ${amount_to_pay} to ${vendor_flo_id} ?`);
+                let send_token_cnf = await confirmation(`Send ${amount_to_pay} to ${vendor_flo_id} ?`);
                 if (send_token_cnf == true) {
                     const token_balance_url =
                         `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${myFloID}`;
@@ -12940,7 +12953,7 @@
                     if (typeof date !== 'number'
                         || (new Date(data.datetime * 1000).getDate() !== new Date(date).getDate())) continue;
 
-                    let tokens_transferred = Number(data.tokens_transferred);
+                    let tokens_transferred = parseInt(data.tokens_transferred);
                     if (isNaN(tokens_transferred)) tokens_transferred = 0;
                     total += tokens_transferred;
                 }
@@ -13006,7 +13019,7 @@
                         return
                     }
                     btnLoading('withdraw_cash_btn', 'start')
-                    const withdraw_cash_amount = Number(document.getElementById('withdraw_cash_amount').value);
+                    const withdraw_cash_amount = parseInt(document.getElementById('withdraw_cash_amount').value);
                     const user_withdraw_upi = selectedUPI.value
                     const token_balance_url =
                         `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${myFloID}`;
@@ -13017,7 +13030,7 @@
                         hidePopup()
                         return;
                     }
-                    const current_balance = Number(user_token_balance_object.balance);
+                    const current_balance = parseInt(user_token_balance_object.balance);
                     if (current_balance < withdraw_cash_amount) {
                         hidePopup()
                         showTransactionStatus('failure', 'Insufficient Balance', `You have only ₹${user_token_balance_object.balance} balance`)
@@ -13081,7 +13094,7 @@
                     btnLoading('withdraw_cash_btn', 'start')
                     const paying_amount_div = document.getElementById('recvr_amount_to_pay')
                     const recvr_id = document.getElementById('recvr_id').value;
-                    let amount_to_pay = Number(paying_amount_div.value);
+                    let amount_to_pay = parseInt(paying_amount_div.value);
                     let paid_cashier_upi = selectedUPI.value;
                     paid_cashier_upi = toAlphanumeric(paid_cashier_upi);
                     if (recvr_id.length < 1 ||
@@ -13114,6 +13127,33 @@
             }
         }
 
+        function showActivities(){
+            depositActivityContainer.innerHTML = ''
+            withdrawActivityContainer.innerHTML = ''
+            payCashierActivityContainer.innerHTML = ''
+            sentActivityContainer.innerHTML = ''
+            receivedActivityContainer.innerHTML = ''
+            
+            for(let i = 0; i < 8; i++){
+                frag.append(render.activityPlaceholder())
+            }
+            let frag1 = frag.cloneNode(true),
+                frag2 = frag.cloneNode(true),
+                frag3 = frag.cloneNode(true),
+                frag4 = frag.cloneNode(true)
+            depositActivityContainer.append(frag)
+            withdrawActivityContainer.append(frag1)
+            payCashierActivityContainer.append(frag2)
+            sentActivityContainer.append(frag3)
+            receivedActivityContainer.append(frag4)
+            getSentRupeeList()
+            getReceivedRupeeList()
+            if(!token_app.master_configurations.cashiers[myFloID]){
+                showAllUserActivities()
+            }
+            
+        }
+
         const sentActivityContainer = document.getElementById('sent_activity_container'),
             receivedActivityContainer = document.getElementById('received_activity_container'),
             depositActivityContainer = document.getElementById('deposit_activity_container'),
@@ -13123,20 +13163,6 @@
 
         async function showAllUserActivities() {
             try {
-
-                depositActivityContainer.innerHTML = ''
-                withdrawActivityContainer.innerHTML = ''
-                payCashierActivityContainer.innerHTML = ''
-
-                for(let i = 0; i < 8; i++){
-                    frag.append(render.activityPlaceholder())
-                }
-                let frag1 = frag.cloneNode(true)
-                let frag2 = frag.cloneNode(true)
-                depositActivityContainer.append(frag)
-                withdrawActivityContainer.append(frag1)
-                payCashierActivityContainer.append(frag2)
-
                 await token_app.actions.retrieveLatestContent();
 
                 let deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0"));
@@ -13589,7 +13615,7 @@
                         if (delete subject_deposit)
                             floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS, { receiverID });
                     } else {
-                        unconfirmed_balance += Number(subject_deposit["tokens_transferred"]);
+                        unconfirmed_balance += parseInt(subject_deposit["tokens_transferred"]);
                         let dt1 = new Date(subject_deposit["datetime"]);
                         let dt2 = new Date();
                         // If 48 hours has passed since unconfirmed balance and is not already claimed, send claim request
