@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 
-<body onload="onLoadStartUp()">
+<body onload="onLoadStartUp()" class="hide-completely">
     <audio id="notification_sound">
         <source src="https://rmservices.duckdns.org/files/notification-sound.mp3" type="audio/mpeg">
         <source src="https://rmservices.duckdns.org/files/notification-sound.ogg" type="audio/ogg">
@@ -518,7 +518,7 @@
             </svg>
             <h5>requests</h5>
         </div>
-        <div title="activity page" id="activity_page_btn" class="navbar-item user-option"
+        <div title="activity page" id="activity_page_btn" class="navbar-item"
             onclick="showPage('activity_page', this)">
             <svg class="icon" viewBox="0 0 64 64">
                 <path
@@ -909,10 +909,10 @@
             <sm-tab-header variant="tab" class="round" target="user_activities">
                 <sm-tab>Sent</sm-tab>
                 <sm-tab>Received</sm-tab>
-                <sm-tab>Deposits</sm-tab>
-                <sm-tab>Withdrawals</sm-tab>
-                <sm-tab>Paid through cashier</sm-tab>
-                <sm-tab>System Notifications</sm-tab>
+                <sm-tab class="user-option">Deposits</sm-tab>
+                <sm-tab class="user-option">Withdrawals</sm-tab>
+                <sm-tab class="user-option">Paid through cashier</sm-tab>
+                <sm-tab class="user-option">System Notifications</sm-tab>
             </sm-tab-header>
             <sm-tab-panels id="user_activities">
                 <sm-panel>
@@ -992,9 +992,6 @@
                 <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address
                 </sm-button>
             </div>
-            <h4>Sign Out</h4>
-            <p>Signing out will erase all the data stored in local storage and Indexed DB. This will remove
-                saved private key, UPI addresses and contacts.</p>
             <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>
         </section>
         <section id="transaction_page" class="page">
@@ -1279,7 +1276,7 @@
                         <h4 class="activity-type">${transaction} ${status}</h4>`
                 if (receiver)
                     composition += `
-                            <h4 class="activity-receiver breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</h4>
+                            <h4 class="activity-receiver breakable">${allContacts ? allContacts[receiver] ? allContacts[receiver].name : receiver: receiver}</h4>
                         `
                 composition += `
                         <h4 class="activity-amount ${className}">${sign} ₹${amount}</h4>
@@ -1829,6 +1826,7 @@
 
         const loaderPage = document.getElementById('main_loader')
         function showLoader() {
+            document.body.classList.remove('hide-completely')
             loaderPage.classList.remove('hide-completely')
             loader.classList.add('animate-loader')
             document.querySelector('main').classList.add('hide-completely')
@@ -2295,8 +2293,8 @@
             if (receiver !== 'undefined'){
                 transactionFloId = receiver
                 composition += `
-                    <h5>${transaction}</h5> <strong class="breakable">${allContacts[receiver] ? allContacts[receiver].name : receiver}</strong>`
-                if(floCrypto.validateAddr(receiver) && !allContacts[receiver])
+                    <h5>${transaction}</h5> <strong class="breakable">${allContacts ? allContacts[receiver] ? allContacts[receiver].name : receiver: receiver}</strong>`
+                if(!token_app.master_configurations.cashiers[myFloID] && floCrypto.validateAddr(receiver) && !allContacts[receiver])
                     composition += `<sm-button onclick="addPersonFromTransaction()">Save this FLO address</sm-button>`
             }
 
@@ -2311,6 +2309,12 @@
                     <h5>Sent to cashier UPI ID</h5>
                     <strong>${receiverUPI}</strong> 
                     `
+            if(tokenTxId !== 'undefined'){
+                composition += `
+                    <h5>FLO transaction ID</h5>
+                    <strong><a class="breakable" target="_blank" href="https://ranchimall.github.io/floscout/#${tokenTxId}">${tokenTxId}</a></strong>  
+                `
+            }
             if(fromCashier !== 'undefined'){
                 composition += `
                     <p>You have received ₹${amount} from RanchiMall Pay. Your deposit request was completed successfully.</p> 
@@ -2320,12 +2324,6 @@
                 composition += `
                     <p>You sent ₹${amount} to our cashier.</p> 
                     ` 
-            }
-            if(tokenTxId !== 'undefined'){
-                composition += `
-                    <h5>FLO transaction ID</h5>
-                    <strong><a class="breakable" target="_blank" href="https://ranchimall.github.io/floscout/#${tokenTxId}">${tokenTxId}</a></strong>  
-                `
             }
             composition += `<h5 id="transaction_time">${formatedTime(timeStamp)}</h5>`
             transactionDetails.innerHTML = composition
@@ -2529,15 +2527,9 @@
                 document.getElementById('navbar').classList.add('hide-completely')
                 document.getElementById('main_header').classList.add('hide-completely')
                 floDapps.clearCredentials()
-                compactIDB.deleteDB().then((message) => {
-                    delete token_app.master_configurations;
-                    localStorage.removeItem(`defaultUPI${myFloID}`)
-                    onLoadStartUp()
-                    notifications.clearAll()
-                    notify('Logged out')
-                }).catch((error) => {
-                    console.log(error)
-                })
+                onLoadStartUp()
+                notifications.clearAll()
+                delete token_app.master_configurations;
             }
         }
     </script>
@@ -12122,6 +12114,9 @@
                     showDepositRequests()
                     showWithdrawRequests()
                     showPayThruCashierRequests()
+                    getSentRupeeList()
+                    
+                    getReceivedRupeeList()
                     userType.forEach(user => user.textContent = 'Cashier')
                     showPage('deposit', 'deposit_page_btn')
                 }
@@ -12694,8 +12689,8 @@
                         flo_comment)
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
-                        showTransactionStatus('failure', `Transaction failed.`);
                         hidePopup()
+                        showTransactionStatus('failure', `Transaction failed.`);
                         return false;
                     } else {
                         if (payingRequested) {
@@ -12724,7 +12719,7 @@
                         }
                         hidePopup()
                         showTransactionStatus('success', 'Rupee Sent', 'It may take upto 48 working hours for transaction to be completed.', flo_txid);
-                        sentActivityContainer.prepend(render.activityCard({ type: 'sent', proceesed: false, amount: token_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: token_receiver }))
+                        sentActivityContainer.prepend(render.activityCard({ type: 'sent', processed: false, amount: token_amount, timeStamp: `${Date.now()}_${myFloID}`, tokenTxId: flo_txid, receiver: token_receiver }))
                         refresh_balance()
                         return true;
                     }
@@ -13243,18 +13238,29 @@
             }
         }
 
+        async function getReceiver(vout){
+            for(v of vout){
+                for(addr of v.scriptPubKey.addresses){
+                    if(addr !== myFloID)
+                        return addr
+                }
+            }
+        }
+
         async function getSentRupeeList() {
             try {
                 let data = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&senderFloAddress=${myFloID}`)
                 let transactions = data.transactions
+                console.log(transactions, data)
                 let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
                 for (transaction of sortedTransactions) {
                     let { tokenAmount, flodata } = transaction.parsedFloData,
-                        {time, txid} = transaction.transactionDetails,
-                        receiver = flodata.match(/\b\w{34,34}\b/),
+                        {time, txid, vout} = transaction.transactionDetails,
+                        receiver = flodata.match(/\b\w{34,34}\b/) ? flodata.match(/\b\w{34,34}\b/) : await getReceiver(vout),
                         timeStamp = time * 1000,
                         confirmations = await ajaxGet(`https://flosight.duckdns.org/api/tx/${txid}`),
                         processed = confirmations.confirmations > 3 ? true : false
+
                     if (receiver === '' || typeof receiver === 'undefined' || receiver === null) continue;
                     frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, tokenTxId: txid, receiver, timeStamp, processed, toCashier: token_app.master_configurations.cashiers[receiver] }))
                 }
@@ -13271,7 +13277,7 @@
                     let transactions = data.transactions
                     let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
                     for (transaction of sortedTransactions) {
-                        console.log(transaction)
+
                         let { tokenAmount, flodata } = transaction.parsedFloData,
                             {time, txid, vin} = transaction.transactionDetails,
                             sender = vin[0].addr,
