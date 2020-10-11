@@ -428,10 +428,10 @@
                 </svg>
                 <svg id="delete_person" onclick="deletePerson()" class="icon" viewBox="0 0 64 64" title="Remove">
                     <title>remove</title>
-                    <line x1="28" y1="0" x2="36" y2="0"/>
-                    <line x1="4" y1="4" x2="60" y2="4"/>
-                    <path d="M53.5,17.5V59.42a4.08,4.08,0,0,1-4.08,4.08H14.58a4.08,4.08,0,0,1-4.08-4.08V17.5"/>
-                </svg>
+                    <line x1="4" y1="6.3" x2="60" y2="6.3"/>
+                    <path d="M53.5,20.5v38.9c0,2.3-1.8,4.1-4.1,4.1h0H14.6c-2.3,0-4.1-1.8-4.1-4.1c0,0,0,0,0,0V20.5"/>
+                    <path d="M22.7,6.6V3.8c0-1.8,1.5-3.3,3.3-3.3h11.4c1.8,0,3.3,1.5,3.3,3.3v2.8"/>
+                </svg>      
             </div>
         </div>
         <h5>FLO ID</h5>
@@ -983,6 +983,7 @@
                     </svg>
                 </div>
             </section>
+            <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>
             <h4>Theme</h4>
             <div class="flex">
                 <p>Toggle dark theme</p>
@@ -995,7 +996,6 @@
                 <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address
                 </sm-button>
             </div>
-            <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>
         </section>
         <section id="transaction_page" class="page">
             <header class="flex align-center" onclick="showPage('activity_page', 'activity_page_btn')">
@@ -1702,9 +1702,6 @@
             if (firstInput)
                 firstInput.focusIn()
             switch (e.detail.popup.id) {
-                case 'deposit_rupee':
-                    request_rupee_token()
-                    break;
                 case 'person_popup':
                     personPopupOpen = true
                     personName = showPersonName.textContent
@@ -2493,7 +2490,7 @@
                 contact.name = 'Unknown'
             compactIDB.writeData('contacts', contact, person.dataset.floId)
                 .then(success => {
-                    notify('Changes saved', 'success')
+                    notify('Renamed contact', 'success')
                     renderAllContacts()
                     personInitials.textContent = contact.name.charAt(0)
                 })
@@ -12022,7 +12019,6 @@
                         }
                     }`
                 text = removeWhiteSpaces(text);
-                return text;
                 const master_data = await ajaxGet(
                     `${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
                 if (typeof master_data === "object" && typeof master_data.txs === "object") {
@@ -12039,6 +12035,7 @@
                     tx_cmnt_arr.reverse().map(m => text += m.replace('text:', ''));
                     return text;
                 }
+                return text;
             },
 
             fetch_configs: async function () {
@@ -12170,6 +12167,8 @@
 
                     showPage('home_page', 'home_page_btn')
                     show_payment_requests()
+                    
+                    request_rupee_token()
                     
                     withdraw_token_to_get_cash();
                     
@@ -13154,12 +13153,12 @@
             
         }
 
-        const sentActivityContainer = document.getElementById('sent_activity_container'),
-            receivedActivityContainer = document.getElementById('received_activity_container'),
-            depositActivityContainer = document.getElementById('deposit_activity_container'),
-            withdrawActivityContainer = document.getElementById('withdraw_activity_container'),
-            payCashierActivityContainer = document.getElementById('pay_cashier_activity_container'),
-            cashierMessageContainer = document.getElementById('cashier_message_container')
+        const   sentActivityContainer = document.getElementById('sent_activity_container'),
+                receivedActivityContainer = document.getElementById('received_activity_container'),
+                depositActivityContainer = document.getElementById('deposit_activity_container'),
+                withdrawActivityContainer = document.getElementById('withdraw_activity_container'),
+                payCashierActivityContainer = document.getElementById('pay_cashier_activity_container'),
+                cashierMessageContainer = document.getElementById('cashier_message_container')
 
         async function showAllUserActivities() {
             try {

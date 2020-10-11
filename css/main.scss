@@ -478,7 +478,8 @@ sm-popup{
 }
 #qr_code_popup{
     &::part(popup){
-        height: 90vh;
+        min-height: 30rem;
+        max-height: 90vh;
     }
     &::part(popup-body){
         padding: 0;

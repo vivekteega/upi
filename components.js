@@ -444,8 +444,7 @@ customElements.define('sm-input',
         }
 
         checkInput = (e) => {
-            if (!this.hasAttribute('placeholder') || this.getAttribute('placeholder') === '')
-                return;
+            if (!this.hasAttribute('placeholder') || this.getAttribute('placeholder') === '') return;
             if (this.input.value !== '') {
                 if (this.animate)
                     this.inputParent.classList.add('animate-label')
@@ -471,6 +470,7 @@ customElements.define('sm-input',
             this.helperText = this.shadowRoot.querySelector('.helper-text')
             this.valueChanged = false;
             this.readonly = false
+            this.isNumeric = false
             this.min
             this.max
             this.animate = this.hasAttribute('animate')
@@ -478,7 +478,7 @@ customElements.define('sm-input',
             this.shadowRoot.querySelector('.label').textContent = this.getAttribute('placeholder')
             if (this.hasAttribute('value')) {
                 this.input.value = this.getAttribute('value')
-                this.checkInput()
+                this.checkInput(e)
             }
             if (this.hasAttribute('required')) {
                 this.input.setAttribute('required', '')
@@ -518,12 +518,13 @@ customElements.define('sm-input',
                 if (this.getAttribute('type') === 'number') {
                     this.input.setAttribute('inputmode', 'numeric')
                     this.input.setAttribute('type', 'number')
+                    this.isNumeric = true
                 } else
                     this.input.setAttribute('type', this.getAttribute('type'))
             } else
                 this.input.setAttribute('type', 'text')
             this.input.addEventListener('input', e => {
-                this.checkInput()
+                this.checkInput(e)
             })
             this.clearBtn.addEventListener('click', e => {
                 this.value = ''
@@ -2076,8 +2077,8 @@ customElements.define('sm-popup', class extends HTMLElement {
             )
             this.setAttribute('open', '')
             this.pinned = pinned
-            this.popupContainer.classList.remove('hide')
         }
+        this.popupContainer.classList.remove('hide')
         this.popup.style.transform = 'translateY(0)';
         document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
         return this.popupStack
@@ -2181,8 +2182,8 @@ customElements.define('sm-popup', class extends HTMLElement {
         this.touchEndY = 0
         this.touchStartTime = 0
         this.touchEndTime = 0
-        this.threshold = this.popup.getBoundingClientRect().height * 0.3
         this.touchEndAnimataion;
+        this.threshold
 
         if (this.hasAttribute('open'))
             this.show()
@@ -2197,6 +2198,9 @@ customElements.define('sm-popup', class extends HTMLElement {
         })
 
         this.popupBodySlot.addEventListener('slotchange', () => {
+            setTimeout(() => {
+                this.threshold = this.popup.getBoundingClientRect().height * 0.3
+            }, 200);
             this.inputFields = this.querySelectorAll('sm-input', 'sm-checkbox', 'textarea', 'radio')
         })
 
