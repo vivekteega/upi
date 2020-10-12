@@ -12,6 +12,7 @@ body {
   --foreground-color: 255, 255, 255;
   --background-color: rgba(var(--foreground-color), 1);
   --dark-shade: #f4f4f4;
+  --error-color: #E53935;
   --hue: 255;
   --saturation: 61%;
   --lightness: 39%;
@@ -462,7 +463,7 @@ sm-popup h5:not(.tag) {
 }
 
 #qr_code_popup::part(popup) {
-  min-height: 30rem;
+  height: 80vh;
   max-height: 90vh;
 }
 #qr_code_popup::part(popup-body) {
@@ -1256,12 +1257,14 @@ sm-panel {
   text-align: right;
   grid-area: amount;
   font-family: "Roboto", sans-serif;
+  white-space: nowrap;
 }
 .activity .activity-time {
   text-align: right;
   grid-area: time;
   color: rgba(var(--text-color), 0.7);
   font-weight: 500;
+  white-space: nowrap;
 }
 .activity .pending {
   display: inline-flex;

@@ -48,7 +48,7 @@
         </div>
         <h4 class="expand light-text">Welcome to RanchiMall Pay.<br>Please enter your FLO private key to
             continue.</h4>
-        <sm-input id="get_priv_key_field" privateKey placeholder="Private Key" type="password" required animate>
+        <sm-input id="get_priv_key_field" error-text="Wrong private key" privateKey placeholder="Private Key" type="password" required animate>
         </sm-input>
         <button id="sign_in_btn" class="primary-btn expand" type="submit" disabled>
             Sign In
@@ -74,8 +74,9 @@
                 </p>
             </sm-panel>
             <sm-panel>
-                <div class="my-qr-code"></div>
+                <div id="my_qr_code"></div>
                 <p>Show this QR Code to receive money using RanchiMall Pay</p>
+                <a href="" id="download_qr"><sm-button>Download my QR code</sm-button></a>
             </sm-panel>
         </sm-tab-panels>
     </sm-popup>
@@ -110,7 +111,7 @@
             <h5>Step 3</h5>
             <p>Press <strong>Send</strong> button.</p>
         </details>
-        <sm-input id="token_amount" placeholder="Amount" type="number" min="1" max="100000" required>
+        <sm-input id="token_amount" placeholder="Amount" type="number" min="1" required>
             <svg slot="icon" class="rupee-symbol" viewBox="0 0 64 64">
                 <title>rupee-symbol</title>
                 <path
@@ -173,7 +174,7 @@
                     d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z" />
             </svg>
         </sm-input>
-        <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" pattern="^[a-zA-z0-9]+" minlength="12"
+        <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" minlength="12"
             maxlength="12" required animate></sm-input>
     </sm-popup>
     <sm-popup id="withdraw_rupee">
@@ -904,7 +905,7 @@
                 </sm-panel>
             </sm-tab-panels>
         </section>
-        <section id="activity_page" class="page">
+        <section id="activity_page" class="page hide-completely">
             <div class="flex align-center space-between">
                 <h3>Activity</h3>
                 <sm-button onclick="showActivities()">Refresh</sm-button>
@@ -997,7 +998,7 @@
                 </sm-button>
             </div>
         </section>
-        <section id="transaction_page" class="page">
+        <section id="transaction_page" class="page hide-completely">
             <header class="flex align-center" onclick="showPage('activity_page', 'activity_page_btn')">
                 <svg class="icon back-arrow" viewBox="0 0 64 64">
                     <title>Go to activity page</title>
@@ -1050,9 +1051,10 @@
             console.log("Starting the app! Please Wait!")
             floDapps.launchStartUp().then(async result => {
                 console.log(`Welcome ${myFloID}`)
+                clearElements(['my_qr_code'])
                 refresh_balance()
                 userFloIdContainers.forEach(container => container.textContent = myFloID)
-                hideLoader()
+
                 await token_app.actions.doShreeGanesh();
             }).catch(error => console.error(error))
         }
@@ -1720,6 +1722,9 @@
                     }
                     break;
                 case 'qr_code_popup':
+                    const qrLink = document.getElementById('download_qr')
+                    qrLink.href = document.querySelector('img').src
+                    qrLink.download = ''
                     Html5Qrcode.getCameras().then(devices => {
                     if (devices && devices.length) {
                         startScanning(devices[devices.length-1].id)
@@ -1859,13 +1864,10 @@
             return color;
         }
 
-        function clearAllInputs(parent) {
-            if (parent.querySelectorAll("textarea"))
-                parent.querySelectorAll("textarea").forEach((field) => {
-                    field.value = '';
-                })
-            if (parent.querySelector("button[type='submit']"))
-                parent.querySelector("button[type='submit']").disabled = true;
+        function clearElements(array = []){
+            array.forEach(item =>{
+                document.getElementById(item).innerHTML = ``
+            })
         }
 
         let notifications = document.getElementById('show_message');
@@ -2027,6 +2029,40 @@
                 if (e.target.closest('sm-input')) {
                     let input = e.target.closest('sm-input')
                     formValidation(input)
+                    if(input.value === '')
+                        input.setValidity('')
+                    let validityState = input.validity
+                    if(input.hasAttribute('type') && input.getAttribute('type') === 'number'){
+                        if(validityState.rangeUnderflow){
+                            input.setValidity('Minium ₹1 should be entered.')
+                        }
+                        else if(validityState.typeMismatch){
+                            input.setValidity('Only digits are allowed.')
+                        }
+                        else{
+                            input.setValidity('')
+                        }
+                    }
+                    else if (input.hasAttribute('floId')) {
+                        if (floCrypto.validateAddr(input.value.trim()) || input.value.trim() === '')
+                            input.setValidity('') 
+                        else
+                            input.setValidity('Invalid FLO address.')   
+                    }
+                    else if (input.hasAttribute('privateKey')) {
+                        if (floCrypto.getPubKeyHex(input.value.trim()) || input.value.trim() === '')
+                            input.setValidity('')
+                        else
+                            input.setValidity('Invalid FLO private key.')   
+                    }
+                    else{
+                        if(validityState.patternMismatch)
+                            input.setValidity('Invalid UPI address.') 
+                        if(validityState.tooShort || validityState.tooLong)
+                            input.setValidity('UPI transaction Id should be 12digits long.') 
+                        else
+                            input.setValidity('') 
+                    }
                 }
             })
             document.addEventListener('keyup', (e) => {
@@ -2527,12 +2563,14 @@
 
         async function signOut() {
             if (await confirmation('Do you want to sign out?', 'Stay', 'Sign Out')) {
-                document.querySelector('main').classList.add('hide-completely')
-                document.getElementById('navbar').classList.add('hide-completely')
-                document.getElementById('main_header').classList.add('hide-completely')
-                floDapps.clearCredentials()
                 delete token_app.master_configurations;
-                onLoadStartUp()
+                floDapps.clearCredentials()
+                setTimeout(() => {
+                    document.querySelector('main').classList.add('hide-completely')
+                    document.getElementById('navbar').classList.add('hide-completely')
+                    document.getElementById('main_header').classList.add('hide-completely')
+                    onLoadStartUp()
+                }, 800);
                 notifications.clearAll()
             }
         }
@@ -12115,6 +12153,7 @@
                     allHelplineOptions.forEach(option => {
                         option.classList.add('hide-completely')
                     })
+                    hideLoader()
                     showDepositRequests()
                     showWithdrawRequests()
                     showPayThruCashierRequests()
@@ -12134,6 +12173,7 @@
                     allUserOptions.forEach(option => {
                         option.classList.add('hide-completely')
                     })
+                    hideLoader()
                     let cashierList = ``,
                         cashierSelect = document.getElementById('select_cashier')
                     cashierList += `<sm-strip-option value = "">Select Cashier</sm-strip-option>`;
@@ -12142,7 +12182,7 @@
                     cashierSelect.innerHTML = cashierList;
                     await Promise.all([load_deposit_complaints(cashierSelect.value), load_withdraw_complaints(
                         cashierSelect.value), load_pay_thru_cashier_complaints(cashierSelect.value)])
-                    userType.forEach(user => user.textContent = 'Cashier')
+                    userType.forEach(user => user.textContent = 'Helpline')
                     showPage('helpline_page', 'helpline_page_btn')
                 }
 
@@ -12157,15 +12197,16 @@
                     allUserOptions.forEach(option => {
                         option.classList.remove('hide-completely')
                     })
+                    userType.forEach(user => user.textContent = 'Me')
                     defaultUPI = localStorage.getItem(`defaultUPI${myFloID}`)
                     renderUserUPI()
                     renderAllContacts()
 
-                    document.querySelectorAll('.my-qr-code').forEach(code => {
-                        new QRCode(code, myFloID);
-                    })
+                    new QRCode(document.getElementById('my_qr_code'), myFloID);
 
                     showPage('home_page', 'home_page_btn')
+                    hideLoader()
+                    
                     show_payment_requests()
                     
                     request_rupee_token()
