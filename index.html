@@ -2516,11 +2516,30 @@
         }
 
         async function signOut() {
+            if(Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+                document.querySelector('main').classList.add('hide-completely')
+                document.getElementById('navbar').classList.add('hide-completely')
+                document.getElementById('main_header').classList.add('hide-completely')
+                // Inform cloud you are signing off before signing off
+                update_cashier_status(false);
+                await floDapps.clearCredentials();
+                delete token_app.master_configurations;
+                localStorage.removeItem(`defaultUPI${myFloID}`);
+                onLoadStartUp()
+                notifications.clearAll()
+                notify('Logged out')
+
+                return false;
+            }
+
+            // For non-cashiers logout is different
             if (await confirmation('Do you want to sign out?', 'Stay', 'Sign Out')) {
                 document.querySelector('main').classList.add('hide-completely')
                 document.getElementById('navbar').classList.add('hide-completely')
                 document.getElementById('main_header').classList.add('hide-completely')
-                floDapps.clearCredentials()
+                
+                floDapps.clearCredentials();
+                
                 compactIDB.deleteDB().then((message) => {
                     delete token_app.master_configurations;
                     localStorage.removeItem(`defaultUPI${myFloID}`)
@@ -2529,7 +2548,7 @@
                     notify('Logged out')
                 }).catch((error) => {
                     console.log(error)
-                })
+                });
             }
         }
     </script>
@@ -11803,7 +11822,6 @@
             console.error(log)
         })
     </script>
-
     <script>
         function extend(Child, Parent) {
             var Temp = function () { };
@@ -11997,6 +12015,7 @@
                     #!#TYPE_MY_PERSONAL_DATA=TYPE_MY_PERSONAL_DATA_TEST${num}
                     #!#TYPE_UNCONFIRMED_RUPEE_DEPOSITS=TYPE_UNCONFIRMED_RUPEE_DEPOSITS_TEST${num} 
                     #!#TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}  
+                    #!#TYPE_CASHIER_LIVE_STATUS=TYPE_CASHIER_LIVE_STATUS${num}  
                     #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
                     #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                     #!#cashiers=
@@ -12116,6 +12135,11 @@
                     showPayThruCashierRequests()
                     userType.forEach(user => user.textContent = 'Cashier')
                     showPage('deposit', 'deposit_page_btn')
+
+                    // Inform cloud you are live
+                    update_cashier_status(true);
+
+                    token_app.actions.idleTimer(300000); // sign out after 5 mins
                 }
 
                 //Helpline startup sequence
@@ -12317,7 +12341,39 @@
 
                 }
 
-            }
+            },
+        
+            // https://gist.github.com/gerard-kanters/2ce9daa5c23d8abe36c2
+            idleTimer: function(maxTime=300000) {
+                var t;
+                let take_action_on_inactivity = resetTimer;
+
+                function auto_shutdown() {
+                    clearTimeout(t);
+                    signOut();
+                    take_action_on_inactivity = ()=>false;
+                    window.onload = take_action_on_inactivity;
+                    window.onmousemove = take_action_on_inactivity; // catches mouse movements
+                    window.onmousedown = take_action_on_inactivity; // catches mouse movements
+                    window.onclick = take_action_on_inactivity;     // catches mouse clicks
+                    window.onscroll = take_action_on_inactivity;    // catches scrolling
+                    window.onkeypress = take_action_on_inactivity;  //catches keyboard actions
+                }
+
+                function resetTimer() {
+                    clearTimeout(t);
+                    t = setTimeout(auto_shutdown, maxTime); 
+                }
+
+
+                window.onload = take_action_on_inactivity;
+                window.onmousemove = take_action_on_inactivity; // catches mouse movements
+                window.onmousedown = take_action_on_inactivity; // catches mouse movements
+                window.onclick = take_action_on_inactivity;     // catches mouse clicks
+                window.onscroll = take_action_on_inactivity;    // catches scrolling
+                window.onkeypress = take_action_on_inactivity;  //catches keyboard actions
+                
+            },
         }
     </script>
 
@@ -12349,6 +12405,8 @@
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_MY_PERSONAL_DATA));
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_SENT_TOKENS));
+            promises.push(reset_cloud_object(token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS));
+            
             if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                 promises.push(reset_cloud_object(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS));
             }
@@ -12848,7 +12906,8 @@
                 const cashiersList = Object.keys(token_app.master_configurations.cashiers);
                 await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS,
                     { receiverID: floGlobals.adminID, senderIDs: cashiersList });
-                const processed_unconfirmed_balance_claim_requests_list = floGlobals.appObjects[TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS];
+                const processed_unconfirmed_balance_claim_requests_list = 
+                floGlobals.appObjects[token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS];
                 const processed_unconfirmed_balance_claim_requests_txid_arr = Object.keys(processed_unconfirmed_balance_claim_requests_list);
 
                 console.log(unconfirmed_cash_deposit_claims);
@@ -12946,6 +13005,24 @@
             }
         }
 
+        async function update_cashier_status(status=false) {
+            try {
+                floGlobals.appObjects[token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS][myFloID] = status;
+                let receiverID = floGlobals.adminID;
+                floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS, { receiverID })
+                .then(res=>notify('Updated Cashier status to '+status))
+                .catch(e=>{
+                    console.error(e);
+                    notify('Failed to update Cashier status to '+status, 'error');
+                });
+                return true;    
+            } catch(e) {
+                console.error(e);
+                notify('Failed to update Cashier status to '+status, 'error');
+                return false;
+            }
+        }
+
     </script>
 
     <!-- User functions -->
@@ -12954,13 +13031,18 @@
         function request_rupee_token() {
             try {
                 const request_tokens_btn = document.getElementById('request_tokens_btn');
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
-                const token_amount_to_buy = document.getElementById('token_amount_to_buy');
-                const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                document.getElementById('send_cash_to_deposit').textContent = cashier_upi;
                 request_tokens_btn.onclick = async function () {
                     if (typeof myFloID !== "string" || myFloID.length < 1) return;
-                    btnLoading('request_tokens_btn', 'start')
+                    btnLoading('request_tokens_btn', 'start');
+                    const cashier = randomNoRepeats(await getLiveCashiers())();
+                    if(typeof cashier!=="string" || cashier.length<1) {
+                        notify('No cashier is live currently. Please try later.', 'error');
+                        return false;
+                    }
+                    const token_amount_to_buy = document.getElementById('token_amount_to_buy');
+                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+                    document.getElementById('send_cash_to_deposit').textContent = cashier_upi;
+                    
                     let upi_txid = depositedRupeeTxId.value
                     let request_object = {
                         user_flo_id: myFloID,
@@ -12988,12 +13070,11 @@
             }
         }
 
-
         const withdrawRupeePopup = document.getElementById('withdraw_rupee')
         function withdraw_token_to_get_cash() {
             try {
                 const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
+                
                 withdraw_cash_btn.onclick = async function () {
                     let selectedUPI = withdrawRupeePopup.querySelector('input[type="radio"]:checked');
                     if (!selectedUPI) {
@@ -13001,6 +13082,12 @@
                         return
                     }
                     btnLoading('withdraw_cash_btn', 'start')
+                    const cashier = randomNoRepeats(await getLiveCashiers())();
+                    if(typeof cashier!=="string" || cashier.length<1) {
+                        notify('No cashier is live currently. Please try later.', 'error');
+                        return false;
+                    }
+                    
                     const withdraw_cash_amount = Number(document.getElementById('withdraw_cash_amount').value);
                     const user_withdraw_upi = selectedUPI.value
                     const token_balance_url =
@@ -13060,19 +13147,26 @@
         const payCashierPopup = document.getElementById('pay_anyone')
         function pay_through_cashier() {
             try {
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
-                const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-
-                document.getElementById('pay_cashier_info').textContent = cashier_upi;
-
                 const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
-                cnf_cash_payment_btn.onclick = function () {
+                
+                cnf_cash_payment_btn.onclick = async function () {
                     let selectedUPI = payCashierPopup.querySelector('input[type="radio"]:checked');
                     if (!selectedUPI) {
                         notify('Add an UPI address to pay through cashier.', 'error')
                         return
                     }
                     btnLoading('withdraw_cash_btn', 'start')
+
+                    const cashier = randomNoRepeats(await getLiveCashiers())();
+                    if(typeof cashier!=="string" || cashier.length<1) {
+                        notify('No cashier is live currently. Please try later.', 'error');
+                        return false;
+                    }
+                    
+                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+
+                    document.getElementById('pay_cashier_info').textContent = cashier_upi;
+                    
                     const paying_amount_div = document.getElementById('recvr_amount_to_pay')
                     const recvr_id = document.getElementById('recvr_id').value;
                     let amount_to_pay = Number(paying_amount_div.value);
@@ -13586,6 +13680,23 @@
                 })
             } catch (error) {
                 throw new Error(error);
+            }
+        }
+
+        async function getLiveCashiers() {
+            try {
+                const cashiersList = Object.keys(token_app.master_configurations.cashiers);
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS,
+                    { receiverID: floGlobals.adminID, senderIDs: cashiersList });
+                // Filter out non-cashiers, if any
+                const cashiers_status = floGlobals.appObjects[token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS];
+                const valid_cashiers = Object.keys(cashiers_status)
+                .filter(f=>Object.keys(token_app.master_configurations.cashiers).includes(f) && cashiers_status[f]===true);
+                return valid_cashiers;
+            } catch(e) {
+                console.error(e);
+                notify('Failed to fecth cashiers status', 'error');
+                return null;
             }
         }
 
