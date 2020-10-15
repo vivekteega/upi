@@ -336,18 +336,14 @@ input{
     opacity: 1;
     color: var(--accent-color)
 }
-.helper-text{
-    top: 100%;
+.feedback-text{
+    font-size: 0.9rem;
     width: 100%;
-    position: absolute;
     color: var(--error-color);
     background: rgba(var(--foreground-color), 1);
-    margin-top: 0.5em;
-    border-radius: 0.2em;
-    border: solid 1px rgba(var(--text-color), 0.2);
-    padding: 0.6em 1em;
+    padding: 0.6rem 1rem;
 }
-.helper-text:empty{
+.feedback-text:empty{
     padding: 0;
 }
 @media (any-hover: hover){
@@ -369,7 +365,7 @@ input{
             <line x1="64" y1="64" x2="0" y2="0"/>
         </svg>
     </label>
-    <div class="helper-text hide"></div>
+    <div class="feedback-text"></div>
 </div>
 `;
 customElements.define('sm-input',
@@ -410,6 +406,10 @@ customElements.define('sm-input',
             return this.shadowRoot.querySelector('input').checkValidity()
         }
 
+        get validity() {
+            return this.shadowRoot.querySelector('input').validity
+        }
+
         set disabled(value) {
             if (value)
                 this.shadowRoot.querySelector('.input').classList.add('disabled')
@@ -424,6 +424,18 @@ customElements.define('sm-input',
                 this.shadowRoot.querySelector('input').removeAttribute('readonly')
                 this.shadowRoot.querySelector('.input').classList.remove('readonly')
             }
+        }
+
+        setValidity = (message) => {
+            this.feedbackText.textContent = message
+        }
+
+        showValidity = () => {
+            this.feedbackText.classList.remove('hide-completely')
+        }
+        
+        hideValidity = () => {
+            this.feedbackText.classList.add('hide-completely')
         }
 
         focusIn = () => {
@@ -444,8 +456,7 @@ customElements.define('sm-input',
         }
 
         checkInput = (e) => {
-            if (!this.hasAttribute('placeholder') || this.getAttribute('placeholder') === '')
-                return;
+            if (!this.hasAttribute('placeholder') || this.getAttribute('placeholder') === '') return;
             if (this.input.value !== '') {
                 if (this.animate)
                     this.inputParent.classList.add('animate-label')
@@ -468,9 +479,10 @@ customElements.define('sm-input',
             this.inputParent = this.shadowRoot.querySelector('.input')
             this.clearBtn = this.shadowRoot.querySelector('.clear')
             this.label = this.shadowRoot.querySelector('.label')
-            this.helperText = this.shadowRoot.querySelector('.helper-text')
+            this.feedbackText = this.shadowRoot.querySelector('.feedback-text')
             this.valueChanged = false;
             this.readonly = false
+            this.isNumeric = false
             this.min
             this.max
             this.animate = this.hasAttribute('animate')
@@ -478,7 +490,7 @@ customElements.define('sm-input',
             this.shadowRoot.querySelector('.label').textContent = this.getAttribute('placeholder')
             if (this.hasAttribute('value')) {
                 this.input.value = this.getAttribute('value')
-                this.checkInput()
+                this.checkInput(e)
             }
             if (this.hasAttribute('required')) {
                 this.input.setAttribute('required', '')
@@ -511,19 +523,20 @@ customElements.define('sm-input',
             if (this.hasAttribute('disabled')) {
                 this.inputParent.classList.add('disabled')
             }
-            if (this.hasAttribute('helper-text')) {
-                this.helperText.textContent = this.getAttribute('helper-text')
+            if (this.hasAttribute('error-text')) {
+                this.feedbackText.textContent = this.getAttribute('error-text')
             }
             if (this.hasAttribute('type')) {
                 if (this.getAttribute('type') === 'number') {
                     this.input.setAttribute('inputmode', 'numeric')
                     this.input.setAttribute('type', 'number')
+                    this.isNumeric = true
                 } else
                     this.input.setAttribute('type', this.getAttribute('type'))
             } else
                 this.input.setAttribute('type', 'text')
             this.input.addEventListener('input', e => {
-                this.checkInput()
+                this.checkInput(e)
             })
             this.clearBtn.addEventListener('click', e => {
                 this.value = ''
@@ -722,11 +735,13 @@ customElements.define('sm-textarea',
             if (!this.hasAttribute('placeholder') || this.getAttribute('placeholder') === '')
                 return;
             if (this.input.value !== '') {
+                this.clearBtn.classList.remove('hide')
                 if (this.animate)
                     this.inputParent.classList.add('animate-label')
                 else
                     this.label.classList.add('hide')
             } else {
+                this.clearBtn.classList.add('hide')
                 if (this.animate)
                     this.inputParent.classList.remove('animate-label')
                 else
@@ -742,7 +757,6 @@ customElements.define('sm-textarea',
             this.inputParent = this.shadowRoot.querySelector('.input')
             this.clearBtn = this.shadowRoot.querySelector('.clear')
             this.label = this.shadowRoot.querySelector('.label')
-            this.helperText = this.shadowRoot.querySelector('.helper-text')
             this.valueChanged = false;
             this.animate = this.hasAttribute('animate')
             this.input = this.shadowRoot.querySelector('textarea')
@@ -759,9 +773,6 @@ customElements.define('sm-textarea',
             }
             if (this.hasAttribute('readonly')) {
                 this.input.setAttribute('readonly', '')
-            }
-            if (this.hasAttribute('helper-text')) {
-                this.helperText.textContent = this.getAttribute('helper-text')
             }
             this.input.addEventListener('input', e => {
                 this.checkInput()
@@ -1066,9 +1077,6 @@ smSwitch.innerHTML = `
     .switch:active .button::after,
     .switch:focus .button::after{
         opacity: 1
-    }
-    .switch:focus:not(:focus-visible){
-        opacity: 0;
     }
     .switch:focus-visible .button::after{
         opacity: 1
@@ -2076,8 +2084,8 @@ customElements.define('sm-popup', class extends HTMLElement {
             )
             this.setAttribute('open', '')
             this.pinned = pinned
-            this.popupContainer.classList.remove('hide')
         }
+        this.popupContainer.classList.remove('hide')
         this.popup.style.transform = 'translateY(0)';
         document.body.setAttribute('style', `overflow: hidden; top: -${window.scrollY}px`)
         return this.popupStack
@@ -2181,8 +2189,8 @@ customElements.define('sm-popup', class extends HTMLElement {
         this.touchEndY = 0
         this.touchStartTime = 0
         this.touchEndTime = 0
-        this.threshold = this.popup.getBoundingClientRect().height * 0.3
         this.touchEndAnimataion;
+        this.threshold
 
         if (this.hasAttribute('open'))
             this.show()
@@ -2197,6 +2205,9 @@ customElements.define('sm-popup', class extends HTMLElement {
         })
 
         this.popupBodySlot.addEventListener('slotchange', () => {
+            setTimeout(() => {
+                this.threshold = this.popup.getBoundingClientRect().height * 0.3
+            }, 200);
             this.inputFields = this.querySelectorAll('sm-input', 'sm-checkbox', 'textarea', 'radio')
         })
 

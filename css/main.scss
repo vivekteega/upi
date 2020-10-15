@@ -11,6 +11,7 @@ body {
     --foreground-color: 255, 255, 255;
     --background-color: rgba(var(--foreground-color), 1);
     --dark-shade: #f4f4f4;
+    --error-color: #E53935;
     --hue: 255;
     --saturation: 61%;
     --lightness: 39%;
@@ -419,6 +420,11 @@ textarea {
         }
     }
 }
+#prompt{
+    .flex{
+        margin-top: 1rem;
+    }
+}
 
 .refresh {
     margin-top: 0.6em;
@@ -473,7 +479,8 @@ sm-popup{
 }
 #qr_code_popup{
     &::part(popup){
-        height: 90vh;
+        height: 80vh;
+        max-height: 90vh;
     }
     &::part(popup-body){
         padding: 0;
@@ -566,6 +573,7 @@ details{
 }
 
 .primary-btn {
+    padding: 0.6rem 1.2rem !important;
     background: var(--accent-color);
     justify-content: center;
     color: rgba(var(--foreground-color), 1);
@@ -683,6 +691,9 @@ details{
     }
     .display-balance {
         grid-template-areas: 'rupee rupee' 'flo flo';
+    }
+    sm-tab-header{
+        display: flex;
     }
 }
 .display-balance {
@@ -1292,12 +1303,14 @@ sm-panel{
         text-align: right;
         grid-area: amount;
         font-family: 'Roboto', sans-serif;
+        white-space: nowrap;
     }
     .activity-time{
         text-align: right;
         grid-area: time;
         color: rgba(var(--text-color), 0.7);
         font-weight: 500;
+        white-space: nowrap;
     }
     .pending{
         display: inline-flex;
@@ -1545,12 +1558,12 @@ sm-panel{
     border-radius: 2rem;
     margin-bottom: 0.6rem !important;
     text-transform: uppercase;
+    color: rgba(var(--foreground-color), 1);
 }
 .person-name{
     font-size: 0.85rem;
     opacity: 0.8;
     font-weight: 500;
-    text-transform: capitalize;
     text-align: center;
 }
 
