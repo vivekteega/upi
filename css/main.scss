@@ -573,6 +573,7 @@ details{
 }
 
 .primary-btn {
+    padding: 0.6rem 1.2rem !important;
     background: var(--accent-color);
     justify-content: center;
     color: rgba(var(--foreground-color), 1);
@@ -1563,7 +1564,6 @@ sm-panel{
     font-size: 0.85rem;
     opacity: 0.8;
     font-weight: 500;
-    text-transform: capitalize;
     text-align: center;
 }
 

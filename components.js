@@ -735,11 +735,13 @@ customElements.define('sm-textarea',
             if (!this.hasAttribute('placeholder') || this.getAttribute('placeholder') === '')
                 return;
             if (this.input.value !== '') {
+                this.clearBtn.classList.remove('hide')
                 if (this.animate)
                     this.inputParent.classList.add('animate-label')
                 else
                     this.label.classList.add('hide')
             } else {
+                this.clearBtn.classList.add('hide')
                 if (this.animate)
                     this.inputParent.classList.remove('animate-label')
                 else

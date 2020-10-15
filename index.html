@@ -48,7 +48,7 @@
         </div>
         <h4 class="expand light-text">Welcome to RanchiMall Pay.<br>Please enter your FLO private key to
             continue.</h4>
-        <sm-input id="get_priv_key_field" error-text="Wrong private key" privateKey placeholder="Private Key" type="password" required animate>
+        <sm-input id="get_priv_key_field" privateKey placeholder="Private Key" type="password" required animate>
         </sm-input>
         <button id="sign_in_btn" class="primary-btn expand" type="submit" disabled>
             Sign In
@@ -421,7 +421,7 @@
         </header>
         <div class="flex direction-column align-center">
             <h3 id="person_initials"></h3>
-            <h4 class="capitalize" id="show_person_name" ondblclick="setNameEditable()"></h4>
+            <h4 id="show_person_name" ondblclick="setNameEditable()"></h4>
             <div class="flex space-between align-center">
                 <svg tooltip="Edit" id="edit_person_name" class="icon" onclick="setNameEditable()" viewBox="0 0 64 64">
                     <path
@@ -2167,7 +2167,7 @@
             document.getElementById('report_btn').addEventListener('click', async (e) => {
                 let customMsg = document.getElementById('complaint_field').value
                 if (await confirmation(
-                    'It may take upto 12hrs to complete your request, are you sure to report this issue?',
+                    'It may take upto 48 working hours to complete your transaction, report this issue?',
                     'No', 'Report'
                 )) {
                     file_complaint(currentRequest.dataset.type, currentRequest.dataset.vectorClock,
@@ -2311,7 +2311,7 @@
                             </svg>`
                 cautionMessage.innerHTML = `
                         It may take upto 48 working hours for a transaction to complete. If even after 48 hours transction wasn't
-                        completed and your money was deducted, use <Strong>Report</Strong> button to report your issue.`
+                        completed, use <Strong>Report</Strong> button to report your issue.`
                 showReportButton.classList.remove('hide')
             }
             else{
@@ -2561,17 +2561,27 @@
             })
         }
 
+        async function signOutSequence(){
+            delete token_app.master_configurations;
+            await floDapps.clearCredentials()
+            document.querySelector('main').classList.add('hide-completely')
+            document.getElementById('navbar').classList.add('hide-completely')
+            document.getElementById('main_header').classList.add('hide-completely')
+            onLoadStartUp()
+            notifications.clearAll()
+        }
+
         async function signOut() {
+            if(Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+                // Inform cloud you are signing off before signing off
+                update_cashier_status(false);
+                signOutSequence()
+                return false;
+            }
+
+            // For non-cashiers logout is different
             if (await confirmation('Do you want to sign out?', 'Stay', 'Sign Out')) {
-                delete token_app.master_configurations;
-                floDapps.clearCredentials()
-                setTimeout(() => {
-                    document.querySelector('main').classList.add('hide-completely')
-                    document.getElementById('navbar').classList.add('hide-completely')
-                    document.getElementById('main_header').classList.add('hide-completely')
-                    onLoadStartUp()
-                }, 800);
-                notifications.clearAll()
+                signOutSequence()
             }
         }
     </script>
@@ -12014,7 +12024,7 @@
         token_app.actions = {
 
             parse_flo_comments: async function () {
-                const num = 4;
+                const num = 5;
                 text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
                     #!#CURRENCY=INR
                     #!#TYPE_UPI_APP=UPI_APP_TEST${num}
@@ -12039,15 +12049,13 @@
                     #!#TYPE_MY_PERSONAL_DATA=TYPE_MY_PERSONAL_DATA_TEST${num}
                     #!#TYPE_UNCONFIRMED_RUPEE_DEPOSITS=TYPE_UNCONFIRMED_RUPEE_DEPOSITS_TEST${num} 
                     #!#TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS=TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS_TEST${num}  
+                    #!#TYPE_CASHIER_LIVE_STATUS=TYPE_CASHIER_LIVE_STATUS${num}  
                     #!#vendors=FGtPEBu2NFFYkqFrA9NDBJJLpVhyuPubDj,
                     #!#helplineFloId=F9MAyvT5b9aSfsuukAungrbt1L5fgmJmuK
                     #!#cashiers=
                     {
                         "FCja6sLv58e3RMy41T5AmWyvXEWesqBCkX": {
                             "upi_id": "8507742774@ybl"
-                        },
-                        "FTmJ6QeBjDFjdqS6Zs4V5amac2X19AjXcF": {
-                            "upi_id": "8902496422@ybl"
                         },
                         "FTpxFWdBDvYARGZuPWDhw9gke72J2pruvv": {
                             "upi_id": "aakriti1705sinha@okicici"
@@ -12160,6 +12168,8 @@
                     showActivities()
                     userType.forEach(user => user.textContent = 'Cashier')
                     showPage('deposit', 'deposit_page_btn')
+
+                    token_app.actions.idleTimer(300000); // sign out after 5 mins
                 }
 
                 //Helpline startup sequence
@@ -12239,7 +12249,7 @@
 
                     await Promise.all([
 
-                        create_root_structure(),
+                        create_root_structure().then(()=>update_cashier_status(true)),
 
                         floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
                             receiverID: myFloID
@@ -12256,7 +12266,7 @@
                         floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, {
                             receiverID: myFloID
                         })
-                    ])
+                    ]);
 
                     return true;
                 } else if (token_app.master_configurations.helplineFloId === myFloID) {
@@ -12362,7 +12372,41 @@
 
                 }
 
-            }
+            },
+        
+            // https://gist.github.com/gerard-kanters/2ce9daa5c23d8abe36c2
+            idleTimer: function(maxTime=300000) {
+                var t;
+                let take_action_on_inactivity = resetTimer;
+
+                function auto_shutdown() {
+                    clearTimeout(t);
+                    signOut();
+                    take_action_on_inactivity = ()=>false;
+                    window.onload = take_action_on_inactivity;
+                    window.onmousemove = take_action_on_inactivity; // catches mouse movements
+                    window.onmousedown = take_action_on_inactivity; // catches mouse movements
+                    window.onclick = take_action_on_inactivity;     // catches mouse clicks
+                    window.onscroll = take_action_on_inactivity;    // catches scrolling
+                    window.onkeypress = take_action_on_inactivity;  //catches keyboard actions
+                    window.onbeforeunload = take_action_on_inactivity;  //catches window close actions
+                }
+
+                function resetTimer() {
+                    clearTimeout(t);
+                    t = setTimeout(auto_shutdown, maxTime); 
+                }
+
+
+                window.onload = take_action_on_inactivity;
+                window.onmousemove = take_action_on_inactivity; // catches mouse movements
+                window.onmousedown = take_action_on_inactivity; // catches mouse movements
+                window.onclick = take_action_on_inactivity;     // catches mouse clicks
+                window.onscroll = take_action_on_inactivity;    // catches scrolling
+                window.onkeypress = take_action_on_inactivity;  //catches keyboard actions
+                window.onbeforeunload = take_action_on_inactivity;  //catches window close actions
+                
+            },
         }
     </script>
 
@@ -12372,21 +12416,22 @@
             try {
                 if (typeof floGlobals.appObjects[object_name] !== 'object'
                     || floGlobals.appObjects[object_name] == null) {
-                    floCloudAPI.requestObjectData(object_name, options)
-                        .then(resp => {
-                            if (typeof floGlobals.appObjects[object_name] !== 'object'
-                                || floGlobals.appObjects[object_name] == null) {
-                                floGlobals.appObjects[object_name] = {};
-                                floCloudAPI.resetObjectData(object_name)
-                                    .then(() => floCloudAPI.requestObjectData(object_name, options))
-                                    .then(() => true);
-                            } else return false;
-                        });
+                    await floCloudAPI.requestObjectData(object_name, options)
+                        
+                    if (typeof floGlobals.appObjects[object_name] !== 'object'
+                        || floGlobals.appObjects[object_name] == null) {
+                        floGlobals.appObjects[object_name] = {};
+                        await floCloudAPI.resetObjectData(object_name)
+                        await floCloudAPI.requestObjectData(object_name, options)
+                        return true;
+                    } else return false;
+                
                 } else return false;
             } catch (error) {
                 throw new Error(error);
             }
         }
+
         // Create root structure
         async function create_root_structure() {
 
@@ -12394,11 +12439,15 @@
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_MY_PERSONAL_DATA));
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_SENT_TOKENS));
+            promises.push(reset_cloud_object(token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS));
+            
             if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                 promises.push(reset_cloud_object(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS));
             }
 
-            return Promise.all(promises);
+            await Promise.all(promises);
+            
+            return true;
         }
 
         const   depositsContainer = document.getElementById("pending_deposits_container"),
@@ -12905,7 +12954,8 @@
                 const cashiersList = Object.keys(token_app.master_configurations.cashiers);
                 await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS,
                     { receiverID: floGlobals.adminID, senderIDs: cashiersList });
-                const processed_unconfirmed_balance_claim_requests_list = floGlobals.appObjects[TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS];
+                const processed_unconfirmed_balance_claim_requests_list = 
+                floGlobals.appObjects[token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS];
                 const processed_unconfirmed_balance_claim_requests_txid_arr = Object.keys(processed_unconfirmed_balance_claim_requests_list);
 
                 console.log(unconfirmed_cash_deposit_claims);
@@ -13003,6 +13053,24 @@
             }
         }
 
+        async function update_cashier_status(status=false) {
+            try {
+                floGlobals.appObjects[token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS][myFloID] = status;
+                let receiverID = floGlobals.adminID;
+                floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS, { receiverID })
+                .then(res=>notify('Updated Cashier status to '+status))
+                .catch(e=>{
+                    console.error(e);
+                    notify('Failed to update Cashier status to '+status, 'error');
+                });
+                return true;    
+            } catch(e) {
+                console.error(e);
+                notify('Failed to update Cashier status to '+status, 'error');
+                return false;
+            }
+        }
+
     </script>
 
     <!-- User functions -->
@@ -13011,13 +13079,18 @@
         function request_rupee_token() {
             try {
                 const request_tokens_btn = document.getElementById('request_tokens_btn');
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
-                const token_amount_to_buy = document.getElementById('token_amount_to_buy');
-                const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                document.getElementById('send_cash_to_deposit').textContent = cashier_upi;
                 request_tokens_btn.onclick = async function () {
                     if (typeof myFloID !== "string" || myFloID.length < 1) return;
-                    btnLoading('request_tokens_btn', 'start')
+                    btnLoading('request_tokens_btn', 'start');
+                    const cashier = randomNoRepeats(await getLiveCashiers())();
+                    if(typeof cashier!=="string" || cashier.length<1) {
+                        notify('No cashier is live currently. Please try later.', 'error');
+                        return false;
+                    }
+                    const token_amount_to_buy = document.getElementById('token_amount_to_buy');
+                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+                    document.getElementById('send_cash_to_deposit').textContent = cashier_upi;
+                    
                     let upi_txid = depositedRupeeTxId.value
                     let request_object = {
                         user_flo_id: myFloID,
@@ -13034,7 +13107,7 @@
                             hidePopup()
                             showTransactionStatus('success', 'Deposit request sent.', 'It may take upto 48 hours for deposited amount to be reflected in your account.')
                             btnLoading('request_tokens_btn', 'stop')
-                            depositActivityContainer.prepend(render.activityCard({ type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: cashier_upi, processed: true }))
+                            depositActivityContainer.prepend(render.activityCard({ type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: cashier_upi, processed: false }))
                         })
                         return true;
                     }
@@ -13051,7 +13124,7 @@
         function withdraw_token_to_get_cash() {
             try {
                 const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
+                
                 withdraw_cash_btn.onclick = async function () {
                     let selectedUPI = withdrawRupeePopup.querySelector('input[type="radio"]:checked');
                     if (!selectedUPI) {
@@ -13059,7 +13132,13 @@
                         return
                     }
                     btnLoading('withdraw_cash_btn', 'start')
-                    const withdraw_cash_amount = parseInt(document.getElementById('withdraw_cash_amount').value);
+                    const cashier = randomNoRepeats(await getLiveCashiers())();
+                    if(typeof cashier!=="string" || cashier.length<1) {
+                        notify('No cashier is live currently. Please try later.', 'error');
+                        return false;
+                    }
+                    
+                    const withdraw_cash_amount = Number(document.getElementById('withdraw_cash_amount').value);
                     const user_withdraw_upi = selectedUPI.value
                     const token_balance_url =
                         `https://ranchimallflo.duckdns.org/api/v1.0/getFloAddressBalance?token=rupee&floAddress=${myFloID}`;
@@ -13103,7 +13182,7 @@
                         });
                         hidePopup()
                         showTransactionStatus('success', 'Withdraw request sent.', 'It may take upto 48 working hours to process your withdrawal request.')
-                        withdrawActivityContainer.prepend(render.activityCard({ type: 'withdraw', amount: withdraw_cash_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: user_withdraw_upi, processed: true }))
+                        withdrawActivityContainer.prepend(render.activityCard({ type: 'withdraw', amount: withdraw_cash_amount, timeStamp: `${Date.now()}_${myFloID}`, token_txid: flo_txid, receiver: user_withdraw_upi, processed: false }))
                         return true;
                     }
                     showTransactionStatus('failure', 'Failed to send withdraw request.');
@@ -13119,19 +13198,26 @@
         const payCashierPopup = document.getElementById('pay_anyone')
         function pay_through_cashier() {
             try {
-                const cashier = randomNoRepeats(Object.keys(token_app.master_configurations.cashiers))();
-                const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-
-                document.getElementById('pay_cashier_info').textContent = cashier_upi;
-
                 const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
-                cnf_cash_payment_btn.onclick = function () {
+                
+                cnf_cash_payment_btn.onclick = async function () {
                     let selectedUPI = payCashierPopup.querySelector('input[type="radio"]:checked');
                     if (!selectedUPI) {
                         notify('Add an UPI address to pay through cashier.', 'error')
                         return
                     }
                     btnLoading('withdraw_cash_btn', 'start')
+
+                    const cashier = randomNoRepeats(await getLiveCashiers())();
+                    if(typeof cashier!=="string" || cashier.length<1) {
+                        notify('No cashier is live currently. Please try later.', 'error');
+                        return false;
+                    }
+                    
+                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+
+                    document.getElementById('pay_cashier_info').textContent = cashier_upi;
+                    
                     const paying_amount_div = document.getElementById('recvr_amount_to_pay')
                     const recvr_id = document.getElementById('recvr_id').value;
                     let amount_to_pay = parseInt(paying_amount_div.value);
@@ -13158,7 +13244,7 @@
                     showTransactionStatus('success', 'Pay through cashier Request sent.', `Sent to: <b class="breakable">${recvr_id}</b><br>
                             through cashier UPI: <b>${cashier_upi}</b>.<br><br>
                             Once the cashier receives your payment, they will transfer it to intended receiver.`);
-                    payCashierActivityContainer.prepend(render.activityCard({ type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, receiverUPI: req_object.upi_txid, processed: true }))
+                    payCashierActivityContainer.prepend(render.activityCard({ type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, receiverUPI: req_object.upi_txid, processed: false }))
                 }
 
             } catch (error) {
@@ -13677,6 +13763,24 @@
                 throw new Error(error);
             }
         }
+
+        async function getLiveCashiers() {
+            try {
+                const cashiersList = Object.keys(token_app.master_configurations.cashiers);
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS,
+                    { receiverID: floGlobals.adminID, senderIDs: cashiersList });
+                // Filter out non-cashiers, if any
+                const cashiers_status = floGlobals.appObjects[token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS];
+                const valid_cashiers = Object.keys(cashiers_status)
+                .filter(f=>Object.keys(token_app.master_configurations.cashiers).includes(f) && cashiers_status[f]===true);
+                return valid_cashiers;
+            } catch(e) {
+                console.error(e);
+                notify('Failed to fecth cashiers status', 'error');
+                return null;
+            }
+        }
+
     </script>
 
     <!-- Helpline -->
@@ -14013,4 +14117,5 @@
         }
     </script>
 </body>
+
 </html>
