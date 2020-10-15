@@ -350,9 +350,16 @@ textarea {
   width: 100%;
 }
 .empty-state svg {
-  stroke: rgba(var(--text-color), 0.8);
   height: 12em;
   width: 12em;
+}
+.empty-state svg polyline,
+.empty-state svg path,
+.empty-state svg ellipse {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: rgba(var(--text-color), 0.7);
+  fill: none;
 }
 
 .container-header {
@@ -1181,7 +1188,7 @@ sm-panel {
   width: auto;
 }
 
-#success_svg, #failure_svg {
+#failure_svg {
   height: 5rem;
   width: 5rem;
   stroke-width: 4;
@@ -1192,9 +1199,45 @@ sm-panel {
   animation: popup 2s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-#success_svg polyline {
-  fill: none;
-  stroke: #00C853;
+#success_art {
+  margin: 1rem 0;
+  height: 12rem;
+  width: 12rem;
+  align-self: center;
+}
+#success_art circle {
+  transform-origin: center;
+  transform: scale(0.9);
+  animation: scale-up 1s forwards ease-out;
+}
+#success_art polygon {
+  transform-origin: center;
+  transform: rotate(-20deg);
+  animation: rotate-in-place 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#success_art polygon:nth-of-type(1) {
+  animation-delay: 0.1s;
+}
+#success_art polygon:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+#success_art polygon:nth-of-type(3) {
+  animation-delay: 0.3s;
+}
+#success_art circle:nth-of-type(1) {
+  animation-delay: 0.1s;
+}
+#success_art circle:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+#success_art circle:nth-of-type(3) {
+  animation-delay: 0.3s;
+}
+#success_art circle:nth-of-type(4) {
+  animation-delay: 0.4s;
+}
+#success_art circle:nth-of-type(5) {
+  animation-delay: 0.5s;
 }
 
 #failure_svg line {
@@ -1414,9 +1457,7 @@ sm-panel {
 }
 #transaction_page #transaction_details {
   position: relative;
-  margin: 1.5rem 0;
-  padding: 1.5rem;
-  background-color: rgba(var(--text-color), 0.06);
+  padding: 0.5rem;
   max-width: 50ch;
   border-radius: 0.5rem;
 }
@@ -1461,6 +1502,22 @@ sm-panel {
   margin: 1.5rem;
 }
 
+@keyframes scale-up {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes rotate-in-place {
+  from {
+    transform: rotate(-20deg);
+  }
+  to {
+    transform: none;
+  }
+}
 #people_container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
