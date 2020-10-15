@@ -11990,7 +11990,7 @@
         token_app.actions = {
 
             parse_flo_comments: async function () {
-                const num = 4;
+                const num = 5;
                 text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
                     #!#CURRENCY=INR
                     #!#TYPE_UPI_APP=UPI_APP_TEST${num}
@@ -12136,9 +12136,6 @@
                     userType.forEach(user => user.textContent = 'Cashier')
                     showPage('deposit', 'deposit_page_btn')
 
-                    // Inform cloud you are live
-                    update_cashier_status(true);
-
                     token_app.actions.idleTimer(300000); // sign out after 5 mins
                 }
 
@@ -12218,7 +12215,7 @@
 
                     await Promise.all([
 
-                        create_root_structure(),
+                        create_root_structure().then(()=>update_cashier_status(true)),
 
                         floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
                             receiverID: myFloID
@@ -12235,7 +12232,7 @@
                         floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, {
                             receiverID: myFloID
                         })
-                    ])
+                    ]);
 
                     return true;
                 } else if (token_app.master_configurations.helplineFloId === myFloID) {
@@ -12358,6 +12355,7 @@
                     window.onclick = take_action_on_inactivity;     // catches mouse clicks
                     window.onscroll = take_action_on_inactivity;    // catches scrolling
                     window.onkeypress = take_action_on_inactivity;  //catches keyboard actions
+                    window.onbeforeunload = take_action_on_inactivity;  //catches window close actions
                 }
 
                 function resetTimer() {
@@ -12372,6 +12370,7 @@
                 window.onclick = take_action_on_inactivity;     // catches mouse clicks
                 window.onscroll = take_action_on_inactivity;    // catches scrolling
                 window.onkeypress = take_action_on_inactivity;  //catches keyboard actions
+                window.onbeforeunload = take_action_on_inactivity;  //catches window close actions
                 
             },
         }
@@ -12383,21 +12382,22 @@
             try {
                 if (typeof floGlobals.appObjects[object_name] !== 'object'
                     || floGlobals.appObjects[object_name] == null) {
-                    floCloudAPI.requestObjectData(object_name, options)
-                        .then(resp => {
-                            if (typeof floGlobals.appObjects[object_name] !== 'object'
-                                || floGlobals.appObjects[object_name] == null) {
-                                floGlobals.appObjects[object_name] = {};
-                                floCloudAPI.resetObjectData(object_name)
-                                    .then(() => floCloudAPI.requestObjectData(object_name, options))
-                                    .then(() => true);
-                            } else return false;
-                        });
+                    await floCloudAPI.requestObjectData(object_name, options)
+                        
+                    if (typeof floGlobals.appObjects[object_name] !== 'object'
+                        || floGlobals.appObjects[object_name] == null) {
+                        floGlobals.appObjects[object_name] = {};
+                        await floCloudAPI.resetObjectData(object_name)
+                        await floCloudAPI.requestObjectData(object_name, options)
+                        return true;
+                    } else return false;
+                
                 } else return false;
             } catch (error) {
                 throw new Error(error);
             }
         }
+
         // Create root structure
         async function create_root_structure() {
 
@@ -12411,7 +12411,9 @@
                 promises.push(reset_cloud_object(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS));
             }
 
-            return Promise.all(promises);
+            await Promise.all(promises);
+            
+            return true;
         }
 
         const   depositsContainer = document.getElementById("pending_deposits_container"),
