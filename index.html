@@ -160,7 +160,7 @@
         </details>
         <p class="message">Send money to UPI ID below.</p>
         <div class="copy-row">
-            <h4 id="send_cash_to_deposit" class="copy"></h4>
+            <h4 id="send_cash_to_deposit" class="copy">Loading cashier UPI...</h4>
             <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
                 <title>Copy</title>
                 <rect x="16" y="16" width="48" height="48" rx="6" />
@@ -310,7 +310,7 @@
         </details>
         <p class="message">Send money to UPI ID below.</p>
         <div class="copy-row">
-            <h4 id="pay_cashier_info" class="copy"></h4>
+            <h4 id="pay_cashier_info" class="copy">Loading cashier UPI...</h4>
             <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
                 <title>Copy</title>
                 <rect x="16" y="16" width="48" height="48" rx="6" />
@@ -330,6 +330,7 @@
         <sm-button class="add-upi empty-state" variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI
             address</sm-button>
     </sm-popup>
+    <!-- Transaction result popup -->
     <sm-popup id="transaction_result">
         <header class="popup-header" slot="header">
             <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
@@ -338,7 +339,7 @@
                 <line x1="64" y1="64" x2="0" y2="0" />
             </svg>
         </header>
-        <section id="success_section" class="flex direction-column">
+        <section id="success_section" class="flex direction-column hide-completely">
             <svg id="success_art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><defs><style>.a{fill:#d4145a;}.b{fill:#2e3192;}.c{fill:#fff;}.d{fill:#662d91;}.e{fill:#9e005d;}.f{fill:#00a99d;}</style></defs><title>success-art</title><polygon class="a" points="87.96 46.76 59.68 69.04 48.54 54.9 43.83 58.62 54.97 72.75 58.68 77.47 91.67 51.47 87.96 46.76"/><polygon class="b" points="84.33 42.6 61.5 70.43 47.58 59.02 43.78 63.66 57.7 75.07 62.33 78.88 88.97 46.41 84.33 42.6"/><polygon class="c" points="86.09 44.39 60.64 69.85 47.91 57.12 43.66 61.36 56.39 74.09 60.64 78.33 90.33 48.64 86.09 44.39"/><circle class="a" cx="27" cy="33" r="2"/><circle class="a" cx="111.5" cy="93.5" r="5.5"/><circle class="d" cx="47" cy="88" r="2"/><circle class="d" cx="22.5" cy="82.5" r="4.5"/><circle class="d" cx="45.5" cy="114.5" r="3.5"/><circle class="d" cx="82" cy="18" r="5"/><circle class="e" cx="102.5" cy="51.5" r="1.5"/><circle class="e" cx="60.5" cy="37.5" r="2.5"/><circle class="e" cx="103" cy="77" r="3"/><circle class="e" cx="87.5" cy="108.5" r="3.5"/><circle class="f" cx="39" cy="20" r="3"/><circle class="f" cx="85" cy="83" r="2"/><circle class="f" cx="32.5" cy="101.5" r="3.5"/><circle class="f" cx="112" cy="113" r="1"/><circle class="f" cx="115" cy="29" r="2"/><circle class="f" cx="18" cy="53" r="1"/><circle class="f" cx="11" cy="5" r="1"/></svg>
         </section>
         <section id="failure_section" class="hide-completely flex direction-column">
@@ -874,7 +875,7 @@
         <section id="activity_page" class="page hide-completely">
             <div class="flex align-center space-between">
                 <h3>Activity</h3>
-                <sm-button onclick="showActivities()">Refresh</sm-button>
+                <sm-button onclick="showActivities(true)">Refresh</sm-button>
             </div>
             <sm-tab-header variant="tab" class="round" target="user_activities">
                 <sm-tab>Sent</sm-tab>
@@ -1643,11 +1644,24 @@
         let popupStack = new Stack(),
             zIndex = 10;
 
-        function showPopup(popup, pinned) {
+        async function showPopup(popup, pinned) {
             let thisPopup = document.getElementById(popup);
             zIndex++
             thisPopup.setAttribute('style', `z-index: ${zIndex}`)
             popupStack = thisPopup.show(pinned, popupStack)
+            if(popup === 'deposit_rupee' || popup === 'withdraw_rupee' || popup === 'pay_anyone'){
+                liveCashier.floId = randomNoRepeats(await getLiveCashiers());
+                if(liveCashier.floId && liveCashier.floId.length){
+                    liveCashier.upi = token_app.master_configurations.cashiers[liveCashier.floId].upi_id;
+                    document.getElementById('send_cash_to_deposit').textContent = liveCashier.upi;
+                    document.getElementById('pay_cashier_info').textContent = liveCashier.upi;
+                }
+                else{
+                    notify('No cashier is online currently, please try again later.', 'error')
+                    document.getElementById('send_cash_to_deposit').textContent = 'No cashier found';
+                    document.getElementById('pay_cashier_info').textContent = 'No cashier found';
+                }
+            }
             return thisPopup;
         }
 
@@ -1662,9 +1676,10 @@
             scannedFloId,
             scannerOn = false
         const   qrScannerInstance = new Html5Qrcode("reader"),
-                selectCamera = document.getElementById('select_camera');
+                selectCamera = document.getElementById('select_camera'),
+                liveCashier = {}
 
-        document.addEventListener('popupopened', e => {
+        document.addEventListener('popupopened', async e => {
             let thisPopup = e.detail.popup,
                 firstInput = thisPopup.querySelector('sm-input')
             if (firstInput)
@@ -1758,6 +1773,16 @@
                     tokenReceiver.readOnly = false
                     tokenAmount.readOnly = false
                     scannerOn = false
+                    break;
+                case 'deposit_rupee':
+                    setTimeout(() => {
+                        document.getElementById('send_cash_to_deposit').textContent = 'Loading cashier UPI...';
+                    }, 300);
+                    break;
+                case 'pay_anyone':
+                    setTimeout(() => {
+                        document.getElementById('pay_cashier_info').textContent = 'Loading cashier UPI...';
+                    }, 300);
                     break;
                 case 'transaction_result':
                     setTimeout(() => {
@@ -1978,7 +2003,8 @@
         let payingRequested = false,
             currentPaymentRequest,
             person,
-            personName;
+            personName,
+            activityLoaded = false;
         const tokenReceiver = document.getElementById('token_receiver'),
             tokenAmount = document.getElementById('token_amount'),
             depositRupeeAmount = document.getElementById('token_amount_to_buy')
@@ -2357,6 +2383,9 @@
             }
             if (page === 'request_page') {
                 show_payment_requests()
+            }
+            if(page === 'activity_page'){
+                showActivities()
             }
             if (page === 'transaction_page') {
                 document.getElementById('navbar').classList.add('hide-on-mobile')
@@ -11858,16 +11887,14 @@
         }
 
         function randomNoRepeats(array) {
-            var copy = array.slice(0);
-            return function () {
-                if (copy.length < 1) {
-                    copy = array.slice(0);
-                }
-                var index = Math.floor(Math.random() * copy.length);
-                var item = copy[index];
-                copy.splice(index, 1);
-                return item;
-            };
+            let copy = [...array];
+            if (copy.length < 1) {
+                copy = array.slice(0);
+            }
+            let index = Math.floor(Math.random() * copy.length);
+            let item = copy[index];
+            copy.splice(index, 1);
+            return item;
         }
 
         function removeWhiteSpaces(text = '') {
@@ -12131,7 +12158,6 @@
                     showDepositRequests()
                     showWithdrawRequests()
                     showPayThruCashierRequests()
-                    showActivities()
                     userType.forEach(user => user.textContent = 'Cashier')
                     showPage('deposit', 'deposit_page_btn')
 
@@ -12192,8 +12218,6 @@
                     transferTokensManually();
                     
                     pay_through_cashier();
-                    
-                    showActivities()
                 }
                 this.retrieveLatestContent();
             },
@@ -13047,33 +13071,30 @@
                 const request_tokens_btn = document.getElementById('request_tokens_btn');
                 request_tokens_btn.onclick = async function () {
                     if (typeof myFloID !== "string" || myFloID.length < 1) return;
-                    btnLoading('request_tokens_btn', 'start');
-                    const cashier = randomNoRepeats(await getLiveCashiers())();
-                    if(typeof cashier!=="string" || cashier.length<1) {
+                    if(typeof liveCashier.floId !== "string" || liveCashier.floId.length < 1) {
                         notify('No cashier is live currently. Please try later.', 'error');
                         return false;
                     }
+                    btnLoading('request_tokens_btn', 'start');
                     const token_amount_to_buy = document.getElementById('token_amount_to_buy');
-                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                    document.getElementById('send_cash_to_deposit').textContent = cashier_upi;
                     
                     let upi_txid = depositedRupeeTxId.value
                     let request_object = {
                         user_flo_id: myFloID,
                         upi_txid: upi_txid,
                         deposit_amount: token_amount_to_buy.value,
-                        cashier_upi
+                        cashier_upi: liveCashier.upi
                     }
                     if (typeof upi_txid === "string" && upi_txid.length > 1) {
                         floCloudAPI.sendGeneralData(request_object, token_app.master_configurations
                             .TYPE_DEPOSITS, {
-                            receiverID: cashier
+                            receiverID: liveCashier.floId
                         }).then(result => {
                             console.log(result)
                             hidePopup()
                             showTransactionStatus('success', 'Deposit request sent.', 'It may take upto 48 hours for deposited amount to be reflected in your account.')
                             btnLoading('request_tokens_btn', 'stop')
-                            depositActivityContainer.prepend(render.activityCard({ type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: cashier_upi, processed: false }))
+                            depositActivityContainer.prepend(render.activityCard({ type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: liveCashier.upi, processed: false }))
                         })
                         return true;
                     }
@@ -13090,20 +13111,17 @@
         function withdraw_token_to_get_cash() {
             try {
                 const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
-                
                 withdraw_cash_btn.onclick = async function () {
                     let selectedUPI = withdrawRupeePopup.querySelector('input[type="radio"]:checked');
                     if (!selectedUPI) {
                         notify('Add an UPI address to withdraw money.', 'error')
                         return
                     }
-                    btnLoading('withdraw_cash_btn', 'start')
-                    const cashier = randomNoRepeats(await getLiveCashiers())();
-                    if(typeof cashier!=="string" || cashier.length<1) {
+                    if(typeof liveCashier.floId !== "string" || liveCashier.floId.length < 1) {
                         notify('No cashier is live currently. Please try later.', 'error');
                         return false;
                     }
-                    
+                    btnLoading('withdraw_cash_btn', 'start')
                     const withdraw_cash_amount = Number(document.getElementById('withdraw_cash_amount').value);
                     const user_withdraw_upi = selectedUPI.value
                     const token_balance_url =
@@ -13123,7 +13141,7 @@
                     }
 
                     const flo_comment = `transfer ${withdraw_cash_amount} rupee#`;
-                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, cashier, 0.001, myPrivKey,
+                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, liveCashier.floId, 0.001, myPrivKey,
                         flo_comment)
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
@@ -13144,7 +13162,7 @@
                     if (typeof flo_txid === "string" && flo_txid.length > 1) {
                         floCloudAPI.sendGeneralData(request_object, token_app.master_configurations
                             .TYPE_WITHDRAWS, {
-                            receiverID: cashier
+                            receiverID: liveCashier.floId
                         });
                         hidePopup()
                         showTransactionStatus('success', 'Withdraw request sent.', 'It may take upto 48 working hours to process your withdrawal request.')
@@ -13172,17 +13190,11 @@
                         notify('Add an UPI address to pay through cashier.', 'error')
                         return
                     }
-                    btnLoading('withdraw_cash_btn', 'start')
-
-                    const cashier = randomNoRepeats(await getLiveCashiers())();
-                    if(typeof cashier!=="string" || cashier.length<1) {
+                    if(typeof liveCashier.floId !=="string" || liveCashier.floId.length < 1) {
                         notify('No cashier is live currently. Please try later.', 'error');
                         return false;
                     }
-                    
-                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-
-                    document.getElementById('pay_cashier_info').textContent = cashier_upi;
+                    btnLoading('withdraw_cash_btn', 'start')
                     
                     const paying_amount_div = document.getElementById('recvr_amount_to_pay')
                     const recvr_id = document.getElementById('recvr_id').value;
@@ -13202,13 +13214,13 @@
 
                     floCloudAPI.sendGeneralData(req_object, token_app.master_configurations
                         .TYPE_PAY_THROUGH_CASHIER, {
-                        receiverID: cashier,
+                        receiverID: liveCashier.floId,
                         senderIDs: [myFloID]
                     });
 
                     hidePopup()
                     showTransactionStatus('success', 'Pay through cashier Request sent.', `Sent to: <b class="breakable">${recvr_id}</b><br>
-                            through cashier UPI: <b>${cashier_upi}</b>.<br><br>
+                            through cashier UPI: <b>${liveCashier.upi}</b>.<br><br>
                             Once the cashier receives your payment, they will transfer it to intended receiver.`);
                     payCashierActivityContainer.prepend(render.activityCard({ type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, receiverUPI: req_object.upi_txid, processed: false }))
                 }
@@ -13219,31 +13231,35 @@
             }
         }
 
-        function showActivities(){
-            depositActivityContainer.innerHTML = ''
-            withdrawActivityContainer.innerHTML = ''
-            payCashierActivityContainer.innerHTML = ''
-            sentActivityContainer.innerHTML = ''
-            receivedActivityContainer.innerHTML = ''
-            
-            for(let i = 0; i < 8; i++){
-                frag.append(render.activityPlaceholder())
+        function showActivities(load){
+            if(!activityLoaded){                
+                depositActivityContainer.innerHTML = ''
+                withdrawActivityContainer.innerHTML = ''
+                payCashierActivityContainer.innerHTML = ''
+                sentActivityContainer.innerHTML = ''
+                receivedActivityContainer.innerHTML = ''
+                
+                for(let i = 0; i < 8; i++){
+                    frag.append(render.activityPlaceholder())
+                }
+                let frag1 = frag.cloneNode(true),
+                    frag2 = frag.cloneNode(true),
+                    frag3 = frag.cloneNode(true),
+                    frag4 = frag.cloneNode(true)
+                depositActivityContainer.append(frag)
+                withdrawActivityContainer.append(frag1)
+                payCashierActivityContainer.append(frag2)
+                sentActivityContainer.append(frag3)
+                receivedActivityContainer.append(frag4)
             }
-            let frag1 = frag.cloneNode(true),
-                frag2 = frag.cloneNode(true),
-                frag3 = frag.cloneNode(true),
-                frag4 = frag.cloneNode(true)
-            depositActivityContainer.append(frag)
-            withdrawActivityContainer.append(frag1)
-            payCashierActivityContainer.append(frag2)
-            sentActivityContainer.append(frag3)
-            receivedActivityContainer.append(frag4)
-            getSentRupeeList()
-            getReceivedRupeeList()
-            if(!token_app.master_configurations.cashiers[myFloID]){
-                showAllUserActivities()
+            if(load){
+                getSentRupeeList()
+                getReceivedRupeeList()
+                if(!token_app.master_configurations.cashiers[myFloID]){
+                    showAllUserActivities()
+                }
             }
-            
+            activityLoaded = true
         }
 
         const   sentActivityContainer = document.getElementById('sent_activity_container'),
@@ -13742,7 +13758,7 @@
                 return valid_cashiers;
             } catch(e) {
                 console.error(e);
-                notify('Failed to fecth cashiers status', 'error');
+                notify('Failed to get cashier status', 'error');
                 return null;
             }
         }
