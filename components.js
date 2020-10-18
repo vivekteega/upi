@@ -2095,6 +2095,7 @@ customElements.define('sm-popup', class extends HTMLElement {
             this.popup.style.transform = 'translateY(100%)';
         else
             this.popup.style.transform = 'translateY(1rem)';
+        this.click()
         this.popupContainer.classList.add('hide')
         this.removeAttribute('open')
         if (typeof this.popupStack !== 'undefined') {

@@ -1201,14 +1201,14 @@ sm-panel {
 
 #success_art {
   margin: 1rem 0;
-  height: 12rem;
-  width: 12rem;
+  height: 14rem;
+  width: 100%;
   align-self: center;
 }
 #success_art circle {
   transform-origin: center;
-  transform: scale(0.9);
-  animation: scale-up 1s forwards ease-out;
+  transform: scale(0.4);
+  animation: explode 1.6s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 #success_art polygon {
   transform-origin: center;
@@ -1502,19 +1502,22 @@ sm-panel {
   margin: 1.5rem;
 }
 
-@keyframes scale-up {
-  from {
-    transform: scale(0.9);
+@keyframes explode {
+  0% {
+    transform: scale(0.4);
   }
-  to {
-    transform: none;
+  80% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.9);
   }
 }
 @keyframes rotate-in-place {
-  from {
+  0% {
     transform: rotate(-20deg);
   }
-  to {
+  100% {
     transform: none;
   }
 }
