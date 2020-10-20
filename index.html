@@ -12994,9 +12994,9 @@
                     if (typeof validate_txid == "object" && validate_txid.result == "ok") {
                         // mark as resolved
                         subject_req.new_flo_txid = new_txid;
-                        floGlobals.appObjects[TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS][subject_req.flo_txid] = subject_req;
+                        floGlobals.appObjects[token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS][subject_req.flo_txid] = subject_req;
                         let receiverID = floGlobals.adminID;
-                        await floCloudAPI.updateObjectData(TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, { receiverID });
+                        await floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, { receiverID });
                         notify('Token transfer for unconfirmed desposit successfull. Txid: ' + new_txid);
 
                     } else if (n <= 30) {
