@@ -875,7 +875,7 @@
         <section id="activity_page" class="page hide-completely">
             <div class="flex align-center space-between">
                 <h3>Activity</h3>
-                <sm-button onclick="showActivities(true)">Refresh</sm-button>
+                <sm-button onclick="showActivities()">Refresh</sm-button>
             </div>
             <sm-tab-header variant="tab" class="round" target="user_activities">
                 <sm-tab>Sent</sm-tab>
@@ -2562,8 +2562,10 @@
             document.querySelector('main').classList.add('hide-completely')
             document.getElementById('navbar').classList.add('hide-completely')
             document.getElementById('main_header').classList.add('hide-completely')
-            onLoadStartUp()
-            notifications.clearAll()
+            setTimeout(() => {                
+                onLoadStartUp()
+                notifications.clearAll()
+            }, 500);
         }
 
         async function signOut() {
@@ -12377,7 +12379,13 @@
                     window.onclick = take_action_on_inactivity;     // catches mouse clicks
                     window.onscroll = take_action_on_inactivity;    // catches scrolling
                     window.onkeypress = take_action_on_inactivity;  //catches keyboard actions
-                    window.onbeforeunload = take_action_on_inactivity;  //catches window close actions
+                    window.onbeforeunload = function (e) {
+                        var confirmationMessage = "\o/";
+
+                        (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+                        take_action_on_inactivity()
+                        return confirmationMessage;                            //Webkit, Safari, Chrome
+                    };  //catches window close actions
                 }
 
                 function resetTimer() {
@@ -12392,7 +12400,13 @@
                 window.onclick = take_action_on_inactivity;     // catches mouse clicks
                 window.onscroll = take_action_on_inactivity;    // catches scrolling
                 window.onkeypress = take_action_on_inactivity;  //catches keyboard actions
-                window.onbeforeunload = take_action_on_inactivity;  //catches window close actions
+                window.onbeforeunload = function (e) {
+                    var confirmationMessage = "\o/";
+
+                    (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+                    take_action_on_inactivity()
+                    return confirmationMessage;                            //Webkit, Safari, Chrome
+                };  //catches window close actions
                 
             },
         }
@@ -13229,7 +13243,7 @@
             }
         }
 
-        function showActivities(load){
+        function showActivities(){
             if(!activityLoaded){                
                 depositActivityContainer.innerHTML = ''
                 withdrawActivityContainer.innerHTML = ''
@@ -13250,12 +13264,10 @@
                 sentActivityContainer.append(frag3)
                 receivedActivityContainer.append(frag4)
             }
-            if(load){
-                getSentRupeeList()
-                getReceivedRupeeList()
-                if(!token_app.master_configurations.cashiers[myFloID]){
-                    showAllUserActivities()
-                }
+            getSentRupeeList()
+            getReceivedRupeeList()
+            if(!token_app.master_configurations.cashiers[myFloID]){
+                showAllUserActivities()
             }
             activityLoaded = true
         }
