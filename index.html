@@ -826,7 +826,7 @@
                 </sm-tab-panels>
             </div>
             <div class="user-panel">
-                <div class="flex align-items space-between">
+                <div class="flex align-center space-between">
                     <h4>My Balances</h4>
                     <button id="refresh_balance_btn" onclick="refresh_balance(this)" class="action expand"
                         type="submit">
@@ -13402,23 +13402,25 @@
 
         async function getSentRupeeList() {
             try {
-                let data = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&senderFloAddress=${myFloID}`)
-                let transactions = data.transactions
-                console.log(transactions, data)
-                let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
-                for (transaction of sortedTransactions) {
-                    let { tokenAmount, flodata } = transaction.parsedFloData,
-                        {time, txid, vout} = transaction.transactionDetails,
-                        receiver = flodata.match(/\b\w{34,34}\b/) ? flodata.match(/\b\w{34,34}\b/) : await getReceiver(vout),
-                        timeStamp = time * 1000,
-                        confirmations = await ajaxGet(`https://flosight.duckdns.org/api/tx/${txid}`),
-                        processed = confirmations.confirmations > 3 ? true : false
-
-                    if (receiver === '' || typeof receiver === 'undefined' || receiver === null) continue;
-                    frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, tokenTxId: txid, receiver, timeStamp, processed, toCashier: token_app.master_configurations.cashiers[receiver] }))
-                }
-                sentActivityContainer.innerHTML = ''
-                sentActivityContainer.append(frag)
+                ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&senderFloAddress=${myFloID}`)
+                .then(data => {
+                    let transactions = data.transactions
+                    console.log(transactions, data)
+                    let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
+                    for (transaction of sortedTransactions) {
+                        let { tokenAmount, flodata } = transaction.parsedFloData,
+                            {time, txid, vout} = transaction.transactionDetails,
+                            receiver = flodata.match(/\b\w{34,34}\b/) ? flodata.match(/\b\w{34,34}\b/) : await getReceiver(vout),
+                            timeStamp = time * 1000,
+                            confirmations = await ajaxGet(`https://flosight.duckdns.org/api/tx/${txid}`),
+                            processed = confirmations.confirmations > 3 ? true : false
+    
+                        if (receiver === '' || typeof receiver === 'undefined' || receiver === null) continue;
+                        frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, tokenTxId: txid, receiver, timeStamp, processed, toCashier: token_app.master_configurations.cashiers[receiver] }))
+                    }
+                    sentActivityContainer.innerHTML = ''
+                    sentActivityContainer.append(frag)
+                })
             } catch (error) {
                 throw new Error(error);
             }
