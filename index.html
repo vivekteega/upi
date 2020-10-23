@@ -828,7 +828,16 @@
             <div class="user-panel">
                 <div class="flex align-items space-between">
                     <h4>My Balances</h4>
-                    <sm-button class="small round" onclick="refresh_balance(this)">Check Balance</sm-button>
+                    <button id="refresh_balance_btn" onclick="refresh_balance(this)" class="action expand"
+                        type="submit">
+                        <h4 class="primary-btn expand">
+                            Refresh Balance
+                        </h4>
+                        <svg viewBox="0 0 73 73" class="loader">
+                            <path
+                                d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                        </svg>
+                    </button>
                 </div>
                 <div class="display-balance grid">
                     <div class="balance rupee-balance-card">
@@ -875,7 +884,7 @@
         <section id="activity_page" class="page hide-completely">
             <div class="flex align-center space-between">
                 <h3>Activity</h3>
-                <sm-button onclick="showActivities()">Refresh</sm-button>
+                <sm-button onclick="showActivities(true)">Refresh</sm-button>
             </div>
             <sm-tab-header variant="tab" class="round" target="user_activities">
                 <sm-tab>Sent</sm-tab>
@@ -13060,7 +13069,7 @@
                 floGlobals.appObjects[token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS][myFloID] = status;
                 let receiverID = floGlobals.adminID;
                 floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS, { receiverID })
-                .then(res=>notify('Updated Cashier status to '+status))
+                .then(res=>notify(`Cashier is ${status ? 'online' : 'offline'}`, 'success'))
                 .catch(e=>{
                     console.error(e);
                     notify('Failed to update Cashier status to '+status, 'error');
@@ -13243,8 +13252,8 @@
             }
         }
 
-        function showActivities(){
-            if(!activityLoaded){                
+        function showActivities(showRefresh = false){
+            if(!activityLoaded || showRefresh){                
                 depositActivityContainer.innerHTML = ''
                 withdrawActivityContainer.innerHTML = ''
                 payCashierActivityContainer.innerHTML = ''
