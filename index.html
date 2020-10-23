@@ -13403,7 +13403,7 @@
         async function getSentRupeeList() {
             try {
                 ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&senderFloAddress=${myFloID}`)
-                .then(data => {
+                .then(async data => {
                     let transactions = data.transactions
                     console.log(transactions, data)
                     let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
