@@ -1466,6 +1466,7 @@ sm-panel {
   width: 4rem;
   padding: 1.2rem;
   border-radius: 4rem;
+  margin-top: 1rem;
   margin-bottom: 2rem;
   background: rgba(var(--text-color), 0.06);
 }
