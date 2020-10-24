@@ -1876,6 +1876,10 @@ sm-panel {
   #deposit .request {
     grid-template-areas: "time time time time" ". . . .";
   }
+  #deposit #unconfirmed_requests_container .request {
+    display: flex;
+    flex-direction: column;
+  }
 }
 @media only screen and (max-width: 320px) {
   body {

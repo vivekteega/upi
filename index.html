@@ -674,6 +674,7 @@
                     <sm-tab>Deposits</sm-tab>
                     <sm-tab>Withdrawals</sm-tab>
                     <sm-tab>Pay Through Cashier</sm-tab>
+                    <sm-tab>Unconfirmed</sm-tab>
                 </sm-tab-header>
                 <sm-tab-panels id="requests_to_cashier">
                     <sm-panel>  
@@ -821,6 +822,54 @@
                                     transform="translate(-703.5 -300.22)" />
                             </svg>
                             <h4 class="light-text">No pay requests.</h4>
+                        </div>
+                    </sm-panel>
+                    <sm-panel>
+                        <div class="flex">
+                            <sm-button class="justify-right" onclick="showUnconfirmedRequests()">Load pending</sm-button>
+                        </div>
+                        <div id="unconfirmed_requests_container" class="container"></div>
+                        <div class="empty-state">
+                            <svg viewBox="0 0 529.94 446.5">
+                                <defs>
+                                    <style>
+                                        .a {
+                                            stroke-width: 9px;
+                                        }
+                                        .b,
+                                        .c {
+                                            stroke-width: 5px;
+                                        }
+                                        .c {
+                                            stroke-dasharray: 11.94 11.94;
+                                        }
+                                        .d {
+                                            stroke-width: 3px;
+                                        }
+                                    </style>
+                                </defs>
+                                <title>Empty icon</title>
+                                <polyline class="a"
+                                    points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
+                                <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
+                                <path class="c"
+                                    d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
+                                    transform="translate(-354.28 918.17) rotate(-60.69)" />
+                                <path class="d"
+                                    d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
+                                    transform="translate(-703.5 -300.22)" />
+                            </svg>
+                            <h4 class="light-text">No unconfirmed requests.</h4>
                         </div>
                     </sm-panel>
                 </sm-tab-panels>
@@ -984,7 +1033,7 @@
             </header>
             <div id="transaction_details" class="grid direction-column"></div>
             <p id="caution_message"></p>
-            <sm-button id="show_report_btn" class="hide" onclick="showPopup('report_popup')">Report</sm-button>
+            <sm-button id="show_report_btn" onclick="showPopup('report_popup')">Report</sm-button>
         </section>
     </main>
     <script src="components.js"></script>
@@ -1040,6 +1089,7 @@
             currentTimeout,
             notificationSound = document.getElementById('notification_sound');
         let defaultUPI
+        let unconfirmedRequestsStore = {}
         const render = {
             depositRequest(txid, floId, amount, vectorClock) {
                 let card = document.createElement('div');
@@ -1120,6 +1170,40 @@
                     </div>                 
                     <h5 class="time">${formatedTime(vectorClock, true)}</h5>
                     <button id="" class="confirm-pay-btn">
+                        Confirm
+                    </button>`;
+                return card;
+            },
+            unconfirmedRequest(obj) {
+                let card = document.createElement('div'),
+                    {datetime, flo_txid, new_flo_txid, receiver_flo_id, tokens_transferred: amount, user_upi_txid} = obj;
+                card.classList.add('request')
+                setAttributes(card, {
+                    'data-vector-clock': `${datetime}_${receiver_flo_id}`
+                })
+                card.innerHTML = `   
+                <h5 class="time">${formatedTime(datetime, true)}</h5>
+                    <div>
+                        <h5>Receiver's FLO address</h5>
+                        <h4 class="breakable">${receiver_flo_id}</h4>
+                    </div>                 
+                    <div>
+                        <h5>Old transaction ID</h5>
+                        <h4 class="breakable">${flo_txid}</h4>
+                    </div>                 
+                    <div>
+                        <h5>New transaction ID</h5>
+                        <h4 class="breakable">${new_flo_txid}</h4>
+                    </div>                 
+                    <div>
+                        <h5>UPI transaction ID</h5>
+                        <h4 class="breakable">${user_upi_txid}</h4>
+                    </div>                 
+                    <div>
+                        <h5>Amount</h5>
+                        <h4 class="breakable amount">₹${amount}</h4>
+                    </div>                 
+                    <button id="" class="confirm-unconfirmed-btn">
                         Confirm
                     </button>`;
                 return card;
@@ -2101,8 +2185,8 @@
                 }
             })
 
-            // Function for confirming deposit requests 
-            document.getElementById('pending_deposits_container').addEventListener('click', async (e) => {
+            document.getElementById('deposit').addEventListener('click', async (e) => {
+                // Function for confirming deposit requests 
                 if (e.target.closest('.confirm-deposit-btn'))
                     if (await confirmation('Confirm this deposit request?')) {
                         let depositRequest = e.target.closest('.request'),
@@ -2115,10 +2199,8 @@
                             depositRequest.remove()
                         }
                     }
-            })
 
-            // Function for confirming withdraw requests 
-            document.getElementById('pending_withdrawals_container').addEventListener('click', async (e) => {
+                // Function for confirming withdraw requests 
                 if (e.target.closest('.confirm-withdraw-btn'))
                     if (await confirmation('Confirm this withdraw request?')) {
                         let withdrawRequest = e.target.closest('.request'),
@@ -2130,9 +2212,7 @@
                             withdrawRequest.remove()
                         }
                     }
-            })
-            // Function for confirming pay requests 
-            document.getElementById('pay_requests_container').addEventListener('click', async (e) => {
+                // Function for confirming pay requests 
                 if (e.target.closest('.confirm-pay-btn'))
                     if (await confirmation('Confirm this pay request?')) {
                         let payRequest = e.target.closest('.request'),
@@ -2143,6 +2223,18 @@
                             refresh_balance()
                             payRequest.remove()
                         }
+                    }
+                // Function for confirming unconfirmed deposit requests 
+                if (e.target.closest('.confirm-unconfirmed-btn'))
+                    if (await confirmation('Confirm this deposit request?')) {
+                        let payRequest = e.target.closest('.request')
+                        console.log(unconfirmedRequestsStore[payRequest.dataset.vectorClock])
+                        /*,
+                            status = await process_unconfirmed_balance_claim_requests(unconfirmedRequestsStore[payRequest.dataset.vectorClock])
+                        if (status) {
+                            refresh_balance()
+                            payRequest.remove()
+                        }*/
                     }
             })
 
@@ -2313,11 +2405,11 @@
                 cautionMessage.innerHTML = `
                         It may take upto 48 working hours for a transaction to complete. If even after 48 hours transction wasn't
                         completed, use <Strong>Report</Strong> button to report your issue.`
-                showReportButton.classList.remove('hide')
+                //showReportButton.classList.remove('hide')
             }
             else{
                 cautionMessage.innerHTML = ``
-                showReportButton.classList.add('hide')
+                //showReportButton.classList.add('hide')
                 icon = `
                 <svg class="icon success" viewBox="0 0 64 64">
                     <title>tick</title>
@@ -12169,6 +12261,7 @@
                     showDepositRequests()
                     showWithdrawRequests()
                     showPayThruCashierRequests()
+                    showUnconfirmedRequests()
                     userType.forEach(user => user.textContent = 'Cashier')
                     showPage('deposit', 'deposit_page_btn')
 
@@ -12463,7 +12556,8 @@
 
         const   depositsContainer = document.getElementById("pending_deposits_container"),
                 withdrawsContainer = document.getElementById("pending_withdrawals_container"),
-                payRequestsContainer = document.getElementById("pay_requests_container");
+                payRequestsContainer = document.getElementById("pay_requests_container"),
+                unconfirmedRequestsContainer = document.getElementById("unconfirmed_requests_container");
 
         async function showDepositRequests() {
             try {
@@ -12624,6 +12718,73 @@
                 throw new Error(error)
             }
         }
+        
+        async function showUnconfirmedRequests() {
+            try {
+                unconfirmedRequestsStore = {}
+                unconfirmedRequestsContainer.innerHTML = ``
+                for(let i= 0; i < 4; i++){
+                    frag.append(render.requestPlaceholder())
+                }
+                unconfirmedRequestsContainer.append(frag)
+                // load all user cliams
+                await floCloudAPI.requestGeneralData(token_app.master_configurations
+                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, {
+                    receiverID: myFloID
+                });
+                const unconfirmed_cash_deposit_claims = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, "0"));
+
+                // load processed claims
+                const cashiersList = Object.keys(token_app.master_configurations.cashiers);
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS,
+                    { receiverID: floGlobals.adminID, senderIDs: cashiersList });
+                const processed_unconfirmed_balance_claim_requests_list = 
+                floGlobals.appObjects[token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS];
+                const processed_unconfirmed_balance_claim_requests_txid_arr = Object.keys(processed_unconfirmed_balance_claim_requests_list);
+
+                console.log(unconfirmed_cash_deposit_claims);
+                console.log(processed_unconfirmed_balance_claim_requests_list);
+
+                // Filter out processed items 
+                let fresh_requests = unconfirmed_cash_deposit_claims
+                    .filter(f => !processed_unconfirmed_balance_claim_requests_txid_arr.includes(f.message.flo_txid)
+                        && diff_hours(new Date(), new Date(f.message.datetime)) > 48);
+
+                // Display fresh requests
+                console.log(fresh_requests);
+                unconfirmedRequestsContainer.innerHTML = ``
+                for (fresh_reqs of fresh_requests) {
+                    let {datetime, receiver_flo_id} = fresh_reqs.message
+                    unconfirmedRequestsStore[`${datetime}_${receiver_flo_id}`] = fresh_reqs.message
+                    frag.append(render.unconfirmedRequest(fresh_reqs.message))
+                }
+                let sample = {
+                    datetime: 1603527634499,
+                    flo_txid: "FAKE_TOKEN_TXID_1",
+                    new_flo_txid: "7382fa53b6d64b269fd9b326ec46104cd30480c8e7b193ca441c70b735621a46",
+                    receiver_flo_id: "FAfuoUEe296a8xGrfuM1ywUjTsCcPj47g5",
+                    tokens_transferred: "5",
+                    user_upi_txid: "FRI2054SEPT112020"
+                }
+                unconfirmedRequestsStore[`${sample.datetime}_${sample.receiver_flo_id}`] = sample
+                unconfirmedRequestsContainer.append(frag)
+
+                // Sample Output
+
+                // datetime: 1599837964056
+                // flo_txid: "FAKE_TOKEN_TXID_1"
+                // new_flo_txid: "7382fa53b6d64b269fd9b326ec46104cd30480c8e7b193ca441c70b735621a46"
+                // receiver_flo_id: "FAfuoUEe296a8xGrfuM1ywUjTsCcPj47g5"
+                // tokens_transferred: "5"
+                // user_upi_txid: "FRI2054SEPT112020"
+
+                // apply process_unconfirmed_balance_claim_requests on each data
+
+            } catch (error) {
+                throw new Error(error);
+            }
+        }
 
         async function transfer_token(receiver_flo_id = '', user_upi_txid = '', amountToSend) {
             try {
@@ -12690,6 +12851,7 @@
                     });
 
                     notify(`Transfer successful: ${flo_txid}`, 'success', true, true);
+                    refresh_balance()
                     return true;
                 }
             } catch (error) {
@@ -12948,54 +13110,6 @@
 
             } catch (error) {
                 throw new Error(error)
-            }
-        }
-
-        async function display_unconfirmed_balance_claim_requests() {
-            try {
-                // load all user cliams
-                await floCloudAPI.requestGeneralData(token_app.master_configurations
-                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, {
-                    receiverID: myFloID
-                });
-                const unconfirmed_cash_deposit_claims = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, "0"));
-
-                // load processed claims
-                const cashiersList = Object.keys(token_app.master_configurations.cashiers);
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS,
-                    { receiverID: floGlobals.adminID, senderIDs: cashiersList });
-                const processed_unconfirmed_balance_claim_requests_list = 
-                floGlobals.appObjects[token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS];
-                const processed_unconfirmed_balance_claim_requests_txid_arr = Object.keys(processed_unconfirmed_balance_claim_requests_list);
-
-                console.log(unconfirmed_cash_deposit_claims);
-                console.log(processed_unconfirmed_balance_claim_requests_list);
-
-                // Filter out processed items 
-                let fresh_requests = unconfirmed_cash_deposit_claims
-                    .filter(f => !processed_unconfirmed_balance_claim_requests_txid_arr.includes(f.message.flo_txid)
-                        && diff_hours(new Date(), new Date(f.message.datetime)) > 48);
-
-                // Display fresh requests
-                console.log(fresh_requests);
-                for (fresh_reqs of fresh_requests) {
-                    console.log(fresh_reqs.message);
-                }
-
-                // Sample Output
-
-                // datetime: 1599837964056
-                // flo_txid: "FAKE_TOKEN_TXID_1"
-                // new_flo_txid: "7382fa53b6d64b269fd9b326ec46104cd30480c8e7b193ca441c70b735621a46"
-                // receiver_flo_id: "FAfuoUEe296a8xGrfuM1ywUjTsCcPj47g5"
-                // tokens_transferred: "5"
-                // user_upi_txid: "FRI2054SEPT112020"
-
-                // apply process_unconfirmed_balance_claim_requests on each data
-
-            } catch (error) {
-                throw new Error(error);
             }
         }
 

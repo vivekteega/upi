@@ -1916,7 +1916,12 @@ sm-panel{
         .request{
             grid-template-areas: 'time time time time' '. . . .';
         }
+        #unconfirmed_requests_container .request{
+            display: flex;
+            flex-direction: column;
+        }
     }
+
 }
 
 @media only screen and (max-width: 320px) {
