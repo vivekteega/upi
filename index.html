@@ -1046,9 +1046,7 @@
 
             //Required for blockchain API operators
             apiURL: {
-                FLO: ['https://explorer.mediciland.com/',
-                    'https://flosight.duckdns.org/'
-                ],
+                FLO: ['https://explorer.mediciland.com/', 'https://flosight.duckdns.org/'],
                 FLO_TEST: ['https://testnet-flosight.duckdns.org/', 'https://testnet.flocha.in/']
             },
             adminID: "F7HEAV9226tqXtRk34XrA9nZCb8ZcbVJt1",
@@ -2201,7 +2199,7 @@
                     }
 
                 // Function for confirming withdraw requests 
-                if (e.target.closest('.confirm-withdraw-btn'))
+                else if (e.target.closest('.confirm-withdraw-btn'))
                     if (await confirmation('Confirm this withdraw request?')) {
                         let withdrawRequest = e.target.closest('.request'),
                             status = await cash_sent(withdrawRequest.dataset.txid, withdrawRequest
@@ -2213,7 +2211,7 @@
                         }
                     }
                 // Function for confirming pay requests 
-                if (e.target.closest('.confirm-pay-btn'))
+                else if (e.target.closest('.confirm-pay-btn'))
                     if (await confirmation('Confirm this pay request?')) {
                         let payRequest = e.target.closest('.request'),
                             status = await pay_as_cashier(payRequest.dataset.sender, payRequest
@@ -2225,7 +2223,7 @@
                         }
                     }
                 // Function for confirming unconfirmed deposit requests 
-                if (e.target.closest('.confirm-unconfirmed-btn'))
+                else if (e.target.closest('.confirm-unconfirmed-btn'))
                     if (await confirmation('Confirm this deposit request?')) {
                         let payRequest = e.target.closest('.request')
                         console.log(unconfirmedRequestsStore[payRequest.dataset.vectorClock])
@@ -12161,6 +12159,7 @@
                         }
                     }`
                 text = removeWhiteSpaces(text);
+                return text;
                 const master_data = await ajaxGet(
                     `${floGlobals.apiURL.FLO[1]}/api/txs/?address=${token_app.masterFLOAddress}`);
                 if (typeof master_data === "object" && typeof master_data.txs === "object") {
@@ -12177,7 +12176,6 @@
                     tx_cmnt_arr.reverse().map(m => text += m.replace('text:', ''));
                     return text;
                 }
-                return text;
             },
 
             fetch_configs: async function () {
