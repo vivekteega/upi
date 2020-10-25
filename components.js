@@ -246,8 +246,6 @@ border: none;
     -o-transition: opacity 0.3s;
     transition: opacity 0.3s;
     background: rgba(var(--text-color), 0.06);
-    -webkit-box-shadow: 0 0 0.2rem rgba(var(--text-color), 0.2) inset;
-            box-shadow: 0 0 0.2rem rgba(var(--text-color), 0.2) inset;
     font-family: var(--font-family);
     width: 100%;
     outline: none;

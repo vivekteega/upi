@@ -540,22 +540,55 @@ details p {
   line-height: 1.4;
 }
 
-#sign_in_popup::part(background) {
+#sign_in_page {
+  position: fixed;
+  gap: 2rem;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  align-items: center;
+  justify-content: space-between;
+  background: url(sign-in-bg.svg) no-repeat center, rgba(var(--foreground-color), 1);
+  background-size: cover;
+  z-index: 5;
+  padding: 0 6vw;
+}
+#sign_in_page .info h1 {
+  line-height: 1.1em;
+  font-weight: 800;
+  font-size: clamp(1.5rem, 8vw, 4rem);
+}
+#sign_in_page .sign-in-box {
   background: rgba(var(--foreground-color), 1);
+  z-index: 1;
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 1rem #00000016, 0 4rem 2rem -2rem #00000016;
+  justify-self: center;
+  align-items: center;
+  text-align: center;
 }
-#sign_in_popup h3 {
-  margin-top: 2rem;
+#sign_in_page .sign-in-box sm-input {
+  text-align: left;
 }
-#sign_in_popup h4 {
+#sign_in_page .sign-in-box form {
+  width: 100%;
+}
+#sign_in_page .sign-in-box h3 {
+  margin-top: 1rem;
+  font-weight: 700;
+}
+#sign_in_page .sign-in-box h4 {
   font-weight: 500;
   margin-bottom: 3rem;
+  margin-top: 0.5rem;
 }
-#sign_in_popup button {
-  margin: 1rem 0;
-}
-#sign_in_popup p {
+#sign_in_page .sign-in-box button {
   margin-top: 1rem;
-  margin-bottom: 0 !important;
+}
+#sign_in_page .sign-in-box p {
+  margin-bottom: 0.5rem;
 }
 
 .primary-btn {
@@ -1696,6 +1729,10 @@ sm-panel {
   body {
     padding: 0 2rem;
     margin-left: 4rem;
+  }
+
+  #sign_in_page {
+    grid-auto-flow: column;
   }
 
   sm-popup {
