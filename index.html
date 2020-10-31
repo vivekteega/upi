@@ -57,6 +57,7 @@
                     Sign In
                 </button>
             </form>
+            <p>New here? <a href="https://flo-webwallet.duckdns.org/" target="_blank">Get your sign-in credentials.</a></p>
         </div>
     </section>
     <sm-popup id="qr_code_popup">
@@ -1075,6 +1076,7 @@
     <script id="onLoadStartUp">
         const userFloIdContainers = document.querySelectorAll('.user-flo-id')
         function onLoadStartUp() {
+            floDapps.setCustomPrivKeyInput(signIn)
             showLoader()
             console.log("Starting the app! Please Wait!")
             floDapps.launchStartUp().then(async result => {
@@ -2654,7 +2656,7 @@
             }
         }
 
-        function signIn() {
+        const signIn = () => {
             return new Promise((resolve, reject) => {
                 hideLoader()
                 showSignIn()
@@ -11702,7 +11704,7 @@
 
                         const defaultInput = function (type) {
                             return new Promise(async (resolve, reject) => {
-                                let inputVal = await signIn(`Enter ${type}: `)
+                                let inputVal = prompt(`Enter ${type}: `)
                                 if (inputVal === null)
                                     reject(null)
                                 else {
