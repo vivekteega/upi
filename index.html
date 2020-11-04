@@ -20,7 +20,7 @@
         <p id="confirm_message"></p>
         <div class="flex align-center">
             <sm-button variant="no-outline" class="cancel-btn">Cancel</sm-button>
-            <sm-button variant="no-outline" class="submit-btn">OK</button>
+            <sm-button variant="no-outline" class="submit-btn">OK</sm-button>
         </div>
     </sm-popup>
     <sm-popup id="prompt">
@@ -76,7 +76,9 @@
             <sm-panel>
                 <div id="my_qr_code"></div>
                 <p>Show this QR Code to receive money using RanchiMall Pay</p>
-                <a href="" id="download_qr"><sm-button>Download my QR code</sm-button></a>
+                <a href="" id="download_qr">
+                    <sm-button>Download my QR code</sm-button>
+                </a>
             </sm-panel>
         </sm-tab-panels>
     </sm-popup>
@@ -160,7 +162,7 @@
         </details>
         <p class="message">Send money to UPI ID below.</p>
         <div class="copy-row">
-            <h4 id="send_cash_to_deposit" class="copy"></h4>
+            <h4 id="send_cash_to_deposit" class="copy">Loading cashier UPI...</h4>
             <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
                 <title>Copy</title>
                 <rect x="16" y="16" width="48" height="48" rx="6" />
@@ -174,8 +176,8 @@
                     d="M51.65,8H42.07A18.44,18.44,0,0,1,45,15.78h8.88l-2.2,8H45q-1,7.26-5.8,11.1T25.54,39.47L46,63.43V64H33.41L11,37.93l0-6.72H22.11a13.19,13.19,0,0,0,7.8-2.05,9.77,9.77,0,0,0,3.85-5.38H10.11l2.24-8H33.58Q31.44,9,21.93,9H10.11l2.37-9H53.89Z" />
             </svg>
         </sm-input>
-        <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" minlength="12"
-            maxlength="12" required animate></sm-input>
+        <sm-input id="deposited_rupee_txid" placeholder="UPI Transaction ID" minlength="12" maxlength="12" required
+            animate></sm-input>
     </sm-popup>
     <sm-popup id="withdraw_rupee">
         <header class="popup-header" slot="header">
@@ -310,7 +312,7 @@
         </details>
         <p class="message">Send money to UPI ID below.</p>
         <div class="copy-row">
-            <h4 id="pay_cashier_info" class="copy"></h4>
+            <h4 id="pay_cashier_info" class="copy">Loading cashier UPI...</h4>
             <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
                 <title>Copy</title>
                 <rect x="16" y="16" width="48" height="48" rx="6" />
@@ -330,6 +332,7 @@
         <sm-button class="add-upi empty-state" variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI
             address</sm-button>
     </sm-popup>
+    <!-- Transaction result popup -->
     <sm-popup id="transaction_result">
         <header class="popup-header" slot="header">
             <svg class="icon" onclick="this.closest('sm-popup').hide()" viewBox="0 0 64 64">
@@ -339,10 +342,58 @@
             </svg>
         </header>
         <section id="success_section" class="flex direction-column hide-completely">
-            <svg id="success_svg" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-                <title>success</title>
-                <ellipse cx="32" cy="32" rx="31.5" ry="31.49" />
-                <polyline points="17.04 30.48 27.92 41.36 46.96 22.32" />
+            <svg id="success_art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <defs>
+                    <style>
+                        .a {
+                            fill: #d4145a;
+                        }
+
+                        .b {
+                            fill: #2e3192;
+                        }
+
+                        .c {
+                            fill: #fff;
+                        }
+
+                        .d {
+                            fill: #662d91;
+                        }
+
+                        .e {
+                            fill: #9e005d;
+                        }
+
+                        .f {
+                            fill: #00a99d;
+                        }
+                    </style>
+                </defs>
+                <title>success-art</title>
+                <polygon class="a"
+                    points="87.96 46.76 59.68 69.04 48.54 54.9 43.83 58.62 54.97 72.75 58.68 77.47 91.67 51.47 87.96 46.76" />
+                <polygon class="b"
+                    points="84.33 42.6 61.5 70.43 47.58 59.02 43.78 63.66 57.7 75.07 62.33 78.88 88.97 46.41 84.33 42.6" />
+                <polygon class="c"
+                    points="86.09 44.39 60.64 69.85 47.91 57.12 43.66 61.36 56.39 74.09 60.64 78.33 90.33 48.64 86.09 44.39" />
+                <circle class="a" cx="27" cy="33" r="2" />
+                <circle class="a" cx="111.5" cy="93.5" r="5.5" />
+                <circle class="d" cx="47" cy="88" r="2" />
+                <circle class="d" cx="22.5" cy="82.5" r="4.5" />
+                <circle class="d" cx="45.5" cy="114.5" r="3.5" />
+                <circle class="d" cx="82" cy="18" r="5" />
+                <circle class="e" cx="102.5" cy="51.5" r="1.5" />
+                <circle class="e" cx="60.5" cy="37.5" r="2.5" />
+                <circle class="e" cx="103" cy="77" r="3" />
+                <circle class="e" cx="87.5" cy="108.5" r="3.5" />
+                <circle class="f" cx="39" cy="20" r="3" />
+                <circle class="f" cx="85" cy="83" r="2" />
+                <circle class="f" cx="32.5" cy="101.5" r="3.5" />
+                <circle class="f" cx="112" cy="113" r="1" />
+                <circle class="f" cx="115" cy="29" r="2" />
+                <circle class="f" cx="18" cy="53" r="1" />
+                <circle class="f" cx="11" cy="5" r="1" />
             </svg>
         </section>
         <section id="failure_section" class="hide-completely flex direction-column">
@@ -429,10 +480,10 @@
                 </svg>
                 <svg id="delete_person" onclick="deletePerson()" class="icon" viewBox="0 0 64 64" title="Remove">
                     <title>remove</title>
-                    <line x1="4" y1="6.3" x2="60" y2="6.3"/>
-                    <path d="M53.5,20.5v38.9c0,2.3-1.8,4.1-4.1,4.1h0H14.6c-2.3,0-4.1-1.8-4.1-4.1c0,0,0,0,0,0V20.5"/>
-                    <path d="M22.7,6.6V3.8c0-1.8,1.5-3.3,3.3-3.3h11.4c1.8,0,3.3,1.5,3.3,3.3v2.8"/>
-                </svg>      
+                    <line x1="4" y1="6.3" x2="60" y2="6.3" />
+                    <path d="M53.5,20.5v38.9c0,2.3-1.8,4.1-4.1,4.1h0H14.6c-2.3,0-4.1-1.8-4.1-4.1c0,0,0,0,0,0V20.5" />
+                    <path d="M22.7,6.6V3.8c0-1.8,1.5-3.3,3.3-3.3h11.4c1.8,0,3.3,1.5,3.3,3.3v2.8" />
+                </svg>
             </div>
         </div>
         <h5>FLO ID</h5>
@@ -519,8 +570,7 @@
             </svg>
             <h5>requests</h5>
         </div>
-        <div title="activity page" id="activity_page_btn" class="navbar-item"
-            onclick="showPage('activity_page', this)">
+        <div title="activity page" id="activity_page_btn" class="navbar-item" onclick="showPage('activity_page', this)">
             <svg class="icon" viewBox="0 0 64 64">
                 <path
                     d="M60.38,1,32.8,33.23a1.77,1.77,0,0,0,1.34,2.92h9.63a.79.79,0,0,1,.71,1.13L33,61.36A1.49,1.49,0,0,0,35.49,63l27.58-32.2a1.77,1.77,0,0,0-1.34-2.92H52.1a.79.79,0,0,1-.71-1.13L62.85,2.64A1.49,1.49,0,0,0,60.38,1Z" />
@@ -560,11 +610,11 @@
                     <div class="option" onclick="showPopup('qr_code_popup')">
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                             <title>scanner</title>
-                            <path d="M24.5,63.5H5.58A5.08,5.08,0,0,1,.5,58.43V39.5"/>
-                            <path d="M63.5,39.5V58.43a5.08,5.08,0,0,1-5.08,5.07H39.5"/>
-                            <path d="M39.5.5H58.42A5.08,5.08,0,0,1,63.5,5.57V24.5"/>
-                            <path d="M.5,24.5V5.57A5.08,5.08,0,0,1,5.58.5H24.5"/>
-                            <line x1="12" y1="32" x2="52" y2="32"/>
+                            <path d="M24.5,63.5H5.58A5.08,5.08,0,0,1,.5,58.43V39.5" />
+                            <path d="M63.5,39.5V58.43a5.08,5.08,0,0,1-5.08,5.07H39.5" />
+                            <path d="M39.5.5H58.42A5.08,5.08,0,0,1,63.5,5.57V24.5" />
+                            <path d="M.5,24.5V5.57A5.08,5.08,0,0,1,5.58.5H24.5" />
+                            <line x1="12" y1="32" x2="52" y2="32" />
                         </svg>
                         <h4>Scan QR</h4>
                     </div>
@@ -677,9 +727,10 @@
                     <sm-tab>Deposits</sm-tab>
                     <sm-tab>Withdrawals</sm-tab>
                     <sm-tab>Pay Through Cashier</sm-tab>
+                    <sm-tab>Unconfirmed</sm-tab>
                 </sm-tab-header>
                 <sm-tab-panels id="requests_to_cashier">
-                    <sm-panel>  
+                    <sm-panel>
                         <div class="flex">
                             <sm-button class="justify-right" onclick="showDepositRequests()">Load pending</sm-button>
                         </div>
@@ -688,14 +739,6 @@
                             <svg viewBox="0 0 529.94 446.5">
                                 <defs>
                                     <style>
-                                        .a,
-                                        .b,
-                                        .c,
-                                        .d {
-                                            fill: none;
-                                            stroke-linejoin: round;
-                                        }
-
                                         .a {
                                             stroke-width: 9px;
                                         }
@@ -747,14 +790,6 @@
                             <svg viewBox="0 0 529.94 446.5">
                                 <defs>
                                     <style>
-                                        .a,
-                                        .b,
-                                        .c,
-                                        .d {
-                                            fill: none;
-                                            stroke-linejoin: round;
-                                        }
-
                                         .a {
                                             stroke-width: 9px;
                                         }
@@ -799,21 +834,14 @@
                     </sm-panel>
                     <sm-panel>
                         <div class="flex">
-                            <sm-button class="justify-right" onclick="showPayThruCashierRequests()">Load pending</sm-button>
+                            <sm-button class="justify-right" onclick="showPayThruCashierRequests()">Load pending
+                            </sm-button>
                         </div>
                         <div id="pay_requests_container" class="container"></div>
                         <div id="pay_illustration" class="empty-state">
                             <svg viewBox="0 0 529.94 446.5">
                                 <defs>
                                     <style>
-                                        .a,
-                                        .b,
-                                        .c,
-                                        .d {
-                                            fill: none;
-                                            stroke-linejoin: round;
-                                        }
-
                                         .a {
                                             stroke-width: 9px;
                                         }
@@ -856,12 +884,73 @@
                             <h4 class="light-text">No pay requests.</h4>
                         </div>
                     </sm-panel>
+                    <sm-panel>
+                        <div class="flex">
+                            <sm-button class="justify-right" onclick="showUnconfirmedRequests()">Load pending
+                            </sm-button>
+                        </div>
+                        <div id="unconfirmed_requests_container" class="container"></div>
+                        <div class="empty-state">
+                            <svg viewBox="0 0 529.94 446.5">
+                                <defs>
+                                    <style>
+                                        .a {
+                                            stroke-width: 9px;
+                                        }
+
+                                        .b,
+                                        .c {
+                                            stroke-width: 5px;
+                                        }
+
+                                        .c {
+                                            stroke-dasharray: 11.94 11.94;
+                                        }
+
+                                        .d {
+                                            stroke-width: 3px;
+                                        }
+                                    </style>
+                                </defs>
+                                <title>Empty icon</title>
+                                <polyline class="a"
+                                    points="508.5 289 220.5 217 4.5 289 293.5 361 370.38 335.47 220.5 298 143.05 323.82 220.5 298 220.5 217 4.5 289 4.5 370 292.5 442 508.5 370 508.5 289 293.5 361 292.5 442" />
+                                <path class="b" d="M947.54,629.34q0-3,.05-6" transform="translate(-703.5 -300.22)" />
+                                <path class="c"
+                                    d="M948.09,611.41c5.42-83.07,49.82-144.78,102.21-154.63,57.46-10.81,101.53-.27,88.07,42.61-7.82,24.88-50.89,36.71-71.95,5.86-26.87-39.37,12.95-108.88,71.46-131,17.38-6.57,37.33-14.37,53.89-30.53"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="b" d="M1195.9,339.41c1.32-1.47,2.62-3,3.88-4.58"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1215,324.59c-2,3.62-6.21,5.12-9.34,3.36s-4-6.11-2-9.72,5.67-3.13,8.8-1.37S1217,321,1215,324.59Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <ellipse class="d" cx="1215.17" cy="310.95" rx="4.5" ry="4"
+                                    transform="translate(-354.28 918.17) rotate(-60.69)" />
+                                <path class="d"
+                                    d="M1231.68,321.5c1.44-1.68-3.48-3-6.84-5.84s-8.44-.9-9.87.78,1.31,2.43,4.67,5.3S1230.25,323.18,1231.68,321.5Z"
+                                    transform="translate(-703.5 -300.22)" />
+                                <path class="d"
+                                    d="M1197.61,302.37c.69-2.09,4.36,1.43,8.56,2.81s5.16,6.73,4.47,8.83-2.76.14-7-1.23S1196.93,304.47,1197.61,302.37Z"
+                                    transform="translate(-703.5 -300.22)" />
+                            </svg>
+                            <h4 class="light-text">No unconfirmed requests.</h4>
+                        </div>
+                    </sm-panel>
                 </sm-tab-panels>
             </div>
             <div class="user-panel">
-                <div class="flex align-items space-between">
+                <div class="flex align-center space-between">
                     <h4>My Balances</h4>
-                    <sm-button class="small round" onclick="refresh_balance(this)">Check Balance</sm-button>
+                    <button id="refresh_balance_btn" onclick="refresh_balance(this)" class="action expand"
+                        type="submit">
+                        <h4 class="primary-btn expand">
+                            Refresh Balance
+                        </h4>
+                        <svg viewBox="0 0 73 73" class="loader">
+                            <path
+                                d="M72.5,36.5c0,19.88-16.12,36-36,36s-36-16.12-36-36s16.12-36,36-36S72.5,16.62,72.5,36.5" />
+                        </svg>
+                    </button>
                 </div>
                 <div class="display-balance grid">
                     <div class="balance rupee-balance-card">
@@ -908,7 +997,7 @@
         <section id="activity_page" class="page hide-completely">
             <div class="flex align-center space-between">
                 <h3>Activity</h3>
-                <sm-button onclick="showActivities()">Refresh</sm-button>
+                <sm-button onclick="showActivities(true)">Refresh</sm-button>
             </div>
             <sm-tab-header variant="tab" class="round" target="user_activities">
                 <sm-tab>Sent</sm-tab>
@@ -973,30 +1062,30 @@
         </section>
         <section id="settings_page" class="page hide-completely">
             <h3 class="bottom-margin">Settings<h3>
-            <section>
-                <h4>My FLO address</h4>
-                <div class="copy-row">
-                    <h4 class="user-flo-id copy"></h4>
-                    <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
-                        <title>Copy</title>
-                        <rect x="16" y="16" width="48" height="48" rx="6" />
-                        <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
-                    </svg>
-                </div>
-            </section>
-            <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>
-            <h4>Theme</h4>
-            <div class="flex">
-                <p>Toggle dark theme</p>
-                <sm-switch id="theme_switcher" class="justify-right"></sm-switch>
-            </div>
-            <div class="user-option">
-                <h4 class="top-margin">My UPIs</h4>
-                <div class="upi-container"></div>
-                <p class="empty-state">Add UPI address for easier access during various transactions.</p>
-                <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address
-                </sm-button>
-            </div>
+                    <section>
+                        <h4>My FLO address</h4>
+                        <div class="copy-row">
+                            <h4 class="user-flo-id copy"></h4>
+                            <svg class="icon" onclick="copyToClipboard(this.parentNode)" viewBox="0 0 64 64">
+                                <title>Copy</title>
+                                <rect x="16" y="16" width="48" height="48" rx="6" />
+                                <path d="M.5,47.52V6.5a6,6,0,0,1,6-6h41" />
+                            </svg>
+                        </div>
+                    </section>
+                    <sm-button variant="primary" onclick="signOut()">Sign out</sm-button>
+                    <h4>Theme</h4>
+                    <div class="flex">
+                        <p>Toggle dark theme</p>
+                        <sm-switch id="theme_switcher" class="justify-right"></sm-switch>
+                    </div>
+                    <div class="user-option">
+                        <h4 class="top-margin">My UPIs</h4>
+                        <div class="upi-container"></div>
+                        <p class="empty-state">Add UPI address for easier access during various transactions.</p>
+                        <sm-button variant="no-outline" onclick="showPopup('add_upi_popup')">+ Add UPI address
+                        </sm-button>
+                    </div>
         </section>
         <section id="transaction_page" class="page hide-completely">
             <header class="flex align-center" onclick="showPage('activity_page', 'activity_page_btn')">
@@ -1008,7 +1097,7 @@
             </header>
             <div id="transaction_details" class="grid direction-column"></div>
             <p id="caution_message"></p>
-            <sm-button id="show_report_btn" class="hide" onclick="showPopup('report_popup')">Report</sm-button>
+            <sm-button id="show_report_btn" onclick="showPopup('report_popup')">Report</sm-button>
         </section>
     </main>
     <script src="components.js"></script>
@@ -1064,6 +1153,7 @@
             currentTimeout,
             notificationSound = document.getElementById('notification_sound');
         let defaultUPI
+        let unconfirmedRequestsStore = {}
         const render = {
             depositRequest(txid, floId, amount, vectorClock) {
                 let card = document.createElement('div');
@@ -1148,7 +1238,41 @@
                     </button>`;
                 return card;
             },
-            requestPlaceholder(){
+            unconfirmedRequest(obj) {
+                let card = document.createElement('div'),
+                    { datetime, flo_txid, new_flo_txid, receiver_flo_id, tokens_transferred: amount, user_upi_txid } = obj;
+                card.classList.add('request')
+                setAttributes(card, {
+                    'data-vector-clock': `${datetime}_${receiver_flo_id}`
+                })
+                card.innerHTML = `   
+                <h5 class="time">${formatedTime(datetime, true)}</h5>
+                    <div>
+                        <h5>Receiver's FLO address</h5>
+                        <h4 class="breakable">${receiver_flo_id}</h4>
+                    </div>                 
+                    <div>
+                        <h5>Old transaction ID</h5>
+                        <h4 class="breakable">${flo_txid}</h4>
+                    </div>                 
+                    <div>
+                        <h5>New transaction ID</h5>
+                        <h4 class="breakable">${new_flo_txid}</h4>
+                    </div>                 
+                    <div>
+                        <h5>UPI transaction ID</h5>
+                        <h4 class="breakable">${user_upi_txid}</h4>
+                    </div>                 
+                    <div>
+                        <h5>Amount</h5>
+                        <h4 class="breakable amount">₹${amount}</h4>
+                    </div>                 
+                    <button id="" class="confirm-unconfirmed-btn">
+                        Confirm
+                    </button>`;
+                return card;
+            },
+            requestPlaceholder() {
                 let card = document.createElement('div');
                 card.classList.add('request', 'placeholder')
                 card.innerHTML = `
@@ -1274,16 +1398,16 @@
                                     <polyline points="47 32.26 32 32.26 32 12.26"/>
                                 </svg>`
                 }
-                if(fromCashier)
+                if (fromCashier)
                     transaction = 'Received from RanchiMall Pay'
-                if(toCashier)
+                if (toCashier)
                     transaction = 'Sent to RanchiMall Pay'
                 composition += `
                         ${icon}
                         <h4 class="activity-type">${transaction} ${status}</h4>`
                 if (receiver)
                     composition += `
-                            <h4 class="activity-receiver breakable">${allContacts ? allContacts[receiver] ? allContacts[receiver].name : receiver: receiver}</h4>
+                            <h4 class="activity-receiver breakable">${allContacts ? allContacts[receiver] ? allContacts[receiver].name : receiver : receiver}</h4>
                         `
                 composition += `
                         <h4 class="activity-amount ${className}">${sign} ₹${amount}</h4>
@@ -1292,7 +1416,7 @@
                 card.innerHTML = composition;
                 return card;
             },
-            activityPlaceholder(){
+            activityPlaceholder() {
                 let card = document.createElement('div'),
                     composition = ``
                 card.classList.add('activity', 'placeholder')
@@ -1338,7 +1462,7 @@
                 card.innerHTML = markup
                 return card;
             },
-            paymentRequestPlaceholder(){
+            paymentRequestPlaceholder() {
                 let card = document.createElement('div');
                 card.classList.add('request', 'placeholder')
                 card.innerHTML = `
@@ -1677,11 +1801,24 @@
         let popupStack = new Stack(),
             zIndex = 10;
 
-        function showPopup(popup, pinned) {
+        async function showPopup(popup, pinned) {
             let thisPopup = document.getElementById(popup);
             zIndex++
             thisPopup.setAttribute('style', `z-index: ${zIndex}`)
             popupStack = thisPopup.show(pinned, popupStack)
+            if (popup === 'deposit_rupee' || popup === 'withdraw_rupee' || popup === 'pay_anyone') {
+                liveCashier.floId = randomNoRepeats(await getLiveCashiers());
+                if (liveCashier.floId && liveCashier.floId.length) {
+                    liveCashier.upi = token_app.master_configurations.cashiers[liveCashier.floId].upi_id;
+                    document.getElementById('send_cash_to_deposit').textContent = liveCashier.upi;
+                    document.getElementById('pay_cashier_info').textContent = liveCashier.upi;
+                }
+                else {
+                    notify('No cashier is online currently, please try again later.', 'error')
+                    document.getElementById('send_cash_to_deposit').textContent = 'No cashier found';
+                    document.getElementById('pay_cashier_info').textContent = 'No cashier found';
+                }
+            }
             return thisPopup;
         }
 
@@ -1695,10 +1832,11 @@
         let personPopupOpen = false,
             scannedFloId,
             scannerOn = false
-        const   qrScannerInstance = new Html5Qrcode("reader"),
-                selectCamera = document.getElementById('select_camera');
+        const qrScannerInstance = new Html5Qrcode("reader"),
+            selectCamera = document.getElementById('select_camera'),
+            liveCashier = {}
 
-        document.addEventListener('popupopened', e => {
+        document.addEventListener('popupopened', async e => {
             let thisPopup = e.detail.popup,
                 firstInput = thisPopup.querySelector('sm-input')
             if (firstInput)
@@ -1726,9 +1864,9 @@
                     qrLink.href = document.querySelector('img').src
                     qrLink.download = ''
                     Html5Qrcode.getCameras().then(devices => {
-                    if (devices && devices.length) {
-                        startScanning(devices[devices.length-1].id)
-                    }
+                        if (devices && devices.length) {
+                            startScanning(devices[devices.length - 1].id)
+                        }
                     }).catch(err => {
                         // handle err
                     });
@@ -1736,35 +1874,35 @@
             }
         })
 
-        function startScanning(cameraId){
+        function startScanning(cameraId) {
             qrScannerInstance.start(
                 cameraId,
                 {
-                    fps: 10,    
-                    qrbox: 250 
+                    fps: 10,
+                    qrbox: 250
                 },
                 qrCodeMessage => {
                     scannedFloId = qrCodeMessage
-                    if(floCrypto.validateAddr(scannedFloId))
-                    qrScannerInstance.stop().then(ignore => {
-                        // QR Code scanning is stopped.
-                        hidePopup()
-                        showPopup('send_rupee_popup')
-                    }).catch(err => {
-                        console.log("Unable to stop scanning.");
-                    });
+                    if (floCrypto.validateAddr(scannedFloId))
+                        qrScannerInstance.stop().then(ignore => {
+                            // QR Code scanning is stopped.
+                            hidePopup()
+                            showPopup('send_rupee_popup')
+                        }).catch(err => {
+                            console.log("Unable to stop scanning.");
+                        });
                 },
                 errorMessage => {
-                    
+
                 })
-            .then(success => {
-                scannerOn = true
-            })
-            .catch(err => {
-                // Start failed, handle it. For example,
-                scannerOn = false
-                console.log(`Unable to start scanning, error: ${err}`);
-            });
+                .then(success => {
+                    scannerOn = true
+                })
+                .catch(err => {
+                    // Start failed, handle it. For example,
+                    scannerOn = false
+                    console.log(`Unable to start scanning, error: ${err}`);
+                });
         }
 
         document.addEventListener('popupclosed', e => {
@@ -1793,6 +1931,16 @@
                     tokenAmount.readOnly = false
                     scannerOn = false
                     break;
+                case 'deposit_rupee':
+                    setTimeout(() => {
+                        document.getElementById('send_cash_to_deposit').textContent = 'Loading cashier UPI...';
+                    }, 300);
+                    break;
+                case 'pay_anyone':
+                    setTimeout(() => {
+                        document.getElementById('pay_cashier_info').textContent = 'Loading cashier UPI...';
+                    }, 300);
+                    break;
                 case 'transaction_result':
                     setTimeout(() => {
                         transactionHeading.textContent = ''
@@ -1811,7 +1959,7 @@
                         thisPopup.querySelector('.cancel-btn').click()
                     break
                 case 'qr_code_popup':
-                    if(scannerOn)
+                    if (scannerOn)
                         qrScannerInstance.stop()
                     break
             }
@@ -1864,8 +2012,8 @@
             return color;
         }
 
-        function clearElements(array = []){
-            array.forEach(item =>{
+        function clearElements(array = []) {
+            array.forEach(item => {
                 document.getElementById(item).innerHTML = ``
             })
         }
@@ -2012,7 +2160,8 @@
         let payingRequested = false,
             currentPaymentRequest,
             person,
-            personName;
+            personName,
+            activityLoaded = false;
         const tokenReceiver = document.getElementById('token_receiver'),
             tokenAmount = document.getElementById('token_amount'),
             depositRupeeAmount = document.getElementById('token_amount_to_buy')
@@ -2029,39 +2178,39 @@
                 if (e.target.closest('sm-input')) {
                     let input = e.target.closest('sm-input')
                     formValidation(input)
-                    if(input.value === '')
+                    if (input.value === '')
                         input.setValidity('')
                     let validityState = input.validity
-                    if(input.hasAttribute('type') && input.getAttribute('type') === 'number'){
-                        if(validityState.rangeUnderflow){
+                    if (input.hasAttribute('type') && input.getAttribute('type') === 'number') {
+                        if (validityState.rangeUnderflow) {
                             input.setValidity('Minium ₹1 should be entered.')
                         }
-                        else if(validityState.typeMismatch){
+                        else if (validityState.typeMismatch) {
                             input.setValidity('Only digits are allowed.')
                         }
-                        else{
+                        else {
                             input.setValidity('')
                         }
                     }
                     else if (input.hasAttribute('floId')) {
                         if (floCrypto.validateAddr(input.value.trim()) || input.value.trim() === '')
-                            input.setValidity('') 
+                            input.setValidity('')
                         else
-                            input.setValidity('Invalid FLO address.')   
+                            input.setValidity('Invalid FLO address.')
                     }
                     else if (input.hasAttribute('privateKey')) {
                         if (floCrypto.getPubKeyHex(input.value.trim()) || input.value.trim() === '')
                             input.setValidity('')
                         else
-                            input.setValidity('Invalid FLO private key.')   
+                            input.setValidity('Invalid FLO private key.')
                     }
-                    else{
-                        if(validityState.patternMismatch)
-                            input.setValidity('Invalid UPI address.') 
-                        if(validityState.tooShort || validityState.tooLong)
-                            input.setValidity('UPI transaction Id should be 12digits long.') 
+                    else {
+                        if (validityState.patternMismatch)
+                            input.setValidity('Invalid UPI address.')
+                        if (validityState.tooShort || validityState.tooLong)
+                            input.setValidity('UPI transaction Id should be 12digits long.')
                         else
-                            input.setValidity('') 
+                            input.setValidity('')
                     }
                 }
             })
@@ -2095,43 +2244,39 @@
                 if (!e.target.closest('#show_person_name') && !e.target.closest('#edit_person_name')) {
                     if (showPersonName.isContentEditable)
                         showPersonName.contentEditable = 'false'
-                    if(personName !== showPersonName.textContent)
+                    if (personName !== showPersonName.textContent)
                         changePersonName()
                 }
             })
 
-            // Function for confirming deposit requests 
-            document.getElementById('pending_deposits_container').addEventListener('click', async (e) => {
+            document.getElementById('deposit').addEventListener('click', async (e) => {
+                // Function for confirming deposit requests 
                 if (e.target.closest('.confirm-deposit-btn'))
                     if (await confirmation('Confirm this deposit request?')) {
                         let depositRequest = e.target.closest('.request'),
                             status = await transfer_token(depositRequest.dataset.userFloId,
-                            depositRequest.dataset.txid, parseInt(depositRequest.dataset
-                            .amount))
+                                depositRequest.dataset.txid, parseInt(depositRequest.dataset
+                                    .amount))
                         console.log(depositRequest)
                         if (status) {
                             refresh_balance()
                             depositRequest.remove()
                         }
                     }
-            })
 
-            // Function for confirming withdraw requests 
-            document.getElementById('pending_withdrawals_container').addEventListener('click', async (e) => {
+                // Function for confirming withdraw requests 
                 if (e.target.closest('.confirm-withdraw-btn'))
                     if (await confirmation('Confirm this withdraw request?')) {
                         let withdrawRequest = e.target.closest('.request'),
                             status = await cash_sent(withdrawRequest.dataset.txid, withdrawRequest
                                 .dataset.userFloId, withdrawRequest.dataset.upi, parseInt(withdrawRequest.dataset
-                                .amount))
+                                    .amount))
                         if (status) {
                             refresh_balance()
                             withdrawRequest.remove()
                         }
                     }
-            })
-            // Function for confirming pay requests 
-            document.getElementById('pay_requests_container').addEventListener('click', async (e) => {
+                // Function for confirming pay requests 
                 if (e.target.closest('.confirm-pay-btn'))
                     if (await confirmation('Confirm this pay request?')) {
                         let payRequest = e.target.closest('.request'),
@@ -2142,6 +2287,18 @@
                             refresh_balance()
                             payRequest.remove()
                         }
+                    }
+                // Function for confirming unconfirmed deposit requests 
+                if (e.target.closest('.confirm-unconfirmed-btn'))
+                    if (await confirmation('Confirm this deposit request?')) {
+                        let payRequest = e.target.closest('.request')
+                        console.log(unconfirmedRequestsStore[payRequest.dataset.vectorClock])
+                        /*,
+                            status = await process_unconfirmed_balance_claim_requests(unconfirmedRequestsStore[payRequest.dataset.vectorClock])
+                        if (status) {
+                            refresh_balance()
+                            payRequest.remove()
+                        }*/
                     }
             })
 
@@ -2312,11 +2469,11 @@
                 cautionMessage.innerHTML = `
                         It may take upto 48 working hours for a transaction to complete. If even after 48 hours transction wasn't
                         completed, use <Strong>Report</Strong> button to report your issue.`
-                showReportButton.classList.remove('hide')
+                //showReportButton.classList.remove('hide')
             }
-            else{
+            else {
                 cautionMessage.innerHTML = ``
-                showReportButton.classList.add('hide')
+                //showReportButton.classList.add('hide')
                 icon = `
                 <svg class="icon success" viewBox="0 0 64 64">
                     <title>tick</title>
@@ -2331,11 +2488,11 @@
                                     ₹ <span class="transaction-amount"> ${amount}</span>
                                 </div>`
 
-            if (receiver !== 'undefined'){
+            if (receiver !== 'undefined') {
                 transactionFloId = receiver
                 composition += `
-                    <h5>${transaction}</h5> <strong class="breakable">${allContacts ? allContacts[receiver] ? allContacts[receiver].name : receiver: receiver}</strong>`
-                if(!token_app.master_configurations.cashiers[myFloID] && floCrypto.validateAddr(receiver) && !allContacts[receiver])
+                    <h5>${transaction}</h5> <strong class="breakable">${allContacts ? allContacts[receiver] ? allContacts[receiver].name : receiver : receiver}</strong>`
+                if (!token_app.master_configurations.cashiers[myFloID] && floCrypto.validateAddr(receiver) && !allContacts[receiver])
                     composition += `<sm-button onclick="addPersonFromTransaction()">Save this FLO address</sm-button>`
             }
 
@@ -2350,21 +2507,21 @@
                     <h5>Sent to cashier UPI ID</h5>
                     <strong>${receiverUPI}</strong> 
                     `
-            if(tokenTxId !== 'undefined'){
+            if (tokenTxId !== 'undefined') {
                 composition += `
                     <h5>FLO transaction ID</h5>
                     <strong><a class="breakable" target="_blank" href="https://ranchimall.github.io/floscout/#${tokenTxId}">${tokenTxId}</a></strong>  
                 `
             }
-            if(fromCashier !== 'undefined'){
+            if (fromCashier !== 'undefined') {
                 composition += `
                     <p>You have received ₹${amount} from RanchiMall Pay. Your deposit request was completed successfully.</p> 
-                    ` 
+                    `
             }
-            if(toCashier !== 'undefined'){
+            if (toCashier !== 'undefined') {
                 composition += `
                     <p>You sent ₹${amount} to our cashier.</p> 
-                    ` 
+                    `
             }
             composition += `<h5 id="transaction_time">${formatedTime(timeStamp)}</h5>`
             transactionDetails.innerHTML = composition
@@ -2391,6 +2548,9 @@
             }
             if (page === 'request_page') {
                 show_payment_requests()
+            }
+            if (page === 'activity_page') {
+                showActivities()
             }
             if (page === 'transaction_page') {
                 document.getElementById('navbar').classList.add('hide-on-mobile')
@@ -2483,7 +2643,7 @@
                 })
         }
 
-        function addPersonFromTransaction(){
+        function addPersonFromTransaction() {
             contactFlo.value = transactionFloId
             showPopup('add_person_popup')
         }
@@ -2511,7 +2671,7 @@
         }
 
         function setNameEditable() {
-            if(!showPersonName.isContentEditable){
+            if (!showPersonName.isContentEditable) {
                 showPersonName.contentEditable = 'true'
                 showPersonName.focus()
                 document.execCommand('selectAll', false, null);
@@ -2561,18 +2721,20 @@
             })
         }
 
-        async function signOutSequence(){
+        async function signOutSequence() {
             delete token_app.master_configurations;
             await floDapps.clearCredentials()
             document.querySelector('main').classList.add('hide-completely')
             document.getElementById('navbar').classList.add('hide-completely')
             document.getElementById('main_header').classList.add('hide-completely')
-            onLoadStartUp()
-            notifications.clearAll()
+            setTimeout(() => {
+                onLoadStartUp()
+                notifications.clearAll()
+            }, 500);
         }
 
         async function signOut() {
-            if(Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
+            if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                 // Inform cloud you are signing off before signing off
                 update_cashier_status(false);
                 signOutSequence()
@@ -10322,7 +10484,7 @@
                         reject("Empty Signature");
                     else {
                         var params = `{"rawtx":"${signedTxHash}"}`;
-                        request.open('POST', url, true);
+                        /* request.open('POST', url, true);
                         //Send the proper header information along with the request
                         request.setRequestHeader('Content-type', 'application/json');
                         request.onload = function () {
@@ -10332,7 +10494,27 @@
                             } else
                                 reject(request.responseText);
                         }
-                        request.send(params);
+                        request.send(params); */
+
+                        fetch(`http://ranchimall.duckdns.org:5839/broadcastTx/${signedTxHash}`)
+                            .then(
+                                function (response) {
+                                    response = JSON.parse(response)
+                                    if (response.returncode == 0) {
+                                        console.log('Broadcasted')
+                                        console.log(response.stdout)
+                                        resolve(response.stdout)                                        
+                                    }
+                                    else{
+                                        console.log('Broadcast failed')
+                                        console.log(response.stderr)
+                                        reject(response.stderr)
+                                    }
+                                }
+                            )
+                            .catch(function (err) {
+                                console.log('Fetch Error :-S', err);
+                            });
                     }
                 })
             },
@@ -11892,16 +12074,14 @@
         }
 
         function randomNoRepeats(array) {
-            var copy = array.slice(0);
-            return function () {
-                if (copy.length < 1) {
-                    copy = array.slice(0);
-                }
-                var index = Math.floor(Math.random() * copy.length);
-                var item = copy[index];
-                copy.splice(index, 1);
-                return item;
-            };
+            let copy = [...array];
+            if (copy.length < 1) {
+                copy = array.slice(0);
+            }
+            let index = Math.floor(Math.random() * copy.length);
+            let item = copy[index];
+            copy.splice(index, 1);
+            return item;
         }
 
         function removeWhiteSpaces(text = '') {
@@ -12024,7 +12204,7 @@
         token_app.actions = {
 
             parse_flo_comments: async function () {
-                const num = 5;
+                const num = 6;
                 text = `masterFLOAddress=FD5hK9ryBogJ5AcSvCy1tW5as8jRTkMLky
                     #!#CURRENCY=INR
                     #!#TYPE_UPI_APP=UPI_APP_TEST${num}
@@ -12165,7 +12345,7 @@
                     showDepositRequests()
                     showWithdrawRequests()
                     showPayThruCashierRequests()
-                    showActivities()
+                    showUnconfirmedRequests()
                     userType.forEach(user => user.textContent = 'Cashier')
                     showPage('deposit', 'deposit_page_btn')
 
@@ -12216,18 +12396,14 @@
 
                     showPage('home_page', 'home_page_btn')
                     hideLoader()
-                    
-                    show_payment_requests()
-                    
+
                     request_rupee_token()
-                    
+
                     withdraw_token_to_get_cash();
-                    
+
                     transferTokensManually();
-                    
+
                     pay_through_cashier();
-                    
-                    showActivities()
                 }
                 this.retrieveLatestContent();
             },
@@ -12249,7 +12425,7 @@
 
                     await Promise.all([
 
-                        create_root_structure().then(()=>update_cashier_status(true)),
+                        create_root_structure().then(() => update_cashier_status(true)),
 
                         floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_DEPOSITS, {
                             receiverID: myFloID
@@ -12373,28 +12549,34 @@
                 }
 
             },
-        
+
             // https://gist.github.com/gerard-kanters/2ce9daa5c23d8abe36c2
-            idleTimer: function(maxTime=300000) {
+            idleTimer: function (maxTime = 300000) {
                 var t;
                 let take_action_on_inactivity = resetTimer;
 
                 function auto_shutdown() {
                     clearTimeout(t);
                     signOut();
-                    take_action_on_inactivity = ()=>false;
+                    take_action_on_inactivity = () => false;
                     window.onload = take_action_on_inactivity;
                     window.onmousemove = take_action_on_inactivity; // catches mouse movements
                     window.onmousedown = take_action_on_inactivity; // catches mouse movements
                     window.onclick = take_action_on_inactivity;     // catches mouse clicks
                     window.onscroll = take_action_on_inactivity;    // catches scrolling
                     window.onkeypress = take_action_on_inactivity;  //catches keyboard actions
-                    window.onbeforeunload = take_action_on_inactivity;  //catches window close actions
+                    window.onbeforeunload = function (e) {
+                        var confirmationMessage = "\o/";
+
+                        (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+                        take_action_on_inactivity()
+                        return confirmationMessage;                            //Webkit, Safari, Chrome
+                    };  //catches window close actions
                 }
 
                 function resetTimer() {
                     clearTimeout(t);
-                    t = setTimeout(auto_shutdown, maxTime); 
+                    t = setTimeout(auto_shutdown, maxTime);
                 }
 
 
@@ -12404,8 +12586,14 @@
                 window.onclick = take_action_on_inactivity;     // catches mouse clicks
                 window.onscroll = take_action_on_inactivity;    // catches scrolling
                 window.onkeypress = take_action_on_inactivity;  //catches keyboard actions
-                window.onbeforeunload = take_action_on_inactivity;  //catches window close actions
-                
+                window.onbeforeunload = function (e) {
+                    var confirmationMessage = "\o/";
+
+                    (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+                    take_action_on_inactivity()
+                    return confirmationMessage;                            //Webkit, Safari, Chrome
+                };  //catches window close actions
+
             },
         }
     </script>
@@ -12417,7 +12605,7 @@
                 if (typeof floGlobals.appObjects[object_name] !== 'object'
                     || floGlobals.appObjects[object_name] == null) {
                     await floCloudAPI.requestObjectData(object_name, options)
-                        
+
                     if (typeof floGlobals.appObjects[object_name] !== 'object'
                         || floGlobals.appObjects[object_name] == null) {
                         floGlobals.appObjects[object_name] = {};
@@ -12425,7 +12613,7 @@
                         await floCloudAPI.requestObjectData(object_name, options)
                         return true;
                     } else return false;
-                
+
                 } else return false;
             } catch (error) {
                 throw new Error(error);
@@ -12440,19 +12628,20 @@
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_UNCONFIRMED_RUPEE_DEPOSITS));
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_SENT_TOKENS));
             promises.push(reset_cloud_object(token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS));
-            
+
             if (Object.keys(token_app.master_configurations.cashiers).includes(myFloID)) {
                 promises.push(reset_cloud_object(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS));
             }
 
             await Promise.all(promises);
-            
+
             return true;
         }
 
-        const   depositsContainer = document.getElementById("pending_deposits_container"),
-                withdrawsContainer = document.getElementById("pending_withdrawals_container"),
-                payRequestsContainer = document.getElementById("pay_requests_container");
+        const depositsContainer = document.getElementById("pending_deposits_container"),
+            withdrawsContainer = document.getElementById("pending_withdrawals_container"),
+            payRequestsContainer = document.getElementById("pay_requests_container"),
+            unconfirmedRequestsContainer = document.getElementById("unconfirmed_requests_container");
 
         async function showDepositRequests() {
             try {
@@ -12463,7 +12652,7 @@
                     senderIDs: [myFloID]
                 });*/
                 depositsContainer.innerHTML = ``
-                for(let i= 0; i < 4; i++){
+                for (let i = 0; i < 4; i++) {
                     frag.append(render.requestPlaceholder())
                 }
                 depositsContainer.append(frag)
@@ -12512,7 +12701,7 @@
         async function showWithdrawRequests() {
             try {
                 withdrawsContainer.innerHTML = ``
-                for(let i= 0; i < 4; i++){
+                for (let i = 0; i < 4; i++) {
                     frag.append(render.requestPlaceholder())
                 }
                 withdrawsContainer.append(frag)
@@ -12526,8 +12715,8 @@
                         senderIDs: [myFloID]
                     }),
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, {
-                    receiverID: myFloID
-                })
+                        receiverID: myFloID
+                    })
                 ])
 
                 if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
@@ -12569,7 +12758,7 @@
         async function showPayThruCashierRequests() {
             try {
                 payRequestsContainer.innerHTML = ``
-                for(let i= 0; i < 4; i++){
+                for (let i = 0; i < 4; i++) {
                     frag.append(render.requestPlaceholder())
                 }
                 payRequestsContainer.append(frag)
@@ -12582,8 +12771,8 @@
                         senderIDs: [myFloID]
                     }),
                     floCloudAPI.requestGeneralData(token_app.master_configurations.TYPE_PAY_THROUGH_CASHIER, {
-                    receiverID: myFloID
-                })
+                        receiverID: myFloID
+                    })
                 ])
 
                 if (typeof finished_tasks === "string") finished_tasks = JSON.parse(finished_tasks);
@@ -12614,6 +12803,73 @@
             }
         }
 
+        async function showUnconfirmedRequests() {
+            try {
+                unconfirmedRequestsStore = {}
+                unconfirmedRequestsContainer.innerHTML = ``
+                for (let i = 0; i < 4; i++) {
+                    frag.append(render.requestPlaceholder())
+                }
+                unconfirmedRequestsContainer.append(frag)
+                // load all user cliams
+                await floCloudAPI.requestGeneralData(token_app.master_configurations
+                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, {
+                    receiverID: myFloID
+                });
+                const unconfirmed_cash_deposit_claims = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
+                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, "0"));
+
+                // load processed claims
+                const cashiersList = Object.keys(token_app.master_configurations.cashiers);
+                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS,
+                    { receiverID: floGlobals.adminID, senderIDs: cashiersList });
+                const processed_unconfirmed_balance_claim_requests_list =
+                    floGlobals.appObjects[token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS];
+                const processed_unconfirmed_balance_claim_requests_txid_arr = Object.keys(processed_unconfirmed_balance_claim_requests_list);
+
+                console.log(unconfirmed_cash_deposit_claims);
+                console.log(processed_unconfirmed_balance_claim_requests_list);
+
+                // Filter out processed items 
+                let fresh_requests = unconfirmed_cash_deposit_claims
+                    .filter(f => !processed_unconfirmed_balance_claim_requests_txid_arr.includes(f.message.flo_txid)
+                        && diff_hours(new Date(), new Date(f.message.datetime)) > 48);
+
+                // Display fresh requests
+                console.log(fresh_requests);
+                unconfirmedRequestsContainer.innerHTML = ``
+                for (fresh_reqs of fresh_requests) {
+                    let { datetime, receiver_flo_id } = fresh_reqs.message
+                    unconfirmedRequestsStore[`${datetime}_${receiver_flo_id}`] = fresh_reqs.message
+                    frag.append(render.unconfirmedRequest(fresh_reqs.message))
+                }
+                let sample = {
+                    datetime: 1603527634499,
+                    flo_txid: "FAKE_TOKEN_TXID_1",
+                    new_flo_txid: "7382fa53b6d64b269fd9b326ec46104cd30480c8e7b193ca441c70b735621a46",
+                    receiver_flo_id: "FAfuoUEe296a8xGrfuM1ywUjTsCcPj47g5",
+                    tokens_transferred: "5",
+                    user_upi_txid: "FRI2054SEPT112020"
+                }
+                unconfirmedRequestsStore[`${sample.datetime}_${sample.receiver_flo_id}`] = sample
+                unconfirmedRequestsContainer.append(frag)
+
+                // Sample Output
+
+                // datetime: 1599837964056
+                // flo_txid: "FAKE_TOKEN_TXID_1"
+                // new_flo_txid: "7382fa53b6d64b269fd9b326ec46104cd30480c8e7b193ca441c70b735621a46"
+                // receiver_flo_id: "FAfuoUEe296a8xGrfuM1ywUjTsCcPj47g5"
+                // tokens_transferred: "5"
+                // user_upi_txid: "FRI2054SEPT112020"
+
+                // apply process_unconfirmed_balance_claim_requests on each data
+
+            } catch (error) {
+                throw new Error(error);
+            }
+        }
+
         async function transfer_token(receiver_flo_id = '', user_upi_txid = '', amountToSend) {
             try {
                 if (user_upi_txid.length < 1 || receiver_flo_id.length < 1) {
@@ -12621,7 +12877,7 @@
                     return;
                 }
                 const amount_of_tokens_to_transfer = parseInt(await askPrompt('Enter the amount of rupee to transfer', amountToSend));
-                if(!amount_of_tokens_to_transfer) return
+                if (!amount_of_tokens_to_transfer) return
                 if (amountToSend !== amount_of_tokens_to_transfer) {
                     let amount_mismatch = await confirmation(
                         "Amount mismatch: Your amount does not match what user entered. Continue?");
@@ -12679,6 +12935,7 @@
                     });
 
                     notify(`Transfer successful: ${flo_txid}`, 'success', true, true);
+                    refresh_balance()
                     return true;
                 }
             } catch (error) {
@@ -12703,8 +12960,8 @@
                 let token_tx = await ajaxGet('https://ranchimallflo.duckdns.org/api/v1.0/getTransactionDetails/' +
                     input_data["token_txid"])
                 if (typeof token_tx !== "object" || typeof token_tx.parsedFloData !== "object"
-                || typeof token_tx.parsedFloData.flodata !== "string" 
-                || token_tx.parsedFloData.flodata.length<1) {
+                    || typeof token_tx.parsedFloData.flodata !== "string"
+                    || token_tx.parsedFloData.flodata.length < 1) {
                     notify("Transaction not found");
                     return false;
                 }
@@ -12721,10 +12978,10 @@
                     true, true);
 
                 let transfer_upi_txid = await askPrompt("Enter the UPI txid for transferred amount.", '');
-                if(!transfer_upi_txid){
-                    notifications.clearAll()    
+                if (!transfer_upi_txid) {
+                    notifications.clearAll()
                     return
-                } 
+                }
                 if (transfer_upi_txid.length !== 12) {
                     notify("UPI Txid can't be less than 12 character long.");
                     return;
@@ -12797,20 +13054,20 @@
                         if (payingRequested) {
                             const all_reqs = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
                                 .TYPE_REQUEST_PAYMENT, "0"));
-                                
+
                             const original_req = all_reqs
                                 .filter(f => f.message.pay_req_id === currentPaymentRequest.dataset.paymentRequestId)
                                 .map(m => m.message)[0];
-                                
+
                             payment_request_status(original_req, 'APPROVED')
                             paidPaymentRequestContainer.prepend(currentPaymentRequest)
-                            for(child of pendingPaymentRequestContainer.children){
-                                if(child.dataset.paymentRequestId === currentPaymentRequest.dataset.paymentRequestId){
+                            for (child of pendingPaymentRequestContainer.children) {
+                                if (child.dataset.paymentRequestId === currentPaymentRequest.dataset.paymentRequestId) {
                                     child.remove()
                                 }
                             }
                             show_payment_requests();
-                        } else{
+                        } else {
                             let receiverID = myFloID;
                             floGlobals.appObjects[token_app.master_configurations.TYPE_SENT_TOKENS[flo_txid]] = {
                                 token_sender, token_receiver, token_amount, token_name_radio,
@@ -12882,7 +13139,7 @@
                 if (sender_flo_id.length < 1) throw new Error("Invalid Sender Id");
                 if (upi_txid.length < 1) throw new Error("Invalid UPI Txid");
                 const amount_to_pay = parseInt(await askPrompt('Enter amount to pay', usr_amount_to_pay));
-                if(!amount_to_pay) return
+                if (!amount_to_pay) return
                 if (typeof amount_to_pay !== "number" || amount_to_pay <= 0)
                     return notify("Invalid amount.", 'error', '', true);
                 if (parseInt(usr_amount_to_pay) !== amount_to_pay) {
@@ -12940,54 +13197,6 @@
             }
         }
 
-        async function display_unconfirmed_balance_claim_requests() {
-            try {
-                // load all user cliams
-                await floCloudAPI.requestGeneralData(token_app.master_configurations
-                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, {
-                    receiverID: myFloID
-                });
-                const unconfirmed_cash_deposit_claims = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
-                    .TYPE_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, "0"));
-
-                // load processed claims
-                const cashiersList = Object.keys(token_app.master_configurations.cashiers);
-                await floCloudAPI.requestObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS,
-                    { receiverID: floGlobals.adminID, senderIDs: cashiersList });
-                const processed_unconfirmed_balance_claim_requests_list = 
-                floGlobals.appObjects[token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS];
-                const processed_unconfirmed_balance_claim_requests_txid_arr = Object.keys(processed_unconfirmed_balance_claim_requests_list);
-
-                console.log(unconfirmed_cash_deposit_claims);
-                console.log(processed_unconfirmed_balance_claim_requests_list);
-
-                // Filter out processed items 
-                let fresh_requests = unconfirmed_cash_deposit_claims
-                    .filter(f => !processed_unconfirmed_balance_claim_requests_txid_arr.includes(f.message.flo_txid)
-                        && diff_hours(new Date(), new Date(f.message.datetime)) > 48);
-
-                // Display fresh requests
-                console.log(fresh_requests);
-                for (fresh_reqs of fresh_requests) {
-                    console.log(fresh_reqs.message);
-                }
-
-                // Sample Output
-
-                // datetime: 1599837964056
-                // flo_txid: "FAKE_TOKEN_TXID_1"
-                // new_flo_txid: "7382fa53b6d64b269fd9b326ec46104cd30480c8e7b193ca441c70b735621a46"
-                // receiver_flo_id: "FAfuoUEe296a8xGrfuM1ywUjTsCcPj47g5"
-                // tokens_transferred: "5"
-                // user_upi_txid: "FRI2054SEPT112020"
-
-                // apply process_unconfirmed_balance_claim_requests on each data
-
-            } catch (error) {
-                throw new Error(error);
-            }
-        }
-
         async function process_unconfirmed_balance_claim_requests(subject_req) {
             try {
                 // get txid of new token transfer
@@ -13006,9 +13215,9 @@
                     if (typeof validate_txid == "object" && validate_txid.result == "ok") {
                         // mark as resolved
                         subject_req.new_flo_txid = new_txid;
-                        floGlobals.appObjects[TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS][subject_req.flo_txid] = subject_req;
+                        floGlobals.appObjects[token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS][subject_req.flo_txid] = subject_req;
                         let receiverID = floGlobals.adminID;
-                        await floCloudAPI.updateObjectData(TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, { receiverID });
+                        await floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_PROCESSED_UNCONFIRMED_BALANCE_CLAIM_REQUESTS, { receiverID });
                         notify('Token transfer for unconfirmed desposit successfull. Txid: ' + new_txid);
 
                     } else if (n <= 30) {
@@ -13053,20 +13262,20 @@
             }
         }
 
-        async function update_cashier_status(status=false) {
+        async function update_cashier_status(status = false) {
             try {
                 floGlobals.appObjects[token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS][myFloID] = status;
                 let receiverID = floGlobals.adminID;
                 floCloudAPI.updateObjectData(token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS, { receiverID })
-                .then(res=>notify('Updated Cashier status to '+status))
-                .catch(e=>{
-                    console.error(e);
-                    notify('Failed to update Cashier status to '+status, 'error');
-                });
-                return true;    
-            } catch(e) {
+                    .then(res => notify(`Cashier is ${status ? 'online' : 'offline'}`, 'success'))
+                    .catch(e => {
+                        console.error(e);
+                        notify('Failed to update Cashier status to ' + status, 'error');
+                    });
+                return true;
+            } catch (e) {
                 console.error(e);
-                notify('Failed to update Cashier status to '+status, 'error');
+                notify('Failed to update Cashier status to ' + status, 'error');
                 return false;
             }
         }
@@ -13081,33 +13290,30 @@
                 const request_tokens_btn = document.getElementById('request_tokens_btn');
                 request_tokens_btn.onclick = async function () {
                     if (typeof myFloID !== "string" || myFloID.length < 1) return;
-                    btnLoading('request_tokens_btn', 'start');
-                    const cashier = randomNoRepeats(await getLiveCashiers())();
-                    if(typeof cashier!=="string" || cashier.length<1) {
+                    if (typeof liveCashier.floId !== "string" || liveCashier.floId.length < 1) {
                         notify('No cashier is live currently. Please try later.', 'error');
                         return false;
                     }
+                    btnLoading('request_tokens_btn', 'start');
                     const token_amount_to_buy = document.getElementById('token_amount_to_buy');
-                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
-                    document.getElementById('send_cash_to_deposit').textContent = cashier_upi;
-                    
+
                     let upi_txid = depositedRupeeTxId.value
                     let request_object = {
                         user_flo_id: myFloID,
                         upi_txid: upi_txid,
                         deposit_amount: token_amount_to_buy.value,
-                        cashier_upi
+                        cashier_upi: liveCashier.upi
                     }
                     if (typeof upi_txid === "string" && upi_txid.length > 1) {
                         floCloudAPI.sendGeneralData(request_object, token_app.master_configurations
                             .TYPE_DEPOSITS, {
-                            receiverID: cashier
+                            receiverID: liveCashier.floId
                         }).then(result => {
                             console.log(result)
                             hidePopup()
                             showTransactionStatus('success', 'Deposit request sent.', 'It may take upto 48 hours for deposited amount to be reflected in your account.')
                             btnLoading('request_tokens_btn', 'stop')
-                            depositActivityContainer.prepend(render.activityCard({ type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: cashier_upi, processed: false }))
+                            depositActivityContainer.prepend(render.activityCard({ type: 'deposit', amount: request_object.deposit_amount, timeStamp: `${Date.now()}_${myFloID}}`, upi_txid, receiver: liveCashier.upi, processed: false }))
                         })
                         return true;
                     }
@@ -13124,20 +13330,17 @@
         function withdraw_token_to_get_cash() {
             try {
                 const withdraw_cash_btn = document.getElementById('withdraw_cash_btn')
-                
                 withdraw_cash_btn.onclick = async function () {
                     let selectedUPI = withdrawRupeePopup.querySelector('input[type="radio"]:checked');
                     if (!selectedUPI) {
                         notify('Add an UPI address to withdraw money.', 'error')
                         return
                     }
-                    btnLoading('withdraw_cash_btn', 'start')
-                    const cashier = randomNoRepeats(await getLiveCashiers())();
-                    if(typeof cashier!=="string" || cashier.length<1) {
+                    if (typeof liveCashier.floId !== "string" || liveCashier.floId.length < 1) {
                         notify('No cashier is live currently. Please try later.', 'error');
                         return false;
                     }
-                    
+                    btnLoading('withdraw_cash_btn', 'start')
                     const withdraw_cash_amount = Number(document.getElementById('withdraw_cash_amount').value);
                     const user_withdraw_upi = selectedUPI.value
                     const token_balance_url =
@@ -13157,7 +13360,7 @@
                     }
 
                     const flo_comment = `transfer ${withdraw_cash_amount} rupee#`;
-                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, cashier, 0.001, myPrivKey,
+                    let flo_txid = await floBlockchainAPI.sendTx(myFloID, liveCashier.floId, 0.001, myPrivKey,
                         flo_comment)
                     console.log(flo_txid);
                     if (typeof flo_txid !== "string") {
@@ -13178,7 +13381,7 @@
                     if (typeof flo_txid === "string" && flo_txid.length > 1) {
                         floCloudAPI.sendGeneralData(request_object, token_app.master_configurations
                             .TYPE_WITHDRAWS, {
-                            receiverID: cashier
+                            receiverID: liveCashier.floId
                         });
                         hidePopup()
                         showTransactionStatus('success', 'Withdraw request sent.', 'It may take upto 48 working hours to process your withdrawal request.')
@@ -13199,25 +13402,19 @@
         function pay_through_cashier() {
             try {
                 const cnf_cash_payment_btn = document.getElementById('cnf_cash_payment')
-                
+
                 cnf_cash_payment_btn.onclick = async function () {
                     let selectedUPI = payCashierPopup.querySelector('input[type="radio"]:checked');
                     if (!selectedUPI) {
                         notify('Add an UPI address to pay through cashier.', 'error')
                         return
                     }
-                    btnLoading('withdraw_cash_btn', 'start')
-
-                    const cashier = randomNoRepeats(await getLiveCashiers())();
-                    if(typeof cashier!=="string" || cashier.length<1) {
+                    if (typeof liveCashier.floId !== "string" || liveCashier.floId.length < 1) {
                         notify('No cashier is live currently. Please try later.', 'error');
                         return false;
                     }
-                    
-                    const cashier_upi = token_app.master_configurations.cashiers[cashier].upi_id;
+                    btnLoading('withdraw_cash_btn', 'start')
 
-                    document.getElementById('pay_cashier_info').textContent = cashier_upi;
-                    
                     const paying_amount_div = document.getElementById('recvr_amount_to_pay')
                     const recvr_id = document.getElementById('recvr_id').value;
                     let amount_to_pay = parseInt(paying_amount_div.value);
@@ -13236,13 +13433,13 @@
 
                     floCloudAPI.sendGeneralData(req_object, token_app.master_configurations
                         .TYPE_PAY_THROUGH_CASHIER, {
-                        receiverID: cashier,
+                        receiverID: liveCashier.floId,
                         senderIDs: [myFloID]
                     });
 
                     hidePopup()
                     showTransactionStatus('success', 'Pay through cashier Request sent.', `Sent to: <b class="breakable">${recvr_id}</b><br>
-                            through cashier UPI: <b>${cashier_upi}</b>.<br><br>
+                            through cashier UPI: <b>${liveCashier.upi}</b>.<br><br>
                             Once the cashier receives your payment, they will transfer it to intended receiver.`);
                     payCashierActivityContainer.prepend(render.activityCard({ type: 'payCashier', amount: amount_to_pay, timeStamp: `${Date.now()}_${myFloID}`, receiver: recvr_id, receiverUPI: req_object.upi_txid, processed: false }))
                 }
@@ -13253,46 +13450,48 @@
             }
         }
 
-        function showActivities(){
-            depositActivityContainer.innerHTML = ''
-            withdrawActivityContainer.innerHTML = ''
-            payCashierActivityContainer.innerHTML = ''
-            sentActivityContainer.innerHTML = ''
-            receivedActivityContainer.innerHTML = ''
-            
-            for(let i = 0; i < 8; i++){
-                frag.append(render.activityPlaceholder())
+        function showActivities(showRefresh = false) {
+            if (!activityLoaded || showRefresh) {
+                depositActivityContainer.innerHTML = ''
+                withdrawActivityContainer.innerHTML = ''
+                payCashierActivityContainer.innerHTML = ''
+                sentActivityContainer.innerHTML = ''
+                receivedActivityContainer.innerHTML = ''
+
+                for (let i = 0; i < 8; i++) {
+                    frag.append(render.activityPlaceholder())
+                }
+                let frag1 = frag.cloneNode(true),
+                    frag2 = frag.cloneNode(true),
+                    frag3 = frag.cloneNode(true),
+                    frag4 = frag.cloneNode(true)
+                depositActivityContainer.append(frag)
+                withdrawActivityContainer.append(frag1)
+                payCashierActivityContainer.append(frag2)
+                sentActivityContainer.append(frag3)
+                receivedActivityContainer.append(frag4)
             }
-            let frag1 = frag.cloneNode(true),
-                frag2 = frag.cloneNode(true),
-                frag3 = frag.cloneNode(true),
-                frag4 = frag.cloneNode(true)
-            depositActivityContainer.append(frag)
-            withdrawActivityContainer.append(frag1)
-            payCashierActivityContainer.append(frag2)
-            sentActivityContainer.append(frag3)
-            receivedActivityContainer.append(frag4)
             getSentRupeeList()
             getReceivedRupeeList()
-            if(!token_app.master_configurations.cashiers[myFloID]){
+            if (!token_app.master_configurations.cashiers[myFloID]) {
                 showAllUserActivities()
             }
-            
+            activityLoaded = true
         }
 
-        const   sentActivityContainer = document.getElementById('sent_activity_container'),
-                receivedActivityContainer = document.getElementById('received_activity_container'),
-                depositActivityContainer = document.getElementById('deposit_activity_container'),
-                withdrawActivityContainer = document.getElementById('withdraw_activity_container'),
-                payCashierActivityContainer = document.getElementById('pay_cashier_activity_container'),
-                cashierMessageContainer = document.getElementById('cashier_message_container')
+        const sentActivityContainer = document.getElementById('sent_activity_container'),
+            receivedActivityContainer = document.getElementById('received_activity_container'),
+            depositActivityContainer = document.getElementById('deposit_activity_container'),
+            withdrawActivityContainer = document.getElementById('withdraw_activity_container'),
+            payCashierActivityContainer = document.getElementById('pay_cashier_activity_container'),
+            cashierMessageContainer = document.getElementById('cashier_message_container')
 
         async function showAllUserActivities() {
             try {
                 await token_app.actions.retrieveLatestContent();
 
                 let deposit_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_DEPOSITS, "0"));
-                const withdraw_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS,"0").reverse());
+                const withdraw_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_WITHDRAWS, "0").reverse());
                 const user_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations.TYPE_MSGES, "0").reverse());
                 const pay_thru_cashier_msg = removeDuplicates(floDapps.getNextGeneralData(token_app.master_configurations
                     .TYPE_PAY_THROUGH_CASHIER, "0").reverse());
@@ -13390,10 +13589,10 @@
             }
         }
 
-        async function getReceiver(vout){
-            for(v of vout){
-                for(addr of v.scriptPubKey.addresses){
-                    if(addr !== myFloID)
+        async function getReceiver(vout) {
+            for (v of vout) {
+                for (addr of v.scriptPubKey.addresses) {
+                    if (addr !== myFloID)
                         return addr
                 }
             }
@@ -13401,23 +13600,25 @@
 
         async function getSentRupeeList() {
             try {
-                let data = await ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&senderFloAddress=${myFloID}`)
-                let transactions = data.transactions
-                console.log(transactions, data)
-                let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
-                for (transaction of sortedTransactions) {
-                    let { tokenAmount, flodata } = transaction.parsedFloData,
-                        {time, txid, vout} = transaction.transactionDetails,
-                        receiver = flodata.match(/\b\w{34,34}\b/) ? flodata.match(/\b\w{34,34}\b/) : await getReceiver(vout),
-                        timeStamp = time * 1000,
-                        confirmations = await ajaxGet(`https://flosight.duckdns.org/api/tx/${txid}`),
-                        processed = confirmations.confirmations > 3 ? true : false
+                ajaxGet(`https://ranchimallflo.duckdns.org/api/v1.0/getTokenTransactions?token=rupee&senderFloAddress=${myFloID}`)
+                    .then(async data => {
+                        let transactions = data.transactions
+                        console.log(transactions, data)
+                        let sortedTransactions = Object.values(transactions).sort((a, b) => b.transactionDetails.time - a.transactionDetails.time)
+                        for (transaction of sortedTransactions) {
+                            let { tokenAmount, flodata } = transaction.parsedFloData,
+                                { time, txid, vout } = transaction.transactionDetails,
+                                receiver = flodata.match(/\b\w{34,34}\b/) ? flodata.match(/\b\w{34,34}\b/) : await getReceiver(vout),
+                                timeStamp = time * 1000,
+                                confirmations = await ajaxGet(`https://flosight.duckdns.org/api/tx/${txid}`),
+                                processed = confirmations.confirmations > 3 ? true : false
 
-                    if (receiver === '' || typeof receiver === 'undefined' || receiver === null) continue;
-                    frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, tokenTxId: txid, receiver, timeStamp, processed, toCashier: token_app.master_configurations.cashiers[receiver] }))
-                }
-                sentActivityContainer.innerHTML = ''
-                sentActivityContainer.append(frag)
+                            if (receiver === '' || typeof receiver === 'undefined' || receiver === null) continue;
+                            frag.append(render.activityCard({ type: 'sent', amount: tokenAmount, tokenTxId: txid, receiver, timeStamp, processed, toCashier: token_app.master_configurations.cashiers[receiver] }))
+                        }
+                        sentActivityContainer.innerHTML = ''
+                        sentActivityContainer.append(frag)
+                    })
             } catch (error) {
                 throw new Error(error);
             }
@@ -13431,7 +13632,7 @@
                     for (transaction of sortedTransactions) {
 
                         let { tokenAmount, flodata } = transaction.parsedFloData,
-                            {time, txid, vin} = transaction.transactionDetails,
+                            { time, txid, vin } = transaction.transactionDetails,
                             sender = vin[0].addr,
                             timeStamp = time * 1000
 
@@ -13600,26 +13801,26 @@
                 return false;
             }
         }
- 
-        const   pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
-                paidPaymentRequestContainer = document.getElementById("paid_payment_request_container"),
-                declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container")
+
+        const pendingPaymentRequestContainer = document.getElementById("pending_payment_request_container"),
+            paidPaymentRequestContainer = document.getElementById("paid_payment_request_container"),
+            declinedPaymentRequestContainer = document.getElementById("declined_payment_request_container")
 
         let paymentRequestAnimated = false;
 
         async function show_payment_requests(requests_received = true, recvr_id = '') {
             try {
-                if(!paymentRequestAnimated){
+                if (!paymentRequestAnimated) {
                     pendingPaymentRequestContainer.innerHTML = ``;
                     paidPaymentRequestContainer.innerHTML = ``;
                     declinedPaymentRequestContainer.innerHTML = ``;
-    
-                    for(let i= 0; i < 6; i++){
+
+                    for (let i = 0; i < 6; i++) {
                         frag.append(render.paymentRequestPlaceholder())
                     }
                     let frag1 = frag.cloneNode(true)
                     let frag2 = frag.cloneNode(true)
-    
+
                     pendingPaymentRequestContainer.append(frag)
                     paidPaymentRequestContainer.append(frag1)
                     declinedPaymentRequestContainer.append(frag2)
@@ -13772,11 +13973,11 @@
                 // Filter out non-cashiers, if any
                 const cashiers_status = floGlobals.appObjects[token_app.master_configurations.TYPE_CASHIER_LIVE_STATUS];
                 const valid_cashiers = Object.keys(cashiers_status)
-                .filter(f=>Object.keys(token_app.master_configurations.cashiers).includes(f) && cashiers_status[f]===true);
+                    .filter(f => Object.keys(token_app.master_configurations.cashiers).includes(f) && cashiers_status[f] === true);
                 return valid_cashiers;
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
-                notify('Failed to fecth cashiers status', 'error');
+                notify('Failed to get cashier status', 'error');
                 return null;
             }
         }
