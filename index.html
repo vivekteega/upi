@@ -10496,7 +10496,7 @@
                         }
                         request.send(params); */
 
-                        fetch(`http://ranchimall.duckdns.org:5839/broadcastTx/${signedTxHash}`)
+                        fetch(`https://teegatest.duckdns.org/broadcastTx/${signedTxHash}`)
                             .then(
                                 function (response) {
                                     response = JSON.parse(response)
