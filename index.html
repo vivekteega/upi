@@ -10478,25 +10478,25 @@
             broadcastTx: function (signedTxHash) {
                 return new Promise((resolve, reject) => {
                     var request = new XMLHttpRequest();
-                    var url = this.util.serverList[this.util.curPos] + 'api/tx/send';
                     console.log(url)
                     if (signedTxHash.length < 1)
                         reject("Empty Signature");
                     else {
                         var params = `{"rawtx":"${signedTxHash}"}`;
-                        /* request.open('POST', url, true);
+                        var url = `https://teegatest.duckdns.org/broadcastTx/${signedTxHash}`;
+                        request.open('GET', url, true);
                         //Send the proper header information along with the request
                         request.setRequestHeader('Content-type', 'application/json');
                         request.onload = function () {
                             if (request.readyState == 4 && request.status == 200) {
                                 console.log(request.response);
-                                resolve(JSON.parse(request.response).txid.result);
+                                resolve(JSON.parse(request.response).stdout);
                             } else
-                                reject(request.responseText);
+                                reject(JSON.parse(request.response).stderr);
                         }
-                        request.send(params); */
+                        request.send(''); 
 
-                        fetch(`https://teegatest.duckdns.org/broadcastTx/${signedTxHash}`)
+                        /*fetch(`https://teegatest.duckdns.org/broadcastTx/${signedTxHash}`)
                             .then(
                                 function (response) {
                                     response = JSON.parse(response)
@@ -10514,7 +10514,7 @@
                             )
                             .catch(function (err) {
                                 console.log('Fetch Error :-S', err);
-                            });
+                            }); */
                     }
                 })
             },
